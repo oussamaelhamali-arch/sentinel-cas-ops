@@ -1225,7 +1225,7 @@ function closeAg(){document.getElementById('ag-det').classList.remove('show');do
 
 function openAddAgent(){agEditIdx=-1;document.getElementById('ag-modal-title').textContent='➕ Ajouter un agent';['ag-f-nom','ag-f-zone','ag-f-tel','ag-f-email'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});document.getElementById('ag-f-ville').value='CAS';document.getElementById('ag-f-statut').value='Actif';document.getElementById('agOverlay').classList.add('show');}
 
-function editAgentIdx(idx){agEditIdx=idx;var a=(D.allAgents||[])[idx];if(!a)return;document.getElementById('ag-modal-title').textContent='✏️ Modifier l\'agent';document.getElementById('ag-f-nom').value=a.nom;document.getElementById('ag-f-ville').value=a.ville;document.getElementById('ag-f-zone').value=a.zone||'';document.getElementById('ag-f-tel').value=a.tel||'';document.getElementById('ag-f-email').value=a.email||'';document.getElementById('ag-f-statut').value=a.statut||'Actif';document.getElementById('agOverlay').classList.add('show');}
+function editAgentIdx(idx){agEditIdx=idx;var a=(D.allAgents||[])[idx];if(!a)return;document.getElementById('ag-modal-title').textContent='✏️ Modifier agent';document.getElementById('ag-f-nom').value=a.nom;document.getElementById('ag-f-ville').value=a.ville;document.getElementById('ag-f-zone').value=a.zone||'';document.getElementById('ag-f-tel').value=a.tel||'';document.getElementById('ag-f-email').value=a.email||'';document.getElementById('ag-f-statut').value=a.statut||'Actif';document.getElementById('agOverlay').classList.add('show');}
 
 function saveAgent(){
   var nom=document.getElementById('ag-f-nom').value.trim();if(!nom){toast('Nom obligatoire','er');return;}
@@ -1515,7 +1515,7 @@ function preparerEmails(){
 }
 
 function envoyerTout(){
-  if(!preparedEmails.length){toast('Préparez les emails d\'abord !','er');return;}
+  if(!preparedEmails.length){toast('Préparez les emails d'abord !','er');return;}
   var i=0;
   function openNext(){if(i>=preparedEmails.length)return;window.open(buildGmailLink(preparedEmails[i]),'_blank');i++;setTimeout(openNext,900);}
   openNext();
@@ -1523,7 +1523,7 @@ function envoyerTout(){
 }
 
 function copyAllEmailsText(){
-  if(!preparedEmails.length){toast('Préparez les emails d\'abord !','er');return;}
+  if(!preparedEmails.length){toast('Préparez les emails d'abord !','er');return;}
   var text=preparedEmails.map(function(em){return 'A : '+em.to+'\nObjet : '+em.subject+'\n\n'+em.textBody+'\n\n'+'='.repeat(50)+'\n\n';}).join('');
   navigator.clipboard.writeText(text).then(function(){toast('Emails copiés !','ok');}).catch(function(){toast('Erreur copie','er');});
 }
@@ -1551,7 +1551,7 @@ function rReportsSummary(){
   Object.keys(byDate).sort().reverse().slice(0,4).forEach(function(date){
     var rapsDay=byDate[date];
     html+='<div style="margin-bottom:10px;border:1px solid var(--bd);border-radius:var(--r);overflow:hidden">'+
-      '<div style="background:var(--bg3);padding:8px 14px;font-size:11px;font-weight:700;color:var(--tx);border-bottom:1px solid var(--bd)">📅 '+new Date(date).toLocaleDateString(\'fr-FR\',{weekday:\'long\',day:\'numeric\',month:\'long\'})+' <span style="font-size:10px;color:var(--tx3);font-weight:400">'+rapsDay.length+' rapport(s)</span></div>';
+      '<div style="background:var(--bg3);padding:8px 14px;font-size:11px;font-weight:700;color:var(--tx);border-bottom:1px solid var(--bd)">📅 '+new Date(date).toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'})+' <span style="font-size:10px;color:var(--tx3);font-weight:400">'+rapsDay.length+' rapport(s)</span></div>';
     rapsDay.forEach(function(r){
       var lc=r.user==='choaib'?'#F39C12':'#27AE60';var stars2='⭐'.repeat(parseInt(r.note)||3);
       html+='<div style="padding:12px 14px;border-bottom:1px solid var(--bd)">'+
