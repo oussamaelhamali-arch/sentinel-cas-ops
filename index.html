@@ -1,0 +1,403 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SENTINEL — Glovo Maroc CAS OPS</title>
+<meta name="description" content="SENTINEL planning system for Glovo Maroc CAS OPS: dashboard, planning, agents and hotspots.">
+<style>
+:root {
+  --yellow:#FFC244;
+  --yellow-dark:#E5A820;
+  --yellow-light:#FFF8E8;
+  --bg:#F7F6F2;
+  --surface:#FFFFFF;
+  --surface-strong:#F2F0EA;
+  --text:#242424;
+  --muted:#5E6B7A;
+  --border:rgba(36,36,36,.12);
+  --success:#0B7A5E;
+  --accent:#00A082;
+  --danger:#D6453C;
+  --shadow:0 16px 40px rgba(15,23,42,.08);
+  --radius:18px;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif;background:linear-gradient(180deg,#FFF9EB 0%,#F7F6F2 100%);color:var(--text);}
+button, input, select{font:inherit;}
+body, html{min-height:100%;}
+
+.navbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(36,36,36,.08);display:flex;align-items:center;gap:20px;padding:14px 22px;box-shadow:0 10px 30px rgba(255,194,68,.12);}
+.brand{display:flex;align-items:center;gap:14px;}
+.brand-circle{width:44px;height:44px;border-radius:16px;background:var(--yellow);display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 12px 30px rgba(255,194,68,.25);}
+.brand-logo{font-weight:800;color:#1B1B1B;}
+.brand-desc{display:flex;flex-direction:column;line-height:1.1;}
+.brand-desc strong{font-size:15px;}
+.brand-desc span{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-weight:700;}
+
+.nav-links{display:flex;gap:10px;flex-wrap:wrap;}
+.nav-link{padding:10px 16px;border-radius:999px;cursor:pointer;border:1px solid transparent;color:var(--muted);transition:all .2s;display:flex;align-items:center;gap:8px;}
+.nav-link.active, .nav-link:hover{background:var(--yellow-light);border-color:rgba(255,194,68,.35);color:#000;}
+.nav-link span{font-size:13px;font-weight:700;}
+
+.top-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.clock{font-size:12px;color:var(--muted);background:var(--surface-strong);padding:8px 12px;border-radius:999px;border:1px solid rgba(36,36,36,.08);}
+.refresh{padding:8px 11px;border-radius:999px;border:1px solid rgba(36,36,36,.12);background:var(--surface);cursor:pointer;transition:transform .2s;}
+.refresh:hover{transform:scale(1.03);}
+
+.content{padding:24px;max-width:1400px;margin:0 auto;display:grid;gap:24px;}
+.page{display:none;animation:fadeIn .25s ease forwards;}
+.page.active{display:block;}
+.section-title{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px;}
+.section-title h1{font-size:22px;margin:0;}
+.section-title p{margin:0;color:var(--muted);font-size:13px;max-width:620px;}
+
+.grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:20px;box-shadow:var(--shadow);}
+.card strong{display:block;font-size:28px;line-height:1;margin-bottom:8px;}
+.card small{color:var(--muted);text-transform:uppercase;letter-spacing:.16em;font-weight:700;font-size:11px;}
+.card .sub{margin-top:8px;color:var(--accent);font-size:13px;}
+
+.metric-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:var(--yellow-light);color:#7d5a1f;font-weight:700;font-size:12px;border:1px solid rgba(255,194,68,.35);}
+.metric-pill span{width:8px;height:8px;border-radius:50%;background:var(--yellow-dark);display:inline-block;}
+
+.kpi-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;}
+.kpi .label{font-size:11px;text-transform:uppercase;color:var(--muted);letter-spacing:.14em;font-weight:700;}
+.kpi .value{font-size:34px;font-weight:800;color:#111;}
+.kpi .detail{font-size:13px;color:var(--muted);}
+.kpi .meter{height:10px;background:var(--surface-strong);border-radius:999px;overflow:hidden;margin-top:10px;}
+.kpi .meter-fill{height:100%;background:linear-gradient(90deg,var(--yellow),var(--accent));width:0%;transition:width .6s ease;}
+
+.small-pill{padding:5px 10px;border-radius:999px;font-size:11px;font-weight:700;}
+.team-CAS{background:rgba(255,243,199,.85);color:#92400E;border:1px solid rgba(245,158,11,.18);}
+.team-RBT{background:rgba(220,252,231,.9);color:#14532D;border:1px solid rgba(16,185,129,.18);}
+.team-DRB{background:rgba(219,234,254,.9);color:#1E40AF;border:1px solid rgba(59,130,246,.18);}
+.team-BSK{background:rgba(243,232,255,.9);color:#6B21A8;border:1px solid rgba(139,92,246,.18);}
+
+.plan-summary{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px;}
+.plan-summary .stat{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow);}
+.plan-summary .stat strong{font-size:24px;}
+.plan-summary .stat span{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:700;}
+
+.table-wrap{overflow-x:auto;border-radius:24px;border:1px solid var(--border);box-shadow:var(--shadow);}
+table{width:100%;border-collapse:collapse;}
+thead tr{background:var(--surface-strong);}
+th, td{padding:14px 10px;text-align:left;font-size:12px;border-bottom:1px solid rgba(36,36,36,.06);}
+th{color:var(--muted);text-transform:uppercase;letter-spacing:.12em;}
+td.team{width:82px;font-weight:700;}
+td.shift{font-family:Courier,monospace;}
+td.shift span{display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border-radius:12px;font-size:12px;}
+.shift-8{background:rgba(0,160,130,.12);color:#065F46;}
+.shift-7{background:rgba(255,194,68,.18);color:#8B6914;}
+.shift-off{background:rgba(36,36,36,.05);color:var(--muted);font-weight:700;}
+.shift-weekend{border:1px dashed rgba(0,160,130,.18);}
+
+.agent-search{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;}
+.agent-search input, .agent-search select{flex:1;min-width:180px;padding:12px 14px;border-radius:16px;border:1px solid var(--border);background:var(--surface);color:var(--text);}
+.agent-search button{border:none;background:var(--yellow);color:#111;padding:12px 18px;border-radius:16px;cursor:pointer;transition:transform .2s;}
+.agent-search button:hover{transform:scale(1.02);}
+
+.agent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;}
+.agent-card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden;}
+.agent-avatar{width:42px;height:42px;border-radius:14px;background:var(--yellow);display:flex;align-items:center;justify-content:center;font-weight:800;color:#111;font-size:16px;}
+.agent-name{font-size:15px;font-weight:800;}
+.agent-meta{display:flex;gap:8px;flex-wrap:wrap;font-size:12px;}
+.agent-meta span{color:var(--muted);}
+.agent-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-top:10px;}
+.agent-day{background:var(--surface-strong);border-radius:12px;padding:8px 6px;text-align:center;font-size:9px;color:var(--muted);}
+.agent-day span{display:block;font-weight:700;margin-top:4px;color:#111;}
+
+.hotspot-list{display:grid;gap:14px;}
+.hotspot-item{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:18px;box-shadow:var(--shadow);display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;}
+.hotspot-meta{display:grid;gap:6px;}
+.hotspot-team{font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);letter-spacing:.15em;}
+.hotspot-name{font-size:16px;font-weight:800;}
+.hotspot-note{color:var(--muted);font-size:13px;line-height:1.5;}
+.hotspot-pill{padding:7px 12px;border-radius:999px;font-size:11px;font-weight:700;background:rgba(255,194,68,.16);color:#7d5a1f;white-space:nowrap;}
+
+@media(max-width:1080px){.grid-4{grid-template-columns:repeat(2,minmax(0,1fr));}.plan-summary{grid-template-columns:1fr;}}
+@media(max-width:720px){.navbar{flex-direction:column;align-items:flex-start;} .top-right{width:100%;justify-content:space-between;} .grid-4{grid-template-columns:1fr;} .section-title{flex-direction:column;align-items:flex-start;}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="brand">
+    <div class="brand-circle">🛵</div>
+    <div class="brand-desc">
+      <strong>SENTINEL</strong>
+      <span>Glovo Maroc CAS OPS</span>
+    </div>
+  </div>
+  <div class="nav-links">
+    <button class="nav-link active" data-page="dashboard" onclick="switchPage(event)">📊 <span>Dashboard</span></button>
+    <button class="nav-link" data-page="planning" onclick="switchPage(event)">📅 <span>Planning</span></button>
+    <button class="nav-link" data-page="agents" onclick="switchPage(event)">👥 <span>Agents</span></button>
+    <button class="nav-link" data-page="hotspots" onclick="switchPage(event)">📍 <span>Hotspots</span></button>
+  </div>
+  <div class="top-right">
+    <div class="clock" id="clock">--:--</div>
+    <button class="refresh" onclick="renderAll()">↻</button>
+  </div>
+</nav>
+
+<main class="content">
+  <section id="dashboard" class="page active">
+    <div class="section-title">
+      <div>
+        <h1>Tableau de bord</h1>
+        <p>Vue synthétique de l’équipe CAS OPS, couverture de la semaine, heures planifiées et hotspots prioritaires.</p>
+      </div>
+      <div class="metric-pill"><span></span> Semaine JEUDI → MERCREDI · 44h / agent</div>
+    </div>
+    <div class="grid-4">
+      <div class="card"><small>Agents actifs</small><strong id="totalAgents">33</strong><div class="sub">Pool CAS, RBT, DRB, BSK</div></div>
+      <div class="card"><small>Heures planifiées</small><strong id="totalHours">1452</strong><div class="sub">Toute la semaine</div></div>
+      <div class="card"><small>Shifts weekend</small><strong id="weekendShifts">66</strong><div class="sub">Samedi et dimanche obligatoires</div></div>
+      <div class="card"><small>Hotspots suivis</small><strong id="hotspotCount">13</strong><div class="sub">Zones critiques Glovo jaune</div></div>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="label">Taux de couverture</div><div class="value" id="coverageValue">100%</div><div class="detail">Plan de garde complet pour tous les agents.</div><div class="meter"><div class="meter-fill" id="coverageMeter"></div></div></div>
+      <div class="kpi"><div class="label">Agents par pool</div><div class="value" id="poolSummary">CAS 11 · RBT 15 · DRB 4 · BSK 3</div><div class="detail">Répartition opérationnelle par équipe.</div></div>
+      <div class="kpi"><div class="label">Jours de repos</div><div class="value" id="restDays">33</div><div class="detail">Chaque agent a un jour OFF dans la semaine.</div></div>
+    </div>
+  </section>
+
+  <section id="planning" class="page">
+    <div class="section-title">
+      <div>
+        <h1>Planning</h1>
+        <p>Tableau des shifts du jeudi au mercredi avec 44h garantis et week-end en 8h obligatoires.</p>
+      </div>
+      <div class="metric-pill"><span></span> 4×7h + 2×8h par agent</div>
+    </div>
+    <div class="plan-summary">
+      <div class="stat"><strong id="openPositions">0</strong><span>Positions ouvertes</span></div>
+      <div class="stat"><strong id="teamDistribution">33 agents</strong><span>Planification par équipe</span></div>
+      <div class="stat"><strong id="shiftBalance">100% validé</strong><span>Respect des règles</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Agent</th>
+            <th>Equipe</th>
+            <th>Jeudi</th>
+            <th>Vendredi</th>
+            <th>Samedi</th>
+            <th>Dimanche</th>
+            <th>Lundi</th>
+            <th>Mardi</th>
+            <th>Mercredi</th>
+          </tr>
+        </thead>
+        <tbody id="planningBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="agents" class="page">
+    <div class="section-title">
+      <div>
+        <h1>Agents</h1>
+        <p>Liste complète des agents avec pools, zones d’affectation et modèle de charge.</p>
+      </div>
+      <div class="metric-pill"><span></span> Données 100% hardcodées</div>
+    </div>
+    <div class="agent-search">
+      <input id="agentFilter" type="search" placeholder="Rechercher un agent ou un pool" oninput="renderAgents()">
+      <select id="teamFilter" onchange="renderAgents()">
+        <option value="">Tous les pools</option>
+        <option value="CAS">CAS</option>
+        <option value="RBT">RBT</option>
+        <option value="DRB">DRB</option>
+        <option value="BSK">BSK</option>
+      </select>
+      <button onclick="clearAgentFilters()">Réinitialiser</button>
+    </div>
+    <div class="agent-grid" id="agentGrid"></div>
+  </section>
+
+  <section id="hotspots" class="page">
+    <div class="section-title">
+      <div>
+        <h1>Hotspots</h1>
+        <p>Zones critiques surveillées pour la semaine; chaque hotspot est aligné sur une équipe.</p>
+      </div>
+      <div class="metric-pill"><span></span> Priorité opérationnelle</div>
+    </div>
+    <div class="hotspot-list" id="hotspotList"></div>
+  </section>
+</main>
+
+<script>
+const DAYS = ['JEUDI','VENDREDI','SAMEDI','DIMANCHE','LUNDI','MARDI','MERCREDI'];
+const AGENTS = [
+  {name:'choaib knari',team:'CAS',zone:'Casa Nord',schedule:['09:00-16:00','10:00-17:00','09:00-17:00','10:00-18:00','OFF','09:00-16:00','10:00-17:00']},
+  {name:'HABIB EDDINE AHMED',team:'CAS',zone:'Casa Sud',schedule:['10:00-17:00','OFF','10:00-18:00','09:00-17:00','09:00-16:00','10:00-17:00','09:00-16:00']},
+  {name:'AYMNE BELGARA',team:'CAS',zone:'Rabat',schedule:['OFF','09:00-16:00','11:00-19:00','10:00-18:00','10:00-17:00','09:00-16:00','10:00-17:00']},
+  {name:'MOHAMED BOUHAJI',team:'CAS',zone:'Marrakech',schedule:['11:00-18:00','09:00-16:00','09:00-17:00','10:00-18:00','09:00-16:00','OFF','10:00-17:00']},
+  {name:'ISMAIL BAHI',team:'CAS',zone:'Tanger',schedule:['10:00-17:00','11:00-18:00','09:00-17:00','11:00-19:00','09:00-16:00','09:00-16:00','OFF']},
+  {name:'HAMZA KARIM',team:'CAS',zone:'Agadir',schedule:['09:00-16:00','10:00-17:00','10:00-18:00','09:00-17:00','OFF','10:00-17:00','09:00-16:00']},
+  {name:'LAHCANE KHOUDRY',team:'CAS',zone:'Fès',schedule:['09:00-16:00','OFF','11:00-19:00','10:00-18:00','09:00-16:00','10:00-17:00','09:00-16:00']},
+  {name:'ANAS RAJID',team:'CAS',zone:'Meknès',schedule:['10:00-17:00','09:00-16:00','09:00-17:00','10:00-18:00','10:00-17:00','OFF','09:00-16:00']},
+  {name:'HAMZA ACHOUBI',team:'CAS',zone:'Safi',schedule:['09:00-16:00','10:00-17:00','10:00-18:00','09:00-17:00','09:00-16:00','10:00-17:00','OFF']},
+  {name:'BRAHIM LACHGUIR',team:'CAS',zone:'El Jadida',schedule:['10:00-17:00','09:00-16:00','09:00-17:00','10:00-18:00','OFF','09:00-16:00','10:00-17:00']},
+  {name:'ABDELKHALEQ',team:'CAS',zone:'Khouribga',schedule:['11:00-18:00','09:00-16:00','10:00-18:00','09:00-17:00','09:00-16:00','OFF','10:00-17:00']},
+  {name:'ISLAM ELMARDI',team:'RBT',zone:'Mohammed V',schedule:['09:00-16:00','10:00-17:00','09:00-17:00','10:00-18:00','OFF','09:00-16:00','10:00-17:00']},
+  {name:'AYOUB ABSSI',team:'RBT',zone:'Salé',schedule:['10:00-17:00','OFF','10:00-18:00','09:00-17:00','09:00-16:00','10:00-17:00','09:00-16:00']},
+  {name:'AYOUB BEN MALEK',team:'RBT',zone:'Rabat Centre',schedule:['OFF','09:00-16:00','11:00-19:00','10:00-18:00','10:00-17:00','09:00-16:00','10:00-17:00']},
+  {name:'AYMANE CHLIFANE',team:'RBT',zone:'Témara',schedule:['11:00-18:00','09:00-16:00','09:00-17:00','10:00-18:00','09:00-16:00','OFF','10:00-17:00']},
+  {name:'ZAKARIE BENALI',team:'RBT',zone:'Kenitra',schedule:['10:00-17:00','11:00-18:00','09:00-17:00','11:00-19:00','09:00-16:00','09:00-16:00','OFF']},
+  {name:'NAJIB HARATI',team:'RBT',zone:'Rabat Sud',schedule:['09:00-16:00','10:00-17:00','10:00-18:00','09:00-17:00','OFF','10:00-17:00','09:00-16:00']},
+  {name:'OUSSAMA CHENNAOUI',team:'RBT',zone:'Aïn Aouda',schedule:['09:00-16:00','OFF','11:00-19:00','10:00-18:00','09:00-16:00','10:00-17:00','09:00-16:00']},
+  {name:'YOUSSEF DERKAOUI',team:'RBT',zone:'Hassan',schedule:['10:00-17:00','09:00-16:00','09:00-17:00','10:00-18:00','10:00-17:00','OFF','09:00-16:00']},
+  {name:'HASSAN AZGOUNE',team:'RBT',zone:'Agdal',schedule:['09:00-16:00','10:00-17:00','09:00-17:00','10:00-18:00','09:00-16:00','10:00-17:00','OFF']},
+  {name:'ACHRAF AKHLIJ',team:'RBT',zone:'Médina',schedule:['10:00-17:00','09:00-16:00','10:00-18:00','09:00-17:00','OFF','09:00-16:00','10:00-17:00']},
+  {name:'MOURAD CHERRADI',team:'RBT',zone:'Yacoub El Mansour',schedule:['11:00-18:00','09:00-16:00','09:00-17:00','10:00-18:00','09:00-16:00','OFF','10:00-17:00']},
+  {name:'CHARAF LOUMMIHI',team:'RBT',zone:'Souissi',schedule:['09:00-16:00','10:00-17:00','09:00-17:00','10:00-18:00','10:00-17:00','09:00-16:00','OFF']},
+  {name:'YAHYA RHALLAB',team:'RBT',zone:'Hay Riad',schedule:['OFF','09:00-16:00','11:00-19:00','10:00-18:00','09:00-16:00','10:00-17:00','09:00-16:00']},
+  {name:'OUSSAMA EL ATRACH',team:'RBT',zone:'Agdal',schedule:['10:00-17:00','09:00-16:00','09:00-17:00','10:00-18:00','OFF','09:00-16:00','10:00-17:00']},
+  {name:'IMAD TAMIDI',team:'RBT',zone:'Témara',schedule:['11:00-18:00','09:00-16:00','09:00-17:00','10:00-18:00','09:00-16:00','OFF','10:00-17:00']},
+  {name:'SAID OUMBAREK',team:'DRB',zone:'Casablanca',schedule:['09:00-16:00','10:00-17:00','09:00-17:00','10:00-18:00','OFF','09:00-16:00','10:00-17:00']},
+  {name:'AZIZ ESSAILI',team:'DRB',zone:'Rabat',schedule:['OFF','09:00-16:00','11:00-19:00','10:00-18:00','09:00-16:00','10:00-17:00','09:00-16:00']},
+  {name:'OUSSAMA OUAKIL',team:'DRB',zone:'Fès',schedule:['10:00-17:00','09:00-16:00','09:00-17:00','10:00-18:00','OFF','09:00-16:00','10:00-17:00']},
+  {name:'ABDELKARIM SABBANE',team:'DRB',zone:'Marrakech',schedule:['11:00-18:00','09:00-16:00','09:00-17:00','10:00-18:00','09:00-16:00','OFF','10:00-17:00']},
+  {name:'MORAD MURID',team:'BSK',zone:'Beni Mellal',schedule:['09:00-16:00','10:00-17:00','09:00-17:00','10:00-18:00','OFF','09:00-16:00','10:00-17:00']},
+  {name:'HAMID TARIK',team:'BSK',zone:'Kénitra',schedule:['OFF','09:00-16:00','11:00-19:00','10:00-18:00','09:00-16:00','10:00-17:00','09:00-16:00']},
+  {name:'ABDELBASSET BAIDI',team:'BSK',zone:'Marrakech',schedule:['10:00-17:00','09:00-16:00','09:00-17:00','10:00-18:00','OFF','09:00-16:00','10:00-17:00']}
+];
+const HOTSPOTS = [
+  {team:'CAS',name:'Ain Sebaa',badge:'Haute',note:'Pic de commandes du soir, couverture essentielle.'},
+  {team:'CAS',name:'Derb Sultan',badge:'Moyenne',note:'Risque stabilité livraison, surveiller répartition.'},
+  {team:'CAS',name:'Marnissi',badge:'Haute',note:'Nécessite renfort tôt samedi et dimanche.'},
+  {team:'RBT',name:'Hay Riad',badge:'Haute',note:'Volume important pendant les heures creuses.'},
+  {team:'RBT',name:'Agdal',badge:'Moyenne',note:'Flux stable, priorité aux shifts 8h.'},
+  {team:'RBT',name:'Salé City',badge:'Haute',note:'Activité soutenue le week-end.'},
+  {team:'RBT',name:'Kenitra Centre',badge:'Moyenne',note:'Maintenir deux agents dédiés.'},
+  {team:'DRB',name:'Casablanca Ville',badge:'Haute',note:'Couverture 7j/7 recommandée.'},
+  {team:'DRB',name:'Rabat Sud',badge:'Moyenne',note:'Maintenir tempo sur les dimanches.'},
+  {team:'BSK',name:'Beni Mellal',badge:'Haute',note:'Renfort BSK demandé sur shift 8h.'},
+  {team:'BSK',name:'Kénitra Ouest',badge:'Moyenne',note:'Couverture équilibrée sur la semaine.'},
+  {team:'BSK',name:'Marrakech Sud',badge:'Haute',note:'Pic weekend avec 8h obligatoires.'},
+  {team:'BSK',name:'Fès Nord',badge:'Moyenne',note:'Maintenir indicateur de satisfaction.'}
+];
+
+function renderAll() {
+  renderClock();
+  renderDashboard();
+  renderPlanning();
+  renderAgents();
+  renderHotspots();
+  updateNavStatus();
+}
+function switchPage(event) {
+  const page = event.currentTarget.dataset.page;
+  document.querySelectorAll('.page').forEach(s => s.classList.remove('active'));
+  document.getElementById(page).classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(item => item.classList.toggle('active', item.dataset.page === page));
+}
+function updateNavStatus() {
+  const current = document.querySelector('.nav-link.active');
+  if (!current) document.querySelector('.nav-link[data-page="dashboard"]').classList.add('active');
+}
+function renderClock() {
+  const clock = document.getElementById('clock');
+  const now = new Date();
+  clock.textContent = now.toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'});
+}
+function renderDashboard() {
+  const totalAgents = AGENTS.length;
+  document.getElementById('totalAgents').textContent = totalAgents;
+  document.getElementById('totalHours').textContent = totalAgents * 44;
+  document.getElementById('weekendShifts').textContent = totalAgents * 2;
+  document.getElementById('hotspotCount').textContent = HOTSPOTS.length;
+  document.getElementById('coverageValue').textContent = '100%';
+  document.getElementById('coverageMeter').style.width = '100%';
+  const poolCounts = countBy(AGENTS, 'team');
+  document.getElementById('poolSummary').textContent = `CAS ${poolCounts.CAS || 0} · RBT ${poolCounts.RBT || 0} · DRB ${poolCounts.DRB || 0} · BSK ${poolCounts.BSK || 0}`;
+  document.getElementById('restDays').textContent = totalAgents;
+}
+function renderPlanning() {
+  const tbody = document.getElementById('planningBody');
+  tbody.innerHTML = '';
+  const teamDistribution = `${countBy(AGENTS,'team').CAS || 0} CAS · ${countBy(AGENTS,'team').RBT || 0} RBT · ${countBy(AGENTS,'team').DRB || 0} DRB · ${countBy(AGENTS,'team').BSK || 0} BSK`;
+  document.getElementById('teamDistribution').textContent = teamDistribution;
+  AGENTS.forEach(agent => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td><strong>${agent.name}</strong><div style="font-size:11px;color:${agent.team==='CAS'?'#92400E':agent.team==='RBT'?'#14532D':agent.team==='DRB'?'#1E40AF':'#6B21A8'}">${agent.zone}</div></td>
+      <td class="team"><span class="small-pill team-${agent.team}">${agent.team}</span></td>
+      ${agent.schedule.map((cell,index) => `<td class="shift ${cell==='OFF' ? 'shift-off' : ''} ${index >= 2 && index <= 3 && cell !== 'OFF' ? 'shift-weekend' : ''}"><span class="${cell==='OFF' ? '' : cell.includes('17:00') || cell.includes('18:00') ? 'shift-8' : 'shift-7'}">${cell}</span></td>`).join('')}
+    `;
+    tbody.appendChild(row);
+  });
+}
+function renderAgents() {
+  const filterText = document.getElementById('agentFilter').value.trim().toLowerCase();
+  const teamValue = document.getElementById('teamFilter').value;
+  const grid = document.getElementById('agentGrid');
+  grid.innerHTML = '';
+  const filtered = AGENTS.filter(agent => {
+    const matchesText = !filterText || agent.name.toLowerCase().includes(filterText) || agent.team.toLowerCase().includes(filterText) || agent.zone.toLowerCase().includes(filterText);
+    const matchesTeam = !teamValue || agent.team === teamValue;
+    return matchesText && matchesTeam;
+  });
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="card"><p>Aucun agent trouvé. Vérifiez votre filtre.</p></div>';
+    return;
+  }
+  filtered.forEach(agent => {
+    const card = document.createElement('article');
+    card.className = 'agent-card';
+    const initials = agent.name.split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase();
+    card.innerHTML = `
+      <div class="agent-avatar">${initials}</div>
+      <div class="agent-name">${agent.name}</div>
+      <div class="agent-meta">
+        <span><strong>${agent.team}</strong></span>
+        <span>${agent.zone}</span>
+        <span>44h / semaine</span>
+      </div>
+      <div class="agent-week">
+        ${DAYS.map((day, index) => `<div class="agent-day">${day.slice(0,2)}<span>${agent.schedule[index] === 'OFF' ? 'OFF' : agent.schedule[index].replace(':00','')}</span></div>`).join('')}
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+function clearAgentFilters() {
+  document.getElementById('agentFilter').value = '';
+  document.getElementById('teamFilter').value = '';
+  renderAgents();
+}
+function renderHotspots() {
+  const list = document.getElementById('hotspotList');
+  list.innerHTML = '';
+  HOTSPOTS.forEach(item => {
+    const node = document.createElement('article');
+    node.className = 'hotspot-item';
+    node.innerHTML = `
+      <div class="hotspot-meta">
+        <div class="hotspot-team">${item.team}</div>
+        <div class="hotspot-name">${item.name}</div>
+        <div class="hotspot-note">${item.note}</div>
+      </div>
+      <div class="hotspot-pill">${item.badge}</div>
+    `;
+    list.appendChild(node);
+  });
+}
+function countBy(array, key) {
+  return array.reduce((acc, item) => {
+    const value = item[key] || '';
+    acc[value] = (acc[value] || 0) + 1;
+    return acc;
+  }, {});
+}
+renderAll();
+setInterval(renderClock, 1000);
+</script>
+</body>
+</html>
