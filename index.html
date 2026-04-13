@@ -317,6 +317,8 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
       <div class="plan-ttl" id="pl-ttl">Planning</div>
       <button class="btn btn-gh btn-ico btn-sm" onclick="chgW(1)">▶</button>
       <button class="btn btn-y btn-sm" onclick="regenererPlanning()">⚙ Regénérer</button>
+      <button class="btn btn-g btn-sm" onclick="openEmailModal()">📧 Envoyer Email</button>
+      <button class="btn btn-gh btn-sm" onclick="exportPlanningExcel()">📊 Excel</button>
       <button class="btn btn-gh btn-sm" onclick="exportPlanningCSV()">📥 CSV</button>
     </div>
     <div class="wk-bar" id="wk-bar">—</div>
@@ -387,6 +389,7 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
       <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
         <select class="sel" id="pay-mois-sel" onchange="rPay()"></select>
         <select class="sel" onchange="fPay(this.value)"><option value="ALL">Toutes</option><option value="CAS">Casablanca</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option><option value="RBT">Rabat-Salé</option></select>
+        <button class="btn btn-gh btn-sm" onclick="exportPaieExcel()">📊 Export Excel</button>
       </div>
     </div>
     <div class="pay-ban">
@@ -464,6 +467,38 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
       </div>
     </div>
     <div class="m-footer"><button class="btn btn-gh btn-sm" onclick="closeModal('hsOverlay')">Annuler</button><button class="btn btn-y btn-sm" onclick="saveHotspot()">💾 Enregistrer</button></div>
+  </div>
+</div>
+
+<!-- MODAL EMAIL -->
+<div class="overlay" id="emailOverlay" onclick="overlayClose(event,'emailOverlay')">
+  <div class="modal modal-lg">
+    <div class="modal-hd"><div><div class="modal-hd-t">📧 Envoyer le Planning par Email</div><div style="font-size:11px;color:rgba(0,0,0,.55)" id="email-modal-sub"></div></div><button class="m-close" onclick="closeModal('emailOverlay')">✕</button></div>
+    <div class="m-body">
+      <div style="background:var(--b-lt);border:1px solid var(--b-md);border-radius:var(--r2);padding:12px 16px;margin-bottom:16px;font-size:12px;color:var(--b)">
+        ℹ️ Cet outil génère un email pour chaque agent. Copiez le contenu et envoyez manuellement, ou utilisez un client email.
+      </div>
+      <div class="fg">
+        <label>Ville à envoyer</label>
+        <select class="fc" id="email-ville-sel">
+          <option value="ALL">Toutes les villes</option>
+          <option value="CAS">Casablanca</option>
+          <option value="DRB">Dar Bouazza</option>
+          <option value="BSK">Bouskoura</option>
+          <option value="RBT">Rabat-Salé</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Expéditeur (votre email)</label>
+        <input type="email" class="fc" id="email-from" value="oussama.elhamali@providers.glovoapp.com">
+      </div>
+      <div id="email-preview" style="margin-top:12px"></div>
+    </div>
+    <div class="m-footer">
+      <button class="btn btn-gh btn-sm" onclick="closeModal('emailOverlay')">Fermer</button>
+      <button class="btn btn-g btn-sm" onclick="genEmailLinks()">📧 Générer les liens email</button>
+      <button class="btn btn-y btn-sm" onclick="copyAllEmails()">📋 Copier tout</button>
+    </div>
   </div>
 </div>
 
@@ -744,7 +779,8 @@ function buildNav(){
   if(agBtns){
     if(u.role==='admin'){
       agBtns.innerHTML='<button class="btn btn-y btn-sm" onclick="openAddAgent()">➕ Ajouter Agent</button>'+
-        '<button class="btn btn-gh btn-sm" onclick="exportAgentsCSV()">📤 Export CSV</button>'+
+        '<button class="btn btn-gh btn-sm" onclick="exportAgentsExcel()">📊 Excel</button>'+
+        '<button class="btn btn-gh btn-sm" onclick="exportAgentsCSV()">📤 CSV</button>'+
         '<label class="btn btn-gh btn-sm" style="cursor:pointer">📥 Import CSV<input type="file" accept=".csv" style="display:none" onchange="importAgentsCSV(event)"></label>';
     }
   }
@@ -800,11 +836,14 @@ function assignHotspotToShift(shift,hotspots){
 function genPlanningAgent(ag,idx,dates,absences,hotspots,weekNum){
   var ville=ag.ville;
   var p7=POOL7[ville]||POOL7.CAS,p8=POOL8[ville]||POOL8.CAS;
-  // Band rotation par semaine pour varier les horaires
-  var band=(idx+weekNum)%p7.length;
-  // OFF day : jamais SAM(5) ni DIM(6)
-  var offOpts=[0,1,2,3,4]; // LUN=0...VEN=4
-  var offDay=offOpts[(idx+weekNum)%offOpts.length];
+  // Rotation forte : band change chaque semaine par agent
+  // Utilise un hash de weekNum+idx pour maximiser la variété
+  var primes=[7,11,13,17,19,23];
+  var weekSeed=(weekNum*primes[idx%primes.length]+idx*3)%100;
+  var band=weekSeed%p7.length;
+  // OFF day : jamais SAM(5) ni DIM(6) — varie chaque semaine
+  var offOpts=[0,1,2,3,4];
+  var offDay=offOpts[(idx+weekNum*3)%offOpts.length];
 
   var shifts=Array(7).fill(null);
 
@@ -828,8 +867,9 @@ function genPlanningAgent(ag,idx,dates,absences,hotspots,weekNum){
     var is8=work8.indexOf(d)>-1;
     var pool=is8?p8[band%p8.length]:p7[band%p7.length];
     if(!pool||!pool.length)pool=is8?['09:00-17:00']:['09:00-16:00'];
-    // Varier les shifts en fonction du jour pour éviter la monotonie
-    shifts[d]=pool[(d+idx)%pool.length];
+    // Varier selon jour + agent + semaine pour éviter la monotonie
+    var shiftIdx=(d*7+idx+weekNum*5)%pool.length;
+    shifts[d]=pool[shiftIdx];
   }
 
   // CORRECTION 44h EXACTES
@@ -1383,6 +1423,205 @@ function deleteRapport(i){
 // ── MODALS ──
 function closeModal(id){var el=document.getElementById(id);if(el)el.classList.remove('show');}
 function overlayClose(e,id){if(e.target===document.getElementById(id))closeModal(id);}
+
+// ══ EMAIL PLANNING ══
+function openEmailModal(){
+  var sub=document.getElementById('email-modal-sub');
+  var wn=D.meta.weekNum||'?',dates=D.meta.dates||[];
+  if(sub)sub.textContent='Planning W'+wn+' — '+dates[0]+' (Lun) au '+dates[6]+' (Dim)';
+  document.getElementById('email-preview').innerHTML='<div class="em"><div class="em-ic">📧</div><div class="em-tx">Cliquez sur "Générer les liens email" pour préparer les emails</div></div>';
+  document.getElementById('emailOverlay').classList.add('show');
+}
+
+function genEmailLinks(){
+  var ville=document.getElementById('email-ville-sel').value;
+  var from=document.getElementById('email-from').value;
+  var plan=D.planning.filter(function(p){return ville==='ALL'||p.ville===ville;});
+  var agents=getAgents().filter(function(a){return(ville==='ALL'||a.ville===ville)&&a.statut==='Actif'&&a.email;});
+  var dates=D.meta.dates||[];var wn=D.meta.weekNum||'?';
+
+  if(!agents.length){document.getElementById('email-preview').innerHTML='<div class="em"><div class="em-ic">📧</div><div class="em-tx">Aucun agent avec email dans cette ville.</div></div>';return;}
+
+  var html='<div style="font-size:11px;color:var(--tx3);margin-bottom:10px">'+agents.length+' agent(s) avec email · Cliquez sur chaque bouton pour ouvrir votre client email</div>';
+  html+='<div style="display:flex;flex-direction:column;gap:8px">';
+
+  agents.forEach(function(ag){
+    var planAg=plan.filter(function(p){return p.nom.toUpperCase()===ag.nom.toUpperCase();})[0];
+    if(!planAg)return;
+    var prenom=ag.nom.split(' ')[0];
+    var body='Bonjour '+prenom+',\n\nVoici votre planning pour la semaine W'+wn+' ('+dates[0]+' au '+dates[6]+').\n\n';
+    body+='AGENT : '+ag.nom+'\nVILLE : '+ag.ville+' - Zone '+ag.zone+'\n\n';
+    body+='PLANNING :\n';
+    JOURS.forEach(function(j,i){
+      var s=planAg.shifts[i]||'—';var hs=planAg.hotspots[i]||'';
+      var label=s==='OFF'?'Repos':s==='ABSENT'?'Absent':s==='CONGE'?'Congé':s;
+      body+=j+' ('+dates[i]+') : '+label+(hs?' — Hotspot : '+hs:'')+'\n';
+    });
+    body+='\nTotal heures : '+planAg.totalH+'h / 44h\n\n';
+    body+='Merci de respecter vos horaires et de vous présenter ponctuellement sur votre hotspot assigné.\n\nCordialement,\nOperations — Glovo Maroc';
+
+    var subject='Planning semaine W'+wn+' — '+dates[0]+' au '+dates[6];
+    var mailto='mailto:'+ag.email+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+
+    html+='<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg3);border-radius:var(--r2);border:1px solid var(--bd)">'+
+      '<div class="av av-sm" style="background:'+avc(ag.nom)+'">'+ini(ag.nom)+'</div>'+
+      '<div style="flex:1"><div style="font-size:12px;font-weight:700">'+ag.nom+'</div><div class="txxs tx3c">'+ag.email+'</div></div>'+
+      '<a href="'+mailto+'" class="btn btn-g btn-sm" style="text-decoration:none">📧 Envoyer</a>'+
+    '</div>';
+  });
+  html+='</div>';
+  document.getElementById('email-preview').innerHTML=html;
+  toast(agents.length+' emails préparés !','ok');
+}
+
+function copyAllEmails(){
+  var plan=D.planning;var dates=D.meta.dates||[];var wn=D.meta.weekNum||'?';
+  var text='PLANNING SENTINEL W'+wn+' — '+dates[0]+' au '+dates[6]+'\n';
+  text+='='.repeat(50)+'\n\n';
+  plan.forEach(function(p){
+    text+=p.nom+' ('+p.ville+')\n';
+    JOURS.forEach(function(j,i){var s=p.shifts[i]||'—';var hs=p.hotspots[i]||'';text+='  '+j+' : '+s+(hs?' | '+hs:'')+'\n';});
+    text+='  TOTAL : '+p.totalH+'h\n\n';
+  });
+  navigator.clipboard.writeText(text).then(function(){toast('Planning copié dans le presse-papiers !','ok');}).catch(function(){toast('Erreur copie','er');});
+}
+
+// ══ EXPORTS EXCEL ══
+function dlXls(html,filename){
+  var blob=new Blob(['\ufeff'+html],{type:'application/vnd.ms-excel;charset=utf-8'});
+  var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download=filename;a.click();URL.revokeObjectURL(url);
+}
+
+function exportPlanningExcel(){
+  var plan=D.planning||[];var dates=D.meta.dates||[];var wn=D.meta.weekNum||'?';
+  var html='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"><style>'+
+    'body{font-family:Arial,sans-serif;font-size:11pt}'+
+    '.hdr{background:#FFC244;font-weight:bold;font-size:12pt;text-align:center}'+
+    '.city-cas{background:#FEF3C7;color:#92400E;font-weight:bold}'+
+    '.city-rbt{background:#DCFCE7;color:#166534;font-weight:bold}'+
+    '.city-drb{background:#DBEAFE;color:#1E40AF;font-weight:bold}'+
+    '.city-bsk{background:#F3E8FF;color:#6B21A8;font-weight:bold}'+
+    '.ok{background:#D1FAE5;color:#065F46;font-weight:bold}'+
+    '.er{background:#FEE2E2;color:#991B1B;font-weight:bold}'+
+    '.off{background:#F3F4F6;color:#9CA3AF}'+
+    'td,th{border:1px solid #ddd;padding:6px 8px;white-space:nowrap}'+
+    '.sep{background:#1A1A2E;color:white;font-weight:bold;font-size:10pt}'+
+  '</style></head><body>'+
+  '<table>'+
+  '<tr><td colspan="'+(JOURS.length+4)+'" class="hdr">SENTINEL — Planning W'+wn+' | '+dates[0]+' (Lun) au '+dates[6]+' (Dim) | Objectif 44h/agent</td></tr>'+
+  '<tr><th>Agent</th><th>Ville</th><th>Zone</th>'+
+  JOURS.map(function(j,i){return '<th>'+j+'<br>'+dates[i]+'</th>';}).join('')+
+  '<th>H/SEM</th></tr>';
+
+  var prevVille='';
+  plan.forEach(function(p){
+    if(p.ville!==prevVille){
+      var cityLabels={CAS:'🏙 Casablanca',DRB:'🌴 Dar Bouazza',BSK:'🌿 Bouskoura',RBT:'🏛 Rabat-Salé'};
+      html+='<tr><td colspan="'+(JOURS.length+4)+'" class="sep">'+cityLabels[p.ville]+' — ville '+p.ville+'</td></tr>';
+      prevVille=p.ville;
+    }
+    var cityClass='city-'+p.ville.toLowerCase();
+    var ok=Math.abs(p.totalH-44)<=0.5,warn=Math.abs(p.totalH-44)<=3;
+    html+='<tr>'+
+      '<td><b>'+p.nom+'</b></td>'+
+      '<td class="'+cityClass+'">'+p.ville+'</td>'+
+      '<td style="color:#64748B">'+p.zone+'</td>'+
+      p.shifts.map(function(s,i){
+        var hs=p.hotspots[i]||'';
+        var bg=s==='OFF'?'#F3F4F6':s==='ABSENT'?'#FEE2E2':s==='CONGE'?'#E0E7FF':'';
+        var txt=s+(hs?'\n📍 '+hs:'');
+        return '<td style="background:'+bg+';text-align:center">'+txt+'</td>';
+      }).join('')+
+      '<td class="'+(ok?'ok':warn?'':'er')+'" style="text-align:center"><b>'+p.totalH+'h</b></td>'+
+    '</tr>';
+  });
+  html+='</table></body></html>';
+  dlXls(html,'Planning_W'+wn+'.xls');
+  toast('Planning Excel téléchargé !','ok');
+}
+
+function exportAgentsExcel(){
+  var agents=getAgents();
+  var html='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel">'+
+  '<head><meta charset="UTF-8"><style>body{font-family:Arial;font-size:11pt}th{background:#FFC244;font-weight:bold}td,th{border:1px solid #ddd;padding:6px 8px}'+
+  '.actif{color:#065F46;background:#D1FAE5;font-weight:bold}.inactif{color:#991B1B;background:#FEE2E2}'+
+  '.cas{background:#FEF3C7}.rbt{background:#DCFCE7}.drb{background:#DBEAFE}.bsk{background:#F3E8FF}</style></head>'+
+  '<body><table>'+
+  '<tr><td colspan="6" style="background:#1A1A2E;color:white;font-weight:bold;font-size:12pt;text-align:center">SENTINEL — Liste des Agents — '+new Date().toLocaleDateString('fr-FR')+'</td></tr>'+
+  '<tr><th>#</th><th>Nom</th><th>Ville</th><th>Zone</th><th>Téléphone</th><th>Email</th><th>Statut</th></tr>'+
+  agents.map(function(a,i){var c=a.ville.toLowerCase();return '<tr><td>'+(i+1)+'</td><td><b>'+a.nom+'</b></td><td class="'+c+'">'+a.ville+'</td><td>'+a.zone+'</td><td>'+a.tel+'</td><td>'+a.email+'</td><td class="'+(a.statut==='Actif'?'actif':'inactif')+'">'+a.statut+'</td></tr>';}).join('')+
+  '</table></body></html>';
+  dlXls(html,'Agents_SENTINEL.xls');
+  toast('Agents Excel téléchargé !','ok');
+}
+
+function exportPaieExcel(){
+  var selMois=document.getElementById('pay-mois-sel');
+  var moisVal=selMois?selMois.value:'';
+  var parts=moisVal?moisVal.split('-'):[String(new Date().getFullYear()),String(new Date().getMonth()+1)];
+  var selAn=parseInt(parts[0]),selMoisIdx=parseInt(parts[1])-1;
+  var moisNom=MOIS_NOM[selMoisIdx]+' '+selAn;
+  var prevMois=selMoisIdx===0?11:selMoisIdx-1;var prevAn=selMoisIdx===0?selAn-1:selAn;
+  var now=new Date();var jp=Math.min(now.getDate(),22);
+  var absences=getAbsences();
+  var agents=(D.allAgents||[]).filter(function(a){return a.statut==='Actif'&&D.visibleVilles.indexOf(a.ville)>-1;});
+  var totNet=0,totDed=0,totBal=0;
+
+  var html='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel">'+
+  '<head><meta charset="UTF-8"><style>body{font-family:Arial;font-size:11pt}th{background:#1A1A2E;color:white;font-weight:bold}td,th{border:1px solid #ddd;padding:6px 8px}'+
+  '.hdr{background:#FFC244;font-weight:bold;font-size:13pt;text-align:center}'+
+  '.ok{background:#D1FAE5;color:#065F46;font-weight:bold}.ded{background:#FEE2E2;color:#991B1B;font-weight:bold}'+
+  '.net{background:#065F46;color:white;font-weight:bold;font-size:12pt}'+
+  '.tot{background:#1A1A2E;color:white;font-weight:bold}'+
+  '.cas{background:#FEF3C7;color:#92400E}.rbt{background:#DCFCE7;color:#166534}.drb{background:#DBEAFE;color:#1E40AF}.bsk{background:#F3E8FF;color:#6B21A8}'+
+  '</style></head><body><table>'+
+  '<tr><td colspan="10" class="hdr">PAIE — '+moisNom.toUpperCase()+' — SENTINEL CAS OPS</td></tr>'+
+  '<tr><td colspan="10" style="background:#0F172A;color:#94A3B8;font-size:9pt;text-align:center">Période : 21/'+String(prevMois+1).padStart(2,'0')+'/'+prevAn+' → 22/'+String(selMoisIdx+1).padStart(2,'0')+'/'+selAn+' | Taux : 192 MAD/j | Salaire base : 5 000 MAD</td></tr>'+
+  '<tr><th>#</th><th>Agent</th><th>Ville</th><th>Zone</th><th>Salaire Base</th><th>J. Travaillés</th><th>Absences</th><th>Congés</th><th>Déduction MAD</th><th>Balance à date</th><th>NET MOIS COMPLET</th></tr>';
+
+  agents.forEach(function(ag,i){
+    var myA=absences.filter(function(ab){
+      if(ab.nom.toUpperCase()!==ag.nom.toUpperCase()||ab.type!=='ABSENT')return false;
+      var dp=ab.date.split('/');if(dp.length!==3)return false;
+      var abDate=new Date(parseInt(dp[2]),parseInt(dp[1])-1,parseInt(dp[0]));
+      return abDate>=new Date(prevAn,prevMois,21)&&abDate<=new Date(selAn,selMoisIdx,22);
+    });
+    var myC=absences.filter(function(ab){
+      if(ab.nom.toUpperCase()!==ag.nom.toUpperCase()||ab.type!=='CONGE')return false;
+      var dp=ab.date.split('/');if(dp.length!==3)return false;
+      var abDate=new Date(parseInt(dp[2]),parseInt(dp[1])-1,parseInt(dp[0]));
+      return abDate>=new Date(prevAn,prevMois,21)&&abDate<=new Date(selAn,selMoisIdx,22);
+    });
+    var nA=myA.length,nC=myC.length,ded=nA*192,net=5000-ded,jT=Math.max(0,26-nA-nC),jA=Math.max(0,jp-nA),bal=jA*192;
+    totNet+=net;totDed+=ded;totBal+=bal;
+    var c=ag.ville.toLowerCase();
+    html+='<tr>'+
+      '<td style="text-align:center">'+(i+1)+'</td>'+
+      '<td><b>'+ag.nom+'</b></td>'+
+      '<td class="'+c+'"><b>'+ag.ville+'</b></td>'+
+      '<td style="color:#64748B">'+ag.zone+'</td>'+
+      '<td style="text-align:right;font-weight:bold">5 000 MAD</td>'+
+      '<td style="text-align:center;'+(jT>=24?'background:#D1FAE5;color:#065F46;':'')+'font-weight:bold">'+jT+' j / 26</td>'+
+      '<td style="text-align:center;'+(nA>0?'background:#FEE2E2;color:#991B1B;':'background:#D1FAE5;color:#065F46;')+'font-weight:bold">'+nA+' j</td>'+
+      '<td style="text-align:center;'+(nC>0?'background:#E0E7FF;color:#3730A3;':'')+'font-weight:bold">'+nC+' j</td>'+
+      '<td class="'+(ded>0?'ded':'ok')+'" style="text-align:right">'+(ded>0?'- '+ded+' MAD':'0 MAD')+'</td>'+
+      '<td style="text-align:right;background:#EFF6FF;color:#1E40AF;font-weight:bold">'+bal+' MAD</td>'+
+      '<td class="net" style="text-align:right">'+net+' MAD</td>'+
+    '</tr>';
+  });
+
+  html+='<tr>'+
+    '<td colspan="4" class="tot">TOTAUX ('+agents.length+' agents)</td>'+
+    '<td class="tot" style="text-align:right;color:#FFC244">'+(5000*agents.length)+' MAD</td>'+
+    '<td class="tot"></td><td class="tot"></td><td class="tot"></td>'+
+    '<td class="tot" style="text-align:right;color:#FCA5A5">- '+totDed+' MAD</td>'+
+    '<td class="tot" style="text-align:right;color:#93C5FD">'+totBal+' MAD</td>'+
+    '<td class="tot" style="text-align:right;color:#4ADE80;font-size:12pt">'+totNet+' MAD</td>'+
+  '</tr>';
+  html+='</table></body></html>';
+  dlXls(html,'Paie_SENTINEL_'+moisNom.replace(' ','_')+'.xls');
+  toast('Paie Excel téléchargée !','ok');
+}
 
 // ── AUTO-REGENERATE weekly ──
 function checkAutoRegen(){
