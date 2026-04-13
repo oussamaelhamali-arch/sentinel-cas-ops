@@ -308,6 +308,10 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
     </div>
     <div class="card"><div class="chd">🗺 Zones</div><div class="zones" id="ov-zones"></div></div>
     <div class="card"><div class="chd">📍 Hotspots actifs <span style="font-size:10px;color:var(--tx3)" id="ov-hs-ct"></span></div><div id="ov-hs"></div></div>
+    <div class="card" id="rapports-summary-card" style="display:none">
+      <div class="chd">📋 Rapports Leaders — Consolidé <span style="font-size:10px;color:var(--tx3);font-weight:400" id="rp-sum-date"></span></div>
+      <div id="rp-summary-content"></div>
+    </div>
   </div>
 
   <!-- PLANNING -->
@@ -470,35 +474,47 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
   </div>
 </div>
 
-<!-- MODAL EMAIL -->
+<!-- MODAL EMAIL BULK -->
 <div class="overlay" id="emailOverlay" onclick="overlayClose(event,'emailOverlay')">
   <div class="modal modal-lg">
-    <div class="modal-hd"><div><div class="modal-hd-t">📧 Envoyer le Planning par Email</div><div style="font-size:11px;color:rgba(0,0,0,.55)" id="email-modal-sub"></div></div><button class="m-close" onclick="closeModal('emailOverlay')">✕</button></div>
+    <div class="modal-hd">
+      <div><div class="modal-hd-t">📧 Envoi Planning — Semaine prochaine</div><div style="font-size:11px;color:rgba(0,0,0,.55)" id="email-modal-sub"></div></div>
+      <button class="m-close" onclick="closeModal('emailOverlay')">✕</button>
+    </div>
     <div class="m-body">
-      <div style="background:var(--b-lt);border:1px solid var(--b-md);border-radius:var(--r2);padding:12px 16px;margin-bottom:16px;font-size:12px;color:var(--b)">
-        ℹ️ Cet outil génère un email pour chaque agent. Copiez le contenu et envoyez manuellement, ou utilisez un client email.
+      <!-- Info bar -->
+      <div style="background:#0B1628;border-radius:var(--r2);padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px">
+        <span style="font-size:20px">📧</span>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:#FFC244">Envoi via Gmail — Semaine prochaine (Lun→Dim)</div>
+          <div style="font-size:11px;color:#4A6080;margin-top:2px">Cliquez "Envoyer Tout" pour ouvrir Gmail avec tous les emails en brouillon, ou envoyez individuellement.</div>
+        </div>
       </div>
-      <div class="fg">
-        <label>Ville à envoyer</label>
-        <select class="fc" id="email-ville-sel">
-          <option value="ALL">Toutes les villes</option>
-          <option value="CAS">Casablanca</option>
-          <option value="DRB">Dar Bouazza</option>
-          <option value="BSK">Bouskoura</option>
-          <option value="RBT">Rabat-Salé</option>
-        </select>
+      <div class="fgrid" style="margin-bottom:14px">
+        <div class="fgl">
+          <label>Ville à envoyer</label>
+          <select class="fc" id="email-ville-sel">
+            <option value="ALL">Toutes les villes</option>
+            <option value="CAS">Casablanca</option>
+            <option value="DRB">Dar Bouazza</option>
+            <option value="BSK">Bouskoura</option>
+            <option value="RBT">Rabat-Salé</option>
+          </select>
+        </div>
+        <div class="fgl">
+          <label>Expéditeur</label>
+          <input type="email" class="fc" id="email-from" placeholder="votre@gmail.com">
+        </div>
       </div>
-      <div class="fg">
-        <label>Expéditeur (votre email)</label>
-        <input type="email" class="fc" id="email-from" value="oussama.elhamali@providers.glovoapp.com">
+      <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+        <button class="btn btn-y" onclick="preparerEmails()">⚡ Préparer les emails</button>
+        <button class="btn btn-g" id="btn-send-all" onclick="envoyerTout()" style="display:none">📧 Envoyer Tout (Gmail)</button>
+        <button class="btn btn-gh btn-sm" onclick="copyAllEmailsText()" id="btn-copy-all" style="display:none">📋 Copier tout</button>
+        <div id="email-count" style="font-size:12px;color:var(--tx3);padding:9px 0;display:none"></div>
       </div>
-      <div id="email-preview" style="margin-top:12px"></div>
+      <div id="email-preview"></div>
     </div>
-    <div class="m-footer">
-      <button class="btn btn-gh btn-sm" onclick="closeModal('emailOverlay')">Fermer</button>
-      <button class="btn btn-g btn-sm" onclick="genEmailLinks()">📧 Générer les liens email</button>
-      <button class="btn btn-y btn-sm" onclick="copyAllEmails()">📋 Copier tout</button>
-    </div>
+    <div class="m-footer"><button class="btn btn-gh btn-sm" onclick="closeModal('emailOverlay')">Fermer</button></div>
   </div>
 </div>
 
@@ -986,7 +1002,7 @@ function loadData(off){
 
 function regenererPlanning(){localStorage.removeItem(getPlanKey(weekOffset));loadData(weekOffset);toast('Planning régénéré !','ok');}
 
-function rAll(){rOv();rPlanning();rAgents();rHs();rAbs();rPay();}
+function rAll(){rOv();rPlanning();rAgents();rHs();rAbs();rPay();rReportsSummary();}
 
 // ══ DASHBOARD ══
 function rOv(){
@@ -1424,66 +1440,114 @@ function deleteRapport(i){
 function closeModal(id){var el=document.getElementById(id);if(el)el.classList.remove('show');}
 function overlayClose(e,id){if(e.target===document.getElementById(id))closeModal(id);}
 
-// ══ EMAIL PLANNING ══
+// ══ EMAIL PLANNING — BULK GMAIL ══
+var preparedEmails=[];
+
 function openEmailModal(){
+  var lundi=getLundi(1);
+  var dates=[];for(var i=0;i<7;i++){var d=new Date(lundi);d.setDate(lundi.getDate()+i);dates.push(fmtD(d));}
+  var wn=numSem(lundi);
   var sub=document.getElementById('email-modal-sub');
-  var wn=D.meta.weekNum||'?',dates=D.meta.dates||[];
-  if(sub)sub.textContent='Planning W'+wn+' — '+dates[0]+' (Lun) au '+dates[6]+' (Dim)';
-  document.getElementById('email-preview').innerHTML='<div class="em"><div class="em-ic">📧</div><div class="em-tx">Cliquez sur "Générer les liens email" pour préparer les emails</div></div>';
+  if(sub)sub.textContent='Planning W'+wn+' — Semaine prochaine Lun '+dates[0]+' au Dim '+dates[6];
+  document.getElementById('email-preview').innerHTML='';
+  document.getElementById('btn-send-all').style.display='none';
+  document.getElementById('btn-copy-all').style.display='none';
+  preparedEmails=[];
   document.getElementById('emailOverlay').classList.add('show');
 }
 
-function genEmailLinks(){
-  var ville=document.getElementById('email-ville-sel').value;
-  var from=document.getElementById('email-from').value;
-  var plan=D.planning.filter(function(p){return ville==='ALL'||p.ville===ville;});
-  var agents=getAgents().filter(function(a){return(ville==='ALL'||a.ville===ville)&&a.statut==='Actif'&&a.email;});
-  var dates=D.meta.dates||[];var wn=D.meta.weekNum||'?';
-
-  if(!agents.length){document.getElementById('email-preview').innerHTML='<div class="em"><div class="em-ic">📧</div><div class="em-tx">Aucun agent avec email dans cette ville.</div></div>';return;}
-
-  var html='<div style="font-size:11px;color:var(--tx3);margin-bottom:10px">'+agents.length+' agent(s) avec email · Cliquez sur chaque bouton pour ouvrir votre client email</div>';
-  html+='<div style="display:flex;flex-direction:column;gap:8px">';
-
-  agents.forEach(function(ag){
-    var planAg=plan.filter(function(p){return p.nom.toUpperCase()===ag.nom.toUpperCase();})[0];
-    if(!planAg)return;
-    var prenom=ag.nom.split(' ')[0];
-    var body='Bonjour '+prenom+',\n\nVoici votre planning pour la semaine W'+wn+' ('+dates[0]+' au '+dates[6]+').\n\n';
-    body+='AGENT : '+ag.nom+'\nVILLE : '+ag.ville+' - Zone '+ag.zone+'\n\n';
-    body+='PLANNING :\n';
-    JOURS.forEach(function(j,i){
-      var s=planAg.shifts[i]||'—';var hs=planAg.hotspots[i]||'';
-      var label=s==='OFF'?'Repos':s==='ABSENT'?'Absent':s==='CONGE'?'Congé':s;
-      body+=j+' ('+dates[i]+') : '+label+(hs?' — Hotspot : '+hs:'')+'\n';
-    });
-    body+='\nTotal heures : '+planAg.totalH+'h / 44h\n\n';
-    body+='Merci de respecter vos horaires et de vous présenter ponctuellement sur votre hotspot assigné.\n\nCordialement,\nOperations — Glovo Maroc';
-
-    var subject='Planning semaine W'+wn+' — '+dates[0]+' au '+dates[6];
-    var mailto='mailto:'+ag.email+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
-
-    html+='<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg3);border-radius:var(--r2);border:1px solid var(--bd)">'+
-      '<div class="av av-sm" style="background:'+avc(ag.nom)+'">'+ini(ag.nom)+'</div>'+
-      '<div style="flex:1"><div style="font-size:12px;font-weight:700">'+ag.nom+'</div><div class="txxs tx3c">'+ag.email+'</div></div>'+
-      '<a href="'+mailto+'" class="btn btn-g btn-sm" style="text-decoration:none">📧 Envoyer</a>'+
-    '</div>';
-  });
-  html+='</div>';
-  document.getElementById('email-preview').innerHTML=html;
-  toast(agents.length+' emails préparés !','ok');
+function buildEmailText(ag,planAg,dates,wn){
+  var prenom=ag.nom.split(' ')[0];
+  var jours=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+  var body='Bonjour '+prenom+',\n\nVoici votre planning pour la semaine W'+wn+' ('+dates[0]+' au '+dates[6]+').\n\n';
+  body+='AGENT : '+ag.nom+'\nVILLE : '+ag.ville+' - Zone '+ag.zone+'\n\nPLANNING :\n'+'─'.repeat(30)+'\n';
+  jours.forEach(function(j,i){var s=planAg.shifts[i]||'—';var hs=planAg.hotspots[i]||'';var label=s==='OFF'?'Repos':s==='ABSENT'?'Absent':s==='CONGE'?'Conge':s;body+=j+' ('+dates[i]+') : '+label+(hs?' | Hotspot : '+hs:'')+'\n';});
+  body+='\nTotal : '+planAg.totalH+'h / 44h\n\nMerci de respecter vos horaires.\n\nCordialement,\nOperations - Glovo Maroc';
+  return body;
 }
 
-function copyAllEmails(){
-  var plan=D.planning;var dates=D.meta.dates||[];var wn=D.meta.weekNum||'?';
-  var text='PLANNING SENTINEL W'+wn+' — '+dates[0]+' au '+dates[6]+'\n';
-  text+='='.repeat(50)+'\n\n';
-  plan.forEach(function(p){
-    text+=p.nom+' ('+p.ville+')\n';
-    JOURS.forEach(function(j,i){var s=p.shifts[i]||'—';var hs=p.hotspots[i]||'';text+='  '+j+' : '+s+(hs?' | '+hs:'')+'\n';});
-    text+='  TOTAL : '+p.totalH+'h\n\n';
+function buildGmailLink(em){
+  return 'https://mail.google.com/mail/?view=cm&to='+encodeURIComponent(em.to)+'&su='+encodeURIComponent(em.subject)+'&body='+encodeURIComponent(em.textBody);
+}
+
+function preparerEmails(){
+  var ville=document.getElementById('email-ville-sel').value;
+  var lundi=getLundi(1);var wn=numSem(lundi);
+  var dates=[];for(var i=0;i<7;i++){var d=new Date(lundi);d.setDate(lundi.getDate()+i);dates.push(fmtD(d));}
+  var key=SK.PLAN+wn+'_'+lundi.getFullYear();
+  var planData=JSON.parse(localStorage.getItem(key)||'null');
+  if(!planData){planData=genPlanning(getAgents(),getHotspots(),getAbsences(),0);savePlan(planData,0);}
+  var agents=getAgents().filter(function(a){return a.statut==='Actif'&&a.email&&a.email.indexOf('@')>-1&&(ville==='ALL'||a.ville===ville)&&currentUser.villes.indexOf(a.ville)>-1;});
+  if(!agents.length){document.getElementById('email-preview').innerHTML='<div class="em"><div class="em-ic">📧</div><div class="em-tx">Aucun agent avec email.<br><small>Ajoutez les emails dans la page Agents.</small></div></div>';return;}
+  preparedEmails=[];
+  var subject='Planning semaine W'+wn+' — '+dates[0]+' (Lun) au '+dates[6]+' (Dim)';
+  agents.forEach(function(ag){
+    var planAg=(planData.planning||[]).filter(function(p){return p.nom.toUpperCase()===ag.nom.toUpperCase();})[0];
+    if(!planAg)return;
+    preparedEmails.push({ag:ag,subject:subject,textBody:buildEmailText(ag,planAg,dates,wn),to:ag.email});
   });
-  navigator.clipboard.writeText(text).then(function(){toast('Planning copié dans le presse-papiers !','ok');}).catch(function(){toast('Erreur copie','er');});
+  var html='<div style="font-size:12px;margin-bottom:10px;padding:8px 12px;background:var(--g-lt);border-radius:var(--r2);color:var(--g);font-weight:600">✅ '+preparedEmails.length+' email(s) prêts — cliquez "Envoyer Tout" pour ouvrir Gmail</div>';
+  html+='<div style="display:flex;flex-direction:column;gap:6px;max-height:300px;overflow-y:auto">';
+  preparedEmails.forEach(function(em){var clr=CC[em.ag.ville]||{};html+='<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg3);border-radius:var(--r2);border:1px solid var(--bd)"><div class="av av-sm" style="background:'+avc(em.ag.nom)+'">'+ini(em.ag.nom)+'</div><div style="flex:1"><div style="font-size:12px;font-weight:700">'+em.ag.nom+'</div><div class="txxs tx3c">'+em.to+'</div></div><span style="background:'+clr.bg+';color:'+clr.tx+';padding:2px 8px;border-radius:var(--r3);font-size:10px;font-weight:700">'+em.ag.ville+'</span><a href="'+buildGmailLink(em)+'" target="_blank" class="btn btn-g btn-sm" style="text-decoration:none;font-size:11px">📧 Gmail</a></div>';});
+  html+='</div>';
+  document.getElementById('email-preview').innerHTML=html;
+  document.getElementById('btn-send-all').style.display='inline-flex';
+  document.getElementById('btn-copy-all').style.display='inline-flex';
+  toast(preparedEmails.length+' emails prêts !','ok');
+}
+
+function envoyerTout(){
+  if(!preparedEmails.length){toast('Préparez les emails d\'abord !','er');return;}
+  var i=0;
+  function openNext(){if(i>=preparedEmails.length)return;window.open(buildGmailLink(preparedEmails[i]),'_blank');i++;setTimeout(openNext,900);}
+  openNext();
+  toast('Ouverture de '+preparedEmails.length+' Gmail...','ok',4000);
+}
+
+function copyAllEmailsText(){
+  if(!preparedEmails.length){toast('Préparez les emails d\'abord !','er');return;}
+  var text=preparedEmails.map(function(em){return 'A : '+em.to+'\nObjet : '+em.subject+'\n\n'+em.textBody+'\n\n'+'='.repeat(50)+'\n\n';}).join('');
+  navigator.clipboard.writeText(text).then(function(){toast('Emails copiés !','ok');}).catch(function(){toast('Erreur copie','er');});
+}
+
+// ══ RAPPORT CONSOLIDÉ ADMIN ══
+function rReportsSummary(){
+  var card=document.getElementById('rapports-summary-card');if(!card)return;
+  if(!currentUser||currentUser.role!=='admin'){card.style.display='none';return;}
+  var rapports=getRapports().sort(function(a,b){return b.date.localeCompare(a.date);});
+  if(!rapports.length){card.style.display='none';return;}
+  card.style.display='block';
+  var recents=rapports.filter(function(r){var d=new Date(r.date),now=new Date();return(now-d)<7*24*3600*1000;});
+  var sub=document.getElementById('rp-sum-date');if(sub)sub.textContent=recents.length+' rapport(s) — 7 derniers jours';
+  var totalRap=recents.length;
+  var avgNote=totalRap?Math.round(recents.reduce(function(s,r){return s+parseInt(r.note||3);},0)/totalRap):0;
+  var stars='⭐'.repeat(avgNote);
+  var allIncidents=recents.filter(function(r){return r.incidents&&r.incidents.trim();}).length;
+  var html='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">'+
+    '<div style="background:var(--y-lt);border:1px solid rgba(255,194,68,.3);border-radius:var(--r2);padding:12px;text-align:center"><div class="kpi-lbl">Rapports reçus</div><div style="font-size:24px;font-weight:800;color:#92400E">'+totalRap+'</div></div>'+
+    '<div style="background:var(--g-lt);border:1px solid rgba(0,160,130,.2);border-radius:var(--r2);padding:12px;text-align:center"><div class="kpi-lbl">Note moyenne</div><div style="font-size:16px;font-weight:700;color:var(--g)">'+stars+'</div></div>'+
+    '<div style="background:'+(allIncidents>0?'var(--r-lt)':'var(--g-lt)')+';border:1px solid rgba('+(allIncidents>0?'229,57,53':'0,160,130')+',.2);border-radius:var(--r2);padding:12px;text-align:center"><div class="kpi-lbl">Incidents signalés</div><div style="font-size:24px;font-weight:800;color:'+(allIncidents>0?'var(--r)':'var(--g)')+'">'+allIncidents+'</div></div>'+
+  '</div>';
+  // Grouper par date
+  var byDate={};recents.forEach(function(r){if(!byDate[r.date])byDate[r.date]=[];byDate[r.date].push(r);});
+  Object.keys(byDate).sort().reverse().slice(0,4).forEach(function(date){
+    var rapsDay=byDate[date];
+    html+='<div style="margin-bottom:10px;border:1px solid var(--bd);border-radius:var(--r);overflow:hidden">'+
+      '<div style="background:var(--bg3);padding:8px 14px;font-size:11px;font-weight:700;color:var(--tx);border-bottom:1px solid var(--bd)">📅 '+new Date(date).toLocaleDateString(\'fr-FR\',{weekday:\'long\',day:\'numeric\',month:\'long\'})+' <span style="font-size:10px;color:var(--tx3);font-weight:400">'+rapsDay.length+' rapport(s)</span></div>';
+    rapsDay.forEach(function(r){
+      var lc=r.user==='choaib'?'#F39C12':'#27AE60';var stars2='⭐'.repeat(parseInt(r.note)||3);
+      html+='<div style="padding:12px 14px;border-bottom:1px solid var(--bd)">'+
+        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div class="av av-sm" style="background:'+lc+'">'+ini(r.auteur)+'</div><div><div style="font-size:12px;font-weight:700">'+r.auteur+'</div><div class="txxs tx3c">'+r.zone+' · '+stars2+'</div></div></div>'+
+        (r.presents?'<div style="margin-bottom:5px"><span style="font-size:9px;font-weight:700;color:var(--g)">✅ PRÉSENTS : </span><span style="font-size:11px;color:var(--tx2)">'+r.presents+'</span></div>':'')+
+        (r.absents?'<div style="margin-bottom:5px"><span style="font-size:9px;font-weight:700;color:var(--r)">🚨 ABSENTS : </span><span style="font-size:11px;color:var(--r)">'+r.absents+'</span></div>':'')+
+        (r.controles?'<div style="margin-bottom:5px"><span style="font-size:9px;font-weight:700;color:var(--b)">🔍 CONTRÔLES : </span><span style="font-size:11px;color:var(--tx2)">'+r.controles+'</span></div>':'')+
+        (r.incidents?'<div style="margin-bottom:5px;padding:6px 10px;background:var(--r-lt);border-radius:var(--r3);border-left:3px solid var(--r)"><span style="font-size:9px;font-weight:700;color:var(--r)">⚠️ INCIDENTS : </span><span style="font-size:11px;color:var(--r)">'+r.incidents+'</span></div>':'')+
+        (r.actions?'<div><span style="font-size:9px;font-weight:700;color:var(--pu)">🎯 ACTIONS : </span><span style="font-size:11px;color:var(--tx2)">'+r.actions+'</span></div>':'')+
+      '</div>';
+    });
+    html+='</div>';
+  });
+  var rpc=document.getElementById('rp-summary-content');if(rpc)rpc.innerHTML=html;
 }
 
 // ══ EXPORTS EXCEL ══
