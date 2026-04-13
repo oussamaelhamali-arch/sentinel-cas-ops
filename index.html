@@ -256,7 +256,23 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
     <div class="login-logo">🛵</div>
     <div class="login-title">SENTINEL</div>
     <div class="login-sub">Glovo Maroc · CAS OPS — Connexion sécurisée</div>
-    <div class="login-users" id="loginUsers"></div>
+    <div class="login-users">
+      <div class="login-user" id="lu-admin" onclick="selUser('admin')">
+        <div class="u-av" style="background:#E74C3C">OE</div>
+        <div class="u-nm">Oussama</div>
+        <div class="u-role">Admin</div>
+      </div>
+      <div class="login-user" id="lu-choaib" onclick="selUser('choaib')">
+        <div class="u-av" style="background:#F39C12">CK</div>
+        <div class="u-nm">Choaib</div>
+        <div class="u-role">Leader</div>
+      </div>
+      <div class="login-user" id="lu-loutfi" onclick="selUser('loutfi')">
+        <div class="u-av" style="background:#27AE60">LO</div>
+        <div class="u-nm">Loutfi</div>
+        <div class="u-role">Leader</div>
+      </div>
+    </div>
     <div class="lf"><label>Mot de passe</label><input type="password" id="loginPwd" placeholder="Entrez votre mot de passe" onkeydown="if(event.key==='Enter')doLogin()"></div>
     <div class="login-err" id="loginErr"></div>
     <button class="login-btn" onclick="doLogin()">🔑 Se connecter</button>
@@ -1700,9 +1716,7 @@ function checkAutoRegen(){
 
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', function(){
-  initLogin();
   checkAutoRegen();
-  // Check saved session
   var savedSession=sessionStorage.getItem('sentinel_user');
   if(savedSession){
     try{
