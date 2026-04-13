@@ -439,32 +439,77 @@
       const zoneFilter = WEEK_FILTER.zone;
       const tbody = document.getElementById('planningBody');
       tbody.innerHTML = '';
+
       const filtered = AGENTS.filter(agent => {
         const byTeam = !team || agent.team === team;
         const byZone = zoneFilter === 'Toutes' || agent.location === zoneFilter || agent.zone.toLowerCase().includes(zoneFilter.toLowerCase()) || agent.city === zoneFilter;
         return byTeam && byZone;
       });
-      const grouped = filtered.reduce((acc,agent) => {
-        (acc[agent.city] = acc[agent.city] || []).push(agent);
+
+      if (!filtered.length) {
+        const emptyRow = document.createElement('tr');
+        emptyRow.innerHTML = '<td colspan="11" style="padding:28px 14px;text-align:center;color:var(--muted);">Aucun agent trouvé pour ce filtre.</td>';
+        tbody.appendChild(emptyRow);
+        return;
+      }
+
+      const grouped = filtered.reduce((acc, agent) => {
+        const city = agent.city || 'Autre';
+        (acc[city] = acc[city] || []).push(agent);
         return acc;
       }, {});
+
       Object.keys(grouped).sort().forEach(city => {
         const header = document.createElement('tr');
         header.className = 'zone-row';
-        header.innerHTML = `<td colspan="11">${city}</td>`;
-        header.style.backgroundColor = getCityBg(city.toUpperCase());
-        header.style.color = getCityTx(city.toUpperCase());
+        const cell = document.createElement('td');
+        cell.colSpan = 11;
+        cell.textContent = city;
+        cell.style.backgroundColor = getCityBg(city.toUpperCase());
+        cell.style.color = getCityTx(city.toUpperCase());
+        header.appendChild(cell);
         tbody.appendChild(header);
+
         grouped[city].forEach(agent => {
           const row = document.createElement('tr');
-          const hours = agent.schedule.reduce((sum,sh) => sum + shiftHours(sh),0);
-          const shifts = agent.schedule.map(shift => {
-            const css = shift === 'OFF' ? 'off' : 'work';
-            const hotspot = shift !== 'OFF' ? `<div class="hotspot-chip">O'Village Sidi Maarouf</div>` : '';
-            const bg = getShiftBg(shift);
-            return `<td><span class="shift-chip ${css}" style="background-color: ${bg};">${shift}</span>${hotspot}</td>`;
-          }).join('');
-          row.innerHTML = `<td><strong>${agent.name}</strong><div style="color:var(--muted);font-size:12px;margin-top:6px;">${agent.team}</div></td><td>${agent.city}</td><td>${agent.zone}</td>${shifts}<td><span class="shift-chip work">${hours}h</span></td>`;
+          const nameCell = document.createElement('td');
+          nameCell.innerHTML = `<strong>${agent.name}</strong><div style="color:var(--muted);font-size:12px;margin-top:6px;">${agent.team}</div>`;
+          row.appendChild(nameCell);
+
+          const cityCell = document.createElement('td');
+          cityCell.textContent = agent.city;
+          row.appendChild(cityCell);
+
+          const zoneCell = document.createElement('td');
+          zoneCell.textContent = agent.zone;
+          row.appendChild(zoneCell);
+
+          let totalHours = 0;
+          agent.schedule.forEach(shift => {
+            const shiftCell = document.createElement('td');
+            const span = document.createElement('span');
+            span.className = 'shift-chip';
+            span.textContent = shift;
+            span.style.backgroundColor = getShiftBg(shift);
+            if (shift === 'OFF') span.classList.add('off');
+            shiftCell.appendChild(span);
+            if (shift !== 'OFF') {
+              const hotspot = document.createElement('div');
+              hotspot.className = 'hotspot-chip';
+              hotspot.textContent = "O'Village Sidi Maarouf";
+              shiftCell.appendChild(hotspot);
+            }
+            row.appendChild(shiftCell);
+            totalHours += shiftHours(shift);
+          });
+
+          const totalCell = document.createElement('td');
+          const totalSpan = document.createElement('span');
+          totalSpan.className = 'shift-chip work';
+          totalSpan.textContent = `${Math.round(totalHours)}h`;
+          totalCell.appendChild(totalSpan);
+          row.appendChild(totalCell);
+
           tbody.appendChild(row);
         });
       });
