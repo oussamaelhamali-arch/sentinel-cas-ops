@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SENTINEL — Glovo CAS OPS</title>
+  <title>SENTINEL v5.2 — Glovo CAS OPS</title>
   <meta name="description" content="SENTINEL Glovo CAS OPS - planning, agents, hotspots, absences et paie." />
   <style>
     :root {
@@ -12,7 +12,7 @@
       --surface-soft:#f7f9fb;
       --text:#141d2f;
       --muted:#6b7280;
-      --primary:#ffcb00;
+      --primary:#FFC244;
       --primary-dark:#d29900;
       --accent:#007b6f;
       --accent-soft:#d8f7f0;
@@ -26,7 +26,7 @@
     .app{max-width:1480px;margin:0 auto;padding:18px 24px 48px;}
     .header{display:flex;align-items:center;gap:18px;padding:12px 0 26px;}
     .brand{display:flex;align-items:center;gap:14px;}
-    .brand-mark{width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,#ffcb00,#f5a800);display:flex;align-items:center;justify-content:center;color:#102a43;font-size:24px;font-weight:900;}
+    .brand-mark{width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,#FFC244,#f5a800);display:flex;align-items:center;justify-content:center;color:#102a43;font-size:24px;font-weight:900;}
     .brand-copy strong{display:block;font-size:18px;letter-spacing:.02em;}
     .brand-copy span{font-size:12px;color:#007b6f;text-transform:uppercase;letter-spacing:.18em;font-weight:700;}
     .nav{display:flex;flex-wrap:wrap;gap:10px;margin-left:auto;}
@@ -98,7 +98,7 @@
     <header class="header">
       <div class="brand">
         <div class="brand-mark">S</div>
-        <div class="brand-copy"><strong>SENTINEL</strong><span>GLOVO · CAS OPS</span></div>
+        <div class="brand-copy"><strong>SENTINEL v5.2</strong><span>GLOVO · CAS OPS</span></div>
       </div>
       <nav class="nav" id="mainNav"></nav>
     </header>
@@ -357,6 +357,28 @@
       return duration;
     }
 
+    function getShiftBg(s) {
+      if (!s || s === 'OFF') return '#F3F4F6';
+      if (s === 'ABSENT') return '#FEE2E2';
+      if (s === 'CONGE') return '#E0E7FF';
+      var m = String(s).match(/^(\d{2}):/);
+      if (m) {
+        var h = parseInt(m[1]);
+        if (h >= 19 || h < 8) return '#EDE9FE';
+        if (h >= 12) return '#FEF9C3';
+        return '#D1FAE5';
+      }
+      return '#F3F4F6';
+    }
+
+    function getCityBg(v) {
+      return {CAS:'#FEF3C7',DRB:'#DBEAFE',BSK:'#F3E8FF',RBT:'#DCFCE7'}[v] || '#F8FAFC';
+    }
+
+    function getCityTx(v) {
+      return {CAS:'#92400E',DRB:'#1E40AF',BSK:'#6B21A8',RBT:'#166534'}[v] || '#1E293B';
+    }
+
     function updateMetrics() {
       document.getElementById('statAgents').textContent = AGENTS.length;
       const activeToday = AGENTS.filter(agent => agent.schedule[0] !== 'OFF').length;
@@ -430,6 +452,8 @@
         const header = document.createElement('tr');
         header.className = 'zone-row';
         header.innerHTML = `<td colspan="11">${city}</td>`;
+        header.style.backgroundColor = getCityBg(city.toUpperCase());
+        header.style.color = getCityTx(city.toUpperCase());
         tbody.appendChild(header);
         grouped[city].forEach(agent => {
           const row = document.createElement('tr');
@@ -437,7 +461,8 @@
           const shifts = agent.schedule.map(shift => {
             const css = shift === 'OFF' ? 'off' : 'work';
             const hotspot = shift !== 'OFF' ? `<div class="hotspot-chip">O'Village Sidi Maarouf</div>` : '';
-            return `<td><span class="shift-chip ${css}">${shift}</span>${hotspot}</td>`;
+            const bg = getShiftBg(shift);
+            return `<td><span class="shift-chip ${css}" style="background-color: ${bg};">${shift}</span>${hotspot}</td>`;
           }).join('');
           row.innerHTML = `<td><strong>${agent.name}</strong><div style="color:var(--muted);font-size:12px;margin-top:6px;">${agent.team}</div></td><td>${agent.city}</td><td>${agent.zone}</td>${shifts}<td><span class="shift-chip work">${hours}h</span></td>`;
           tbody.appendChild(row);
@@ -457,7 +482,9 @@
       }).forEach(agent => {
         const card = document.createElement('article');
         card.className = 'agent-card';
-        card.innerHTML = `<h3>${agent.name}</h3><p>${agent.zone}</p><p>${agent.city}</p><p class="agent-value">5 000 MAD / mois</p>`;
+        const cityBg = getCityBg(agent.city.toUpperCase());
+        const cityTx = getCityTx(agent.city.toUpperCase());
+        card.innerHTML = `<h3>${agent.name}</h3><p style="background-color: ${cityBg}; color: ${cityTx}; padding: 4px 8px; border-radius: 4px; display: inline-block;">${agent.zone}</p><p>${agent.city}</p><p class="agent-value">5 000 MAD / mois</p>`;
         grid.appendChild(card);
       });
     }
