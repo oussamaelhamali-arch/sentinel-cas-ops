@@ -257,22 +257,23 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
     <div class="login-title">SENTINEL</div>
     <div class="login-sub">Glovo Maroc · CAS OPS — Connexion sécurisée</div>
     <div class="login-users">
-      <div class="login-user" id="lu-admin" onclick="selUser('admin')">
+      <div class="login-user" id="lu-admin" onclick="document.getElementById('selUser').value='admin';document.querySelectorAll('.login-user').forEach(function(e){e.classList.remove('sel')});this.classList.add('sel');document.getElementById('loginPwd').focus()">
         <div class="u-av" style="background:#E74C3C">OE</div>
         <div class="u-nm">Oussama</div>
         <div class="u-role">Admin</div>
       </div>
-      <div class="login-user" id="lu-choaib" onclick="selUser('choaib')">
+      <div class="login-user" id="lu-choaib" onclick="document.getElementById('selUser').value='choaib';document.querySelectorAll('.login-user').forEach(function(e){e.classList.remove('sel')});this.classList.add('sel');document.getElementById('loginPwd').focus()">
         <div class="u-av" style="background:#F39C12">CK</div>
         <div class="u-nm">Choaib</div>
         <div class="u-role">Leader</div>
       </div>
-      <div class="login-user" id="lu-loutfi" onclick="selUser('loutfi')">
+      <div class="login-user" id="lu-loutfi" onclick="document.getElementById('selUser').value='loutfi';document.querySelectorAll('.login-user').forEach(function(e){e.classList.remove('sel')});this.classList.add('sel');document.getElementById('loginPwd').focus()">
         <div class="u-av" style="background:#27AE60">LO</div>
         <div class="u-nm">Loutfi</div>
         <div class="u-role">Leader</div>
       </div>
     </div>
+    <input type="hidden" id="selUser" value="">
     <div class="lf"><label>Mot de passe</label><input type="password" id="loginPwd" placeholder="Entrez votre mot de passe" onkeydown="if(event.key==='Enter')doLogin()"></div>
     <div class="login-err" id="loginErr"></div>
     <button class="login-btn" onclick="doLogin()">🔑 Se connecter</button>
@@ -742,12 +743,13 @@ function selUser(k){
 }
 
 function doLogin(){
-  if(!selUserKey){document.getElementById('loginErr').textContent='Sélectionnez un utilisateur.';return;}
+  var selKey=document.getElementById('selUser').value;
+  if(!selKey){document.getElementById('loginErr').textContent='Sélectionnez un utilisateur.';return;}
   var pwd=document.getElementById('loginPwd').value;
-  var u=USERS[selUserKey];
-  if(pwd!==u.pwd){document.getElementById('loginErr').textContent='Mot de passe incorrect.';return;}
-  currentUser={key:selUserKey,pwd:u.pwd,nom:u.nom,role:u.role,villes:u.villes,offDay:u.offDay,email:u.email||'',color:u.color};
-  sessionStorage.setItem('sentinel_user',JSON.stringify({key:selUserKey}));
+  var u=USERS[selKey];
+  if(!u||pwd!==u.pwd){document.getElementById('loginErr').textContent='Mot de passe incorrect.';return;}
+  currentUser={key:selKey,pwd:u.pwd,nom:u.nom,role:u.role,villes:u.villes,offDay:u.offDay,email:u.email||'',color:u.color};
+  sessionStorage.setItem('sentinel_user',JSON.stringify({key:selKey}));
   startApp();
 }
 
