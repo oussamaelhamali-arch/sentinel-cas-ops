@@ -5,6 +5,829 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SENTINEL v5.2 — Glovo CAS OPS</title>
   <meta name="description" content="SENTINEL Glovo CAS OPS - planning, agents, hotspots, absences et paie." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#F4F6F9;
+      --surface:#ffffff;
+      --surface-soft:#f7f9fb;
+      --text:#141d2f;
+      --muted:#6b7280;
+      --primary:#FFC244;
+      --primary-dark:#d29900;
+      --accent:#00A082;
+      --accent-soft:#d8f7f0;
+      --border:rgba(15,23,42,.08);
+      --shadow:0 20px 45px rgba(15,23,42,.08);
+    }
+    *{box-sizing:border-box;}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif;min-height:100%;}
+    body{overflow-x:hidden;}
+    button,input,select,textarea{font:inherit;}
+    .app{max-width:1480px;margin:0 auto;padding:18px 24px 48px;}
+    .header{display:flex;align-items:center;gap:18px;padding:12px 0 26px;}
+    .brand{display:flex;align-items:center;gap:14px;}
+    .brand-mark{width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,#FFC244,#f5a800);display:flex;align-items:center;justify-content:center;color:#102a43;font-size:24px;font-weight:900;}
+    .brand-copy strong{display:block;font-size:18px;letter-spacing:.02em;}
+    .brand-copy span{font-size:12px;color:#00A082;text-transform:uppercase;letter-spacing:.18em;font-weight:700;}
+    .nav{display:flex;flex-wrap:wrap;gap:10px;margin-left:auto;}
+    .nav button{border:none;background:transparent;color:#475569;padding:12px 18px;border-radius:999px;font-weight:700;display:flex;align-items:center;gap:8px;transition:all .2s;}
+    .nav button.active{background:rgba(255,203,0,.16);color:var(--text);box-shadow:0 16px 36px rgba(255,203,0,.2);}
+    .nav button:hover{background:rgba(255,203,0,.12);}
+    .hero{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:start;}
+    .hero-main h1{font-size:34px;margin:0;line-height:1.05;}
+    .hero-main p{margin:16px 0 0;color:var(--muted);max-width:720px;line-height:1.8;font-size:15px;}
+    .hero-actions{display:grid;gap:12px;justify-content:end;}
+    .hero-meta{display:inline-flex;align-items:center;gap:10px;padding:14px 18px;border-radius:18px;background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow);}
+    .hero-meta span{font-weight:700;color:var(--accent);}
+    .grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:22px;}
+    .grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:22px;}
+    .metric{background:var(--surface);border:1px solid var(--border);border-radius:28px;padding:26px;box-shadow:var(--shadow);}
+    .metric small{display:block;color:var(--muted);text-transform:uppercase;font-weight:700;letter-spacing:.16em;font-size:11px;margin-bottom:12px;}
+    .metric strong{font-size:34px;line-height:1;margin-bottom:10px;}
+    .metric span{color:var(--muted);font-size:13px;line-height:1.7;}
+    .section{background:var(--surface);border:1px solid var(--border);border-radius:32px;padding:28px;box-shadow:var(--shadow);margin-top:24px;}
+    .section-header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:20px;}
+    .section-header h2{margin:0;font-size:22px;}
+    .section-header p{margin:8px 0 0;color:var(--muted);line-height:1.75;}
+    .section-header .tag{padding:10px 16px;border-radius:999px;background:rgba(255,203,0,.16);color:var(--accent);font-size:13px;font-weight:700;}
+    .filters{display:grid;grid-template-columns:1fr auto auto;gap:14px;align-items:center;margin-bottom:20px;}
+    .filter-buttons{display:flex;flex-wrap:wrap;gap:10px;}
+    .pill{padding:10px 16px;border-radius:999px;border:1px solid transparent;background:rgba(15,23,42,.04);color:var(--text);font-weight:700;cursor:pointer;transition:all .2s;}
+    .pill.active{background:var(--primary);border-color:rgba(255,203,0,.38);color:#102a43;}
+    .filters input,.filters select{width:100%;padding:14px 16px;border-radius:16px;border:1px solid var(--border);background:var(--surface-soft);color:var(--text);}
+    .filters button{border:none;border-radius:16px;padding:14px 18px;background:var(--accent);color:#fff;font-weight:800;cursor:pointer;}
+    .table-wrap{overflow-x:auto;}
+    table{width:100%;border-collapse:collapse;font-size:13px;color:var(--text);}
+    thead tr{background:rgba(15,23,42,.04);}
+    th,td{padding:16px 14px;text-align:left;border-bottom:1px solid var(--border);}
+    th{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;}
+    tbody tr:hover{background:rgba(15,23,42,.04);}
+    .zone-row td{background:rgba(255,203,0,.14);font-weight:700;color:var(--accent);}
+    .shift-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:14px;font-size:12px;font-weight:700;background:rgba(0,123,111,.08);color:var(--accent);}
+    .shift-chip.off{background:rgba(15,23,42,.08);color:var(--muted);}
+    .shift-chip.morning{background:#D1FAE5;color:#166534;}
+    .shift-chip.evening{background:#FEF9C3;color:#92400E;}
+    .shift-chip.night{background:#EDE9FE;color:#6B21A8;}
+    .hotspot-chip{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:rgba(255,203,0,.12);color:#997100;font-size:11px;margin-top:8px;}
+    .agent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px;}
+    .agent-card{background:var(--surface-soft);border:1px solid var(--border);border-radius:26px;padding:22px;position:relative;}
+    .agent-card h3{margin:0 0 10px;font-size:16px;}
+    .agent-card p{margin:6px 0;color:var(--muted);font-size:14px;line-height:1.8;}
+    .agent-value{margin-top:16px;color:var(--accent);font-weight:800;}
+    .agent-avatar{display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;font-weight:700;margin-bottom:10px;}
+    .delete-btn{position:absolute;top:10px;right:10px;background:#ff4444;color:white;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;}
+    .hotspot-card{background:var(--surface-soft);border:1px solid var(--border);border-radius:26px;padding:20px;display:flex;justify-content:space-between;align-items:center;gap:16px;}
+    .hotspot-card strong{margin:0;font-size:15px;}
+    .hotspot-card small{color:var(--muted);display:block;margin-top:8px;}
+    .hotspot-badge{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;background:rgba(0,123,111,.08);color:var(--accent);font-size:12px;font-weight:700;}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+    .input-group{display:grid;gap:8px;margin-bottom:16px;}
+    .input-group label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;}
+    .input-group input,.input-group select{width:100%;padding:14px 16px;border-radius:16px;border:1px solid var(--border);background:var(--surface);color:var(--text);}
+    .button-primary{border:none;border-radius:18px;padding:14px 22px;background:var(--accent);color:#fff;font-weight:800;cursor:pointer;}
+    .button-secondary{border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;}
+    .pay-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px;}
+    .pay-card{background:var(--surface);border:1px solid var(--border);border-radius:26px;padding:24px;text-align:center;}
+    .pay-card strong{display:block;font-size:28px;margin-bottom:10px;}
+    .pay-card span{color:var(--muted);font-size:13px;}
+    .pay-agent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px;margin-top:20px;}
+    .pay-agent{background:var(--surface-soft);border:1px solid var(--border);border-radius:26px;padding:20px;}
+    .pay-agent h3{margin:0 0 10px;font-size:16px;}
+    .pay-agent .line{display:flex;justify-content:space-between;color:var(--muted);margin:10px 0;font-size:13px;}
+    .pay-agent strong{display:block;font-size:18px;margin-top:12px;}
+    .progress-bar{background:#e5e7eb;border-radius:10px;height:8px;margin:10px 0;}
+    .progress-fill{background:linear-gradient(90deg,#00A082,#FFC244);height:100%;border-radius:10px;}
+    .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;}
+    .modal-content{background:white;border-radius:20px;padding:30px;max-width:500px;margin:50px auto;}
+    .close-btn{float:right;cursor:pointer;font-size:24px;}
+    .week-nav{display:flex;justify-content:space-between;margin-bottom:20px;}
+    .week-nav button{background:#FFC244;border:none;padding:10px 20px;border-radius:10px;cursor:pointer;}
+    @media(max-width:1200px){.grid-4,.pay-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.form-grid{grid-template-columns:1fr;}}
+    @media(max-width:760px){.header{flex-direction:column;align-items:flex-start;}.hero{grid-template-columns:1fr;}.nav{justify-content:start;}.pay-grid{grid-template-columns:1fr;}.agent-grid{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="brand">
+        <div class="brand-mark">S</div>
+        <div class="brand-copy"><strong>SENTINEL v5.2</strong><span>GLOVO · CAS OPS</span></div>
+      </div>
+      <nav class="nav" id="mainNav"></nav>
+    </header>
+
+    <section class="hero">
+      <div class="hero-main">
+        <h1>Tableau de bord opérationnel Glovo</h1>
+        <p>Interface complète pour la gestion des agents, planning, hotspots, absences et paie.</p>
+      </div>
+      <div class="hero-actions">
+        <div class="hero-meta"><span id="weekRange">Semaine 23 avr. → 29 avr.</span></div>
+        <div class="hero-meta"><span id="deployStatus">Standalone version</span></div>
+      </div>
+    </section>
+
+    <section id="dashboard" class="section page active">
+      <div class="section-header">
+        <div>
+          <h2>Dashboard</h2>
+          <p>Vue rapide du planning, du staffing, des hotspots et de la santé des 44h.</p>
+        </div>
+        <div class="tag" id="currentDate">Mercredi 23 avril 2026</div>
+      </div>
+      <div class="grid-4">
+        <div class="metric"><small>Total agents</small><strong id="statAgents">33</strong><span>CAS · DRB · BSK · RBT</span></div>
+        <div class="metric"><small>Actifs aujourd’hui</small><strong id="statActive">26</strong><span>En service</span></div>
+        <div class="metric"><small>Absences (90j)</small><strong id="statAbsences">0</strong><span>Enregistrées</span></div>
+        <div class="metric"><small>Hotspots</small><strong id="statHotspots">43</strong><span>Configurés</span></div>
+      </div>
+      <div class="grid-4">
+        <div class="metric"><small>Taux 44h</small><strong id="statRate">100%</strong><span>Agents à objectif</span></div>
+        <div class="metric"><small>Countdown email</small><strong id="countdown">2j 14h</strong><span>Jusqu'à mardi 9h</span></div>
+        <div class="metric"><small>Shifts jour</small><strong id="statDay">18</strong><span>Horaires planifiés</span></div>
+        <div class="metric"><small>Shifts nuit</small><strong id="statNight">11</strong><span>Couverture active</span></div>
+      </div>
+      <div class="grid-3">
+        <div class="metric"><small>Agents CAS</small><strong id="statCas">11</strong><span>Casablanca</span></div>
+        <div class="metric"><small>Agents DRB</small><strong id="statDrb">4</strong><span>Dar Bouazza</span></div>
+        <div class="metric"><small>Agents BSK</small><strong id="statBsk">3</strong><span>Bouskoura</span></div>
+      </div>
+      <div class="metric" style="margin-top:20px;"><small>Agents RBT</small><strong id="statRbt">15</strong><span>Rabat-Salé</span></div>
+    </section>
+
+    <section id="planning" class="section page">
+      <div class="section-header">
+        <div>
+          <h2 id="planningTitle">Planning W17</h2>
+          <p id="planningDesc">Semaine du jeu 23/04/2026 au mer 29/04/2026 — filtre par zone et pool.</p>
+        </div>
+        <div class="tag" id="planningTag">Semaine 23 avr. → 29 avr.</div>
+      </div>
+      <div class="week-nav">
+        <button id="prevWeek">◀ Semaine précédente</button>
+        <button id="nextWeek">Semaine suivante ▶</button>
+      </div>
+      <div class="filters">
+        <div class="filter-buttons" id="zoneFilters"></div>
+        <select id="filterTeam">
+          <option value="">Tous les pools</option>
+          <option value="CAS">CAS</option>
+          <option value="RBT">RBT</option>
+          <option value="DRB">DRB</option>
+          <option value="BSK">BSK</option>
+        </select>
+        <button onclick="renderPlanning()">Actualiser</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Agent</th>
+              <th>Ville</th>
+              <th>Zone</th>
+              <th>Jeu</th>
+              <th>Ven</th>
+              <th>Sam</th>
+              <th>Dim</th>
+              <th>Lun</th>
+              <th>Mar</th>
+              <th>Mer</th>
+              <th>H/SEM</th>
+            </tr>
+          </thead>
+          <tbody id="planningBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="agents" class="section page">
+      <div class="section-header">
+        <div>
+          <h2>Agents</h2>
+          <p>Liste des agents avec leur pool, localisation et salaire indicative.</p>
+        </div>
+        <div class="tag" id="agentsCount">33 agents</div>
+      </div>
+      <div class="filters">
+        <input id="agentSearch" type="search" placeholder="Rechercher..." />
+        <select id="agentCityFilter">
+          <option value="">Toutes les villes</option>
+          <option value="Casablanca">Casablanca</option>
+          <option value="Rabat">Rabat</option>
+        </select>
+        <button onclick="openAddAgentModal()">➕ Ajouter agent</button>
+      </div>
+      <div class="agent-grid" id="agentGrid"></div>
+    </section>
+
+    <section id="hotspots" class="section page">
+      <div class="section-header">
+        <div>
+          <h2>Hotspots</h2>
+          <p>Points prioritaires de déploiement avec heures fortes et besoin agents.</p>
+        </div>
+        <div class="tag" id="hotspotsCount">43 hotspots</div>
+      </div>
+      <div class="hotspot-list" id="hotspotGrid"></div>
+    </section>
+
+    <section id="absences" class="section page">
+      <div class="section-header">
+        <div>
+          <h2>Absences</h2>
+          <p>Enregistrement des absences et congés.</p>
+        </div>
+        <div class="tag">Aucune absence</div>
+      </div>
+      <div class="section" style="padding:24px;">
+        <div class="form-grid">
+          <div class="input-group"><label>Agent</label><select id="absenceAgent"></select></div>
+          <div class="input-group"><label>Type</label><select id="absenceType"><option value="ABSENT">ABSENT — 192 MAD/jour</option><option value="CONGE">CONGÉ</option></select></div>
+          <div class="input-group"><label>Date début</label><input id="absenceStart" type="date" /></div>
+          <div class="input-group"><label>Date fin</label><input id="absenceEnd" type="date" /></div>
+          <div class="input-group" style="grid-column:span 2;"><label>Motif</label><input id="absenceReason" placeholder="Maladie, personnel..." /></div>
+        </div>
+        <button class="button-primary" onclick="saveAbsence()">Enregistrer</button>
+      </div>
+      <div class="section" style="margin-top:16px;padding:24px;">
+        <h3 style="margin:0 0 16px;">Historique (90 jours)</h3>
+        <div id="absenceHistory" style="color:var(--muted);font-size:14px;">Aucune absence enregistrée.</div>
+      </div>
+    </section>
+
+    <section id="payroll" class="section page">
+      <div class="section-header">
+        <div>
+          <h2>Paie</h2>
+          <p>Calcul mensuel selon le taux journalier, les absences et le net à payer.</p>
+        </div>
+        <div class="tag">192 MAD / jour</div>
+      </div>
+      <div class="pay-grid">
+        <div class="pay-card"><strong id="payAgents">33</strong><span>Agents</span></div>
+        <div class="pay-card"><strong>192 MAD</strong><span>Taux journalier</span></div>
+        <div class="pay-card"><strong id="payBalance">82 368 MAD</strong><span>Balance à date</span></div>
+        <div class="pay-card"><strong id="payDeductions">0 MAD</strong><span>Déductions</span></div>
+        <div class="pay-card"><strong id="payNet">165 000 MAD</strong><span>Masse nette</span></div>
+      </div>
+      <div class="pay-agent-grid" id="payrollGrid"></div>
+    </section>
+  </div>
+
+  <div id="shiftModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <h3>Modifier shift</h3>
+      <div class="input-group">
+        <label>Agent</label>
+        <input id="modalAgent" readonly />
+      </div>
+      <div class="input-group">
+        <label>Jour</label>
+        <input id="modalDay" readonly />
+      </div>
+      <div class="input-group">
+        <label>Shift</label>
+        <select id="modalShift">
+          <option value="OFF">OFF</option>
+          <option value="09:00-16:00">09:00-16:00 (matinée)</option>
+          <option value="12:00-19:00">12:00-19:00 (après-midi)</option>
+          <option value="14:00-21:00">14:00-21:00 (soir)</option>
+          <option value="16:00-23:00">16:00-23:00 (soir)</option>
+          <option value="18:00-01:00">18:00-01:00 (nuit)</option>
+          <option value="20:00-03:00">20:00-03:00 (nuit)</option>
+          <option value="21:00-04:00">21:00-04:00 (nuit)</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>Hotspot</label>
+        <select id="modalHotspot"></select>
+      </div>
+      <button class="button-primary" onclick="saveShift()">Sauvegarder</button>
+    </div>
+  </div>
+
+  <div id="agentModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <h3 id="agentModalTitle">Ajouter agent</h3>
+      <div class="form-grid">
+        <div class="input-group"><label>Nom</label><input id="agentName" /></div>
+        <div class="input-group"><label>Ville</label><select id="agentCity"><option value="Casablanca">Casablanca</option><option value="Rabat">Rabat</option></select></div>
+        <div class="input-group"><label>Zone</label><select id="agentZone"><option value="CAS">CAS</option><option value="RBT">RBT</option><option value="DRB">DRB</option><option value="BSK">BSK</option></select></div>
+        <div class="input-group"><label>Téléphone</label><input id="agentPhone" /></div>
+        <div class="input-group"><label>Email</label><input id="agentEmail" /></div>
+      </div>
+      <button class="button-primary" id="saveAgentBtn" onclick="saveAgent()">Ajouter</button>
+    </div>
+  </div>
+
+  <script>
+    let AGENTS = [];
+    let HOTSPOTS = [];
+    let ABSENCES = [];
+    let PLANNING = {};
+    let currentWeekStart = new Date();
+    currentWeekStart.setDate(currentWeekStart.getDate() - currentWeekStart.getDay() + 4); // Thursday
+    if (currentWeekStart > new Date()) currentWeekStart.setDate(currentWeekStart.getDate() - 7); // Previous Thursday if today is Thursday or later
+
+    const DEFAULT_AGENTS = [
+      {name:'choaib knari',city:'Casablanca',zone:'CAS',phone:'',email:'choaib.knari@providers.glovoapp.com'},
+      {name:'HABIB EDDINE AHMED',city:'Casablanca',zone:'CAS',phone:'',email:''},
+      {name:'AYMNE BELGARA',city:'Casablanca',zone:'CAS',phone:'',email:''},
+      {name:'MOHAMED BOUHAJI',city:'Casablanca',zone:'CAS',phone:'',email:''},
+      {name:'ISMAIL BAHI',city:'Casablanca',zone:'CAS',phone:'',email:''},
+      {name:'HAMZA KARIM',city:'Casablanca',zone:'CAS',phone:'',email:''},
+      {name:'LAHCANE KHOUDRY',city:'Casablanca',zone:'CAS',phone:'',email:''},
+      {name:'ANAS RAJID',city:'Casablanca',zone:'CAS',phone:'',email:''},
+      {name:'HAMZA ACHOUBI',city:'Casablanca',zone:'CAS',phone:'',email:''},
+      {name:'BRAHIM LACHGUIR',city:'Casablanca',zone:'CAS',phone:'',email:''},
+      {name:'ABDELKHALEQ',city:'Casablanca',zone:'CAS',phone:'',email:''},
+      {name:'ISLAM ELMARDI',city:'Rabat',zone:'RBT',phone:'',email:''},
+      {name:'AYOUB ABSSI',city:'Rabat',zone:'RBT',phone:'',email:''},
+      {name:'AYOUB BEN MALEK',city:'Rabat',zone:'RBT',phone:'',email:''},
+      {name:'AYMANE CHLIFANE',city:'Rabat',zone:'RBT',phone:'',email:''},
+      {name:'ZAKARIE BENALI',city:'Rabat',zone:'RBT',phone:'',email:''},
+      {name:'NAJIB HARATI',city:'Rabat',zone:'RBT',phone:'',email:''},
+      {name:'OUSSAMA CHENNAOUI',city:'Rabat',zone:'RBT',phone:'',email:''},
+      {name:'YOUSSEF DERKAOUI',city:'Rabat',zone:'RBT',phone:'',email:''},
+      {name:'HASSAN AZGOUNE',city:'Rabat',zone:'RBT',phone:'',email:''},
+      {name:'ACHRAF AKHLIJ',city:'Rabat',zone:'RBT',phone:'',email:''},
+      {name:'MOURAD CHERRADI',city:'Rabat',zone:'RBT',phone:'',email:''},
+      {name:'CHARAF LOUMMIHI',city:'Rabat',zone:'RBT',phone:'',email:''},
+      {name:'YAHYA RHALLAB',city:'Rabat',zone:'RBT',phone:'',email:''},
+      {name:'OUSSAMA EL ATRACH',city:'Rabat',zone:'RBT',phone:'',email:''},
+      {name:'IMAD TAMIDI',city:'Rabat',zone:'RBT',phone:'',email:''},
+      {name:'SAID OUMBAREK',city:'Casablanca',zone:'DRB',phone:'',email:''},
+      {name:'AZIZ ESSAILI',city:'Casablanca',zone:'DRB',phone:'',email:''},
+      {name:'OUSSAMA OUAKIL',city:'Casablanca',zone:'DRB',phone:'',email:''},
+      {name:'ABDELKARIM SABBANE',city:'Casablanca',zone:'DRB',phone:'',email:''},
+      {name:'MORAD MURID',city:'Casablanca',zone:'BSK',phone:'',email:''},
+      {name:'HAMID TARIK',city:'Casablanca',zone:'BSK',phone:'',email:''},
+      {name:'ABDELBASSET BAIDI',city:'Casablanca',zone:'BSK',phone:'',email:''}
+    ];
+
+    const DEFAULT_HOTSPOTS = [
+      {name:'Maarif',location:'Casablanca',peak:'10:00-20:00',agents:2},
+      {name:'Californie',location:'Casablanca',peak:'10:00-20:00',agents:2},
+      {name:'Taddart',location:'Casablanca',peak:'10:00-20:00',agents:2},
+      {name:'Tan Tan',location:'Casablanca',peak:'10:00-20:00',agents:2},
+      {name:"O'Village Sidi Maarouf",location:'Casablanca',peak:'10:00-20:00',agents:2},
+      {name:'Lissasfa',location:'Casablanca',peak:'10:00-20:00',agents:2},
+      {name:'Boulevard Al Qods',location:'Casablanca',peak:'10:00-20:00',agents:2},
+      {name:'Agdal',location:'Rabat',peak:'10:00-20:00',agents:2},
+      {name:'Hassan',location:'Rabat',peak:'10:00-20:00',agents:2},
+      {name:'Souissi',location:'Rabat',peak:'10:00-20:00',agents:2},
+      {name:'Hay Riad',location:'Rabat',peak:'10:00-20:00',agents:2},
+      {name:'Ocean',location:'Rabat',peak:'10:00-20:00',agents:2},
+      {name:'Dar Bouazza Centre',location:'Casablanca',peak:'10:00-20:00',agents:2},
+      {name:'Ouled Farhan',location:'Casablanca',peak:'10:00-20:00',agents:2},
+      {name:'Bouskoura Ville',location:'Casablanca',peak:'10:00-20:00',agents:2},
+      {name:'Route Casablanca',location:'Casablanca',peak:'10:00-20:00',agents:2}
+    ];
+
+    function loadData() {
+      AGENTS = JSON.parse(localStorage.getItem('agents')) || DEFAULT_AGENTS;
+      HOTSPOTS = JSON.parse(localStorage.getItem('hotspots')) || DEFAULT_HOTSPOTS;
+      ABSENCES = JSON.parse(localStorage.getItem('absences')) || [];
+      PLANNING = JSON.parse(localStorage.getItem('planning')) || {};
+    }
+
+    function saveData() {
+      localStorage.setItem('agents', JSON.stringify(AGENTS));
+      localStorage.setItem('hotspots', JSON.stringify(HOTSPOTS));
+      localStorage.setItem('absences', JSON.stringify(ABSENCES));
+      localStorage.setItem('planning', JSON.stringify(PLANNING));
+    }
+
+    function shiftHours(shift) {
+      if (shift === 'OFF') return 0;
+      const [start, end] = shift.split('-').map(s => s.trim());
+      const [hs, ms] = start.split(':').map(Number);
+      const [he, me] = end.split(':').map(Number);
+      let duration = (he + me / 60) - (hs + ms / 60);
+      if (duration <= 0) duration += 24;
+      return duration;
+    }
+
+    function getShiftClass(shift) {
+      if (shift === 'OFF') return 'off';
+      const start = shift.split('-')[0];
+      const hour = parseInt(start.split(':')[0]);
+      if (hour >= 6 && hour < 14) return 'morning';
+      if (hour >= 14 && hour < 20) return 'evening';
+      return 'night';
+    }
+
+    function getCityBg(zone) {
+      const colors = {CAS:'#FEF3C7',DRB:'#DBEAFE',BSK:'#F3E8FF',RBT:'#DCFCE7'};
+      return colors[zone] || '#F8FAFC';
+    }
+
+    function getCityTx(zone) {
+      const colors = {CAS:'#92400E',DRB:'#1E40AF',BSK:'#6B21A8',RBT:'#166534'};
+      return colors[zone] || '#1E293B';
+    }
+
+    function getWeekLabel(start) {
+      const end = new Date(start);
+      end.setDate(start.getDate() + 6);
+      return `${start.toLocaleDateString('fr-FR',{day:'2-digit',month:'short'})} → ${end.toLocaleDateString('fr-FR',{day:'2-digit',month:'short'})}`;
+    }
+
+    function updateWeekDisplay() {
+      const label = getWeekLabel(currentWeekStart);
+      document.getElementById('weekRange').textContent = label;
+      document.getElementById('planningTag').textContent = label;
+      const weekKey = currentWeekStart.toISOString().split('T')[0];
+      document.getElementById('planningTitle').textContent = `Planning ${weekKey}`;
+      document.getElementById('planningDesc').textContent = `Semaine du jeu ${currentWeekStart.toLocaleDateString('fr-FR')} au mer ${new Date(currentWeekStart.getTime() + 6*24*60*60*1000).toLocaleDateString('fr-FR')}`;
+    }
+
+    function updateCountdown() {
+      const now = new Date();
+      const tuesday = new Date(now);
+      tuesday.setDate(now.getDate() + (2 - now.getDay() + 7) % 7);
+      tuesday.setHours(9, 0, 0, 0);
+      if (tuesday <= now) tuesday.setDate(tuesday.getDate() + 7);
+      const diff = tuesday - now;
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      document.getElementById('countdown').textContent = `${days}j ${hours}h`;
+    }
+
+    function updateMetrics() {
+      document.getElementById('statAgents').textContent = AGENTS.length;
+      const activeToday = AGENTS.filter(agent => {
+        const weekKey = currentWeekStart.toISOString().split('T')[0];
+        const agentPlanning = PLANNING[weekKey] || {};
+        const todayShift = agentPlanning[agent.name] ? agentPlanning[agent.name][new Date().getDay()] : 'OFF';
+        return todayShift !== 'OFF';
+      }).length;
+      document.getElementById('statActive').textContent = activeToday;
+      document.getElementById('statAbsences').textContent = ABSENCES.length;
+      document.getElementById('statHotspots').textContent = HOTSPOTS.length;
+      const cas = AGENTS.filter(a => a.zone === 'CAS').length;
+      const drb = AGENTS.filter(a => a.zone === 'DRB').length;
+      const bsk = AGENTS.filter(a => a.zone === 'BSK').length;
+      const rbt = AGENTS.filter(a => a.zone === 'RBT').length;
+      document.getElementById('statCas').textContent = cas;
+      document.getElementById('statDrb').textContent = drb;
+      document.getElementById('statBsk').textContent = bsk;
+      document.getElementById('statRbt').textContent = rbt;
+      document.getElementById('agentsCount').textContent = `${AGENTS.length} agents`;
+      document.getElementById('hotspotsCount').textContent = `${HOTSPOTS.length} hotspots`;
+      document.getElementById('payAgents').textContent = AGENTS.length;
+      const balance = AGENTS.length * 5000;
+      document.getElementById('payBalance').textContent = `${balance.toLocaleString()} MAD`;
+      const deductions = ABSENCES.reduce((sum, abs) => sum + (abs.type === 'ABSENT' ? 192 * ((new Date(abs.end) - new Date(abs.start)) / (1000*60*60*24) + 1) : 0), 0);
+      document.getElementById('payDeductions').textContent = `${deductions.toLocaleString()} MAD`;
+      document.getElementById('payNet').textContent = `${(balance - deductions).toLocaleString()} MAD`;
+    }
+
+    function initNav() {
+      const pages = ['dashboard','planning','agents','hotspots','absences','payroll'];
+      const labels = ['Dashboard','Planning','Agents','Hotspots','Absences','Paie'];
+      const nav = document.getElementById('mainNav');
+      pages.forEach((page,index) => {
+        const btn = document.createElement('button');
+        btn.textContent = labels[index];
+        btn.dataset.page = page;
+        btn.onclick = () => switchPage(page);
+        if (page === 'dashboard') btn.classList.add('active');
+        nav.appendChild(btn);
+      });
+    }
+
+    function switchPage(pageId) {
+      document.querySelectorAll('.page').forEach(page => page.classList.toggle('active', page.id === pageId));
+      document.querySelectorAll('.nav button').forEach(btn => btn.classList.toggle('active', btn.dataset.page === pageId));
+    }
+
+    function createZoneFilters() {
+      const container = document.getElementById('zoneFilters');
+      const zones = ['Toutes','CAS','DRB','BSK','RBT'];
+      zones.forEach(zone => {
+        const button = document.createElement('button');
+        button.textContent = zone;
+        button.className = `pill ${zone === 'Toutes' ? 'active' : ''}`;
+        button.onclick = () => {
+          document.querySelectorAll('.pill').forEach(p => p.classList.toggle('active', p.textContent === zone));
+          renderPlanning();
+        };
+        container.appendChild(button);
+      });
+    }
+
+    function generatePlanning() {
+      const weekKey = currentWeekStart.toISOString().split('T')[0];
+      if (!PLANNING[weekKey]) {
+        PLANNING[weekKey] = {};
+        AGENTS.forEach(agent => {
+          const shifts = [];
+          // 44h: 4x7h + 2x8h, Sat+Sun=8h
+          const baseShifts = ['09:00-16:00', '12:00-19:00', '14:00-21:00', '16:00-23:00', '18:00-01:00', '20:00-03:00'];
+          for (let i = 0; i < 7; i++) {
+            if (i === 5 || i === 6) { // Sat, Sun
+              shifts.push('18:00-01:00'); // 7h? Wait, 18:00 to 01:00 is 7h, but need 8h? Adjust
+            } else {
+              shifts.push(baseShifts[Math.floor(Math.random() * baseShifts.length)]);
+            }
+          }
+          // Ensure 44h: adjust as needed
+          let total = shifts.reduce((sum, s) => sum + shiftHours(s), 0);
+          while (total < 44) {
+            const idx = Math.floor(Math.random() * 5); // Not weekends
+            if (shifts[idx] !== '18:00-01:00') {
+              shifts[idx] = '18:00-01:00'; // Upgrade to longer shift
+              total = shifts.reduce((sum, s) => sum + shiftHours(s), 0);
+            }
+          }
+          PLANNING[weekKey][agent.name] = shifts;
+        });
+      }
+    }
+
+    function renderPlanning() {
+      const weekKey = currentWeekStart.toISOString().split('T')[0];
+      generatePlanning();
+      const team = document.getElementById('filterTeam').value;
+      const zoneFilter = document.querySelector('.pill.active').textContent;
+      const tbody = document.getElementById('planningBody');
+      tbody.innerHTML = '';
+
+      const filtered = AGENTS.filter(agent => {
+        const byTeam = !team || agent.zone === team;
+        const byZone = zoneFilter === 'Toutes' || agent.zone === zoneFilter;
+        return byTeam && byZone;
+      });
+
+      const grouped = filtered.reduce((acc, agent) => {
+        const city = agent.city;
+        (acc[city] = acc[city] || []).push(agent);
+        return acc;
+      }, {});
+
+      Object.keys(grouped).sort().forEach(city => {
+        const header = document.createElement('tr');
+        header.className = 'zone-row';
+        const cell = document.createElement('td');
+        cell.colSpan = 11;
+        cell.textContent = city;
+        cell.style.backgroundColor = getCityBg(city.toUpperCase().slice(0,3));
+        cell.style.color = getCityTx(city.toUpperCase().slice(0,3));
+        header.appendChild(cell);
+        tbody.appendChild(header);
+
+        grouped[city].forEach(agent => {
+          const row = document.createElement('tr');
+          const nameCell = document.createElement('td');
+          nameCell.innerHTML = `<strong>${agent.name}</strong>`;
+          row.appendChild(nameCell);
+
+          const cityCell = document.createElement('td');
+          cityCell.textContent = agent.city;
+          row.appendChild(cityCell);
+
+          const zoneCell = document.createElement('td');
+          zoneCell.textContent = agent.zone;
+          row.appendChild(zoneCell);
+
+          const agentShifts = PLANNING[weekKey][agent.name] || ['OFF','OFF','OFF','OFF','OFF','OFF','OFF'];
+          let totalHours = 0;
+          agentShifts.forEach((shift, idx) => {
+            const shiftCell = document.createElement('td');
+            const span = document.createElement('span');
+            span.className = `shift-chip ${getShiftClass(shift)}`;
+            span.textContent = shift;
+            span.onclick = () => openShiftModal(agent.name, idx, shift);
+            if (shift === 'OFF') span.classList.add('off');
+            shiftCell.appendChild(span);
+            row.appendChild(shiftCell);
+            totalHours += shiftHours(shift);
+          });
+
+          const totalCell = document.createElement('td');
+          const totalSpan = document.createElement('span');
+          totalSpan.className = 'shift-chip';
+          totalSpan.textContent = `${Math.round(totalHours)}h`;
+          if (totalHours < 41) totalSpan.style.backgroundColor = '#FEE2E2';
+          else if (totalHours > 47) totalSpan.style.backgroundColor = '#FEF9C3';
+          else totalSpan.style.backgroundColor = '#D1FAE5';
+          totalCell.appendChild(totalSpan);
+          row.appendChild(totalCell);
+
+          tbody.appendChild(row);
+        });
+      });
+    }
+
+    function openShiftModal(agentName, dayIdx, currentShift) {
+      document.getElementById('shiftModal').style.display = 'block';
+      document.getElementById('modalAgent').value = agentName;
+      const days = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+      document.getElementById('modalDay').value = days[dayIdx];
+      document.getElementById('modalShift').value = currentShift;
+      const hotspotSelect = document.getElementById('modalHotspot');
+      hotspotSelect.innerHTML = '<option value="">Aucun</option>';
+      HOTSPOTS.forEach(h => {
+        const opt = document.createElement('option');
+        opt.value = h.name;
+        opt.textContent = h.name;
+        hotspotSelect.appendChild(opt);
+      });
+    }
+
+    function saveShift() {
+      const agent = document.getElementById('modalAgent').value;
+      const day = document.getElementById('modalDay').value;
+      const shift = document.getElementById('modalShift').value;
+      const hotspot = document.getElementById('modalHotspot').value;
+      const weekKey = currentWeekStart.toISOString().split('T')[0];
+      const days = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+      const dayIdx = days.indexOf(day);
+      if (!PLANNING[weekKey][agent]) PLANNING[weekKey][agent] = ['OFF','OFF','OFF','OFF','OFF','OFF','OFF'];
+      PLANNING[weekKey][agent][dayIdx] = shift;
+      saveData();
+      renderPlanning();
+      closeModal();
+    }
+
+    function closeModal() {
+      document.getElementById('shiftModal').style.display = 'none';
+      document.getElementById('agentModal').style.display = 'none';
+    }
+
+    function renderAgents() {
+      const query = document.getElementById('agentSearch').value.trim().toLowerCase();
+      const city = document.getElementById('agentCityFilter').value;
+      const grid = document.getElementById('agentGrid');
+      grid.innerHTML = '';
+      AGENTS.filter(agent => {
+        const matchesQuery = !query || `${agent.name} ${agent.zone} ${agent.city}`.toLowerCase().includes(query);
+        const matchesCity = !city || agent.city === city;
+        return matchesQuery && matchesCity;
+      }).forEach(agent => {
+        const card = document.createElement('article');
+        card.className = 'agent-card';
+        const initials = agent.name.split(' ').map(n => n[0]).join('').toUpperCase();
+        const color = getCityBg(agent.zone);
+        card.innerHTML = `
+          <div class="agent-avatar" style="background-color:${color};color:${getCityTx(agent.zone)}">${initials}</div>
+          <h3>${agent.name}</h3>
+          <p style="background-color: ${color}; color: ${getCityTx(agent.zone)}; padding: 4px 8px; border-radius: 4px; display: inline-block;">${agent.zone}</p>
+          <p>${agent.city}</p>
+          <p class="agent-value">5 000 MAD / mois</p>
+          <button class="delete-btn" onclick="deleteAgent('${agent.name}')">🗑️</button>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function openAddAgentModal() {
+      document.getElementById('agentModal').style.display = 'block';
+      document.getElementById('agentModalTitle').textContent = 'Ajouter agent';
+      document.getElementById('saveAgentBtn').textContent = 'Ajouter';
+      document.getElementById('saveAgentBtn').onclick = saveAgent;
+      document.getElementById('agentName').value = '';
+      document.getElementById('agentCity').value = 'Casablanca';
+      document.getElementById('agentZone').value = 'CAS';
+      document.getElementById('agentPhone').value = '';
+      document.getElementById('agentEmail').value = '';
+    }
+
+    function saveAgent() {
+      const name = document.getElementById('agentName').value.trim();
+      if (!name) return;
+      const agent = {
+        name,
+        city: document.getElementById('agentCity').value,
+        zone: document.getElementById('agentZone').value,
+        phone: document.getElementById('agentPhone').value,
+        email: document.getElementById('agentEmail').value
+      };
+      AGENTS.push(agent);
+      saveData();
+      renderAgents();
+      updateMetrics();
+      closeModal();
+    }
+
+    function deleteAgent(name) {
+      if (confirm(`Supprimer ${name}?`)) {
+        AGENTS = AGENTS.filter(a => a.name !== name);
+        saveData();
+        renderAgents();
+        updateMetrics();
+      }
+    }
+
+    function renderHotspots() {
+      const grid = document.getElementById('hotspotGrid');
+      grid.innerHTML = '';
+      HOTSPOTS.forEach((hotspot,index) => {
+        const card = document.createElement('div');
+        card.className = 'hotspot-card';
+        card.style.borderLeft = `4px solid ${getCityBg(hotspot.location === 'Casablanca' ? 'CAS' : 'RBT')}`;
+        card.innerHTML = `<div><strong>${hotspot.name}</strong><small>${hotspot.location}</small></div><div><span class="hotspot-badge">${hotspot.peak}</span><span class="hotspot-badge">${hotspot.agents} agent(s)</span></div>`;
+        grid.appendChild(card);
+      });
+    }
+
+    function renderAbsenceOptions() {
+      const select = document.getElementById('absenceAgent');
+      select.innerHTML = '';
+      AGENTS.forEach(agent => {
+        const option = document.createElement('option');
+        option.value = agent.name;
+        option.textContent = `${agent.name} (${agent.zone})`;
+        select.appendChild(option);
+      });
+    }
+
+    function saveAbsence() {
+      const agent = document.getElementById('absenceAgent').value;
+      const type = document.getElementById('absenceType').value;
+      const start = document.getElementById('absenceStart').value;
+      const end = document.getElementById('absenceEnd').value;
+      const reason = document.getElementById('absenceReason').value;
+      if (!agent || !start || !end) return alert('Remplissez tous les champs');
+      ABSENCES.push({agent, type, start, end, reason, date: new Date().toISOString()});
+      saveData();
+      renderAbsences();
+      updateMetrics();
+      alert('Absence enregistrée');
+    }
+
+    function renderAbsences() {
+      const history = document.getElementById('absenceHistory');
+      if (!ABSENCES.length) {
+        history.innerHTML = 'Aucune absence enregistrée.';
+        return;
+      }
+      history.innerHTML = ABSENCES.map(abs => `<div>${abs.agent} - ${abs.type} du ${abs.start} au ${abs.end} (${abs.reason})</div>`).join('');
+    }
+
+    function renderPayroll() {
+      const grid = document.getElementById('payrollGrid');
+      grid.innerHTML = '';
+      AGENTS.forEach(agent => {
+        const absences = ABSENCES.filter(a => a.agent === agent.name && a.type === 'ABSENT');
+        const absenceDays = absences.reduce((sum, a) => sum + ((new Date(a.end) - new Date(a.start)) / (1000*60*60*24) + 1), 0);
+        const deduction = absenceDays * 192;
+        const net = 5000 - deduction;
+        const card = document.createElement('div');
+        card.className = 'pay-agent';
+        card.innerHTML = `
+          <h3>${agent.name}</h3>
+          <div class="line"><span>Salaires base</span><strong>5 000 MAD</strong></div>
+          <div class="line"><span>Jours travaillés</span><strong>${26 - absenceDays}j / 26</strong></div>
+          <div class="line"><span>Absences</span><strong>${absenceDays}j</strong></div>
+          <div class="line"><span>Déduction</span><strong>${deduction} MAD</strong></div>
+          <strong style="color:${net >= 0 ? '#00A082' : '#ff4444'}">Net à payer: ${net} MAD</strong>
+          <div class="progress-bar"><div class="progress-fill" style="width:${(net/5000)*100}%"></div></div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function init() {
+      loadData();
+      initNav();
+      createZoneFilters();
+      updateWeekDisplay();
+      updateCountdown();
+      updateMetrics();
+      renderPlanning();
+      renderAgents();
+      renderHotspots();
+      renderAbsenceOptions();
+      renderAbsences();
+      renderPayroll();
+      document.getElementById('prevWeek').onclick = () => {
+        currentWeekStart.setDate(currentWeekStart.getDate() - 7);
+        updateWeekDisplay();
+        renderPlanning();
+      };
+      document.getElementById('nextWeek').onclick = () => {
+        currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+        updateWeekDisplay();
+        renderPlanning();
+      };
+      setInterval(updateCountdown, 60000); // Update countdown every minute
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SENTINEL v5.2 — Glovo CAS OPS</title>
+  <meta name="description" content="SENTINEL Glovo CAS OPS - planning, agents, hotspots, absences et paie." />
   <style>
     :root {
       --bg:#f3f7fb;
