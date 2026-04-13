@@ -1,562 +1,398 @@
 ﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SENTINEL — Glovo Maroc CAS OPS</title>
-<meta name="description" content="SENTINEL planning professionnel pour Glovo Maroc CAS OPS, avec planning, agents, hotspots et reporting.">
-<style>
-:root {
-  --yellow:#FFC244;
-  --yellow-dark:#E5A820;
-  --yellow-soft:#FFF2CF;
-  --green:#00A082;
-  --green-soft:#DBFFF3;
-  --dark:#102132;
-  --dark-soft:#1B2B3C;
-  --surface:#172B3D;
-  --surface-strong:#1E3C57;
-  --surface-hover:#273F56;
-  --text:#F8FAFC;
-  --muted:#A8BBCD;
-  --border:rgba(255,255,255,.08);
-  --shadow:0 20px 50px rgba(0,0,0,.22);
-}
-*{box-sizing:border-box;}
-html,body{margin:0;padding:0;min-height:100%;font-family:Inter,system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif;background:radial-gradient(circle at top left,rgba(255,194,68,.20),transparent 25%),linear-gradient(180deg,#0B1724 0%,#152B41 100%);color:var(--text);}
-button,input,select,textarea{font:inherit;}
-button{cursor:pointer;}
-body{overflow-x:hidden;}
-.navbar{position:sticky;top:0;z-index:20;background:rgba(11,23,36,.96);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:18px;padding:18px 28px;box-shadow:var(--shadow);}
-.brand{display:flex;align-items:center;gap:14px;}
-.brand-mark{width:46px;height:46px;border-radius:16px;background:linear-gradient(135deg,var(--yellow),var(--yellow-dark));display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:#102132;}
-.brand-copy{display:flex;flex-direction:column;line-height:1.1;}
-.brand-copy strong{font-size:16px;letter-spacing:-.02em;}
-.brand-copy span{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--green);font-weight:700;}
-.nav-links{display:flex;gap:10px;flex-wrap:wrap;}
-.nav-link{padding:10px 16px;border-radius:999px;border:1px solid transparent;color:var(--muted);transition:all .2s;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.02);}
-.nav-link.active,.nav-link:hover{background:rgba(255,194,68,.18);border-color:rgba(255,194,68,.25);color:#fff;}
-.nav-link span{font-size:13px;font-weight:700;}
-.top-right{margin-left:auto;display:flex;align-items:center;gap:12px;}
-.clock{font-size:12px;color:var(--text);background:rgba(255,255,255,.06);padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.08);}
-.refresh{padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#fff;transition:transform .2s;}
-.refresh:hover{transform:scale(1.03);}
-.content{padding:28px 28px 48px;max-width:1440px;margin:0 auto;display:grid;gap:24px;}
-.section{background:var(--surface);border:1px solid rgba(255,255,255,.08);border-radius:28px;box-shadow:var(--shadow);}
-.section-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:28px 32px 24px;}
-.section-header h1{font-size:28px;margin:0;line-height:1.1;}
-.section-header p{margin:8px 0 0;color:var(--muted);max-width:760px;line-height:1.8;font-size:14px;}
-.status-badge{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:rgba(255,194,68,.12);color:var(--yellow);font-weight:700;font-size:13px;}
-.grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;padding:0 0 24px 0;}
-.metric{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:24px;padding:24px;}
-.metric small{display:block;color:var(--muted);text-transform:uppercase;letter-spacing:.18em;font-weight:700;font-size:11px;margin-bottom:14px;}
-.metric strong{display:block;font-size:34px;line-height:1;margin-bottom:8px;}
-.metric .hint{color:var(--muted);font-size:13px;line-height:1.6;}
-.panel{padding:24px 28px 28px;}
-.panel-title{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px;}
-.panel-title h2{margin:0;font-size:20px;}
-.panel-title .note{color:var(--muted);font-size:13px;}
-.panel-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;}
-.panel-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:22px;}
-.panel-card strong{display:block;font-size:28px;line-height:1;margin-bottom:8px;color:#fff;}
-.panel-card span{display:block;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.14em;}
-.table-wrap{overflow-x:auto;}
-table{width:100%;border-collapse:collapse;font-size:13px;color:#F8FAFC;}
-thead tr{background:rgba(255,255,255,.05);}
-th,td{padding:16px 14px;text-align:left;vertical-align:middle;border-bottom:1px solid rgba(255,255,255,.08);}
-th{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.16em;}
-.zone-row td{background:rgba(255,194,68,.08);color:#102132;font-weight:700;border-bottom:1px solid rgba(255,255,255,.08);}
-.agent-name{font-weight:700;}
-.agent-info{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.5;}
-.shift-chip{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:16px;font-size:12px;font-weight:700;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);}
-.shift-chip[data-length="7"]{background:rgba(255,194,68,.15);color:#7D5800;}
-.shift-chip[data-length="8"]{background:rgba(0,160,130,.15);color:#055A43;}
-.shift-chip[data-type="off"]{background:rgba(255,255,255,.08);color:var(--muted);}
-.hotspot-tag{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;font-size:10px;color:var(--yellow);background:rgba(255,194,68,.12);margin-top:8px;}
-.filter-row{display:grid;grid-template-columns:1fr 1fr auto;gap:14px;padding:24px 28px 0;}
-.filter-row input,.filter-row select{width:100%;padding:14px 16px;border-radius:18px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#fff;}
-.filter-row button{border:none;border-radius:18px;padding:14px 20px;background:linear-gradient(135deg,var(--yellow),var(--yellow-dark));color:#102132;font-weight:800;}
-.agent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;padding:24px 28px 28px;}
-.agent-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:24px;padding:22px;display:grid;gap:18px;}
-.agent-top{display:flex;align-items:center;gap:14px;}
-.agent-avatar{width:50px;height:50px;border-radius:18px;background:linear-gradient(135deg,var(--yellow),var(--yellow-dark));display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#102132;}
-.agent-labels{display:grid;gap:6px;}
-.agent-labels strong{font-size:15px;}
-.agent-meta{display:flex;flex-wrap:wrap;gap:8px;font-size:12px;color:var(--muted);}
-.agent-schedule{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;}
-.agent-day{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:10px 8px;text-align:center;font-size:11px;}
-.agent-day strong{display:block;margin-bottom:8px;font-size:12px;}
-.agent-actions{display:flex;gap:12px;flex-wrap:wrap;}
-.btn-secondary{background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.08);}
-.hotspot-panel{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:24px 28px 28px;}
-.hotspot-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:24px;padding:22px;display:grid;gap:18px;}
-.hotspot-row{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:18px;display:flex;justify-content:space-between;align-items:center;gap:12px;}
-.hotspot-meta{display:grid;gap:6px;}
-.hotspot-meta strong{font-size:14px;}
-.hotspot-meta span{font-size:12px;color:var(--muted);}
-.multi-input{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.multi-input textarea{grid-column:span 2;min-height:150px;padding:14px 16px;border-radius:18px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#fff;resize:vertical;}
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(1,9,18,.85);z-index:1000;align-items:center;justify-content:center;padding:24px;}
-.modal-overlay.show{display:flex;}
-.modal{background:var(--surface);border:1px solid rgba(255,255,255,.08);border-radius:24px;width:480px;max-width:100%;overflow:hidden;box-shadow:var(--shadow);}
-.modal-header{display:flex;align-items:center;justify-content:space-between;padding:24px;}
-.modal-header strong{font-size:16px;}
-.modal-body{padding:0 24px 24px;display:grid;gap:14px;}
-.modal-body label{font-size:12px;color:var(--muted);font-weight:700;}
-.modal-body input, .modal-body select{width:100%;padding:14px 16px;border-radius:18px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#fff;}
-.modal-footer{display:flex;justify-content:flex-end;gap:12px;padding:0 24px 24px;}
-.hidden{display:none;}
-@media(max-width:1100px){.grid-4,.panel-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.hotspot-panel{grid-template-columns:1fr;}}
-@media(max-width:760px){.navbar{flex-direction:column;align-items:flex-start;}.section-header{flex-direction:column;}.filter-row{grid-template-columns:1fr;}.agent-week{grid-template-columns:repeat(4,minmax(0,1fr));}}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SENTINEL · Glovo CAS OPS</title>
+  <meta name="description" content="SENTINEL planning Glovo Maroc CAS OPS - tableau de bord, planning, agents, hotspots." />
+  <style>
+    :root {
+      --bg:#EAF4F9;
+      --card:#ffffff;
+      --surface:#F5F9FB;
+      --text:#1F2937;
+      --text-soft:#4B5563;
+      --primary:#FFC600;
+      --primary-dark:#F2A900;
+      --accent:#005F58;
+      --border:rgba(15,23,42,.08);
+      --shadow:0 24px 60px rgba(15,23,42,.08);
+    }
+    *{box-sizing:border-box;}
+    html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif;background:linear-gradient(180deg,#F6FBFF 0%,#EAF4F9 100%);color:var(--text);min-height:100%;}
+    body{overflow-x:hidden;}
+    button,input,select,textarea{font:inherit;}
+    .app-shell{max-width:1440px;margin:0 auto;padding:18px 22px 48px;}
+    .topbar{display:flex;align-items:center;gap:18px;padding:18px 0 24px;}
+    .brand{display:flex;align-items:center;gap:14px;}
+    .brand-mark{width:50px;height:50px;border-radius:18px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:22px;box-shadow:0 12px 24px rgba(0,95,88,.18);}
+    .brand-copy{line-height:1.1;}
+    .brand-copy strong{font-size:18px;display:block;}
+    .brand-copy span{font-size:12px;color:var(--accent);letter-spacing:.14em;text-transform:uppercase;}
+    .nav{display:flex;flex-wrap:wrap;gap:10px;margin-left:auto;}
+    .nav button{border:none;background:transparent;color:var(--text-soft);padding:12px 18px;border-radius:999px;transition:all .2s;display:flex;align-items:center;gap:8px;font-weight:700;}
+    .nav button.active{background:rgba(255,198,0,.18);color:var(--text);box-shadow:0 12px 24px rgba(255,198,0,.12);}
+    .hero{display:grid;grid-template-columns:1fr auto;gap:18px;padding:24px 0 0;}
+    .hero-title{max-width:760px;}
+    .hero-title h1{font-size:34px;margin:0;line-height:1.05;}
+    .hero-title p{margin:14px 0 0;color:var(--text-soft);font-size:16px;line-height:1.8;}
+    .hero-meta{display:grid;gap:10px;align-items:start;}
+    .badge{display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:18px;background:#fff;border:1px solid var(--border);font-size:13px;font-weight:700;color:var(--accent);}
+    .card-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:18px;}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:26px;padding:24px;box-shadow:var(--shadow);}
+    .card small{display:block;text-transform:uppercase;letter-spacing:.18em;color:var(--text-soft);font-weight:700;font-size:11px;margin-bottom:10px;}
+    .card strong{display:block;font-size:36px;line-height:1;margin-bottom:10px;}
+    .card span{color:var(--text-soft);font-size:13px;line-height:1.7;}
+    .section{background:var(--card);border:1px solid var(--border);border-radius:32px;padding:26px;box-shadow:var(--shadow);margin-top:24px;}
+    .section-header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:24px;}
+    .section-header h2{margin:0;font-size:22px;}
+    .section-header p{margin:8px 0 0;color:var(--text-soft);line-height:1.75;}
+    .section-header .label{padding:10px 16px;border-radius:999px;background:rgba(255,198,0,.12);color:var(--accent);font-weight:700;font-size:13px;}
+    .filters{display:grid;grid-template-columns:1fr 1fr auto;gap:14px;margin-bottom:22px;}
+    .filters input,.filters select{width:100%;padding:14px 16px;border-radius:16px;border:1px solid var(--border);background:var(--surface);color:var(--text);}
+    .filters button{border:none;border-radius:16px;padding:14px 18px;background:var(--accent);color:#fff;font-weight:800;}
+    .table-wrap{overflow-x:auto;}
+    table{width:100%;border-collapse:collapse;font-size:13px;color:var(--text);}
+    th,td{padding:16px 14px;text-align:left;border-bottom:1px solid var(--border);}
+    thead th{background:rgba(255,198,0,.08);color:var(--accent);text-transform:uppercase;letter-spacing:.15em;font-size:12px;}
+    tbody tr:hover{background:rgba(0,95,88,.04);}
+    .zone-row td{background:rgba(255,198,0,.14);font-weight:700;color:var(--accent);}
+    .status-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(0,95,88,.08);color:var(--accent);font-size:12px;font-weight:700;}
+    .agent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;}
+    .agent-card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:22px;}
+    .agent-card h3{margin:0 0 10px;font-size:16px;}
+    .agent-card p{margin:0;color:var(--text-soft);font-size:13px;line-height:1.8;}
+    .agent-schedule{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;margin:18px 0 0;}
+    .shift-pill{border-radius:14px;padding:8px 10px;font-size:11px;text-align:center;}
+    .shift-pill.off{background:rgba(15,23,42,.06);color:var(--text-soft);}
+    .shift-pill.work{background:rgba(255,198,0,.18);color:var(--accent);}
+    .hotspot-list{display:grid;gap:14px;}
+    .hotspot-item{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:18px;display:flex;justify-content:space-between;align-items:center;gap:12px;}
+    .hotspot-item strong{font-size:15px;margin:0;}
+    .hotspot-item small{color:var(--text-soft);}
+    .button-small{border:none;border-radius:14px;padding:10px 14px;background:rgba(15,23,42,.08);color:var(--text-soft);cursor:pointer;}
+    .page{display:none;}
+    .page.active{display:block;}
+    @media(max-width:1100px){.card-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.filters{grid-template-columns:1fr;}}
+    @media(max-width:760px){.hero, .section-header{grid-template-columns:1fr;}.agent-schedule{grid-template-columns:repeat(4,minmax(0,1fr));}}
+  </style>
 </head>
 <body>
-<nav class="navbar">
-  <div class="brand">
-    <div class="brand-mark">S</div>
-    <div class="brand-copy">
-      <strong>SENTINEL</strong>
-      <span>GLOVO · CAS OPS</span>
-    </div>
-  </div>
-  <div class="nav-links">
-    <button class="nav-link active" data-page="dashboard" onclick="switchPage(event)">📊 <span>Dashboard</span></button>
-    <button class="nav-link" data-page="planning" onclick="switchPage(event)">📅 <span>Planning</span></button>
-    <button class="nav-link" data-page="agents" onclick="switchPage(event)">👥 <span>Agents</span></button>
-    <button class="nav-link" data-page="hotspots" onclick="switchPage(event)">📍 <span>Hotspots</span></button>
-    <button class="nav-link" data-page="absences" onclick="switchPage(event)">🚨 <span>Absences</span></button>
-    <button class="nav-link" data-page="payroll" onclick="switchPage(event)">💰 <span>Paie</span></button>
-  </div>
-  <div class="top-right">
-    <div class="clock" id="clock">--:--</div>
-    <button class="refresh" onclick="renderAll()">↻ Actualiser</button>
-  </div>
-</nav>
-<main class="content">
-  <section id="dashboard" class="section page active">
-    <div class="section-header">
-      <div>
-        <h1>Tableau de bord Glovo</h1>
-        <p>Suivi opérationnel de la semaine prochaine avec couverture hotspot, respect du 44h et qualité du staffing CAS OPS.</p>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">S</div>
+        <div class="brand-copy"><strong>SENTINEL</strong><span>GLOVO · CAS OPS</span></div>
       </div>
-      <span class="status-badge">Livraison de planning : mercredi 12h</span>
-    </div>
-    <div class="grid-4">
-      <div class="metric"><small>Agents actifs</small><strong id="totalAgents">0</strong><div class="hint">Agents disponibles pour la semaine</div></div>
-      <div class="metric"><small>Total heures</small><strong id="totalHours">0</strong><div class="hint">Total 44h par agent confirmé</div></div>
-      <div class="metric"><small>Weekend validé</small><strong id="weekendCoverage">0%</strong><div class="hint">Samedi / dimanche en 8h</div></div>
-      <div class="metric"><small>Hotspots suivis</small><strong id="hotspotCount">0</strong><div class="hint">Points de déploiement priorisés</div></div>
-    </div>
-    <div class="panel">
-      <div class="panel-title"><h2>Performance globale</h2><span class="note" id="nextWeekLabel"></span></div>
-      <div class="panel-grid">
-        <div class="panel-card"><strong id="validScheduleCount">0</strong><span>Plannings valides</span></div>
-        <div class="panel-card"><strong id="unsafeTransitions">0</strong><span>Transitions à ajuster</span></div>
-        <div class="panel-card"><strong id="coverageScore">100%</strong><span>Score de couverture</span></div>
+      <nav class="nav" id="mainNav"></nav>
+    </header>
+
+    <section class="hero">
+      <div class="hero-title">
+        <h1>Outil de planning CAS OPS Glovo</h1>
+        <p>Un tableau de bord live pour préparer le planning de la semaine, suivre les agents, valider les hotspots et vérifier le staffing.</p>
       </div>
-    </div>
-  </section>
-  <section id="planning" class="section page">
-    <div class="section-header">
-      <div>
-        <h1>Planning professionnel</h1>
-        <p>Tableau de la semaine du jeudi au mercredi — 44h par agent, 1 OFF, weekend 8h et liaison avec les hotspots.</p>
+      <div class="hero-meta">
+        <div class="badge" id="deployStatus">Mise à jour en cours</div>
+        <div class="badge" id="weekRange">Semaine</div>
       </div>
-      <span class="status-badge">Semaine en cours de préparation</span>
-    </div>
-    <div class="filter-row">
-      <input id="planFilter" type="search" placeholder="Filtrer par agent, zone, ville" oninput="renderPlanning()">
-      <select id="teamFilter" onchange="renderPlanning()">
-        <option value="">Tous les pools</option>
-        <option value="CAS">CAS</option>
-        <option value="RBT">RBT</option>
-        <option value="DRB">DRB</option>
-        <option value="BSK">BSK</option>
-      </select>
-      <button onclick="renderPlanning()">Actualiser</button>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Agent</th>
-            <th>Ville</th>
-            <th>Zone</th>
-            <th>Jeu</th>
-            <th>Ven</th>
-            <th>Sam</th>
-            <th>Dim</th>
-            <th>Lun</th>
-            <th>Mar</th>
-            <th>Mer</th>
-            <th>H/SEM</th>
-          </tr>
-        </thead>
-        <tbody id="planningBody"></tbody>
-      </table>
-    </div>
-  </section>
-  <section id="agents" class="section page">
-    <div class="section-header">
-      <div>
-        <h1>Agents</h1>
-        <p>Gestion des agents CAS OPS avec informations email, ville et pool. Modification instantanée pour chaque fiche.</p>
-      </div>
-      <span class="status-badge">Données liées au planning</span>
-    </div>
-    <div class="filter-row">
-      <input id="agentSearch" type="search" placeholder="Rechercher nom, email, ville, pool" oninput="renderAgents()">
-      <select id="agentTeam" onchange="renderAgents()">
-        <option value="">Tous les pools</option>
-        <option value="CAS">CAS</option>
-        <option value="RBT">RBT</option>
-        <option value="DRB">DRB</option>
-        <option value="BSK">BSK</option>
-      </select>
-      <button onclick="clearAgentFilters()">Réinitialiser</button>
-    </div>
-    <div class="agent-grid" id="agentGrid"></div>
-  </section>
-  <section id="hotspots" class="section page">
-    <div class="section-header">
-      <div>
-        <h1>Hotspots</h1>
-        <p>Gestion des pointes de livraison : ajout, suppression et import en masse des hotspots par pool.</p>
-      </div>
-      <span class="status-badge">Impact directement lié au planning</span>
-    </div>
-    <div class="hotspot-panel">
-      <div class="hotspot-card">
-        <strong>Ajouter un hotspot</strong>
-        <div class="multi-input">
-          <select id="hotspotTeam"><option value="CAS">CAS</option><option value="RBT">RBT</option><option value="DRB">DRB</option><option value="BSK">BSK</option></select>
-          <input id="hotspotName" placeholder="Nom du hotspot">
-          <input id="hotspotPeak" placeholder="Heure de pointe (HH:MM-HH:MM)">
-          <input id="hotspotAgents" type="number" min="1" value="2" placeholder="Agents/jour">
+    </section>
+
+    <section id="dashboard" class="section page active">
+      <div class="section-header">
+        <div>
+          <h2>Tableau de bord</h2>
+          <p>Vue opérationnelle de l’état du planning, du nombre d’agents disponibles, du weekend et des hotspots.</p>
         </div>
-        <button class="btn btn-primary" onclick="addHotspot()">Ajouter hotspot</button>
+        <div class="label">Statut planning</div>
       </div>
-      <div class="hotspot-card">
-        <strong>Import bulk</strong>
-        <p class="small-note">Colle chaque ligne sous la forme : équipe | hotspot | peak | agents/jour</p>
-        <textarea id="bulkHotspotInput" placeholder="RBT | Marjane Market Acima Rabat | 10:00-20:00 | 2"></textarea>
-        <button class="btn btn-primary" onclick="importBulkHotspots()">Importer en masse</button>
+      <div class="card-grid">
+        <div class="card"><small>Agents actifs</small><strong id="statAgents">0</strong><span>Agents prets pour la semaine de support.</span></div>
+        <div class="card"><small>Total heures</small><strong id="statHours">0</strong><span>Total des heures planifiées pour tous les agents.</span></div>
+        <div class="card"><small>Weekend validé</small><strong id="statWeekend">0%</strong><span>Couverture samedi / dimanche conforme au modèle 8h.</span></div>
+        <div class="card"><small>Hotspots</small><strong id="statHotspots">0</strong><span>Points prioritaires à couvrir cette semaine.</span></div>
       </div>
-    </div>
-    <div class="hotspot-panel" id="hotspotList"></div>
-  </section>
-  <section id="absences" class="section page">
-    <div class="section-header">
-      <div>
-        <h1>Absences</h1>
-        <p>Section de suivi pour marquer les absences, congés et faire des ajustements avant envoi du planning.</p>
+      <div class="card-grid">
+        <div class="card"><small>Plannings valides</small><strong id="statValid">0</strong><span>Agents avec 44h, 1 OFF et weekend en place.</span></div>
+        <div class="card"><small>Transitions à corriger</small><strong id="statAdjust">0</strong><span>Enchaînements de shift à vérifier.</span></div>
+        <div class="card"><small>Score couverture</small><strong id="statCoverage">100%</strong><span>Alignement plan / hotspots</span></div>
+        <div class="card"><small>Actions</small><strong>OK</strong><span>Le planning est prêt pour revue.</span></div>
       </div>
-      <span class="status-badge">A venir</span>
-    </div>
-    <div class="panel"><div class="panel-title"><h2>Fonctionnalité en cours</h2><span class="note">La page Absences est prête à être enrichie avec tes données métiers.</span></div></div>
-  </section>
-  <section id="payroll" class="section page">
-    <div class="section-header">
-      <div>
-        <h1>Paie</h1>
-        <p>Calculs de paie selon les heures planifiées et les pools pour les agents CAS OPS.</p>
+    </section>
+
+    <section id="planning" class="section page">
+      <div class="section-header">
+        <div>
+          <h2>Planning</h2>
+          <p>Édition du planning semaine du jeudi au mercredi. Filtering par pool et par agent.</p>
+        </div>
+        <div class="label">Semaine cible</div>
       </div>
-      <span class="status-badge">A venir</span>
-    </div>
-    <div class="panel"><div class="panel-title"><h2>Fonctionnalité en cours</h2><span class="note">La page Paie est prête pour la suite du workflow.</span></div></div>
-  </section>
-</main>
-<div class="modal-overlay" id="agentModal">
-  <div class="modal">
-    <div class="modal-header"><strong>Modifier l’agent</strong><button class="btn btn-secondary btn-small" onclick="closeAgentModal()">Annuler</button></div>
-    <div class="modal-body">
-      <label>Nom complet</label>
-      <input id="editName" />
-      <label>Email</label>
-      <input id="editEmail" type="email" />
-      <label>Ville</label>
-      <input id="editCity" />
-      <label>Pool</label>
-      <select id="editTeam"><option value="CAS">CAS</option><option value="RBT">RBT</option><option value="DRB">DRB</option><option value="BSK">BSK</option></select>
-    </div>
-    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeAgentModal()">Fermer</button><button class="btn btn-primary" onclick="saveAgentEdit()">Sauvegarder</button></div>
+      <div class="filters">
+        <input id="filterSearch" type="search" placeholder="Filtrer par agent, ville, zone" />
+        <select id="filterTeam">
+          <option value="">Tous les pools</option>
+          <option value="CAS">CAS</option>
+          <option value="RBT">RBT</option>
+          <option value="DRB">DRB</option>
+          <option value="BSK">BSK</option>
+        </select>
+        <button onclick="renderPlanning()">Actualiser</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Agent</th>
+              <th>Ville</th>
+              <th>Zone</th>
+              <th>Jeu</th>
+              <th>Ven</th>
+              <th>Sam</th>
+              <th>Dim</th>
+              <th>Lun</th>
+              <th>Mar</th>
+              <th>Mer</th>
+              <th>H/SEM</th>
+            </tr>
+          </thead>
+          <tbody id="planningBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="agents" class="section page">
+      <div class="section-header">
+        <div>
+          <h2>Agents</h2>
+          <p>Liste des agents CAS OPS avec leurs pools, e-mails et planning de la semaine.</p>
+        </div>
+        <div class="label">33 Agents</div>
+      </div>
+      <div class="filters">
+        <input id="agentSearch" type="search" placeholder="Rechercher un agent" />
+        <select id="agentTeam">
+          <option value="">Tous les pools</option>
+          <option value="CAS">CAS</option>
+          <option value="RBT">RBT</option>
+          <option value="DRB">DRB</option>
+          <option value="BSK">BSK</option>
+        </select>
+        <button onclick="renderAgents()">Chercher</button>
+      </div>
+      <div class="agent-grid" id="agentGrid"></div>
+    </section>
+
+    <section id="hotspots" class="section page">
+      <div class="section-header">
+        <div>
+          <h2>Hotspots</h2>
+          <p>Gestion des points de forte demande et suivi des besoins agents par équipe.</p>
+        </div>
+        <div class="label">Hotspots</div>
+      </div>
+      <div class="hotspot-list" id="hotspotGrid"></div>
+    </section>
   </div>
-</div>
-<script>
-const DAYS = ['JEUDI','VENDREDI','SAMEDI','DIMANCHE','LUNDI','MARDI','MERCREDI'];
-const STORAGE_KEYS = {agents:'sentinel_agents',hotspots:'sentinel_hotspots'};
-const AGENTS_DEFAULT = [
-  {name:'choaib knari',email:'choaib.knari@glovo.com',city:'Casablanca',zone:'Casa Nord',team:'CAS',schedule:['09:00-16:00','10:00-17:00','10:00-18:00','11:00-19:00','OFF','10:00-18:00','10:00-18:00']},
-  {name:'HABIB EDDINE AHMED',email:'habib.ahmed@glovo.com',city:'Casablanca',zone:'Casa Sud',team:'CAS',schedule:['10:00-17:00','09:00-16:00','11:00-19:00','10:00-18:00','OFF','10:00-18:00','10:00-18:00']},
-  {name:'AYMNE BELGARA',email:'aymne.belgara@glovo.com',city:'Rabat',zone:'Rabat Centre',team:'CAS',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','11:00-19:00','10:00-18:00','10:00-18:00']},
-  {name:'MOHAMED BOUHAJI',email:'mohamed.bouhaji@glovo.com',city:'Marrakech',zone:'Marrakech Centre',team:'CAS',schedule:['09:00-16:00','10:00-17:00','11:00-19:00','OFF','10:00-18:00','10:00-18:00','10:00-18:00']},
-  {name:'ISMAIL BAHI',email:'ismail.bahi@glovo.com',city:'Tanger',zone:'Tanger Sud',team:'CAS',schedule:['OFF','10:00-17:00','09:00-16:00','10:00-18:00','09:00-16:00','10:00-18:00','10:00-18:00']},
-  {name:'HAMZA KARIM',email:'hamza.karim@glovo.com',city:'Agadir',zone:'Agadir Centre',team:'CAS',schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-18:00','10:00-18:00','10:00-18:00']},
-  {name:'LAHCANE KHOUDRY',email:'lahcane.khoudry@glovo.com',city:'Fès',zone:'Fès Ville',team:'CAS',schedule:['10:00-17:00','09:00-16:00','10:00-18:00','OFF','09:00-16:00','10:00-18:00','10:00-18:00']},
-  {name:'ANAS RAJID',email:'anas.rajid@glovo.com',city:'Meknès',zone:'Meknès Centre',team:'CAS',schedule:['09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-18:00','10:00-18:00','10:00-18:00']},
-  {name:'HAMZA ACHOUBI',email:'hamza.achoubi@glovo.com',city:'Safi',zone:'Safi Centre',team:'CAS',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','11:00-19:00','10:00-18:00','10:00-18:00']},
-  {name:'BRAHIM LACHGUIR',email:'brahim.lachguir@glovo.com',city:'El Jadida',zone:'El Jadida',team:'CAS',schedule:['09:00-16:00','10:00-17:00','11:00-19:00','OFF','10:00-18:00','10:00-18:00','10:00-18:00']},
-  {name:'ABDELKHALEQ',email:'abdelkhaleq@glovo.com',city:'Khouribga',zone:'Khouribga',team:'CAS',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','11:00-19:00','10:00-18:00','10:00-18:00']},
-  {name:'ISLAM ELMARDI',email:'islam.elmardi@glovo.com',city:'Casablanca',zone:'Mohammed V',team:'RBT',schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-18:00','10:00-18:00','10:00-18:00']},
-  {name:'AYOUB ABSSI',email:'ayoub.abssi@glovo.com',city:'Salé',zone:'Salé Centre',team:'RBT',schedule:['10:00-17:00','OFF','10:00-18:00','09:00-16:00','10:00-18:00','10:00-18:00','10:00-18:00']},
-  {name:'AYOUB BEN MALEK',email:'ayoub.benmalek@glovo.com',city:'Rabat',zone:'Rabat Centre',team:'RBT',schedule:['09:00-16:00','10:00-17:00','11:00-19:00','OFF','10:00-18:00','10:00-18:00','10:00-18:00']},
-  {name:'AYMANE CHLIFANE',email:'aymane.chlifane@glovo.com',city:'Témara',zone:'Témara',team:'RBT',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','11:00-19:00','10:00-18:00','10:00-18:00']},
-  {name:'ZAKARIE BENALI',email:'zakarie.benali@glovo.com',city:'Kenitra',zone:'Kenitra',team:'RBT',schedule:['09:00-16:00','10:00-17:00','11:00-19:00','OFF','09:00-16:00','10:00-18:00','10:00-18:00']},
-  {name:'NAJIB HARATI',email:'najib.harati@glovo.com',city:'Rabat',zone:'Rabat Sud',team:'RBT',schedule:['10:00-17:00','OFF','09:00-16:00','10:00-18:00','10:00-17:00','10:00-18:00','10:00-18:00']},
-  {name:'OUSSAMA CHENNAOUI',email:'oussama.chennaoui@glovo.com',city:'Aïn Aouda',zone:'Aïn Aouda',team:'RBT',schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00']},
-  {name:'YOUSSEF DERKAOUI',email:'youssef.derkaoui@glovo.com',city:'Casablanca',zone:'Hassan',team:'RBT',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-18:00','10:00-18:00']},
-  {name:'HASSAN AZGOUNE',email:'hassan.azgoune@glovo.com',city:'Casablanca',zone:'Agdal',team:'RBT',schedule:['09:00-16:00','10:00-17:00','11:00-19:00','OFF','09:00-16:00','10:00-18:00','10:00-18:00']},
-  {name:'ACHRAF AKHLIJ',email:'achraf.akhlij@glovo.com',city:'Casablanca',zone:'Médina',team:'RBT',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','11:00-19:00','10:00-18:00','10:00-18:00']},
-  {name:'MOURAD CHERRADI',email:'mourad.cherradi@glovo.com',city:'Casablanca',zone:'Yacoub El Mansour',team:'RBT',schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','11:00-19:00','10:00-18:00','10:00-18:00']},
-  {name:'CHARAF LOUMMIHI',email:'charaf.loummiHi@glovo.com',city:'Rabat',zone:'Souissi',team:'RBT',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-18:00','10:00-18:00']},
-  {name:'YAHYA RHALLAB',email:'yahya.rhallab@glovo.com',city:'Rabat',zone:'Hay Riad',team:'RBT',schedule:['09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00']},
-  {name:'OUSSAMA EL ATRACH',email:'oussama.elatrach@glovo.com',city:'Rabat',zone:'Agdal',team:'RBT',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','11:00-19:00','10:00-18:00','10:00-18:00']},
-  {name:'IMAD TAMIDI',email:'imad.tamidi@glovo.com',city:'Témara',zone:'Témara',team:'RBT',schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00']},
-  {name:'SAID OUMBAREK',email:'said.oumbarek@glovo.com',city:'Casablanca',zone:'Casablanca',team:'DRB',schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00']},
-  {name:'AZIZ ESSAILI',email:'aziz.essaili@glovo.com',city:'Rabat',zone:'Rabat Nord',team:'DRB',schedule:['09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00']},
-  {name:'OUSSAMA OUAKIL',email:'oussama.ouakil@glovo.com',city:'Fès',zone:'Fès Ville',team:'DRB',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-18:00','10:00-18:00']},
-  {name:'ABDELKARIM SABBANE',email:'abdelkarim.sabbane@glovo.com',city:'Marrakech',zone:'Marrakech Sud',team:'DRB',schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00']},
-  {name:'MORAD MURID',email:'morad.murid@glovo.com',city:'Beni Mellal',zone:'Beni Mellal',team:'BSK',schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00']},
-  {name:'HAMID TARIK',email:'hamid.tarik@glovo.com',city:'Kénitra',zone:'Kénitra',team:'BSK',schedule:['09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00']},
-  {name:'ABDELBASSET BAIDI',email:'abdelbasset.baidi@glovo.com',city:'Marrakech',zone:'Marrakech Nord',team:'BSK',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-18:00','10:00-18:00']}
-];
-const HOTSPOTS_DEFAULT = [
-  {team:'CAS',name:'Marjane Market Bouskoura',peak:'10:00-19:00',agentsPerDay:2},
-  {team:'CAS',name:'KFC Bouskoura',peak:'17:00-22:00',agentsPerDay:2},
-  {team:'RBT',name:'Marjane Market Acima Rabat',peak:'10:00-20:00',agentsPerDay:2},
-  {team:'RBT',name:'Carrefour Market Rabat M6',peak:'10:00-20:00',agentsPerDay:2},
-  {team:'DRB',name:'Carrefour Market Tamaris',peak:'10:00-20:00',agentsPerDay:2},
-  {team:'DRB',name:'McDonalds Tamaris',peak:'17:00-22:00',agentsPerDay:2},
-  {team:'BSK',name:'Marjane Market Bouskoura',peak:'10:00-19:00',agentsPerDay:2}
-];
-let AGENTS = [];
-let HOTSPOTS = [];
-let currentAgentIndex = null;
-function loadState() {
-  const agents = localStorage.getItem(STORAGE_KEYS.agents);
-  const hotspots = localStorage.getItem(STORAGE_KEYS.hotspots);
-  AGENTS = agents ? JSON.parse(agents) : JSON.parse(JSON.stringify(AGENTS_DEFAULT));
-  HOTSPOTS = hotspots ? JSON.parse(hotspots) : JSON.parse(JSON.stringify(HOTSPOTS_DEFAULT));
-}
-function saveState() {
-  localStorage.setItem(STORAGE_KEYS.agents, JSON.stringify(AGENTS));
-  localStorage.setItem(STORAGE_KEYS.hotspots, JSON.stringify(HOTSPOTS));
-}
-function getNextWeekLabel() {
-  const today = new Date();
-  const delta = (4 - today.getDay() + 7) % 7 || 7;
-  const nextThursday = new Date(today);
-  nextThursday.setDate(today.getDate() + delta);
-  const nextWednesday = new Date(nextThursday);
-  nextWednesday.setDate(nextThursday.getDate() + 6);
-  const opts = {day:'2-digit',month:'short'};
-  return `${nextThursday.toLocaleDateString('fr-FR',opts)} → ${nextWednesday.toLocaleDateString('fr-FR',opts)}`;
-}
-function shiftLength(shift) {
-  if (!shift || shift==='OFF') return 0;
-  const [start,end] = shift.split('-').map(t=>t.trim());
-  const toMin = t => { const [h,m]=t.split(':').map(Number); return h*60+m; };
-  let diff = toMin(end) - toMin(start);
-  if (diff < 0) diff += 1440;
-  return diff/60;
-}
-function validateAgent(agent) {
-  const hours = agent.schedule.reduce((sum,shift)=>sum+shiftLength(shift),0);
-  const off = agent.schedule.filter(shift=>shift==='OFF').length;
-  const weekendOk = shiftLength(agent.schedule[2])===8 && shiftLength(agent.schedule[3])===8;
-  const unsafe = [];
-  agent.schedule.forEach((shift,i)=>{
-    if (shift==='OFF') return;
-    const endHour = Number(shift.split('-')[1].trim().split(':')[0]);
-    const next = agent.schedule[i+1];
-    if (!next || next==='OFF') return;
-    const startHour = Number(next.split('-')[0].trim().split(':')[0]);
-    if (endHour >= 19 && startHour <= 9) unsafe.push(`${DAYS[i]}→${DAYS[i+1]}`);
-  });
-  return {hours,off,weekendOk,unsafe,valid:hours===44 && off===1 && weekendOk && unsafe.length===0};
-}
-function matchHotspots(agent,index) {
-  const shift = agent.schedule[index];
-  if (!shift || shift==='OFF') return [];
-  const start = shift.split('-')[0].trim();
-  return HOTSPOTS.filter(h=>h.team===agent.team && (h.peak.startsWith(start) || agent.city.toLowerCase().includes(h.name.toLowerCase().split(' ')[0]))).slice(0,2).map(h=>h.name);
-}
-function renderAll() {
-  loadState();
-  renderClock();
-  renderDashboard();
-  renderPlanning();
-  renderAgents();
-  renderHotspots();
-  updateNav();
-}
-function switchPage(event) {
-  const page = event.currentTarget.dataset.page;
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById(page).classList.add('active');
-  document.querySelectorAll('.nav-link').forEach(btn=>btn.classList.toggle('active', btn.dataset.page===page));
-}
-function updateNav() {
-  if (!document.querySelector('.nav-link.active')) document.querySelector('.nav-link[data-page="dashboard"]').classList.add('active');
-}
-function renderClock() {
-  document.getElementById('clock').textContent = new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
-}
-function renderDashboard() {
-  const totalAgents = AGENTS.length;
-  const totalHours = AGENTS.reduce((sum,a)=>sum+a.schedule.reduce((s,shift)=>s+shiftLength(shift),0),0);
-  const weekendCount = AGENTS.filter(a=>validateAgent(a).weekendOk).length;
-  const validCount = AGENTS.filter(a=>validateAgent(a).valid).length;
-  document.getElementById('totalAgents').textContent = totalAgents;
-  document.getElementById('totalHours').textContent = totalHours;
-  document.getElementById('weekendCoverage').textContent = `${Math.round(weekendCount/totalAgents*100)}%`;
-  document.getElementById('hotspotCount').textContent = HOTSPOTS.length;
-  document.getElementById('validScheduleCount').textContent = validCount;
-  document.getElementById('unsafeTransitions').textContent = AGENTS.reduce((sum,a)=>sum+validateAgent(a).unsafe.length,0);
-  document.getElementById('coverageScore').textContent = `${HOTSPOTS.length?100:0}%`;
-  document.getElementById('nextWeekLabel').textContent = `Semaine ${getNextWeekLabel()}`;
-}
-function renderPlanning() {
-  const tbody = document.getElementById('planningBody');
-  const filter = document.getElementById('planFilter').value.trim().toLowerCase();
-  const team = document.getElementById('teamFilter').value;
-  tbody.innerHTML = '';
-  const grouped = AGENTS.reduce((acc,agent)=>{
-    if (team && agent.team!==team) return acc;
-    if (filter && !(`${agent.name} ${agent.city} ${agent.zone} ${agent.team}`.toLowerCase().includes(filter))) return acc;
-    (acc[agent.city] = acc[agent.city]||[]).push(agent);
-    return acc;
-  },{});
-  Object.keys(grouped).sort().forEach(city=>{
-    const header = document.createElement('tr');
-    header.className='zone-row';
-    header.innerHTML = `<td colspan="11">${city}</td>`;
-    tbody.appendChild(header);
-    grouped[city].forEach(agent=>{
-      const validation = validateAgent(agent);
-      const row = document.createElement('tr');
-      const shifts = agent.schedule.map((shift,i)=>{
-        const length = shiftLength(shift);
-        const tag = shift==='OFF' ? `<span class="shift-chip" data-type="off">OFF</span>` : `<span class="shift-chip" data-length="${length}">${shift}</span>`;
-        const hotspots = matchHotspots(agent,i).map(name=>`<span class="hotspot-tag">${name}</span>`).join('');
-        return `<td>${tag}${hotspots}</td>`;
-      }).join('');
-      row.innerHTML = `
-        <td><div class="agent-name">${agent.name}</div><div class="agent-info">${agent.team} · ${agent.zone}</div></td>
-        <td>${agent.city}</td>
-        <td>${agent.zone}</td>
-        ${shifts}
-        <td><span class="shift-chip" data-length="${agent.schedule.reduce((s,shift)=>s+shiftLength(shift),0)}">44h</span></td>
-      `;
-      tbody.appendChild(row);
-    });
-  });
-}
-function renderAgents() {
-  const query = document.getElementById('agentSearch').value.trim().toLowerCase();
-  const team = document.getElementById('agentTeam').value;
-  const grid = document.getElementById('agentGrid');
-  grid.innerHTML = '';
-  const filtered = AGENTS.filter(agent=>{
-    const text = `${agent.name} ${agent.email} ${agent.city} ${agent.zone} ${agent.team}`.toLowerCase();
-    return (!team||agent.team===team) && (!query||text.includes(query));
-  });
-  if (!filtered.length) {
-    grid.innerHTML = '<div class="panel-card"><strong>Aucun agent trouvé</strong><span>Change le filtre ou remets tous les pools.</span></div>';
-    return;
-  }
-  filtered.forEach((agent,index)=>{
-    const card = document.createElement('article');
-    card.className='agent-card';
-    const initials = agent.name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
-    const scheduleHtml = agent.schedule.map((shift,i)=>`<div class="agent-day"><strong>${DAYS[i].slice(0,2)}</strong><span>${shift==='OFF'?'OFF':shift.replace(':00','')}</span></div>`).join('');
-    card.innerHTML = `
-      <div class="agent-top">
-        <div class="agent-avatar">${initials}</div>
-        <div class="agent-labels"><strong>${agent.name}</strong><div class="agent-meta"><span>${agent.team}</span><span>${agent.city}</span><span>${agent.email}</span></div></div>
-      </div>
-      <div class="agent-schedule">${scheduleHtml}</div>
-      <div class="agent-actions"><button class="btn btn-primary btn-small" onclick="openAgentEditor(${index})">Modifier</button></div>
-    `;
-    grid.appendChild(card);
-  });
-}
-function clearAgentFilters() {
-  document.getElementById('agentSearch').value='';
-  document.getElementById('agentTeam').value='';
-  renderAgents();
-}
-function renderHotspots() {
-  const list = document.getElementById('hotspotList');
-  list.innerHTML = '';
-  if (!HOTSPOTS.length) {
-    list.innerHTML = '<div class="hotspot-row"><div class="hotspot-meta"><strong>Aucun hotspot défini</strong><span>Ajoute des hotspots pour qu’ils apparaissent dans le planning.</span></div></div>';
-    return;
-  }
-  HOTSPOTS.forEach((hotspot,index)=>{
-    const row = document.createElement('div');
-    row.className='hotspot-row';
-    row.innerHTML = `
-      <div class="hotspot-meta"><strong>${hotspot.name}</strong><span>${hotspot.team} · ${hotspot.peak} · ${hotspot.agentsPerDay} agents/jour</span></div>
-      <button class="btn btn-secondary btn-small" onclick="removeHotspot(${index})">Supprimer</button>
-    `;
-    list.appendChild(row);
-  });
-}
-function addHotspot() {
-  const team = document.getElementById('hotspotTeam').value;
-  const name = document.getElementById('hotspotName').value.trim();
-  const peak = document.getElementById('hotspotPeak').value.trim();
-  const agents = Number(document.getElementById('hotspotAgents').value)||2;
-  if (!name||!peak) return alert('Remplis le nom et l’heure de pointe.');
-  HOTSPOTS.unshift({team,name,peak,agentsPerDay:agents});
-  saveState();
-  renderHotspots();
-}
-function removeHotspot(index) {
-  HOTSPOTS.splice(index,1);
-  saveState();
-  renderHotspots();
-}
-function importBulkHotspots() {
-  const raw = document.getElementById('bulkHotspotInput').value.trim();
-  if (!raw) return alert('Colle des hotspot à importer.');
-  raw.split(/\r?\n/).map(line=>line.trim()).filter(Boolean).forEach(line=>{
-    const parts = line.split('|').map(p=>p.trim());
-    if (parts.length>=4) {
-      const [team,name,peak,agents] = parts;
-      HOTSPOTS.unshift({team:team.toUpperCase(),name,peak,agentsPerDay:Number(agents)||2});
+
+  <script>
+    const DAYS = ['JEUDI','VENDREDI','SAMEDI','DIMANCHE','LUNDI','MARDI','MERCREDI'];
+    const AGENTS = [
+      {name:'choaib knari',email:'choaib.knari@glovo.com',city:'Casablanca',zone:'Casa Nord',team:'CAS',schedule:['09:00-16:00','10:00-17:00','10:00-18:00','11:00-19:00','OFF','10:00-18:00','10:00-18:00']},
+      {name:'HABIB EDDINE AHMED',email:'habib.ahmed@glovo.com',city:'Casablanca',zone:'Casa Sud',team:'CAS',schedule:['10:00-17:00','09:00-16:00','11:00-19:00','10:00-18:00','OFF','10:00-18:00','10:00-18:00']},
+      {name:'AYMNE BELGARA',email:'aymne.belgara@glovo.com',city:'Rabat',zone:'Rabat Centre',team:'CAS',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','11:00-19:00','10:00-18:00','10:00-18:00']},
+      {name:'MOHAMED BOUHAJI',email:'mohamed.bouhaji@glovo.com',city:'Marrakech',zone:'Marrakech Centre',team:'CAS',schedule:['09:00-16:00','10:00-17:00','11:00-19:00','OFF','10:00-18:00','10:00-18:00','10:00-18:00']},
+      {name:'ISMAIL BAHI',email:'ismail.bahi@glovo.com',city:'Tanger',zone:'Tanger Sud',team:'CAS',schedule:['OFF','10:00-17:00','09:00-16:00','10:00-18:00','09:00-16:00','10:00-18:00','10:00-18:00']},
+      {name:'HAMZA KARIM',email:'hamza.karim@glovo.com',city:'Agadir',zone:'Agadir Centre',team:'CAS',schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-18:00','10:00-18:00','10:00-18:00']},
+      {name:'LAHCANE KHOUDRY',email:'lahcane.khoudry@glovo.com',city:'Fès',zone:'Fès Ville',team:'CAS',schedule:['10:00-17:00','09:00-16:00','10:00-18:00','OFF','09:00-16:00','10:00-18:00','10:00-18:00']},
+      {name:'ANAS RAJID',email:'anas.rajid@glovo.com',city:'Meknès',zone:'Meknès Centre',team:'CAS',schedule:['09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-18:00','10:00-18:00','10:00-18:00']},
+      {name:'HAMZA ACHOUBI',email:'hamza.achoubi@glovo.com',city:'Safi',zone:'Safi Centre',team:'CAS',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','11:00-19:00','10:00-18:00','10:00-18:00']},
+      {name:'BRAHIM LACHGUIR',email:'brahim.lachguir@glovo.com',city:'El Jadida',zone:'El Jadida',team:'CAS',schedule:['09:00-16:00','10:00-17:00','11:00-19:00','OFF','10:00-18:00','10:00-18:00','10:00-18:00']},
+      {name:'ABDELKHALEQ',email:'abdelkhaleq@glovo.com',city:'Khouribga',zone:'Khouribga',team:'CAS',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','11:00-19:00','10:00-18:00','10:00-18:00']},
+      {name:'ISLAM ELMARDI',email:'islam.elmardi@glovo.com',city:'Casablanca',zone:'Mohammed V',team:'RBT',schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-18:00','10:00-18:00','10:00-18:00']},
+      {name:'AYOUB ABSSI',email:'ayoub.abssi@glovo.com',city:'Salé',zone:'Salé Centre',team:'RBT',schedule:['10:00-17:00','OFF','10:00-18:00','09:00-16:00','10:00-18:00','10:00-18:00','10:00-18:00']},
+      {name:'AYOUB BEN MALEK',email:'ayoub.benmalek@glovo.com',city:'Rabat',zone:'Rabat Centre',team:'RBT',schedule:['09:00-16:00','10:00-17:00','11:00-19:00','OFF','10:00-18:00','10:00-18:00','10:00-18:00']},
+      {name:'AYMANE CHLIFANE',email:'aymane.chlifane@glovo.com',city:'Témara',zone:'Témara',team:'RBT',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','11:00-19:00','10:00-18:00','10:00-18:00']},
+      {name:'ZAKARIE BENALI',email:'zakarie.benali@glovo.com',city:'Kenitra',zone:'Kenitra',team:'RBT',schedule:['09:00-16:00','10:00-17:00','11:00-19:00','OFF','09:00-16:00','10:00-18:00','10:00-18:00']},
+      {name:'NAJIB HARATI',email:'najib.harati@glovo.com',city:'Rabat',zone:'Rabat Sud',team:'RBT',schedule:['10:00-17:00','OFF','09:00-16:00','10:00-18:00','10:00-17:00','10:00-18:00','10:00-18:00']},
+      {name:'OUSSAMA CHENNAOUI',email:'oussama.chennaoui@glovo.com',city:'Aïn Aouda',zone:'Aïn Aouda',team:'RBT',schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00']},
+      {name:'YOUSSEF DERKAOUI',email:'youssef.derkaoui@glovo.com',city:'Casablanca',zone:'Hassan',team:'RBT',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-18:00','10:00-18:00']},
+      {name:'HASSAN AZGOUNE',email:'hassan.azgoune@glovo.com',city:'Casablanca',zone:'Agdal',team:'RBT',schedule:['09:00-16:00','10:00-17:00','11:00-19:00','OFF','09:00-16:00','10:00-18:00','10:00-18:00']},
+      {name:'ACHRAF AKHLIJ',email:'achraf.akhlij@glovo.com',city:'Casablanca',zone:'Médina',team:'RBT',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','11:00-19:00','10:00-18:00','10:00-18:00']},
+      {name:'MOURAD CHERRADI',email:'mourad.cherradi@glovo.com',city:'Casablanca',zone:'Yacoub El Mansour',team:'RBT',schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','11:00-19:00','10:00-18:00','10:00-18:00']},
+      {name:'CHARAF LOUMMIHI',email:'charaf.loummiHi@glovo.com',city:'Rabat',zone:'Souissi',team:'RBT',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-18:00','10:00-18:00']},
+      {name:'YAHYA RHALLAB',email:'yahya.rhallab@glovo.com',city:'Rabat',zone:'Hay Riad',team:'RBT',schedule:['09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00']},
+      {name:'OUSSAMA EL ATRACH',email:'oussama.elatrach@glovo.com',city:'Rabat',zone:'Agdal',team:'RBT',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','11:00-19:00','10:00-18:00','10:00-18:00']},
+      {name:'IMAD TAMIDI',email:'imad.tamidi@glovo.com',city:'Témara',zone:'Témara',team:'RBT',schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00']},
+      {name:'SAID OUMBAREK',email:'said.oumbarek@glovo.com',city:'Casablanca',zone:'Casablanca',team:'DRB',schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00']},
+      {name:'AZIZ ESSAILI',email:'aziz.essaili@glovo.com',city:'Rabat',zone:'Rabat Nord',team:'DRB',schedule:['09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00']},
+      {name:'OUSSAMA OUAKIL',email:'oussama.ouakil@glovo.com',city:'Fès',zone:'Fès Ville',team:'DRB',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-18:00','10:00-18:00']},
+      {name:'ABDELKARIM SABBANE',email:'abdelkarim.sabbane@glovo.com',city:'Marrakech',zone:'Marrakech Sud',team:'DRB',schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00']},
+      {name:'MORAD MURID',email:'morad.murid@glovo.com',city:'Beni Mellal',zone:'Beni Mellal',team:'BSK',schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00']},
+      {name:'HAMID TARIK',email:'hamid.tarik@glovo.com',city:'Kénitra',zone:'Kénitra',team:'BSK',schedule:['09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00']},
+      {name:'ABDELBASSET BAIDI',email:'abdelbasset.baidi@glovo.com',city:'Marrakech',zone:'Marrakech Nord',team:'BSK',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-18:00','10:00-18:00']}
+    ];
+    const HOTSPOTS = [
+      {team:'CAS',name:'Marjane Market Bouskoura',peak:'10:00-19:00',agents:2},
+      {team:'CAS',name:'KFC Bouskoura',peak:'17:00-22:00',agents:2},
+      {team:'RBT',name:'Marjane Market Acima Rabat',peak:'10:00-20:00',agents:2},
+      {team:'RBT',name:'Carrefour Market Rabat M6',peak:'10:00-20:00',agents:2},
+      {team:'DRB',name:'Carrefour Market Tamaris',peak:'10:00-20:00',agents:2},
+      {team:'DRB',name:'McDonalds Tamaris',peak:'17:00-22:00',agents:2},
+      {team:'BSK',name:'Marjane Market Bouskoura',peak:'10:00-19:00',agents:2}
+    ];
+
+    const pages = [
+      {id:'dashboard',label:'Dashboard'},
+      {id:'planning',label:'Planning'},
+      {id:'agents',label:'Agents'},
+      {id:'hotspots',label:'Hotspots'}
+    ];
+
+    function initNav() {
+      const nav = document.getElementById('mainNav');
+      pages.forEach(page => {
+        const button = document.createElement('button');
+        button.textContent = page.label;
+        button.dataset.page = page.id;
+        button.onclick = () => switchPage(page.id);
+        button.className = page.id === 'dashboard' ? 'active' : '';
+        nav.appendChild(button);
+      });
     }
-  });
-  saveState();
-  renderHotspots();
-  document.getElementById('bulkHotspotInput').value='';
-}
-function openAgentEditor(index) {
-  currentAgentIndex = index;
-  const agent = AGENTS[index];
-  document.getElementById('editName').value = agent.name;
-  document.getElementById('editEmail').value = agent.email;
-  document.getElementById('editCity').value = agent.city;
-  document.getElementById('editTeam').value = agent.team;
-  document.getElementById('agentModal').classList.add('show');
-}
-function closeAgentModal() {
-  document.getElementById('agentModal').classList.remove('show');
-}
-function saveAgentEdit() {
-  if (currentAgentIndex===null) return;
-  AGENTS[currentAgentIndex].name = document.getElementById('editName').value.trim();
-  AGENTS[currentAgentIndex].email = document.getElementById('editEmail').value.trim();
-  AGENTS[currentAgentIndex].city = document.getElementById('editCity').value.trim();
-  AGENTS[currentAgentIndex].team = document.getElementById('editTeam').value;
-  saveState();
-  renderAll();
-  closeAgentModal();
-}
-loadState();
-renderAll();
-setInterval(renderClock,1000);
-</script>
+
+    function switchPage(pageId) {
+      document.querySelectorAll('.page').forEach(section => {
+        section.classList.toggle('active', section.id === pageId);
+      });
+      document.querySelectorAll('.nav button').forEach(button => {
+        button.classList.toggle('active', button.dataset.page === pageId);
+      });
+    }
+
+    function formatHours(value) {
+      return `${value}`;
+    }
+
+    function shiftHours(shift) {
+      if (!shift || shift === 'OFF') return 0;
+      const [start,end] = shift.split('-').map(t => t.trim());
+      const [h1,m1] = start.split(':').map(Number);
+      const [h2,m2] = end.split(':').map(Number);
+      let minutes = (h2*60 + m2) - (h1*60 + m1);
+      if (minutes < 0) minutes += 24*60;
+      return minutes/60;
+    }
+
+    function validate(agent) {
+      const total = agent.schedule.reduce((sum,shift) => sum + shiftHours(shift), 0);
+      const offs = agent.schedule.filter(s => s === 'OFF').length;
+      const weekendOk = shiftHours(agent.schedule[2]) === 8 && shiftHours(agent.schedule[3]) === 8;
+      const errors = [];
+      agent.schedule.forEach((shift,i) => {
+        if (shift === 'OFF') return;
+        const next = agent.schedule[i+1];
+        if (!next || next === 'OFF') return;
+        const end = Number(shift.split('-')[1].split(':')[0]);
+        const nextStart = Number(next.split('-')[0].split(':')[0]);
+        if (end >= 19 && nextStart <= 9) errors.push(`${DAYS[i]} → ${DAYS[i+1]}`);
+      });
+      return {total,offs,weekendOk,errors,valid: total === 44 && offs === 1 && weekendOk && errors.length === 0};
+    }
+
+    function renderDashboard() {
+      document.getElementById('statAgents').textContent = AGENTS.length;
+      const totalHours = AGENTS.reduce((sum,agent) => sum + agent.schedule.reduce((s,shift) => s + shiftHours(shift), 0), 0);
+      const weekends = AGENTS.filter(agent => validate(agent).weekendOk).length;
+      const validCount = AGENTS.filter(agent => validate(agent).valid).length;
+      const errors = AGENTS.reduce((sum,a) => sum + validate(a).errors.length, 0);
+      document.getElementById('statHours').textContent = formatHours(totalHours);
+      document.getElementById('statWeekend').textContent = `${Math.round((weekends/AGENTS.length) * 100)}%`;
+      document.getElementById('statHotspots').textContent = HOTSPOTS.length;
+      document.getElementById('statValid').textContent = validCount;
+      document.getElementById('statAdjust').textContent = errors;
+      document.getElementById('statCoverage').textContent = HOTSPOTS.length ? '100%' : '0%';
+      document.getElementById('weekRange').textContent = nextWeekRange();
+      document.getElementById('deployStatus').textContent = 'Live sur Netlify';
+    }
+
+    function nextWeekRange() {
+      const today = new Date();
+      const offset = (4 - today.getDay() + 7) % 7 || 7;
+      const start = new Date(today);
+      start.setDate(start.getDate() + offset);
+      const end = new Date(start);
+      end.setDate(start.getDate() + 6);
+      return `${start.toLocaleDateString('fr-FR',{day:'2-digit',month:'short'})} → ${end.toLocaleDateString('fr-FR',{day:'2-digit',month:'short'})}`;
+    }
+
+    function renderPlanning() {
+      const filter = document.getElementById('filterSearch').value.trim().toLowerCase();
+      const team = document.getElementById('filterTeam').value;
+      const tbody = document.getElementById('planningBody');
+      tbody.innerHTML = '';
+      const groups = AGENTS.reduce((acc, agent) => {
+        if (team && agent.team !== team) return acc;
+        const text = `${agent.name} ${agent.city} ${agent.zone} ${agent.team}`.toLowerCase();
+        if (filter && !text.includes(filter)) return acc;
+        (acc[agent.city] = acc[agent.city] || []).push(agent);
+        return acc;
+      }, {});
+      Object.keys(groups).sort().forEach(city => {
+        const header = document.createElement('tr');
+        header.className = 'zone-row';
+        header.innerHTML = `<td colspan="11">${city}</td>`;
+        tbody.appendChild(header);
+        groups[city].forEach(agent => {
+          const row = document.createElement('tr');
+          const cells = agent.schedule.map(shift => {
+            const css = shift === 'OFF' ? 'off' : 'work';
+            return `<td><span class="shift-pill ${css}">${shift}</span></td>`;
+          }).join('');
+          const total = agent.schedule.reduce((sum,shift) => sum + shiftHours(shift), 0);
+          row.innerHTML = `<td><strong>${agent.name}</strong><div style="color:var(--text-soft);font-size:12px;">${agent.team} · ${agent.zone}</div></td><td>${agent.city}</td><td>${agent.zone}</td>${cells}<td><span class="shift-pill work">${total}h</span></td>`;
+          tbody.appendChild(row);
+        });
+      });
+    }
+
+    function renderAgents() {
+      const query = document.getElementById('agentSearch').value.trim().toLowerCase();
+      const team = document.getElementById('agentTeam').value;
+      const grid = document.getElementById('agentGrid');
+      grid.innerHTML = '';
+      AGENTS.filter(agent => {
+        const text = `${agent.name} ${agent.email} ${agent.city} ${agent.zone} ${agent.team}`.toLowerCase();
+        return (!team || agent.team === team) && (!query || text.includes(query));
+      }).forEach(agent => {
+        const card = document.createElement('article');
+        card.className = 'agent-card';
+        const shiftHtml = agent.schedule.map(shift => `<span class="shift-pill ${shift==='OFF'?'off':'work'}">${shift}</span>`).join('');
+        card.innerHTML = `<h3>${agent.name}</h3><p><strong>${agent.team}</strong> · ${agent.city} · ${agent.zone}</p><p>${agent.email}</p><div class="agent-schedule">${shiftHtml}</div>`;
+        grid.appendChild(card);
+      });
+    }
+
+    function renderHotspots() {
+      const grid = document.getElementById('hotspotGrid');
+      grid.innerHTML = '';
+      HOTSPOTS.forEach(h => {
+        const item = document.createElement('div');
+        item.className = 'hotspot-item';
+        item.innerHTML = `<div><strong>${h.name}</strong><small>${h.team} · ${h.peak}</small></div><div class="status-chip">${h.agents} agents</div>`;
+        grid.appendChild(item);
+      });
+    }
+
+    function initApp() {
+      initNav();
+      renderDashboard();
+      renderPlanning();
+      renderAgents();
+      renderHotspots();
+    }
+
+    document.addEventListener('DOMContentLoaded', initApp);
+  </script>
 </body>
 </html>
