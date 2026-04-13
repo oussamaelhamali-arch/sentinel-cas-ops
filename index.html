@@ -109,7 +109,7 @@
         <p>Une interface proche de ton ancien site Apps Script, avec planning, gestion d’agents, hotspots, absences et paie intégrés.</p>
       </div>
       <div class="hero-actions">
-        <div class="hero-meta"><span id="weekRange">Semaine 16 avr. → 22 avr.</span></div>
+        <div class="hero-meta"><span id="weekRange">Semaine 23 avr. → 29 avr.</span></div>
         <div class="hero-meta"><span id="deployStatus">Source : données internes</span></div>
       </div>
     </section>
@@ -120,7 +120,7 @@
           <h2>Dashboard</h2>
           <p>Vue rapide du planning, du staffing, des hotspots et de la santé des 44h.</p>
         </div>
-        <div class="tag">Mercredi 16 avril 2026</div>
+        <div class="tag">Mercredi 23 avril 2026</div>
       </div>
       <div class="grid-4">
         <div class="metric"><small>Total agents</small><strong id="statAgents">33</strong><span>CAS · DRB · BSK · RBT</span></div>
@@ -139,10 +139,10 @@
     <section id="planning" class="section page">
       <div class="section-header">
         <div>
-          <h2>Planning W16</h2>
-          <p>Semaine du jeu 16/04/2026 au mer 22/04/2026 — filtre par zone et pool.</p>
+          <h2>Planning W17</h2>
+          <p>Semaine du jeu 23/04/2026 au mer 29/04/2026 — filtre par zone et pool.</p>
         </div>
-        <div class="tag">Semaine 16 avr. → 22 avr.</div>
+        <div class="tag">Semaine 23 avr. → 29 avr.</div>
       </div>
       <div class="filters">
         <div class="filter-buttons" id="zoneFilters"></div>
@@ -265,40 +265,84 @@
 
   <script>
     const AGENTS = [
-      {name:'CHOAIB KNARI',initials:'CK',team:'CAS',city:'Casablanca',zone:'Casa Nord',email:'choaib.knari@glovo.com',salary:5000,schedule:['09:00-16:00','10:00-17:00','10:00-18:00','11:00-19:00','OFF','10:00-18:00','10:00-18:00'],location:'Casablanca'},
-      {name:'HABIB EDDINE AHMED',initials:'HE',team:'CAS',city:'Casablanca',zone:'Casa Sud',email:'habib.ahmed@glovo.com',salary:5000,schedule:['21:00-04:00','OFF','09:00-16:00','10:00-18:00','10:00-18:00','10:00-18:00','10:00-18:00'],location:'Casablanca'},
-      {name:'AYMNE BELGARA',initials:'AB',team:'CAS',city:'Casablanca',zone:'Californie',email:'aymne.belgara@glovo.com',salary:5000,schedule:['09:00-16:00','12:00-19:00','09:00-17:00','09:00-17:00','OFF','12:00-19:00','12:00-19:00'],location:'Casablanca'},
-      {name:'MOHAMED BOUHAJI',initials:'MB',team:'CAS',city:'Casablanca',zone:'Maarif',email:'mohamed.bouhaji@glovo.com',salary:5000,schedule:['14:00-21:00','13:00-20:00','13:00-21:00','14:00-22:00','15:00-22:00','OFF','14:00-21:00'],location:'Casablanca'},
-      {name:'ISMAIL BAHI',initials:'IB',team:'CAS',city:'Casablanca',zone:'Lissasfa',email:'ismail.bahi@glovo.com',salary:5000,schedule:['14:00-21:00','14:00-21:00','14:00-22:00','12:00-20:00','14:00-21:00','14:00-21:00','OFF'],location:'Casablanca'},
-      {name:'HAMZA KARIM',initials:'HK',team:'CAS',city:'Casablanca',zone:'Californie',email:'hamza.karim@glovo.com',salary:5000,schedule:['OFF','15:00-22:00','13:00-21:00','13:00-21:00','13:00-20:00','13:00-20:00','13:00-20:00'],location:'Casablanca'},
-      {name:'LAHCANE KHOUDRY',initials:'LK',team:'CAS',city:'Casablanca',zone:'Californie',email:'lahcane.khoudry@glovo.com',salary:5000,schedule:['16:00-23:00','15:00-22:00','16:00-23:00','15:00-22:00','OFF','16:00-23:00','16:00-23:00'],location:'Casablanca'},
-      {name:'ANAS RAJID',initials:'AR',team:'CAS',city:'Casablanca',zone:'Californie',email:'anas.rajid@glovo.com',salary:5000,schedule:['09:00-16:00','OFF','09:00-16:00','10:00-18:00','10:00-18:00','10:00-18:00','10:00-18:00'],location:'Casablanca'},
-      {name:'BRAHIM LACHGUIR',initials:'BL',team:'CAS',city:'Casablanca',zone:'Tan Tan',email:'brahim.lachguir@glovo.com',salary:5000,schedule:['09:00-16:00','10:00-17:00','11:00-19:00','OFF','09:00-16:00','10:00-18:00','10:00-18:00'],location:'Casablanca'},
-      {name:'ABDELKHALEQ',initials:'A',team:'CAS',city:'Casablanca',zone:'Casa Nord',email:'abdelkhaleq@glovo.com',salary:5000,schedule:['09:00-16:00','10:00-17:00','OFF','10:00-18:00','10:00-18:00','10:00-18:00','10:00-18:00'],location:'Casablanca'},
-      {name:'SAID OUMBAREK',initials:'SO',team:'DRB',city:'Casablanca',zone:'Carrefour Market Tamaris',email:'said.oumbarek@glovo.com',salary:5000,schedule:['10:00-17:00','10:00-18:00','OFF','14:00-21:00','14:00-21:00','14:00-21:00','OFF'],location:'Casablanca'},
-      {name:'AZIZ ESSAILI',initials:'AE',team:'DRB',city:'Casablanca',zone:'Dar Bouazza',email:'aziz.essaili@glovo.com',salary:5000,schedule:['09:00-16:00','OFF','09:00-16:00','09:00-16:00','10:00-18:00','10:00-18:00','10:00-18:00'],location:'Casablanca'},
-      {name:'OUSSAMA OUAKIL',initials:'OO',team:'DRB',city:'Fès',zone:'Fès Ville',email:'oussama.ouakil@glovo.com',salary:5000,schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-18:00','10:00-18:00'],location:'Fès'},
-      {name:'ABDELKARIM SABBANE',initials:'AS',team:'DRB',city:'Marrakech',zone:'Marrakech Sud',email:'abdelkarim.sabbane@glovo.com',salary:5000,schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00'],location:'Marrakech'},
-      {name:'MORAD MURID',initials:'MM',team:'BSK',city:'Beni Mellal',zone:'Beni Mellal',email:'morad.murid@glovo.com',salary:5000,schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00'],location:'Beni Mellal'},
-      {name:'HAMID TARIK',initials:'HT',team:'BSK',city:'Kénitra',zone:'Kénitra',email:'hamid.tarik@glovo.com',salary:5000,schedule:['09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00'],location:'Kénitra'},
-      {name:'ABDELBASSET BAIDI',initials:'AB',team:'BSK',city:'Marrakech',zone:'Marrakech Nord',email:'abdelbasset.baidi@glovo.com',salary:5000,schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-18:00','10:00-18:00'],location:'Marrakech'},
-      {name:'IMAD TAMIDI',initials:'IT',team:'RBT',city:'Témara',zone:'Témara',email:'imad.tamidi@glovo.com',salary:5000,schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00'],location:'Témara'},
-      {name:'YOUSSEF DERKAOUI',initials:'YD',team:'RBT',city:'Casablanca',zone:'Hassan',email:'youssef.derkaoui@glovo.com',salary:5000,schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-18:00','10:00-18:00'],location:'Casablanca'},
-      {name:'HASSAN AZGOUNE',initials:'HA',team:'RBT',city:'Casablanca',zone:'Agdal',email:'hassan.azgoune@glovo.com',salary:5000,schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-18:00','10:00-18:00','10:00-18:00'],location:'Casablanca'},
-      {name:'ACHRAF AKHLIJ',initials:'AK',team:'RBT',city:'Casablanca',zone:'Médina',email:'achraf.akhlij@glovo.com',salary:5000,schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','11:00-19:00','10:00-18:00','10:00-18:00'],location:'Casablanca'},
-      {name:'MOURAD CHERRADI',initials:'MC',team:'RBT',city:'Casablanca',zone:'Yacoub El Mansour',email:'mourad.cherradi@glovo.com',salary:5000,schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','11:00-19:00','10:00-18:00','10:00-18:00'],location:'Casablanca'},
-      {name:'CHARAF LOUMMIHI',initials:'CL',team:'RBT',city:'Rabat',zone:'Souissi',email:'charaf.loummiHi@glovo.com',salary:5000,schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-18:00','10:00-18:00'],location:'Rabat'},
-      {name:'YAHYA RHALLAB',initials:'YR',team:'RBT',city:'Rabat',zone:'Hay Riad',email:'yahya.rhallab@glovo.com',salary:5000,schedule:['09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00'],location:'Rabat'},
-      {name:'OUSSAMA EL ATRACH',initials:'OA',team:'RBT',city:'Rabat',zone:'Agdal',email:'oussama.elatrach@glovo.com',salary:5000,schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','11:00-19:00','10:00-18:00','10:00-18:00'],location:'Rabat'}
+      {name:'CHOIB KNARI',initials:'CK',team:'CAS',city:'Casablanca',zone:'CAS',email:'choaib.knari@providers.glovoapp.com',salary:5000,schedule:['OFF','09:00-16:00','09:00-16:00','12:00-19:00','12:00-19:00','09:00-17:00','19:00-03:00'],location:'Casablanca'},
+      {name:'HABIB EDDINE AHMED',initials:'HE',team:'CAS',city:'Casablanca',zone:'CAS',email:'',salary:5000,schedule:['21:00-04:00','OFF','14:00-22:00','14:00-22:00','15:00-22:00','14:00-21:00','13:00-20:00'],location:'Casablanca'},
+      {name:'AYMNE BELGARA',initials:'AB',team:'CAS',city:'Casablanca',zone:'CAS',email:'',salary:5000,schedule:['13:00-20:00','15:00-22:00','12:00-20:00','12:00-20:00','OFF','12:00-19:00','14:00-21:00'],location:'Casablanca'},
+      {name:'MOHAMED BOUHAJI',initials:'MB',team:'CAS',city:'Casablanca',zone:'CAS',email:'',salary:5000,schedule:['16:00-23:00','18:00-01:00','16:00-00:00','15:00-23:00','16:00-23:00','OFF','16:00-23:00'],location:'Casablanca'},
+      {name:'ISMAIL BAHI',initials:'IB',team:'CAS',city:'Casablanca',zone:'CAS',email:'',salary:5000,schedule:['18:00-01:00','17:00-00:00','16:00-00:00','17:00-01:00','16:00-23:00','OFF','16:00-23:00'],location:'Casablanca'},
+      {name:'HAMZA KARIM',initials:'HK',team:'CAS',city:'Casablanca',zone:'CAS',email:'',salary:5000,schedule:['OFF','17:00-00:00','17:00-01:00','15:00-23:00','16:00-23:00','17:00-00:00','17:00-00:00'],location:'Casablanca'},
+      {name:'LAHCANE KHOUDRY',initials:'LK',team:'CAS',city:'Casablanca',zone:'CAS',email:'',salary:5000,schedule:['20:00-03:00','OFF','19:00-03:00','19:00-03:00','21:00-04:00','21:00-04:00','20:00-03:00'],location:'Casablanca'},
+      {name:'ANAS RAJID',initials:'AR',team:'CAS',city:'Casablanca',zone:'CAS',email:'',salary:5000,schedule:['21:00-04:00','21:00-04:00','21:00-05:00','19:00-03:00','OFF','21:00-04:00','20:00-03:00'],location:'Casablanca'},
+      {name:'HAMZA ACHOUBI',initials:'HA',team:'CAS',city:'Casablanca',zone:'CAS',email:'',salary:5000,schedule:['21:00-04:00','19:00-02:00','19:00-03:00','21:00-05:00','19:00-02:00','20:00-03:00','OFF'],location:'Casablanca'},
+      {name:'BRAHIM LACHGUIR',initials:'BL',team:'CAS',city:'Casablanca',zone:'CAS',email:'',salary:5000,schedule:['OFF','09:00-16:00','09:00-17:00','10:00-18:00','11:00-18:00','11:00-18:00','10:00-17:00'],location:'Casablanca'},
+      {name:'ABDELKHALEQ',initials:'A',team:'CAS',city:'Casablanca',zone:'CAS',email:'',salary:5000,schedule:['12:00-19:00','09:00-16:00','10:00-18:00','09:00-17:00','11:00-18:00','OFF','12:00-19:00'],location:'Casablanca'},
+      {name:'SAID OUMBAREK',initials:'SO',team:'DRB',city:'Casablanca',zone:'DRB',email:'',salary:5000,schedule:['OFF','12:00-19:00','12:00-19:00','12:00-19:00','17:00-01:00','09:00-17:00','12:00-19:00'],location:'Casablanca'},
+      {name:'AZIZ ESSAILI',initials:'AE',team:'DRB',city:'Casablanca',zone:'DRB',email:'',salary:5000,schedule:['17:00-00:00','OFF','14:00-22:00','14:00-22:00','14:00-21:00','17:00-00:00','14:00-21:00'],location:'Casablanca'},
+      {name:'OUSSAMA OUAKIL',initials:'OO',team:'DRB',city:'Casablanca',zone:'DRB',email:'',salary:5000,schedule:['18:00-01:00','18:00-01:00','17:00-01:00','18:00-02:00','OFF','18:00-01:00','18:00-01:00'],location:'Casablanca'},
+      {name:'ABDELKARIM SABBANE',initials:'AS',team:'DRB',city:'Casablanca',zone:'DRB',email:'',salary:5000,schedule:['09:00-16:00','10:00-17:00','10:00-18:00','09:00-17:00','09:00-16:00','OFF','09:00-16:00'],location:'Casablanca'},
+      {name:'MORAD MURID',initials:'MM',team:'BSK',city:'Casablanca',zone:'BSK',email:'',salary:5000,schedule:['OFF','12:00-19:00','12:00-19:00','12:00-19:00','12:00-19:00','17:00-01:00','09:00-17:00'],location:'Casablanca'},
+      {name:'HAMID TARIK',initials:'HT',team:'BSK',city:'Casablanca',zone:'BSK',email:'',salary:5000,schedule:['14:00-21:00','OFF','14:00-22:00','15:00-23:00','15:00-22:00','14:00-21:00','15:00-22:00'],location:'Casablanca'},
+      {name:'ABDELBASSET BAIDI',initials:'AB',team:'BSK',city:'Casablanca',zone:'BSK',email:'',salary:5000,schedule:['18:00-01:00','18:00-01:00','17:00-01:00','18:00-02:00','18:00-01:00','OFF','18:00-01:00'],location:'Casablanca'},
+      {name:'ISLAM ELMARDI',initials:'IE',team:'RBT',city:'Rabat',zone:'RABAT 1',email:'',salary:5000,schedule:['OFF','11:00-18:00','11:00-18:00','08:00-16:00','08:00-16:00','11:00-18:00','11:00-18:00'],location:'Rabat'},
+      {name:'AYOUB ABSSI',initials:'AA',team:'RBT',city:'Rabat',zone:'RABAT 2',email:'',salary:5000,schedule:['11:00-18:00','OFF','14:00-22:00','12:00-20:00','11:00-18:00','12:00-19:00','14:00-21:00'],location:'Rabat'},
+      {name:'AYOUB BEN MALEK',initials:'AB',team:'RBT',city:'Rabat',zone:'SALE 1',email:'',salary:5000,schedule:['11:00-18:00','11:00-18:00','11:00-19:00','14:00-22:00','OFF','14:00-21:00','11:00-18:00'],location:'Rabat'},
+      {name:'AYMANE CHLIFANE',initials:'AC',team:'RBT',city:'Rabat',zone:'RABAT 3',email:'',salary:5000,schedule:['11:00-18:00','11:00-18:00','11:00-19:00','14:00-22:00','14:00-21:00','OFF','11:00-18:00'],location:'Rabat'},
+      {name:'ZAKARIE BENALI',initials:'ZB',team:'RBT',city:'Rabat',zone:'SALE 2',email:'',salary:5000,schedule:['15:00-22:00','15:00-22:00','15:00-23:00','15:00-23:00','15:00-22:00','15:00-22:00','OFF'],location:'Rabat'},
+      {name:'NAJIB HARATI',initials:'NH',team:'RBT',city:'Rabat',zone:'TEMMARA 1',email:'',salary:5000,schedule:['OFF','15:00-22:00','15:00-23:00','15:00-23:00','15:00-22:00','15:00-22:00','15:00-22:00'],location:'Rabat'},
+      {name:'OUSSAMA CHENNAOUI',initials:'OC',team:'RBT',city:'Rabat',zone:'RABAT 4',email:'',salary:5000,schedule:['15:00-22:00','OFF','15:00-23:00','15:00-23:00','15:00-22:00','15:00-22:00','15:00-22:00'],location:'Rabat'},
+      {name:'YOUSSEF DERKAOUI',initials:'YD',team:'RBT',city:'Rabat',zone:'RABAT 5',email:'',salary:5000,schedule:['15:00-22:00','15:00-22:00','15:00-23:00','15:00-23:00','OFF','15:00-22:00','15:00-22:00'],location:'Rabat'},
+      {name:'HASSAN AZGOUNE',initials:'HA',team:'RBT',city:'Rabat',zone:'SALE 3',email:'',salary:5000,schedule:['20:30-03:30','20:30-03:30','20:30-04:30','20:30-04:30','20:30-03:30','OFF','20:30-03:30'],location:'Rabat'},
+      {name:'ACHRAF AKHLIJ',initials:'AA',team:'RBT',city:'Rabat',zone:'RABAT 6',email:'',salary:5000,schedule:['20:30-03:30','20:30-03:30','20:30-04:30','19:00-03:00','20:30-03:30','20:30-03:30','OFF'],location:'Rabat'},
+      {name:'MOURAD CHERRADI',initials:'MC',team:'RBT',city:'Rabat',zone:'RABAT 7',email:'',salary:5000,schedule:['OFF','OFF','OFF','OFF','OFF','OFF','OFF'],location:'Rabat'},
+      {name:'CHARAF LOUMMIHI',initials:'CL',team:'RBT',city:'Rabat',zone:'SALE 4',email:'',salary:5000,schedule:['OFF','OFF','OFF','OFF','OFF','OFF','OFF'],location:'Rabat'},
+      {name:'YAHYA RHALLAB',initials:'YR',team:'RBT',city:'Rabat',zone:'RABAT 8',email:'',salary:5000,schedule:['OFF','OFF','OFF','OFF','OFF','OFF','OFF'],location:'Rabat'},
+      {name:'OUSSAMA EL ATRACH',initials:'OA',team:'RBT',city:'Rabat',zone:'TEMMARA 2',email:'',salary:5000,schedule:['OFF','OFF','OFF','OFF','OFF','OFF','OFF'],location:'Rabat'},
+      {name:'IMAD TAMIDI',initials:'IT',team:'RBT',city:'Rabat',zone:'RABAT 9',email:'',salary:5000,schedule:['OFF','OFF','OFF','OFF','OFF','OFF','OFF'],location:'Rabat'}
     ];
     const HOTSPOTS = [
-      {name:'Maarif (marjane market ...)',location:'Casablanca',peak:'10:00-12:00',agents:1},
-      {name:'Maarif (Macdo, kfc, burger king ...)',location:'Casablanca',peak:'12:00-00:00',agents:1},
-      {name:'Tan Tan (crusty, foodly ...)',location:'Casablanca',peak:'12:00-16:00',agents:1},
+      {name:'Carrefour Market Tamaris',location:'Casablanca',peak:'10:00-20:00',agents:2},
+      {name:'McDonalds Tamaris',location:'Casablanca',peak:'17:00-22:00',agents:2},
+      {name:'Sushiclub Mercato Anfa',location:'Casablanca',peak:'19:00-23:00',agents:2},
+      {name:'Pizza Hut Tamaris',location:'Casablanca',peak:'18:00-22:00',agents:2},
+      {name:'Marjane Market Bouskoura',location:'Bouskoura',peak:'10:00-19:00',agents:2},
+      {name:'KFC Bouskoura',location:'Bouskoura',peak:'17:00-22:00',agents:2},
+      {name:'Carrefour Market Bouskoura',location:'Bouskoura',peak:'10:00-20:00',agents:2},
+      {name:'Marjane Market Acima Rabat',location:'Rabat',peak:'10:00-20:00',agents:2},
+      {name:'Carrefour Market Rabat M6',location:'Rabat',peak:'10:00-20:00',agents:2},
+      {name:'Marjane Hyper Rabat',location:'Rabat',peak:'09:00-18:00',agents:2},
+      {name:'McDonalds Rabat',location:'Rabat',peak:'17:00-23:00',agents:2},
+      {name:'Carrefour Market Sale',location:'Rabat',peak:'10:00-20:00',agents:2},
+      {name:'Marjane Market Sale',location:'Rabat',peak:'10:00-19:00',agents:2},
+      {name:'McDonalds Temmara',location:'Rabat',peak:'17:00-23:00',agents:2},
+      {name:'Carrefour Temmara',location:'Rabat',peak:'10:00-20:00',agents:2},
+      {name:'Maarif (marjane market ....)',location:'Casablanca',peak:'10:00-12:00',agents:1},
+      {name:'Maarif (Macdo , kfc , burger king ...)',location:'Casablanca',peak:'12:00-00:00',agents:1},
+      {name:'Tan Tan ( crusty , foodly ...)',location:'Casablanca',peak:'12:00-16:00',agents:1},
       {name:'Californie (marjane ...)',location:'Casablanca',peak:'10:00-12:00',agents:1},
-      {name:'Californie (Macdo ...)',location:'Casablanca',peak:'12:00-16:00',agents:1},
-      {name:'Taddart (Macdo ...)',location:'Casablanca',peak:'14:00-16:00',agents:1},
-      {name:'Taddart (Macdo ...)',location:'Casablanca',peak:'20:00-00:00',agents:2}
+      {name:'Californie (Macdo ....)',location:'Casablanca',peak:'12:00-16:00',agents:1},
+      {name:'Taddart (Macdo ....)',location:'Casablanca',peak:'14:00-16:00',agents:1},
+      {name:'Taddart (Macdo ....)',location:'Casablanca',peak:'20:00-00:00',agents:2},
+      {name:'CIL ( Macdo ....)',location:'Casablanca',peak:'18:00-23:00',agents:1},
+      {name:'Area Mall ( Macdo , KFC , Joy&juice , Papa jhon's....)',location:'Casablanca',peak:'13:00-16:00',agents:1},
+      {name:'Area Mall ( Macdo , KFC , Joy&juice , Papa jhon's....)',location:'Casablanca',peak:'18:00-23:00',agents:2},
+      {name:'Ziraoui (Macdo , foodly ...)',location:'Casablanca',peak:'14:00-16:00',agents:1},
+      {name:'Ziraoui (Macdo , foodly ...)',location:'Casablanca',peak:'20:00-00:00',agents:1},
+      {name:'2mars (Macdo , KFC , Marjane market ...)',location:'Casablanca',peak:'12:00-16:00',agents:1},
+      {name:'2mars (Macdo , KFC , Marjane market ...)',location:'Casablanca',peak:'18:00-22:00',agents:1},
+      {name:'Hermitage (Macdo ....)',location:'Casablanca',peak:'12:00-15:00',agents:1},
+      {name:'Hermitage (Macdo ....)',location:'Casablanca',peak:'19:00-23:00',agents:1},
+      {name:'Boulevard Al Qods ( PAUL , les qautres cerices ,o\'Tacos,',location:'Casablanca',peak:'09:00-12:00',agents:1},
+      {name:'Lissasfa (Carrefour  ....)',location:'Casablanca',peak:'09:00-11:00',agents:1},
+      {name:'Lissasfa (macdo...)',location:'Casablanca',peak:'12:00-15:00',agents:2},
+      {name:'Lissasfa (macdo...)',location:'Casablanca',peak:'18:00-22:00',agents:2},
+      {name:'CIL ( Macdo ....)',location:'Casablanca',peak:'12:00-15:00',agents:1},
+      {name:'Ain Sbaa (Kfc , Burger king , Macdo ...)',location:'Casablanca',peak:'12:00-15:00',agents:1},
+      {name:'Ain Sbaa (Kfc , Burger king , Macdo ...)',location:'Casablanca',peak:'18:00-00:00',agents:1},
+      {name:'Mers sultan ( macdo ...)',location:'Casablanca',peak:'12:00-15:00',agents:1},
+      {name:'Mers sultan ( macdo ...)',location:'Casablanca',peak:'18:00-21:00',agents:1},
+      {name:'O\'Village Sidi Maarouf ( Macdo , O\'Village ... )',location:'Casablanca',peak:'18:00-00:00',agents:2},
+      {name:'Almaz ( sela park , Macdo , KFC ...)',location:'Casablanca',peak:'12:00-15:00',agents:1},
+      {name:'Almaz ( sela park , Macdo , KFC ...)',location:'Casablanca',peak:'18:00-00:00',agents:2}
     ];
     const ZONES = ['Toutes','Casablanca','Dar Bouazza','Bouskoura','Rabat-Sale'];
     const WEEK_FILTER = {zone:'Toutes',team:''};
@@ -363,8 +407,8 @@
     }
 
     function getWeekLabel() {
-      const start = new Date(2026,3,16);
-      const end = new Date(2026,3,22);
+      const start = new Date(2026,3,23);
+      const end = new Date(2026,3,29);
       return `${start.toLocaleDateString('fr-FR',{day:'2-digit',month:'short'})} → ${end.toLocaleDateString('fr-FR',{day:'2-digit',month:'short'})}`;
     }
 
