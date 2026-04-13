@@ -730,7 +730,7 @@ function doLogin(){
   var pwd=document.getElementById('loginPwd').value;
   var u=USERS[selUserKey];
   if(pwd!==u.pwd){document.getElementById('loginErr').textContent='Mot de passe incorrect.';return;}
-  currentUser={key:selUserKey,...u};
+  currentUser={key:selUserKey,pwd:u.pwd,nom:u.nom,role:u.role,villes:u.villes,offDay:u.offDay,email:u.email||'',color:u.color};
   sessionStorage.setItem('sentinel_user',JSON.stringify({key:selUserKey}));
   startApp();
 }
@@ -1699,14 +1699,22 @@ function checkAutoRegen(){
 }
 
 // ── INIT ──
-initLogin();
-checkAutoRegen();
-
-// Check saved session
-var savedSession=sessionStorage.getItem('sentinel_user');
-if(savedSession){
-  try{var sk=JSON.parse(savedSession);var u=USERS[sk.key];if(u){currentUser={key:sk.key,...u};startApp();}}catch(e){sessionStorage.removeItem('sentinel_user');}
-}
+document.addEventListener('DOMContentLoaded', function(){
+  initLogin();
+  checkAutoRegen();
+  // Check saved session
+  var savedSession=sessionStorage.getItem('sentinel_user');
+  if(savedSession){
+    try{
+      var sk=JSON.parse(savedSession);
+      var u=USERS[sk.key];
+      if(u){
+        currentUser={key:sk.key,pwd:u.pwd,nom:u.nom,role:u.role,villes:u.villes,offDay:u.offDay,email:u.email||'',color:u.color};
+        startApp();
+      }
+    }catch(e){sessionStorage.removeItem('sentinel_user');}
+  }
+});
 </script>
 </body>
 </html>
