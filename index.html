@@ -3264,12 +3264,12 @@
       </div>
 
       <nav class="nav">
-        <button class="nav-link active" data-page="dashboard">Dashboard</button>
-        <button class="nav-link" data-page="planning">Planning</button>
-        <button class="nav-link" data-page="agents">Agents</button>
-        <button class="nav-link" data-page="hotspots">Hotspots</button>
-        <button class="nav-link" data-page="absences">Absences</button>
-        <button class="nav-link" data-page="payroll">Paie</button>
+        <button class="nav-link active" data-page="dashboard" onclick="switchPage(this.dataset.page)">Dashboard</button>
+        <button class="nav-link" data-page="planning" onclick="switchPage(this.dataset.page)">Planning</button>
+        <button class="nav-link" data-page="agents" onclick="switchPage(this.dataset.page)">Agents</button>
+        <button class="nav-link" data-page="hotspots" onclick="switchPage(this.dataset.page)">Hotspots</button>
+        <button class="nav-link" data-page="absences" onclick="switchPage(this.dataset.page)">Absences</button>
+        <button class="nav-link" data-page="payroll" onclick="switchPage(this.dataset.page)">Paie</button>
       </nav>
 
       <div class="header-right">
@@ -3352,7 +3352,7 @@
           <button class="week-nav-btn" onclick="changeWeek(-1)">◀</button>
           <div>
             <div class="week-title">SENTINEL — Planning W17</div>
-            <div class="week-subtitle" id="weekRange">14/04 au 20/04</div>
+            <div class="week-subtitle" id="weekRange"></div>
           </div>
           <button class="week-nav-btn" onclick="changeWeek(1)">▶</button>
         </div>
@@ -4404,7 +4404,7 @@
         <p>Interface complète pour la gestion des agents, planning, hotspots, absences et paie.</p>
       </div>
       <div class="hero-actions">
-        <div class="hero-meta"><span id="weekRange">Semaine 23 avr. → 29 avr.</span></div>
+        <div class="hero-meta"><span id="weekRange"></span></div>
         <div class="hero-meta"><span id="deployStatus">Standalone version</span></div>
       </div>
     </section>
@@ -5213,7 +5213,7 @@
         <p>Une interface proche de ton ancien site Apps Script, avec planning, gestion d’agents, hotspots, absences et paie intégrés.</p>
       </div>
       <div class="hero-actions">
-        <div class="hero-meta"><span id="weekRange">Semaine 23 avr. → 29 avr.</span></div>
+        <div class="hero-meta"><span id="weekRange"></span></div>
         <div class="hero-meta"><span id="deployStatus">Source : données internes</span></div>
       </div>
     </section>
