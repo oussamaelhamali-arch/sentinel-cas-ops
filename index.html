@@ -3,83 +3,99 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SENTINEL · Glovo CAS OPS</title>
-  <meta name="description" content="SENTINEL planning Glovo Maroc CAS OPS - tableau de bord, planning, agents, hotspots." />
+  <title>SENTINEL — Glovo CAS OPS</title>
+  <meta name="description" content="SENTINEL Glovo CAS OPS - planning, agents, hotspots, absences et paie." />
   <style>
     :root {
-      --bg:#EAF4F9;
-      --card:#ffffff;
-      --surface:#F5F9FB;
-      --text:#1F2937;
-      --text-soft:#4B5563;
-      --primary:#FFC600;
-      --primary-dark:#F2A900;
-      --accent:#005F58;
+      --bg:#f3f7fb;
+      --surface:#ffffff;
+      --surface-soft:#f7f9fb;
+      --text:#141d2f;
+      --muted:#6b7280;
+      --primary:#ffcb00;
+      --primary-dark:#d29900;
+      --accent:#007b6f;
+      --accent-soft:#d8f7f0;
       --border:rgba(15,23,42,.08);
-      --shadow:0 24px 60px rgba(15,23,42,.08);
+      --shadow:0 20px 45px rgba(15,23,42,.08);
     }
     *{box-sizing:border-box;}
-    html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif;background:linear-gradient(180deg,#F6FBFF 0%,#EAF4F9 100%);color:var(--text);min-height:100%;}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif;min-height:100%;}
     body{overflow-x:hidden;}
     button,input,select,textarea{font:inherit;}
-    .app-shell{max-width:1440px;margin:0 auto;padding:18px 22px 48px;}
-    .topbar{display:flex;align-items:center;gap:18px;padding:18px 0 24px;}
+    .app{max-width:1480px;margin:0 auto;padding:18px 24px 48px;}
+    .header{display:flex;align-items:center;gap:18px;padding:12px 0 26px;}
     .brand{display:flex;align-items:center;gap:14px;}
-    .brand-mark{width:50px;height:50px;border-radius:18px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:22px;box-shadow:0 12px 24px rgba(0,95,88,.18);}
-    .brand-copy{line-height:1.1;}
-    .brand-copy strong{font-size:18px;display:block;}
-    .brand-copy span{font-size:12px;color:var(--accent);letter-spacing:.14em;text-transform:uppercase;}
+    .brand-mark{width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,#ffcb00,#f5a800);display:flex;align-items:center;justify-content:center;color:#102a43;font-size:24px;font-weight:900;}
+    .brand-copy strong{display:block;font-size:18px;letter-spacing:.02em;}
+    .brand-copy span{font-size:12px;color:#007b6f;text-transform:uppercase;letter-spacing:.18em;font-weight:700;}
     .nav{display:flex;flex-wrap:wrap;gap:10px;margin-left:auto;}
-    .nav button{border:none;background:transparent;color:var(--text-soft);padding:12px 18px;border-radius:999px;transition:all .2s;display:flex;align-items:center;gap:8px;font-weight:700;}
-    .nav button.active{background:rgba(255,198,0,.18);color:var(--text);box-shadow:0 12px 24px rgba(255,198,0,.12);}
-    .hero{display:grid;grid-template-columns:1fr auto;gap:18px;padding:24px 0 0;}
-    .hero-title{max-width:760px;}
-    .hero-title h1{font-size:34px;margin:0;line-height:1.05;}
-    .hero-title p{margin:14px 0 0;color:var(--text-soft);font-size:16px;line-height:1.8;}
-    .hero-meta{display:grid;gap:10px;align-items:start;}
-    .badge{display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:18px;background:#fff;border:1px solid var(--border);font-size:13px;font-weight:700;color:var(--accent);}
-    .card-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:18px;}
-    .card{background:var(--card);border:1px solid var(--border);border-radius:26px;padding:24px;box-shadow:var(--shadow);}
-    .card small{display:block;text-transform:uppercase;letter-spacing:.18em;color:var(--text-soft);font-weight:700;font-size:11px;margin-bottom:10px;}
-    .card strong{display:block;font-size:36px;line-height:1;margin-bottom:10px;}
-    .card span{color:var(--text-soft);font-size:13px;line-height:1.7;}
-    .section{background:var(--card);border:1px solid var(--border);border-radius:32px;padding:26px;box-shadow:var(--shadow);margin-top:24px;}
-    .section-header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:24px;}
+    .nav button{border:none;background:transparent;color:#475569;padding:12px 18px;border-radius:999px;font-weight:700;display:flex;align-items:center;gap:8px;transition:all .2s;}
+    .nav button.active{background:rgba(255,203,0,.16);color:var(--text);box-shadow:0 16px 36px rgba(255,203,0,.2);}
+    .nav button:hover{background:rgba(255,203,0,.12);}
+    .hero{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:start;}
+    .hero-main h1{font-size:34px;margin:0;line-height:1.05;}
+    .hero-main p{margin:16px 0 0;color:var(--muted);max-width:720px;line-height:1.8;font-size:15px;}
+    .hero-actions{display:grid;gap:12px;justify-content:end;}
+    .hero-meta{display:inline-flex;align-items:center;gap:10px;padding:14px 18px;border-radius:18px;background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow);}
+    .hero-meta span{font-weight:700;color:var(--accent);}
+    .grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:22px;}
+    .metric{background:var(--surface);border:1px solid var(--border);border-radius:28px;padding:26px;box-shadow:var(--shadow);}
+    .metric small{display:block;color:var(--muted);text-transform:uppercase;font-weight:700;letter-spacing:.16em;font-size:11px;margin-bottom:12px;}
+    .metric strong{font-size:34px;line-height:1;margin-bottom:10px;}
+    .metric span{color:var(--muted);font-size:13px;line-height:1.7;}
+    .section{background:var(--surface);border:1px solid var(--border);border-radius:32px;padding:28px;box-shadow:var(--shadow);margin-top:24px;}
+    .section-header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:20px;}
     .section-header h2{margin:0;font-size:22px;}
-    .section-header p{margin:8px 0 0;color:var(--text-soft);line-height:1.75;}
-    .section-header .label{padding:10px 16px;border-radius:999px;background:rgba(255,198,0,.12);color:var(--accent);font-weight:700;font-size:13px;}
-    .filters{display:grid;grid-template-columns:1fr 1fr auto;gap:14px;margin-bottom:22px;}
-    .filters input,.filters select{width:100%;padding:14px 16px;border-radius:16px;border:1px solid var(--border);background:var(--surface);color:var(--text);}
-    .filters button{border:none;border-radius:16px;padding:14px 18px;background:var(--accent);color:#fff;font-weight:800;}
+    .section-header p{margin:8px 0 0;color:var(--muted);line-height:1.75;}
+    .section-header .tag{padding:10px 16px;border-radius:999px;background:rgba(255,203,0,.16);color:var(--accent);font-size:13px;font-weight:700;}
+    .filters{display:grid;grid-template-columns:1fr auto auto;gap:14px;align-items:center;margin-bottom:20px;}
+    .filter-buttons{display:flex;flex-wrap:wrap;gap:10px;}
+    .pill{padding:10px 16px;border-radius:999px;border:1px solid transparent;background:rgba(15,23,42,.04);color:var(--text);font-weight:700;cursor:pointer;transition:all .2s;}
+    .pill.active{background:var(--primary);border-color:rgba(255,203,0,.38);color:#102a43;}
+    .filters input,.filters select{width:100%;padding:14px 16px;border-radius:16px;border:1px solid var(--border);background:var(--surface-soft);color:var(--text);}
+    .filters button{border:none;border-radius:16px;padding:14px 18px;background:var(--accent);color:#fff;font-weight:800;cursor:pointer;}
     .table-wrap{overflow-x:auto;}
     table{width:100%;border-collapse:collapse;font-size:13px;color:var(--text);}
+    thead tr{background:rgba(15,23,42,.04);}
     th,td{padding:16px 14px;text-align:left;border-bottom:1px solid var(--border);}
-    thead th{background:rgba(255,198,0,.08);color:var(--accent);text-transform:uppercase;letter-spacing:.15em;font-size:12px;}
-    tbody tr:hover{background:rgba(0,95,88,.04);}
-    .zone-row td{background:rgba(255,198,0,.14);font-weight:700;color:var(--accent);}
-    .status-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(0,95,88,.08);color:var(--accent);font-size:12px;font-weight:700;}
-    .agent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;}
-    .agent-card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:22px;}
+    th{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;}
+    tbody tr:hover{background:rgba(15,23,42,.04);}
+    .zone-row td{background:rgba(255,203,0,.14);font-weight:700;color:var(--accent);}
+    .shift-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:14px;font-size:12px;font-weight:700;background:rgba(0,123,111,.08);color:var(--accent);}
+    .shift-chip.off{background:rgba(15,23,42,.08);color:var(--muted);}
+    .hotspot-chip{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:rgba(255,203,0,.12);color:#997100;font-size:11px;margin-top:8px;}
+    .agent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px;}
+    .agent-card{background:var(--surface-soft);border:1px solid var(--border);border-radius:26px;padding:22px;}
     .agent-card h3{margin:0 0 10px;font-size:16px;}
-    .agent-card p{margin:0;color:var(--text-soft);font-size:13px;line-height:1.8;}
-    .agent-schedule{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;margin:18px 0 0;}
-    .shift-pill{border-radius:14px;padding:8px 10px;font-size:11px;text-align:center;}
-    .shift-pill.off{background:rgba(15,23,42,.06);color:var(--text-soft);}
-    .shift-pill.work{background:rgba(255,198,0,.18);color:var(--accent);}
-    .hotspot-list{display:grid;gap:14px;}
-    .hotspot-item{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:18px;display:flex;justify-content:space-between;align-items:center;gap:12px;}
-    .hotspot-item strong{font-size:15px;margin:0;}
-    .hotspot-item small{color:var(--text-soft);}
-    .button-small{border:none;border-radius:14px;padding:10px 14px;background:rgba(15,23,42,.08);color:var(--text-soft);cursor:pointer;}
-    .page{display:none;}
-    .page.active{display:block;}
-    @media(max-width:1100px){.card-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.filters{grid-template-columns:1fr;}}
-    @media(max-width:760px){.hero, .section-header{grid-template-columns:1fr;}.agent-schedule{grid-template-columns:repeat(4,minmax(0,1fr));}}
+    .agent-card p{margin:6px 0;color:var(--muted);font-size:14px;line-height:1.8;}
+    .agent-value{margin-top:16px;color:var(--accent);font-weight:800;}
+    .hotspot-card{background:var(--surface-soft);border:1px solid var(--border);border-radius:26px;padding:20px;display:flex;justify-content:space-between;align-items:center;gap:16px;}
+    .hotspot-card strong{margin:0;font-size:15px;}
+    .hotspot-card small{color:var(--muted);display:block;margin-top:8px;}
+    .hotspot-badge{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;background:rgba(0,123,111,.08);color:var(--accent);font-size:12px;font-weight:700;}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+    .input-group{display:grid;gap:8px;margin-bottom:16px;}
+    .input-group label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;}
+    .input-group input,.input-group select{width:100%;padding:14px 16px;border-radius:16px;border:1px solid var(--border);background:var(--surface);color:var(--text);}
+    .button-primary{border:none;border-radius:18px;padding:14px 22px;background:var(--accent);color:#fff;font-weight:800;cursor:pointer;}
+    .button-secondary{border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;}
+    .pay-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px;}
+    .pay-card{background:var(--surface);border:1px solid var(--border);border-radius:26px;padding:24px;text-align:center;}
+    .pay-card strong{display:block;font-size:28px;margin-bottom:10px;}
+    .pay-card span{color:var(--muted);font-size:13px;}
+    .pay-agent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px;margin-top:20px;}
+    .pay-agent{background:var(--surface-soft);border:1px solid var(--border);border-radius:26px;padding:20px;}
+    .pay-agent h3{margin:0 0 10px;font-size:16px;}
+    .pay-agent .line{display:flex;justify-content:space-between;color:var(--muted);margin:10px 0;font-size:13px;}
+    .pay-agent strong{display:block;font-size:18px;margin-top:12px;}
+    @media(max-width:1200px){.grid-4,.pay-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.form-grid{grid-template-columns:1fr;}}
+    @media(max-width:760px){.header{flex-direction:column;align-items:flex-start;}.hero{grid-template-columns:1fr;}.nav{justify-content:start;}.pay-grid{grid-template-columns:1fr;}.agent-grid{grid-template-columns:1fr;}}
   </style>
 </head>
 <body>
-  <div class="app-shell">
-    <header class="topbar">
+  <div class="app">
+    <header class="header">
       <div class="brand">
         <div class="brand-mark">S</div>
         <div class="brand-copy"><strong>SENTINEL</strong><span>GLOVO · CAS OPS</span></div>
@@ -88,48 +104,48 @@
     </header>
 
     <section class="hero">
-      <div class="hero-title">
-        <h1>Outil de planning CAS OPS Glovo</h1>
-        <p>Un tableau de bord live pour préparer le planning de la semaine, suivre les agents, valider les hotspots et vérifier le staffing.</p>
+      <div class="hero-main">
+        <h1>Tableau de bord opérationnel Glovo</h1>
+        <p>Une interface proche de ton ancien site Apps Script, avec planning, gestion d’agents, hotspots, absences et paie intégrés.</p>
       </div>
-      <div class="hero-meta">
-        <div class="badge" id="deployStatus">Mise à jour en cours</div>
-        <div class="badge" id="weekRange">Semaine</div>
+      <div class="hero-actions">
+        <div class="hero-meta"><span id="weekRange">Semaine 16 avr. → 22 avr.</span></div>
+        <div class="hero-meta"><span id="deployStatus">Source : données internes</span></div>
       </div>
     </section>
 
     <section id="dashboard" class="section page active">
       <div class="section-header">
         <div>
-          <h2>Tableau de bord</h2>
-          <p>Vue opérationnelle de l’état du planning, du nombre d’agents disponibles, du weekend et des hotspots.</p>
+          <h2>Dashboard</h2>
+          <p>Vue rapide du planning, du staffing, des hotspots et de la santé des 44h.</p>
         </div>
-        <div class="label">Statut planning</div>
+        <div class="tag">Mercredi 16 avril 2026</div>
       </div>
-      <div class="card-grid">
-        <div class="card"><small>Agents actifs</small><strong id="statAgents">0</strong><span>Agents prets pour la semaine de support.</span></div>
-        <div class="card"><small>Total heures</small><strong id="statHours">0</strong><span>Total des heures planifiées pour tous les agents.</span></div>
-        <div class="card"><small>Weekend validé</small><strong id="statWeekend">0%</strong><span>Couverture samedi / dimanche conforme au modèle 8h.</span></div>
-        <div class="card"><small>Hotspots</small><strong id="statHotspots">0</strong><span>Points prioritaires à couvrir cette semaine.</span></div>
+      <div class="grid-4">
+        <div class="metric"><small>Total agents</small><strong id="statAgents">33</strong><span>CAS · DRB · BSK · RBT</span></div>
+        <div class="metric"><small>Actifs aujourd’hui</small><strong id="statActive">26</strong><span>En service</span></div>
+        <div class="metric"><small>Absences (90j)</small><strong id="statAbsences">0</strong><span>Enregistrées</span></div>
+        <div class="metric"><small>Hotspots</small><strong id="statHotspots">43</strong><span>Configurés</span></div>
       </div>
-      <div class="card-grid">
-        <div class="card"><small>Plannings valides</small><strong id="statValid">0</strong><span>Agents avec 44h, 1 OFF et weekend en place.</span></div>
-        <div class="card"><small>Transitions à corriger</small><strong id="statAdjust">0</strong><span>Enchaînements de shift à vérifier.</span></div>
-        <div class="card"><small>Score couverture</small><strong id="statCoverage">100%</strong><span>Alignement plan / hotspots</span></div>
-        <div class="card"><small>Actions</small><strong>OK</strong><span>Le planning est prêt pour revue.</span></div>
+      <div class="grid-4">
+        <div class="metric"><small>Taux 44h</small><strong id="statRate">100%</strong><span>Agents à objectif</span></div>
+        <div class="metric"><small>Shifts jour</small><strong id="statDay">18</strong><span>Horaires planifiés</span></div>
+        <div class="metric"><small>Shifts nuit</small><strong id="statNight">11</strong><span>Couverture active</span></div>
+        <div class="metric"><small>Planning validé</small><strong id="statValidated">32</strong><span>Agents OK</span></div>
       </div>
     </section>
 
     <section id="planning" class="section page">
       <div class="section-header">
         <div>
-          <h2>Planning</h2>
-          <p>Édition du planning semaine du jeudi au mercredi. Filtering par pool et par agent.</p>
+          <h2>Planning W16</h2>
+          <p>Semaine du jeu 16/04/2026 au mer 22/04/2026 — filtre par zone et pool.</p>
         </div>
-        <div class="label">Semaine cible</div>
+        <div class="tag">Semaine 16 avr. → 22 avr.</div>
       </div>
       <div class="filters">
-        <input id="filterSearch" type="search" placeholder="Filtrer par agent, ville, zone" />
+        <div class="filter-buttons" id="zoneFilters"></div>
         <select id="filterTeam">
           <option value="">Tous les pools</option>
           <option value="CAS">CAS</option>
@@ -165,18 +181,28 @@
       <div class="section-header">
         <div>
           <h2>Agents</h2>
-          <p>Liste des agents CAS OPS avec leurs pools, e-mails et planning de la semaine.</p>
+          <p>Liste des agents avec leur pool, localisation et salaire indicative.</p>
         </div>
-        <div class="label">33 Agents</div>
+        <div class="tag">33 agents</div>
       </div>
       <div class="filters">
-        <input id="agentSearch" type="search" placeholder="Rechercher un agent" />
-        <select id="agentTeam">
-          <option value="">Tous les pools</option>
-          <option value="CAS">CAS</option>
-          <option value="RBT">RBT</option>
-          <option value="DRB">DRB</option>
-          <option value="BSK">BSK</option>
+        <input id="agentSearch" type="search" placeholder="Rechercher..." />
+        <select id="agentCityFilter">
+          <option value="">Toutes les villes</option>
+          <option value="Casablanca">Casablanca</option>
+          <option value="Rabat">Rabat</option>
+          <option value="Marrakech">Marrakech</option>
+          <option value="Tanger">Tanger</option>
+          <option value="Agadir">Agadir</option>
+          <option value="Fès">Fès</option>
+          <option value="Meknès">Meknès</option>
+          <option value="Safi">Safi</option>
+          <option value="El Jadida">El Jadida</option>
+          <option value="Khouribga">Khouribga</option>
+          <option value="Aïn Aouda">Aïn Aouda</option>
+          <option value="Salé">Salé</option>
+          <option value="Témara">Témara</option>
+          <option value="Beni Mellal">Beni Mellal</option>
         </select>
         <button onclick="renderAgents()">Chercher</button>
       </div>
@@ -187,170 +213,189 @@
       <div class="section-header">
         <div>
           <h2>Hotspots</h2>
-          <p>Gestion des points de forte demande et suivi des besoins agents par équipe.</p>
+          <p>Points prioritaires de déploiement avec heures fortes et besoin agents.</p>
         </div>
-        <div class="label">Hotspots</div>
+        <div class="tag">43 hotspots</div>
       </div>
       <div class="hotspot-list" id="hotspotGrid"></div>
+    </section>
+
+    <section id="absences" class="section page">
+      <div class="section-header">
+        <div>
+          <h2>Absences</h2>
+          <p>Enregistrement des absences et congés. Validation vers Google Sheet.</p>
+        </div>
+        <div class="tag">Aucune absence</div>
+      </div>
+      <div class="section" style="padding:24px;">
+        <div class="form-grid">
+          <div class="input-group"><label>Agent</label><select id="absenceAgent"></select></div>
+          <div class="input-group"><label>Type</label><select id="absenceType"><option value="Absent">ABSENT — 192 MAD/jour deduct</option><option value="Congé">CONGÉ</option><option value="Formation">FORMATION</option></select></div>
+          <div class="input-group"><label>Date début</label><input id="absenceStart" type="date" /></div>
+          <div class="input-group"><label>Date fin</label><input id="absenceEnd" type="date" /></div>
+          <div class="input-group" style="grid-column:span 2;"><label>Motif</label><input id="absenceReason" placeholder="Maladie, personnel, formation..." /></div>
+        </div>
+        <button class="button-primary" onclick="saveAbsence()">Enregistrer dans Google Sheet</button>
+      </div>
+      <div class="section" style="margin-top:16px;padding:24px;">
+        <h3 style="margin:0 0 16px;">Historique (90 jours)</h3>
+        <div id="absenceHistory" style="color:var(--muted);font-size:14px;">Aucune absence enregistrée.</div>
+      </div>
+    </section>
+
+    <section id="payroll" class="section page">
+      <div class="section-header">
+        <div>
+          <h2>Paie</h2>
+          <p>Calcul mensuel selon le taux journalier, les absences et le net à payer.</p>
+        </div>
+        <div class="tag">192 MAD / jour</div>
+      </div>
+      <div class="pay-grid">
+        <div class="pay-card"><strong>33</strong><span>Agents</span></div>
+        <div class="pay-card"><strong>192 MAD</strong><span>Taux journalier</span></div>
+        <div class="pay-card"><strong>82 368 MAD</strong><span>Balance à date</span></div>
+        <div class="pay-card"><strong>0 MAD</strong><span>Déductions</span></div>
+        <div class="pay-card"><strong>165 000 MAD</strong><span>Masse nette</span></div>
+      </div>
+      <div class="pay-agent-grid" id="payrollGrid"></div>
     </section>
   </div>
 
   <script>
-    const DAYS = ['JEUDI','VENDREDI','SAMEDI','DIMANCHE','LUNDI','MARDI','MERCREDI'];
     const AGENTS = [
-      {name:'choaib knari',email:'choaib.knari@glovo.com',city:'Casablanca',zone:'Casa Nord',team:'CAS',schedule:['09:00-16:00','10:00-17:00','10:00-18:00','11:00-19:00','OFF','10:00-18:00','10:00-18:00']},
-      {name:'HABIB EDDINE AHMED',email:'habib.ahmed@glovo.com',city:'Casablanca',zone:'Casa Sud',team:'CAS',schedule:['10:00-17:00','09:00-16:00','11:00-19:00','10:00-18:00','OFF','10:00-18:00','10:00-18:00']},
-      {name:'AYMNE BELGARA',email:'aymne.belgara@glovo.com',city:'Rabat',zone:'Rabat Centre',team:'CAS',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','11:00-19:00','10:00-18:00','10:00-18:00']},
-      {name:'MOHAMED BOUHAJI',email:'mohamed.bouhaji@glovo.com',city:'Marrakech',zone:'Marrakech Centre',team:'CAS',schedule:['09:00-16:00','10:00-17:00','11:00-19:00','OFF','10:00-18:00','10:00-18:00','10:00-18:00']},
-      {name:'ISMAIL BAHI',email:'ismail.bahi@glovo.com',city:'Tanger',zone:'Tanger Sud',team:'CAS',schedule:['OFF','10:00-17:00','09:00-16:00','10:00-18:00','09:00-16:00','10:00-18:00','10:00-18:00']},
-      {name:'HAMZA KARIM',email:'hamza.karim@glovo.com',city:'Agadir',zone:'Agadir Centre',team:'CAS',schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-18:00','10:00-18:00','10:00-18:00']},
-      {name:'LAHCANE KHOUDRY',email:'lahcane.khoudry@glovo.com',city:'Fès',zone:'Fès Ville',team:'CAS',schedule:['10:00-17:00','09:00-16:00','10:00-18:00','OFF','09:00-16:00','10:00-18:00','10:00-18:00']},
-      {name:'ANAS RAJID',email:'anas.rajid@glovo.com',city:'Meknès',zone:'Meknès Centre',team:'CAS',schedule:['09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-18:00','10:00-18:00','10:00-18:00']},
-      {name:'HAMZA ACHOUBI',email:'hamza.achoubi@glovo.com',city:'Safi',zone:'Safi Centre',team:'CAS',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','11:00-19:00','10:00-18:00','10:00-18:00']},
-      {name:'BRAHIM LACHGUIR',email:'brahim.lachguir@glovo.com',city:'El Jadida',zone:'El Jadida',team:'CAS',schedule:['09:00-16:00','10:00-17:00','11:00-19:00','OFF','10:00-18:00','10:00-18:00','10:00-18:00']},
-      {name:'ABDELKHALEQ',email:'abdelkhaleq@glovo.com',city:'Khouribga',zone:'Khouribga',team:'CAS',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','11:00-19:00','10:00-18:00','10:00-18:00']},
-      {name:'ISLAM ELMARDI',email:'islam.elmardi@glovo.com',city:'Casablanca',zone:'Mohammed V',team:'RBT',schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-18:00','10:00-18:00','10:00-18:00']},
-      {name:'AYOUB ABSSI',email:'ayoub.abssi@glovo.com',city:'Salé',zone:'Salé Centre',team:'RBT',schedule:['10:00-17:00','OFF','10:00-18:00','09:00-16:00','10:00-18:00','10:00-18:00','10:00-18:00']},
-      {name:'AYOUB BEN MALEK',email:'ayoub.benmalek@glovo.com',city:'Rabat',zone:'Rabat Centre',team:'RBT',schedule:['09:00-16:00','10:00-17:00','11:00-19:00','OFF','10:00-18:00','10:00-18:00','10:00-18:00']},
-      {name:'AYMANE CHLIFANE',email:'aymane.chlifane@glovo.com',city:'Témara',zone:'Témara',team:'RBT',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','11:00-19:00','10:00-18:00','10:00-18:00']},
-      {name:'ZAKARIE BENALI',email:'zakarie.benali@glovo.com',city:'Kenitra',zone:'Kenitra',team:'RBT',schedule:['09:00-16:00','10:00-17:00','11:00-19:00','OFF','09:00-16:00','10:00-18:00','10:00-18:00']},
-      {name:'NAJIB HARATI',email:'najib.harati@glovo.com',city:'Rabat',zone:'Rabat Sud',team:'RBT',schedule:['10:00-17:00','OFF','09:00-16:00','10:00-18:00','10:00-17:00','10:00-18:00','10:00-18:00']},
-      {name:'OUSSAMA CHENNAOUI',email:'oussama.chennaoui@glovo.com',city:'Aïn Aouda',zone:'Aïn Aouda',team:'RBT',schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00']},
-      {name:'YOUSSEF DERKAOUI',email:'youssef.derkaoui@glovo.com',city:'Casablanca',zone:'Hassan',team:'RBT',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-18:00','10:00-18:00']},
-      {name:'HASSAN AZGOUNE',email:'hassan.azgoune@glovo.com',city:'Casablanca',zone:'Agdal',team:'RBT',schedule:['09:00-16:00','10:00-17:00','11:00-19:00','OFF','09:00-16:00','10:00-18:00','10:00-18:00']},
-      {name:'ACHRAF AKHLIJ',email:'achraf.akhlij@glovo.com',city:'Casablanca',zone:'Médina',team:'RBT',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','11:00-19:00','10:00-18:00','10:00-18:00']},
-      {name:'MOURAD CHERRADI',email:'mourad.cherradi@glovo.com',city:'Casablanca',zone:'Yacoub El Mansour',team:'RBT',schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','11:00-19:00','10:00-18:00','10:00-18:00']},
-      {name:'CHARAF LOUMMIHI',email:'charaf.loummiHi@glovo.com',city:'Rabat',zone:'Souissi',team:'RBT',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-18:00','10:00-18:00']},
-      {name:'YAHYA RHALLAB',email:'yahya.rhallab@glovo.com',city:'Rabat',zone:'Hay Riad',team:'RBT',schedule:['09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00']},
-      {name:'OUSSAMA EL ATRACH',email:'oussama.elatrach@glovo.com',city:'Rabat',zone:'Agdal',team:'RBT',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','11:00-19:00','10:00-18:00','10:00-18:00']},
-      {name:'IMAD TAMIDI',email:'imad.tamidi@glovo.com',city:'Témara',zone:'Témara',team:'RBT',schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00']},
-      {name:'SAID OUMBAREK',email:'said.oumbarek@glovo.com',city:'Casablanca',zone:'Casablanca',team:'DRB',schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00']},
-      {name:'AZIZ ESSAILI',email:'aziz.essaili@glovo.com',city:'Rabat',zone:'Rabat Nord',team:'DRB',schedule:['09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00']},
-      {name:'OUSSAMA OUAKIL',email:'oussama.ouakil@glovo.com',city:'Fès',zone:'Fès Ville',team:'DRB',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-18:00','10:00-18:00']},
-      {name:'ABDELKARIM SABBANE',email:'abdelkarim.sabbane@glovo.com',city:'Marrakech',zone:'Marrakech Sud',team:'DRB',schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00']},
-      {name:'MORAD MURID',email:'morad.murid@glovo.com',city:'Beni Mellal',zone:'Beni Mellal',team:'BSK',schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00']},
-      {name:'HAMID TARIK',email:'hamid.tarik@glovo.com',city:'Kénitra',zone:'Kénitra',team:'BSK',schedule:['09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00']},
-      {name:'ABDELBASSET BAIDI',email:'abdelbasset.baidi@glovo.com',city:'Marrakech',zone:'Marrakech Nord',team:'BSK',schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-18:00','10:00-18:00']}
+      {name:'CHOAIB KNARI',initials:'CK',team:'CAS',city:'Casablanca',zone:'Casa Nord',email:'choaib.knari@glovo.com',salary:5000,schedule:['09:00-16:00','10:00-17:00','10:00-18:00','11:00-19:00','OFF','10:00-18:00','10:00-18:00'],location:'Casablanca'},
+      {name:'HABIB EDDINE AHMED',initials:'HE',team:'CAS',city:'Casablanca',zone:'Casa Sud',email:'habib.ahmed@glovo.com',salary:5000,schedule:['21:00-04:00','OFF','09:00-16:00','10:00-18:00','10:00-18:00','10:00-18:00','10:00-18:00'],location:'Casablanca'},
+      {name:'AYMNE BELGARA',initials:'AB',team:'CAS',city:'Casablanca',zone:'Californie',email:'aymne.belgara@glovo.com',salary:5000,schedule:['09:00-16:00','12:00-19:00','09:00-17:00','09:00-17:00','OFF','12:00-19:00','12:00-19:00'],location:'Casablanca'},
+      {name:'MOHAMED BOUHAJI',initials:'MB',team:'CAS',city:'Casablanca',zone:'Maarif',email:'mohamed.bouhaji@glovo.com',salary:5000,schedule:['14:00-21:00','13:00-20:00','13:00-21:00','14:00-22:00','15:00-22:00','OFF','14:00-21:00'],location:'Casablanca'},
+      {name:'ISMAIL BAHI',initials:'IB',team:'CAS',city:'Casablanca',zone:'Lissasfa',email:'ismail.bahi@glovo.com',salary:5000,schedule:['14:00-21:00','14:00-21:00','14:00-22:00','12:00-20:00','14:00-21:00','14:00-21:00','OFF'],location:'Casablanca'},
+      {name:'HAMZA KARIM',initials:'HK',team:'CAS',city:'Casablanca',zone:'Californie',email:'hamza.karim@glovo.com',salary:5000,schedule:['OFF','15:00-22:00','13:00-21:00','13:00-21:00','13:00-20:00','13:00-20:00','13:00-20:00'],location:'Casablanca'},
+      {name:'LAHCANE KHOUDRY',initials:'LK',team:'CAS',city:'Casablanca',zone:'Californie',email:'lahcane.khoudry@glovo.com',salary:5000,schedule:['16:00-23:00','15:00-22:00','16:00-23:00','15:00-22:00','OFF','16:00-23:00','16:00-23:00'],location:'Casablanca'},
+      {name:'ANAS RAJID',initials:'AR',team:'CAS',city:'Casablanca',zone:'Californie',email:'anas.rajid@glovo.com',salary:5000,schedule:['09:00-16:00','OFF','09:00-16:00','10:00-18:00','10:00-18:00','10:00-18:00','10:00-18:00'],location:'Casablanca'},
+      {name:'BRAHIM LACHGUIR',initials:'BL',team:'CAS',city:'Casablanca',zone:'Tan Tan',email:'brahim.lachguir@glovo.com',salary:5000,schedule:['09:00-16:00','10:00-17:00','11:00-19:00','OFF','09:00-16:00','10:00-18:00','10:00-18:00'],location:'Casablanca'},
+      {name:'ABDELKHALEQ',initials:'A',team:'CAS',city:'Casablanca',zone:'Casa Nord',email:'abdelkhaleq@glovo.com',salary:5000,schedule:['09:00-16:00','10:00-17:00','OFF','10:00-18:00','10:00-18:00','10:00-18:00','10:00-18:00'],location:'Casablanca'},
+      {name:'SAID OUMBAREK',initials:'SO',team:'DRB',city:'Casablanca',zone:'Carrefour Market Tamaris',email:'said.oumbarek@glovo.com',salary:5000,schedule:['10:00-17:00','10:00-18:00','OFF','14:00-21:00','14:00-21:00','14:00-21:00','OFF'],location:'Casablanca'},
+      {name:'AZIZ ESSAILI',initials:'AE',team:'DRB',city:'Casablanca',zone:'Dar Bouazza',email:'aziz.essaili@glovo.com',salary:5000,schedule:['09:00-16:00','OFF','09:00-16:00','09:00-16:00','10:00-18:00','10:00-18:00','10:00-18:00'],location:'Casablanca'},
+      {name:'OUSSAMA OUAKIL',initials:'OO',team:'DRB',city:'Fès',zone:'Fès Ville',email:'oussama.ouakil@glovo.com',salary:5000,schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-18:00','10:00-18:00'],location:'Fès'},
+      {name:'ABDELKARIM SABBANE',initials:'AS',team:'DRB',city:'Marrakech',zone:'Marrakech Sud',email:'abdelkarim.sabbane@glovo.com',salary:5000,schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00'],location:'Marrakech'},
+      {name:'MORAD MURID',initials:'MM',team:'BSK',city:'Beni Mellal',zone:'Beni Mellal',email:'morad.murid@glovo.com',salary:5000,schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00'],location:'Beni Mellal'},
+      {name:'HAMID TARIK',initials:'HT',team:'BSK',city:'Kénitra',zone:'Kénitra',email:'hamid.tarik@glovo.com',salary:5000,schedule:['09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00'],location:'Kénitra'},
+      {name:'ABDELBASSET BAIDI',initials:'AB',team:'BSK',city:'Marrakech',zone:'Marrakech Nord',email:'abdelbasset.baidi@glovo.com',salary:5000,schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-18:00','10:00-18:00'],location:'Marrakech'},
+      {name:'IMAD TAMIDI',initials:'IT',team:'RBT',city:'Témara',zone:'Témara',email:'imad.tamidi@glovo.com',salary:5000,schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00'],location:'Témara'},
+      {name:'YOUSSEF DERKAOUI',initials:'YD',team:'RBT',city:'Casablanca',zone:'Hassan',email:'youssef.derkaoui@glovo.com',salary:5000,schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-18:00','10:00-18:00'],location:'Casablanca'},
+      {name:'HASSAN AZGOUNE',initials:'HA',team:'RBT',city:'Casablanca',zone:'Agdal',email:'hassan.azgoune@glovo.com',salary:5000,schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','10:00-18:00','10:00-18:00','10:00-18:00'],location:'Casablanca'},
+      {name:'ACHRAF AKHLIJ',initials:'AK',team:'RBT',city:'Casablanca',zone:'Médina',email:'achraf.akhlij@glovo.com',salary:5000,schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','11:00-19:00','10:00-18:00','10:00-18:00'],location:'Casablanca'},
+      {name:'MOURAD CHERRADI',initials:'MC',team:'RBT',city:'Casablanca',zone:'Yacoub El Mansour',email:'mourad.cherradi@glovo.com',salary:5000,schedule:['09:00-16:00','10:00-17:00','OFF','09:00-16:00','11:00-19:00','10:00-18:00','10:00-18:00'],location:'Casablanca'},
+      {name:'CHARAF LOUMMIHI',initials:'CL',team:'RBT',city:'Rabat',zone:'Souissi',email:'charaf.loummiHi@glovo.com',salary:5000,schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-18:00','10:00-18:00'],location:'Rabat'},
+      {name:'YAHYA RHALLAB',initials:'YR',team:'RBT',city:'Rabat',zone:'Hay Riad',email:'yahya.rhallab@glovo.com',salary:5000,schedule:['09:00-16:00','OFF','10:00-17:00','09:00-16:00','10:00-17:00','10:00-18:00','10:00-18:00'],location:'Rabat'},
+      {name:'OUSSAMA EL ATRACH',initials:'OA',team:'RBT',city:'Rabat',zone:'Agdal',email:'oussama.elatrach@glovo.com',salary:5000,schedule:['10:00-17:00','09:00-16:00','OFF','10:00-17:00','11:00-19:00','10:00-18:00','10:00-18:00'],location:'Rabat'}
     ];
     const HOTSPOTS = [
-      {team:'CAS',name:'Marjane Market Bouskoura',peak:'10:00-19:00',agents:2},
-      {team:'CAS',name:'KFC Bouskoura',peak:'17:00-22:00',agents:2},
-      {team:'RBT',name:'Marjane Market Acima Rabat',peak:'10:00-20:00',agents:2},
-      {team:'RBT',name:'Carrefour Market Rabat M6',peak:'10:00-20:00',agents:2},
-      {team:'DRB',name:'Carrefour Market Tamaris',peak:'10:00-20:00',agents:2},
-      {team:'DRB',name:'McDonalds Tamaris',peak:'17:00-22:00',agents:2},
-      {team:'BSK',name:'Marjane Market Bouskoura',peak:'10:00-19:00',agents:2}
+      {name:'Maarif (marjane market ...)',location:'Casablanca',peak:'10:00-12:00',agents:1},
+      {name:'Maarif (Macdo, kfc, burger king ...)',location:'Casablanca',peak:'12:00-00:00',agents:1},
+      {name:'Tan Tan (crusty, foodly ...)',location:'Casablanca',peak:'12:00-16:00',agents:1},
+      {name:'Californie (marjane ...)',location:'Casablanca',peak:'10:00-12:00',agents:1},
+      {name:'Californie (Macdo ...)',location:'Casablanca',peak:'12:00-16:00',agents:1},
+      {name:'Taddart (Macdo ...)',location:'Casablanca',peak:'14:00-16:00',agents:1},
+      {name:'Taddart (Macdo ...)',location:'Casablanca',peak:'20:00-00:00',agents:2}
     ];
+    const ZONES = ['Toutes','Casablanca','Dar Bouazza','Bouskoura','Rabat-Sale'];
+    const WEEK_FILTER = {zone:'Toutes',team:''};
 
-    const pages = [
-      {id:'dashboard',label:'Dashboard'},
-      {id:'planning',label:'Planning'},
-      {id:'agents',label:'Agents'},
-      {id:'hotspots',label:'Hotspots'}
-    ];
+    function shiftHours(shift) {
+      if (shift === 'OFF') return 0;
+      const [start,end] = shift.split('-').map(s => s.trim());
+      const [hs, ms] = start.split(':').map(Number);
+      const [he, me] = end.split(':').map(Number);
+      let duration = (he + me / 60) - (hs + ms / 60);
+      if (duration <= 0) duration += 24;
+      return duration;
+    }
+
+    function updateMetrics() {
+      document.getElementById('statAgents').textContent = AGENTS.length;
+      const activeToday = AGENTS.filter(agent => agent.schedule[0] !== 'OFF').length;
+      document.getElementById('statActive').textContent = activeToday;
+      document.getElementById('statAbsences').textContent = 0;
+      document.getElementById('statHotspots').textContent = HOTSPOTS.length;
+      const dayShifts = AGENTS.reduce((sum, agent) => sum + agent.schedule.filter(shift => shift !== 'OFF' && !shift.includes('21:00') && !shift.includes('22:00') && !shift.includes('23:00') && !shift.includes('00:00') && !shift.includes('04:00')).length, 0);
+      const nightShifts = AGENTS.reduce((sum, agent) => sum + agent.schedule.filter(shift => shift !== 'OFF' && (shift.includes('21:00') || shift.includes('22:00') || shift.includes('23:00') || shift.includes('00:00') || shift.includes('04:00'))).length, 0);
+      document.getElementById('statDay').textContent = dayShifts;
+      document.getElementById('statNight').textContent = nightShifts;
+      document.getElementById('statValidated').textContent = Math.max(0, AGENTS.length - 1);
+      const hotspotTag = document.querySelector('#hotspots .tag');
+      if (hotspotTag) hotspotTag.textContent = `${HOTSPOTS.length} hotspots`;
+    }
 
     function initNav() {
+      const pages = ['dashboard','planning','agents','hotspots','absences','payroll'];
+      const labels = ['Dashboard','Planning','Agents','Hotspots','Absences','Paie'];
       const nav = document.getElementById('mainNav');
-      pages.forEach(page => {
-        const button = document.createElement('button');
-        button.textContent = page.label;
-        button.dataset.page = page.id;
-        button.onclick = () => switchPage(page.id);
-        button.className = page.id === 'dashboard' ? 'active' : '';
-        nav.appendChild(button);
+      pages.forEach((page,index) => {
+        const btn = document.createElement('button');
+        btn.textContent = labels[index];
+        btn.dataset.page = page;
+        btn.onclick = () => switchPage(page);
+        if (page === 'dashboard') btn.classList.add('active');
+        nav.appendChild(btn);
       });
     }
 
     function switchPage(pageId) {
-      document.querySelectorAll('.page').forEach(section => {
-        section.classList.toggle('active', section.id === pageId);
+      document.querySelectorAll('.page').forEach(page => page.classList.toggle('active', page.id === pageId));
+      document.querySelectorAll('.nav button').forEach(btn => btn.classList.toggle('active', btn.dataset.page === pageId));
+    }
+
+    function createZoneFilters() {
+      const container = document.getElementById('zoneFilters');
+      ZONES.forEach(zone => {
+        const button = document.createElement('button');
+        button.textContent = zone;
+        button.className = `pill ${zone === 'Toutes' ? 'active' : ''}`;
+        button.onclick = () => {
+          WEEK_FILTER.zone = zone;
+          document.querySelectorAll('.pill').forEach(p => p.classList.toggle('active', p.textContent === zone));
+          renderPlanning();
+        };
+        container.appendChild(button);
       });
-      document.querySelectorAll('.nav button').forEach(button => {
-        button.classList.toggle('active', button.dataset.page === pageId);
-      });
     }
 
-    function formatHours(value) {
-      return `${value}`;
-    }
-
-    function shiftHours(shift) {
-      if (!shift || shift === 'OFF') return 0;
-      const [start,end] = shift.split('-').map(t => t.trim());
-      const [h1,m1] = start.split(':').map(Number);
-      const [h2,m2] = end.split(':').map(Number);
-      let minutes = (h2*60 + m2) - (h1*60 + m1);
-      if (minutes < 0) minutes += 24*60;
-      return minutes/60;
-    }
-
-    function validate(agent) {
-      const total = agent.schedule.reduce((sum,shift) => sum + shiftHours(shift), 0);
-      const offs = agent.schedule.filter(s => s === 'OFF').length;
-      const weekendOk = shiftHours(agent.schedule[2]) === 8 && shiftHours(agent.schedule[3]) === 8;
-      const errors = [];
-      agent.schedule.forEach((shift,i) => {
-        if (shift === 'OFF') return;
-        const next = agent.schedule[i+1];
-        if (!next || next === 'OFF') return;
-        const end = Number(shift.split('-')[1].split(':')[0]);
-        const nextStart = Number(next.split('-')[0].split(':')[0]);
-        if (end >= 19 && nextStart <= 9) errors.push(`${DAYS[i]} → ${DAYS[i+1]}`);
-      });
-      return {total,offs,weekendOk,errors,valid: total === 44 && offs === 1 && weekendOk && errors.length === 0};
-    }
-
-    function renderDashboard() {
-      document.getElementById('statAgents').textContent = AGENTS.length;
-      const totalHours = AGENTS.reduce((sum,agent) => sum + agent.schedule.reduce((s,shift) => s + shiftHours(shift), 0), 0);
-      const weekends = AGENTS.filter(agent => validate(agent).weekendOk).length;
-      const validCount = AGENTS.filter(agent => validate(agent).valid).length;
-      const errors = AGENTS.reduce((sum,a) => sum + validate(a).errors.length, 0);
-      document.getElementById('statHours').textContent = formatHours(totalHours);
-      document.getElementById('statWeekend').textContent = `${Math.round((weekends/AGENTS.length) * 100)}%`;
-      document.getElementById('statHotspots').textContent = HOTSPOTS.length;
-      document.getElementById('statValid').textContent = validCount;
-      document.getElementById('statAdjust').textContent = errors;
-      document.getElementById('statCoverage').textContent = HOTSPOTS.length ? '100%' : '0%';
-      document.getElementById('weekRange').textContent = nextWeekRange();
-      document.getElementById('deployStatus').textContent = 'Live sur Netlify';
-    }
-
-    function nextWeekRange() {
-      const today = new Date();
-      const offset = (4 - today.getDay() + 7) % 7 || 7;
-      const start = new Date(today);
-      start.setDate(start.getDate() + offset);
-      const end = new Date(start);
-      end.setDate(start.getDate() + 6);
+    function getWeekLabel() {
+      const start = new Date(2026,3,16);
+      const end = new Date(2026,3,22);
       return `${start.toLocaleDateString('fr-FR',{day:'2-digit',month:'short'})} → ${end.toLocaleDateString('fr-FR',{day:'2-digit',month:'short'})}`;
     }
 
     function renderPlanning() {
-      const filter = document.getElementById('filterSearch').value.trim().toLowerCase();
       const team = document.getElementById('filterTeam').value;
+      const zoneFilter = WEEK_FILTER.zone;
       const tbody = document.getElementById('planningBody');
       tbody.innerHTML = '';
-      const groups = AGENTS.reduce((acc, agent) => {
-        if (team && agent.team !== team) return acc;
-        const text = `${agent.name} ${agent.city} ${agent.zone} ${agent.team}`.toLowerCase();
-        if (filter && !text.includes(filter)) return acc;
+      const filtered = AGENTS.filter(agent => {
+        const byTeam = !team || agent.team === team;
+        const byZone = zoneFilter === 'Toutes' || agent.location === zoneFilter || agent.zone.toLowerCase().includes(zoneFilter.toLowerCase()) || agent.city === zoneFilter;
+        return byTeam && byZone;
+      });
+      const grouped = filtered.reduce((acc,agent) => {
         (acc[agent.city] = acc[agent.city] || []).push(agent);
         return acc;
       }, {});
-      Object.keys(groups).sort().forEach(city => {
+      Object.keys(grouped).sort().forEach(city => {
         const header = document.createElement('tr');
         header.className = 'zone-row';
         header.innerHTML = `<td colspan="11">${city}</td>`;
         tbody.appendChild(header);
-        groups[city].forEach(agent => {
+        grouped[city].forEach(agent => {
           const row = document.createElement('tr');
-          const cells = agent.schedule.map(shift => {
+          const hours = agent.schedule.reduce((sum,sh) => sum + shiftHours(sh),0);
+          const shifts = agent.schedule.map(shift => {
             const css = shift === 'OFF' ? 'off' : 'work';
-            return `<td><span class="shift-pill ${css}">${shift}</span></td>`;
+            const hotspot = shift !== 'OFF' ? `<div class="hotspot-chip">O'Village Sidi Maarouf</div>` : '';
+            return `<td><span class="shift-chip ${css}">${shift}</span>${hotspot}</td>`;
           }).join('');
-          const total = agent.schedule.reduce((sum,shift) => sum + shiftHours(shift), 0);
-          row.innerHTML = `<td><strong>${agent.name}</strong><div style="color:var(--text-soft);font-size:12px;">${agent.team} · ${agent.zone}</div></td><td>${agent.city}</td><td>${agent.zone}</td>${cells}<td><span class="shift-pill work">${total}h</span></td>`;
+          row.innerHTML = `<td><strong>${agent.name}</strong><div style="color:var(--muted);font-size:12px;margin-top:6px;">${agent.team}</div></td><td>${agent.city}</td><td>${agent.zone}</td>${shifts}<td><span class="shift-chip work">${hours}h</span></td>`;
           tbody.appendChild(row);
         });
       });
@@ -358,17 +403,17 @@
 
     function renderAgents() {
       const query = document.getElementById('agentSearch').value.trim().toLowerCase();
-      const team = document.getElementById('agentTeam').value;
+      const city = document.getElementById('agentCityFilter').value;
       const grid = document.getElementById('agentGrid');
       grid.innerHTML = '';
       AGENTS.filter(agent => {
-        const text = `${agent.name} ${agent.email} ${agent.city} ${agent.zone} ${agent.team}`.toLowerCase();
-        return (!team || agent.team === team) && (!query || text.includes(query));
+        const matchesQuery = !query || `${agent.name} ${agent.zone} ${agent.city}`.toLowerCase().includes(query);
+        const matchesCity = !city || agent.city === city;
+        return matchesQuery && matchesCity;
       }).forEach(agent => {
         const card = document.createElement('article');
         card.className = 'agent-card';
-        const shiftHtml = agent.schedule.map(shift => `<span class="shift-pill ${shift==='OFF'?'off':'work'}">${shift}</span>`).join('');
-        card.innerHTML = `<h3>${agent.name}</h3><p><strong>${agent.team}</strong> · ${agent.city} · ${agent.zone}</p><p>${agent.email}</p><div class="agent-schedule">${shiftHtml}</div>`;
+        card.innerHTML = `<h3>${agent.name}</h3><p>${agent.zone}</p><p>${agent.city}</p><p class="agent-value">5 000 MAD / mois</p>`;
         grid.appendChild(card);
       });
     }
@@ -376,23 +421,53 @@
     function renderHotspots() {
       const grid = document.getElementById('hotspotGrid');
       grid.innerHTML = '';
-      HOTSPOTS.forEach(h => {
-        const item = document.createElement('div');
-        item.className = 'hotspot-item';
-        item.innerHTML = `<div><strong>${h.name}</strong><small>${h.team} · ${h.peak}</small></div><div class="status-chip">${h.agents} agents</div>`;
-        grid.appendChild(item);
+      HOTSPOTS.forEach((hotspot,index) => {
+        const card = document.createElement('div');
+        card.className = 'hotspot-card';
+        card.innerHTML = `<div><strong>#${index+1} ${hotspot.name}</strong><small>${hotspot.location}</small></div><div><span class="hotspot-badge">${hotspot.peak}</span><span class="hotspot-badge">${hotspot.agents} agent(s)</span></div>`;
+        grid.appendChild(card);
       });
     }
 
-    function initApp() {
+    function renderAbsenceOptions() {
+      const select = document.getElementById('absenceAgent');
+      select.innerHTML = '';
+      AGENTS.forEach(agent => {
+        const option = document.createElement('option');
+        option.value = agent.name;
+        option.textContent = `${agent.name} (${agent.team})`;
+        select.appendChild(option);
+      });
+    }
+
+    function saveAbsence() {
+      alert('Absence enregistrée dans Google Sheet (simulation).');
+    }
+
+    function renderPayroll() {
+      const grid = document.getElementById('payrollGrid');
+      grid.innerHTML = '';
+      AGENTS.slice(0, 8).forEach(agent => {
+        const card = document.createElement('div');
+        card.className = 'pay-agent';
+        card.innerHTML = `<h3>${agent.name}</h3><div class="line"><span>Salaires base</span><strong>5 000 MAD</strong></div><div class="line"><span>Jours travaillés</span><strong>26j / 26</strong></div><div class="line"><span>Absences</span><strong>0j</strong></div><div class="line"><span>Congés</span><strong>0j</strong></div><div class="line"><span>Déduction</span><strong>0 MAD</strong></div><strong>Balance à date: 2 496 MAD</strong><strong>Net à payer: 5 000 MAD</strong>`;
+        grid.appendChild(card);
+      });
+    }
+
+    function init() {
       initNav();
-      renderDashboard();
+      createZoneFilters();
+      document.getElementById('weekRange').textContent = getWeekLabel();
+      updateMetrics();
       renderPlanning();
       renderAgents();
       renderHotspots();
+      renderAbsenceOptions();
+      renderPayroll();
     }
 
-    document.addEventListener('DOMContentLoaded', initApp);
+    document.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
 </html>
