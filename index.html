@@ -339,12 +339,12 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
     </div>
     <div class="card"><div class="chd">🗺 Zones</div><div class="zones" id="ov-zones"></div></div>
     <div class="card"><div class="chd">📍 Hotspots actifs <span style="font-size:10px;color:var(--tx3)" id="ov-hs-ct"></span></div><div id="ov-hs"></div></div>
-    <div class="card" id="rapports-summary-card" style="display:none">
+    <div class="card" id="rapports-summary-card">
       <div class="chd">📋 Rapports Leaders — Consolidé <span style="font-size:10px;color:var(--tx3);font-weight:400" id="rp-sum-date"></span></div>
       <div id="rp-summary-content"></div>
     </div>
     <!-- AUDIT LOG ADMIN -->
-    <div class="card" id="audit-card" style="display:none">
+    <div class="card" id="audit-card">
       <div class="chd">
         🕵️ Historique des modifications
         <div style="display:flex;gap:6px;flex-wrap:wrap">
@@ -484,7 +484,7 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
       <div><div class="ph-t">📋 Rapport Journalier</div><div class="txs tx2c" id="rp-subtitle"></div></div>
       <button class="btn btn-y" onclick="openRapportForm()">➕ Nouveau Rapport</button>
     </div>
-    <div id="rp-weekly-admin" style="display:none"></div>
+    <div id="rp-weekly-admin"></div>
     <div id="rp-list"></div>
   </div>
 
@@ -1218,13 +1218,13 @@ function rAudit(){
   var filter=window._auditFilter||'all';
   var shown=log.filter(function(l){return filter==='all'||l.type===filter||l.type.indexOf(filter)>-1;});
   var list=document.getElementById('audit-list');if(!list)return;
-  if(!shown.length){list.innerHTML='<div class="em" style="padding:20px"><div class="em-tx">Aucune activité</div></div>';return;}
+  if(!shown.length){list.innerHTML='<div class="em" style="padding:20px"><div class="em-tx">Aucune activité encore — les modifications apparaîtront ici.</div></div>';return;}
   var dotClass={add:'add',edit:'edit',del:'del',login:'login',planning:'plan',plan:'plan',absence:'del',rapport:'login',hotspot:'add',agent:'edit'};
   list.innerHTML=shown.slice(0,100).map(function(l){
     var dc=dotClass[l.type]||'edit';
     var d=new Date(l.ts);
     var timeStr=d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'})+' '+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
-    var uc={OE:'#E74C3C','Choaib Knari':'#F39C12','Loutfi Ouzguite':'#27AE60'};
+    var uc={'Oussama E.':'#E74C3C','Choaib Knari':'#F39C12','Loutfi Ouzguite':'#27AE60'};
     var ub=uc[l.who]||'#64748B';
     return '<div class="audit-item">'+
       '<div class="audit-dot '+dc+'"></div>'+
@@ -1909,7 +1909,15 @@ function buildEmailText(ag,planAg,dates,wn){
 }
 
 function buildGmailLink(em){
-  return 'https://mail.google.com/mail/?view=cm&to='+encodeURIComponent(em.to)+'&su='+encodeURIComponent(em.subject)+'&body='+encodeURIComponent(em.textBody);
+  // Force Gmail web — pas mailto (qui ouvre Outlook)
+  var body=em.textBody||'';
+  // Gmail limite les URLs longues — on tronque le body si nécessaire
+  var maxBody=1500;
+  if(body.length>maxBody)body=body.substring(0,maxBody)+'...';
+  return 'https://mail.google.com/mail/?view=cm&fs=1&to='+
+    encodeURIComponent(em.to)+
+    '&su='+encodeURIComponent(em.subject)+
+    '&body='+encodeURIComponent(body);
 }
 
 function preparerEmails(){
@@ -1956,11 +1964,19 @@ function copyAllEmailsText(){
 function rReportsSummary(){
   var card=document.getElementById('rapports-summary-card');if(!card)return;
   if(!currentUser||currentUser.role!=='admin'){card.style.display='none';return;}
-  var rapports=getRapports().sort(function(a,b){return b.date.localeCompare(a.date);});
-  if(!rapports.length){card.style.display='none';return;}
   card.style.display='block';
+  var rapports=getRapports().sort(function(a,b){return b.date.localeCompare(a.date);});
   var recents=rapports.filter(function(r){var d=new Date(r.date),now=new Date();return(now-d)<7*24*3600*1000;});
-  var sub=document.getElementById('rp-sum-date');if(sub)sub.textContent=recents.length+' rapport(s) — 7 derniers jours';
+  var sub=document.getElementById('rp-sum-date');if(sub)sub.textContent=recents.length+' rapport(s) — 7 jours';
+  if(!rapports.length){
+    document.getElementById('rp-summary-content').innerHTML=
+      '<div class="em" style="padding:16px">'+
+        '<div class="em-ic">📋</div>'+
+        '<div class="em-tx">Aucun rapport reçu</div>'+
+        '<div style="font-size:11px;color:var(--tx3);margin-top:6px">Les rapports de Choaib et Loutfi apparaîtront ici dès qu\'ils en soumettent un.</div>'+
+      '</div>';
+    return;
+  }
   var totalRap=recents.length;
   var avgNote=totalRap?Math.round(recents.reduce(function(s,r){return s+parseInt(r.note||3);},0)/totalRap):0;
   var stars='⭐'.repeat(avgNote);
