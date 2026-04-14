@@ -207,7 +207,21 @@ tbody tr:hover td{background:rgba(255,194,68,.04)}
 .prog{height:4px;background:var(--bg3);border-radius:2px;margin-top:7px;overflow:hidden}
 .prog-f{height:100%;border-radius:2px;transition:width .6s ease}
 
-/* ── RAPPORT ── */
+/* ── AUDIT LOG ── */
+.audit-item{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-bottom:1px solid var(--bd);font-size:11px}
+.audit-item:last-child{border:none}
+.audit-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.audit-dot.add{background:var(--g)}.audit-dot.edit{background:var(--y-dk)}.audit-dot.del{background:var(--r)}.audit-dot.login{background:var(--b)}.audit-dot.plan{background:var(--pu)}
+.audit-time{color:var(--tx3);font-size:10px;white-space:nowrap;flex-shrink:0}
+.audit-msg{color:var(--tx2);flex:1;line-height:1.4}
+.audit-user{font-size:9px;padding:1px 6px;border-radius:10px;background:var(--y-md);color:#92400E;font-weight:700;white-space:nowrap}
+/* ── RAPPORT SIMPLE ── */
+.rp-simple{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);padding:16px;margin-bottom:10px;box-shadow:var(--sh);border-left:4px solid var(--y)}
+.rp-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700}
+.rp-badge.anomalie{background:var(--r-lt);color:var(--r)}
+.rp-badge.normal{background:var(--g-lt);color:var(--g)}
+.rp-badge.info{background:var(--b-lt);color:var(--b)}
+
 .rapport-card{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);padding:20px;margin-bottom:12px;box-shadow:var(--sh);border-left:4px solid var(--y)}
 .rapport-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .rapport-date{font-size:11px;color:var(--tx3);background:var(--bg3);padding:3px 10px;border-radius:20px}
@@ -329,6 +343,20 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
       <div class="chd">📋 Rapports Leaders — Consolidé <span style="font-size:10px;color:var(--tx3);font-weight:400" id="rp-sum-date"></span></div>
       <div id="rp-summary-content"></div>
     </div>
+    <!-- AUDIT LOG ADMIN -->
+    <div class="card" id="audit-card" style="display:none">
+      <div class="chd">
+        🕵️ Historique des modifications
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-gh btn-sm" onclick="filterAudit('all')" id="af-all">Tout</button>
+          <button class="btn btn-gh btn-sm" onclick="filterAudit('agent')" id="af-agent">Agents</button>
+          <button class="btn btn-gh btn-sm" onclick="filterAudit('planning')" id="af-plan">Planning</button>
+          <button class="btn btn-gh btn-sm" onclick="filterAudit('absence')" id="af-abs">Absences</button>
+          <button class="btn btn-r btn-sm" onclick="clearAudit()">🗑️ Vider</button>
+        </div>
+      </div>
+      <div id="audit-list" style="max-height:320px;overflow-y:auto;border:1px solid var(--bd);border-radius:var(--r2)"></div>
+    </div>
   </div>
 
   <!-- PLANNING -->
@@ -434,7 +462,8 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
       <div><div class="ph-t">📋 Rapport Journalier</div><div class="txs tx2c" id="rp-subtitle"></div></div>
       <button class="btn btn-y" onclick="openRapportForm()">➕ Nouveau Rapport</button>
     </div>
-    <div id="rp-list"><div class="sw"><div class="spin"></div></div></div>
+    <div id="rp-weekly-admin" style="display:none"></div>
+    <div id="rp-list"></div>
   </div>
 
 </div><!-- /appContent -->
@@ -537,30 +566,40 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
 
 <!-- MODAL RAPPORT -->
 <div class="overlay" id="rpOverlay" onclick="overlayClose(event,'rpOverlay')">
-  <div class="modal modal-lg">
-    <div class="modal-hd"><div><div class="modal-hd-t">📋 Rapport Journalier</div><div style="font-size:11px;color:rgba(0,0,0,.55)" id="rp-modal-sub"></div></div><button class="m-close" onclick="closeModal('rpOverlay')">✕</button></div>
+  <div class="modal">
+    <div class="modal-hd"><div><div class="modal-hd-t">📋 Rapport de la journée</div><div style="font-size:11px;color:rgba(0,0,0,.55)" id="rp-modal-sub"></div></div><button class="m-close" onclick="closeModal('rpOverlay')">✕</button></div>
     <div class="m-body">
-      <div class="fgrid">
+      <div class="fgrid" style="margin-bottom:14px">
         <div class="fgl"><label>Date *</label><input type="date" class="fc" id="rp-date"></div>
-        <div class="fgl"><label>Zone supervisée</label><input type="text" class="fc" id="rp-zone" readonly></div>
+        <div class="fgl"><label>Type de rapport</label>
+          <select class="fc" id="rp-type">
+            <option value="normal">✅ Journée normale</option>
+            <option value="anomalie">⚠️ Anomalie / Incident</option>
+            <option value="info">ℹ️ Information</option>
+          </select>
+        </div>
       </div>
-      <div class="fg"><label>Agents présents</label><textarea class="fc fc-ta" id="rp-presents" placeholder="Noms des agents présents aujourd'hui..."></textarea></div>
-      <div class="fg"><label>Agents absents / retards</label><textarea class="fc fc-ta" id="rp-absents" placeholder="Noms + motifs si connus..."></textarea></div>
-      <div class="fg"><label>Contrôles effectués (nombre + détails)</label><textarea class="fc fc-ta" id="rp-controles" placeholder="Ex: 45 contrôles, 3 refus équipement, 2 incidents..."></textarea></div>
-      <div class="fg"><label>Points positifs</label><textarea class="fc fc-ta" id="rp-positifs" placeholder="Ce qui s'est bien passé..."></textarea></div>
-      <div class="fg"><label>Points à améliorer / Incidents</label><textarea class="fc fc-ta" id="rp-incidents" placeholder="Problèmes rencontrés, incidents à signaler..."></textarea></div>
-      <div class="fg"><label>Actions prises / Décisions</label><textarea class="fc fc-ta" id="rp-actions" placeholder="Ce qui a été fait pour résoudre les problèmes..."></textarea></div>
-      <div class="fg"><label>Note globale de la journée</label>
+      <div class="fg"><label>Zone supervisée</label><input type="text" class="fc" id="rp-zone" readonly></div>
+      <div class="fg"><label>Résumé de la journée *</label>
+        <textarea class="fc fc-ta" id="rp-resume" rows="3" placeholder="Résumé rapide de la journée..."></textarea>
+      </div>
+      <div class="fg"><label>Anomalies / Incidents</label>
+        <textarea class="fc fc-ta" id="rp-anomalies" rows="3" placeholder="Laisser vide si aucun incident..."></textarea>
+      </div>
+      <div class="fg"><label>Remarques</label>
+        <textarea class="fc fc-ta" id="rp-remarques" rows="2" placeholder="Observations, suggestions..."></textarea>
+      </div>
+      <div class="fg"><label>Note journée</label>
         <select class="fc" id="rp-note">
-          <option value="5">⭐⭐⭐⭐⭐ Excellente journée</option>
-          <option value="4">⭐⭐⭐⭐ Bonne journée</option>
-          <option value="3" selected>⭐⭐⭐ Journée correcte</option>
-          <option value="2">⭐⭐ Journée difficile</option>
-          <option value="1">⭐ Journée très difficile</option>
+          <option value="5">⭐⭐⭐⭐⭐ Excellente</option>
+          <option value="4">⭐⭐⭐⭐ Bonne</option>
+          <option value="3" selected>⭐⭐⭐ Correcte</option>
+          <option value="2">⭐⭐ Difficile</option>
+          <option value="1">⭐ Très difficile</option>
         </select>
       </div>
     </div>
-    <div class="m-footer"><button class="btn btn-gh btn-sm" onclick="closeModal('rpOverlay')">Annuler</button><button class="btn btn-y btn-sm" onclick="saveRapport()">💾 Enregistrer le rapport</button></div>
+    <div class="m-footer"><button class="btn btn-gh btn-sm" onclick="closeModal('rpOverlay')">Annuler</button><button class="btn btn-y btn-sm" onclick="saveRapport()">💾 Enregistrer</button></div>
   </div>
 </div>
 
@@ -582,7 +621,7 @@ var currentUser=null;
 var TAUX=192,SALAIRE=5000;
 // Semaine LUN→DIM
 var JOURS=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
-var SK={AGENTS:'s_agents',HOTSPOTS:'s_hotspots',ABSENCES:'s_absences',PLAN:'s_plan_',RAPPORTS:'s_rapports'};
+var SK={AGENTS:'s_agents',HOTSPOTS:'s_hotspots',ABSENCES:'s_absences',PLAN:'s_plan_',RAPPORTS:'s_rapports',AUDIT:'s_audit'};
 var MOIS_NOM=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
 
 var SHIFTS={
@@ -750,6 +789,8 @@ function doLogin(){
   if(!u||pwd!==u.pwd){document.getElementById('loginErr').textContent='Mot de passe incorrect.';return;}
   currentUser={key:selKey,pwd:u.pwd,nom:u.nom,role:u.role,villes:u.villes,offDay:u.offDay,email:u.email||'',color:u.color};
   sessionStorage.setItem('sentinel_user',JSON.stringify({key:selKey}));
+  // Audit login
+  var log=getAudit();log.unshift({type:'login',msg:'Connexion au tableau de bord',who:u.nom,ts:new Date().toISOString()});if(log.length>200)log=log.slice(0,200);localStorage.setItem(SK.AUDIT,JSON.stringify(log));
   startApp();
 }
 
@@ -820,7 +861,9 @@ function buildNav(){
   }
   var hsBtns=document.getElementById('hsBtns');
   if(hsBtns&&u.role==='admin'){
-    hsBtns.innerHTML='<button class="btn btn-y btn-sm" onclick="openAddHotspot()">➕ Ajouter Hotspot</button>';
+    hsBtns.innerHTML='<button class="btn btn-y btn-sm" onclick="openAddHotspot()">➕ Ajouter</button>'+
+      '<label class="btn btn-gh btn-sm" style="cursor:pointer">📊 Import Excel<input type="file" accept=".xlsx,.xls,.csv" style="display:none" onchange="importHotspotsExcel(event)"></label>'+
+      '<button class="btn btn-gh btn-sm" onclick="exportHotspotsExcel()">📥 Export Excel</button>';
   }
 }
 
@@ -834,13 +877,54 @@ function goPage(id,btn){
 
 // ── STORAGE ──
 function getAgents(){var a=localStorage.getItem(SK.AGENTS);if(!a){localStorage.setItem(SK.AGENTS,JSON.stringify(DEFAULT_AGENTS));return DEFAULT_AGENTS;}return JSON.parse(a);}
-function saveAgents(ag){localStorage.setItem(SK.AGENTS,JSON.stringify(ag));}
+function saveAgents(ag){localStorage.setItem(SK.AGENTS,JSON.stringify(ag));broadcastChange('agents');}
 function getHotspots(){var h=localStorage.getItem(SK.HOTSPOTS);if(!h){localStorage.setItem(SK.HOTSPOTS,JSON.stringify(DEFAULT_HOTSPOTS));return DEFAULT_HOTSPOTS;}return JSON.parse(h);}
-function saveHotspots(hs){localStorage.setItem(SK.HOTSPOTS,JSON.stringify(hs));}
+function saveHotspots(hs){localStorage.setItem(SK.HOTSPOTS,JSON.stringify(hs));broadcastChange('hotspots');}
 function getAbsences(){return JSON.parse(localStorage.getItem(SK.ABSENCES)||'[]');}
-function saveAbsences(abs){localStorage.setItem(SK.ABSENCES,JSON.stringify(abs));}
+function saveAbsences(abs){localStorage.setItem(SK.ABSENCES,JSON.stringify(abs));broadcastChange('absences');}
 function getRapports(){return JSON.parse(localStorage.getItem(SK.RAPPORTS)||'[]');}
-function saveRapports(r){localStorage.setItem(SK.RAPPORTS,JSON.stringify(r));}
+function saveRapports(r){localStorage.setItem(SK.RAPPORTS,JSON.stringify(r));broadcastChange('rapports');}
+// Audit log
+function getAudit(){return JSON.parse(localStorage.getItem(SK.AUDIT)||'[]');}
+function addAudit(type,msg){
+  var log=getAudit();
+  var who=currentUser?currentUser.nom:'?';
+  log.unshift({type:type,msg:msg,who:who,ts:new Date().toISOString()});
+  if(log.length>200)log=log.slice(0,200);
+  localStorage.setItem(SK.AUDIT,JSON.stringify(log));
+  broadcastChange('audit');
+  if(currentUser&&currentUser.role==='admin')rAudit();
+}
+// BroadcastChannel pour sync entre onglets
+var bc=null;
+try{bc=new BroadcastChannel('sentinel');}catch(e){}
+function broadcastChange(what){
+  if(bc)bc.postMessage({what:what,ts:Date.now()});
+}
+if(bc){
+  bc.onmessage=function(e){
+    // Recharge les données sans régénérer le planning
+    setTimeout(function(){
+      var a=getAgents(),hs=getHotspots(),abs=getAbsences();
+      D.allAgents=a;D.hotspots=hs;D.absences=abs;
+      D.agents=a.filter(function(x){return x.statut==='Actif'&&D.visibleVilles&&D.visibleVilles.indexOf(x.ville)>-1;});
+      if(e.data.what==='audit'&&currentUser&&currentUser.role==='admin')rAudit();
+      else if(document.querySelector('.pg.active')){
+        var pg=document.querySelector('.pg.active').id;
+        if(pg==='pg-ag')rAgents();
+        else if(pg==='pg-hs')rHs();
+        else if(pg==='pg-ab')rAbs();
+        else if(pg==='pg-ov')rOv();
+      }
+    },300);
+  };
+}
+// Also listen to storage events (other tabs same browser)
+window.addEventListener('storage',function(e){
+  if(e.key&&e.key.indexOf('s_')===0){
+    setTimeout(function(){loadData(weekOffset);},500);
+  }
+});
 
 function getPlanKey(wOff){
   var lundi=getLundi((wOff||0)+1);
@@ -1020,7 +1104,47 @@ function loadData(off){
 
 function regenererPlanning(){localStorage.removeItem(getPlanKey(weekOffset));loadData(weekOffset);toast('Planning régénéré !','ok');}
 
-function rAll(){rOv();rPlanning();rAgents();rHs();rAbs();rPay();rReportsSummary();}
+function rAll(){rOv();rPlanning();rAgents();rHs();rAbs();rPay();rReportsSummary();rAudit();}
+
+// Audit display
+function rAudit(){
+  var card=document.getElementById('audit-card');if(!card)return;
+  if(!currentUser||currentUser.role!=='admin'){card.style.display='none';return;}
+  card.style.display='block';
+  var log=getAudit();
+  var filter=window._auditFilter||'all';
+  var shown=log.filter(function(l){return filter==='all'||l.type===filter||l.type.indexOf(filter)>-1;});
+  var list=document.getElementById('audit-list');if(!list)return;
+  if(!shown.length){list.innerHTML='<div class="em" style="padding:20px"><div class="em-tx">Aucune activité</div></div>';return;}
+  var dotClass={add:'add',edit:'edit',del:'del',login:'login',planning:'plan',plan:'plan',absence:'del',rapport:'login',hotspot:'add',agent:'edit'};
+  list.innerHTML=shown.slice(0,100).map(function(l){
+    var dc=dotClass[l.type]||'edit';
+    var d=new Date(l.ts);
+    var timeStr=d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'})+' '+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+    var uc={OE:'#E74C3C','Choaib Knari':'#F39C12','Loutfi Ouzguite':'#27AE60'};
+    var ub=uc[l.who]||'#64748B';
+    return '<div class="audit-item">'+
+      '<div class="audit-dot '+dc+'"></div>'+
+      '<div class="audit-msg">'+l.msg+'</div>'+
+      '<span class="audit-user" style="background:'+ub+'20;color:'+ub+'">'+l.who.split(' ')[0]+'</span>'+
+      '<span class="audit-time">'+timeStr+'</span>'+
+    '</div>';
+  }).join('');
+}
+
+function filterAudit(f){
+  window._auditFilter=f;
+  document.querySelectorAll('[id^="af-"]').forEach(function(b){b.classList.remove('btn-y');b.classList.add('btn-gh');});
+  var btn=document.getElementById('af-'+f);if(btn){btn.classList.add('btn-y');btn.classList.remove('btn-gh');}
+  rAudit();
+}
+
+function clearAudit(){
+  if(!confirm('Vider tout historique ?'))return;
+  localStorage.removeItem(SK.AUDIT);
+  rAudit();
+  toast('Historique vidé','ok');
+}
 
 // ══ DASHBOARD ══
 function rOv(){
@@ -1231,11 +1355,12 @@ function saveAgent(){
   var nom=document.getElementById('ag-f-nom').value.trim();if(!nom){toast('Nom obligatoire','er');return;}
   var agents=getAgents();
   var newAg={nom:nom,ville:document.getElementById('ag-f-ville').value,zone:document.getElementById('ag-f-zone').value||document.getElementById('ag-f-ville').value,tel:document.getElementById('ag-f-tel').value,email:document.getElementById('ag-f-email').value,statut:document.getElementById('ag-f-statut').value};
-  if(agEditIdx>=0)agents[agEditIdx]=newAg;else agents.push(newAg);
+  if(agEditIdx>=0){agents[agEditIdx]=newAg;addAudit('edit','Agent modifié : '+newAg.nom+' ('+newAg.ville+')');}
+  else{agents.push(newAg);addAudit('add','Agent ajouté : '+newAg.nom+' ('+newAg.ville+')');}
   saveAgents(agents);closeModal('agOverlay');localStorage.removeItem(getPlanKey(weekOffset));loadData(weekOffset);toast(agEditIdx>=0?'Agent modifié !':'Agent ajouté !','ok');
 }
 
-function deleteAgent(idx){if(!confirm('Supprimer cet agent ?'))return;var agents=getAgents();agents.splice(idx,1);saveAgents(agents);closeAg();localStorage.removeItem(getPlanKey(weekOffset));loadData(weekOffset);toast('Agent supprimé','ok');}
+function deleteAgent(idx){if(!confirm('Supprimer cet agent ?'))return;var agents=getAgents();var nom=agents[idx]?agents[idx].nom:'?';agents.splice(idx,1);saveAgents(agents);addAudit('del','Agent supprimé : '+nom);closeAg();localStorage.removeItem(getPlanKey(weekOffset));loadData(weekOffset);toast('Agent supprimé','ok');}
 function toggleAgentStatus(idx){var agents=getAgents();agents[idx].statut=agents[idx].statut==='Actif'?'Inactif':'Actif';saveAgents(agents);closeAg();localStorage.removeItem(getPlanKey(weekOffset));loadData(weekOffset);toast('Statut mis à jour','ok');}
 
 function exportAgentsCSV(){var agents=getAgents();var csv='Nom,Ville,Zone,Tel,Email,Statut\n'+agents.map(function(a){return[a.nom,a.ville,a.zone,a.tel,a.email,a.statut].join(',');}).join('\n');dlCSV(csv,'agents.csv');}
@@ -1268,15 +1393,24 @@ function rAbs(){
   var abs=D.absences||[];
   var abl=document.getElementById('abs-list');if(!abl)return;
   if(!abs.length){abl.innerHTML='<div class="em" style="background:var(--g-lt);border-radius:var(--r2);padding:20px"><div class="em-ic">✅</div><div class="em-tx" style="color:var(--g)">Aucune absence enregistrée</div></div>';return;}
+  // Toutes les absences (historique complet) filtrées par villes visibles
   var visible=abs.filter(function(a){var ag=(D.allAgents||[]).filter(function(x){return x.nom.toUpperCase()===a.nom.toUpperCase();})[0];return ag&&D.visibleVilles.indexOf(ag.ville)>-1;});
-  abl.innerHTML=visible.map(function(a,i){var clr=CC[a.ville]||{};var isA=a.type==='ABSENT';var realIdx=abs.indexOf(a);
+  // Stats rapides
+  var nA=visible.filter(function(a){return a.type==='ABSENT';}).length;
+  var nC=visible.filter(function(a){return a.type==='CONGE';}).length;
+  var statsHtml='<div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap">'+
+    '<div style="background:var(--r-lt);border:1px solid rgba(229,57,53,.2);border-radius:var(--r2);padding:8px 14px;font-size:12px;font-weight:700;color:var(--r)">🚨 '+nA+' absence(s)</div>'+
+    '<div style="background:var(--b-lt);border:1px solid rgba(21,101,192,.2);border-radius:var(--r2);padding:8px 14px;font-size:12px;font-weight:700;color:var(--b)">🏖 '+nC+' congé(s)</div>'+
+    '<div style="background:var(--bg3);border:1px solid var(--bd);border-radius:var(--r2);padding:8px 14px;font-size:12px;color:var(--tx3)">Total : '+visible.length+'</div>'+
+  '</div>';
+  abl.innerHTML=statsHtml+visible.map(function(a,i){var clr=CC[a.ville]||{};var isA=a.type==='ABSENT';var realIdx=abs.indexOf(a);
     return '<div class="abs-item">'+
       '<div class="av av-md" style="background:'+avc(a.nom)+'">'+ini(a.nom)+'</div>'+
       '<div style="flex:1"><div style="font-size:13px;font-weight:700">'+a.nom+'<span style="background:'+clr.bg+';color:'+clr.tx+';padding:1px 7px;border-radius:var(--r3);font-size:10px;font-weight:700;margin-left:7px">'+(a.ville||'?')+'</span></div>'+
         '<div class="txs tx3c">'+a.date+(a.motif?' · '+a.motif:'')+'</div></div>'+
       '<span class="badge" style="background:'+(isA?'var(--r-lt)':'var(--b-lt)')+';color:'+(isA?'var(--r)':'var(--b)')+'">'+a.type+'</span>'+
       '<div style="font-size:13px;font-weight:800;color:'+(isA?'var(--r)':'var(--g)')+'">'+( isA?'- 192 MAD':'0 MAD')+'</div>'+
-      '<button class="btn btn-gh btn-ico btn-sm" onclick="deleteAbsence('+realIdx+')" title="Supprimer">🗑️</button>'+
+      '<button class="btn btn-gh btn-ico btn-sm" onclick="deleteAbsence('+realIdx+')" title="Supprimer si erreur">🗑️</button>'+
     '</div>';}).join('');
 }
 
@@ -1291,7 +1425,9 @@ function submitAbs(){
   var agData=(D.allAgents||[]).filter(function(a){return a.nom===nom;})[0];
   while(cur<=end){var d=fmtD(cur);var dup=absences.some(function(ab){return ab.nom.toUpperCase()===nom.toUpperCase()&&ab.date===d;});if(!dup){absences.push({nom:nom,ville:agData?agData.ville:'?',date:d,type:type,motif:motif,deduction:type==='ABSENT'?TAUX:0});count++;}cur.setDate(cur.getDate()+1);}
   if(!count){if(msg)msg.innerHTML='<span style="color:var(--r)">Dates déjà enregistrées.</span>';return;}
-  saveAbsences(absences);if(msg)msg.innerHTML='<span style="color:var(--g)">✅ '+count+' jour(s) enregistré(s).</span>';
+  saveAbsences(absences);
+  addAudit('absence','Absence enregistrée : '+nom+' — '+count+' jour(s) '+type);
+  if(msg)msg.innerHTML='<span style="color:var(--g)">✅ '+count+' jour(s) enregistré(s).</span>';
   document.getElementById('f-s').value='';document.getElementById('f-e').value='';document.getElementById('f-m').value='';
   toast(count+' absence(s) enregistrée(s)','ok');localStorage.removeItem(getPlanKey(weekOffset));setTimeout(function(){loadData(weekOffset);},400);
 }
@@ -1380,36 +1516,120 @@ function rPay(){
   }).join('')||'<div class="em" style="grid-column:1/-1"><div class="em-ic">💰</div><div class="em-tx">Aucun agent</div></div>';
 }
 
-// ══ RAPPORT JOURNALIER ══
+// ══ RAPPORT JOURNALIER SIMPLIFIÉ ══
 function rRapports(){
   var rpl=document.getElementById('rp-list');if(!rpl)return;
   var sub=document.getElementById('rp-subtitle');
-  var u=currentUser;
-  if(!u)return;
+  var u=currentUser;if(!u)return;
   var zone=u.villes.map(function(v){return CLA[v];}).join(' · ');
   if(sub)sub.textContent=u.nom+' — '+zone;
 
-  var rapports=getRapports().filter(function(r){return r.user===u.key;}).sort(function(a,b){return b.date.localeCompare(a.date);});
-  if(!rapports.length){rpl.innerHTML='<div class="em"><div class="em-ic">📋</div><div class="em-tx">Aucun rapport. Cliquez sur "Nouveau Rapport" pour commencer.</div></div>';return;}
+  // Admin voit TOUS les rapports + résumé hebdo
+  var rapports;
+  var weeklyDiv=document.getElementById('rp-weekly-admin');
+  if(u.role==='admin'){
+    rapports=getRapports().sort(function(a,b){return b.date.localeCompare(a.date);});
+    if(weeklyDiv)weeklyDiv.style.display='block';
+    rWeeklySummary();
+  } else {
+    rapports=getRapports().filter(function(r){return r.user===u.key;}).sort(function(a,b){return b.date.localeCompare(a.date);});
+    if(weeklyDiv)weeklyDiv.style.display='none';
+  }
+
+  if(!rapports.length){rpl.innerHTML='<div class="em"><div class="em-ic">📋</div><div class="em-tx">Aucun rapport. Cliquez "Nouveau Rapport".</div></div>';return;}
+
   rpl.innerHTML=rapports.map(function(r,i){
     var stars='⭐'.repeat(parseInt(r.note)||3);
-    return '<div class="rapport-card">'+
-      '<div class="rapport-hd">'+
-        '<div><div class="rapport-author">'+r.auteur+' <span style="font-size:10px;color:var(--tx3)">— '+r.zone+'</span></div>'+
-          '<div style="font-size:11px;color:var(--tx3);margin-top:2px">'+stars+'</div></div>'+
+    var typeClr={normal:'var(--g)',anomalie:'var(--r)',info:'var(--b)'};
+    var typeIc={normal:'✅',anomalie:'⚠️',info:'ℹ️'};
+    var tc=typeClr[r.type||'normal']||'var(--g)';
+    var tic=typeIc[r.type||'normal']||'✅';
+    var lc=r.user==='choaib'?'#F39C12':'r.user==="loutfi"'?'#27AE60':'#E74C3C';
+    if(r.user==='loutfi')lc='#27AE60';
+    else if(r.user==='admin')lc='#E74C3C';
+    var badgeStyle='background:'+tc+'20;color:'+tc+';border:1px solid '+tc+'40';
+    return '<div class="rp-simple">'+
+      '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">'+
         '<div style="display:flex;align-items:center;gap:8px">'+
-          '<span class="rapport-date">'+r.date+'</span>'+
+          '<div class="av av-sm" style="background:'+lc+'">'+ini(r.auteur)+'</div>'+
+          '<div>'+
+            '<div style="font-size:12px;font-weight:700;color:var(--tx)">'+r.auteur+'</div>'+
+            '<div style="font-size:10px;color:var(--tx3)">'+r.zone+'</div>'+
+          '</div>'+
+        '</div>'+
+        '<div style="display:flex;align-items:center;gap:6px">'+
+          '<span class="rp-badge '+( r.type||'normal')+'">'+tic+' '+(r.type==='anomalie'?'Anomalie':r.type==='info'?'Info':'Normal')+'</span>'+
+          '<span style="font-size:10px;color:var(--tx3);background:var(--bg3);padding:2px 8px;border-radius:10px">'+new Date(r.date).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'})+'</span>'+
+          '<span style="font-size:12px">'+stars+'</span>'+
           '<button class="btn btn-r btn-ico btn-sm" onclick="deleteRapport('+i+')">🗑️</button>'+
         '</div>'+
       '</div>'+
-      (r.presents?'<div class="rapport-section"><div class="rapport-section-title">✅ Agents présents</div><div class="rapport-text">'+r.presents+'</div></div>':'')+
-      (r.absents?'<div class="rapport-section"><div class="rapport-section-title">🚨 Absences / Retards</div><div class="rapport-text" style="color:var(--r)">'+r.absents+'</div></div>':'')+
-      (r.controles?'<div class="rapport-section"><div class="rapport-section-title">🔍 Contrôles effectués</div><div class="rapport-text">'+r.controles+'</div></div>':'')+
-      (r.positifs?'<div class="rapport-section"><div class="rapport-section-title">👍 Points positifs</div><div class="rapport-text" style="color:var(--g)">'+r.positifs+'</div></div>':'')+
-      (r.incidents?'<div class="rapport-section"><div class="rapport-section-title">⚠️ Incidents / Points à améliorer</div><div class="rapport-text" style="color:#92400E">'+r.incidents+'</div></div>':'')+
-      (r.actions?'<div class="rapport-section"><div class="rapport-section-title">🎯 Actions prises</div><div class="rapport-text">'+r.actions+'</div></div>':'')+
+      (r.resume?'<div style="font-size:12px;color:var(--tx2);margin-bottom:6px;line-height:1.5">'+r.resume+'</div>':'')+
+      (r.anomalies?'<div style="padding:8px 12px;background:var(--r-lt);border-radius:var(--r3);border-left:3px solid var(--r);margin-bottom:6px">'+
+        '<div style="font-size:9px;font-weight:700;color:var(--r);margin-bottom:3px">⚠️ ANOMALIES / INCIDENTS</div>'+
+        '<div style="font-size:12px;color:var(--r)">'+r.anomalies+'</div>'+
+      '</div>':'')+
+      (r.remarques?'<div style="padding:6px 10px;background:var(--b-lt);border-radius:var(--r3);font-size:11px;color:var(--b)">'+
+        '<span style="font-weight:700">💬 </span>'+r.remarques+
+      '</div>':'')+
     '</div>';
   }).join('');
+}
+
+function rWeeklySummary(){
+  var wa=document.getElementById('rp-weekly-admin');if(!wa)return;
+  var rapports=getRapports();
+  // Rapports de cette semaine (lundi au dimanche)
+  var now=new Date(),dow=now.getDay(),diff=dow===1?0:dow===0?-6:1-dow;
+  var lundi=new Date(now);lundi.setDate(now.getDate()+diff);lundi.setHours(0,0,0,0);
+  var dimanche=new Date(lundi);dimanche.setDate(lundi.getDate()+6);dimanche.setHours(23,59,59,999);
+  var semaine=rapports.filter(function(r){var d=new Date(r.date);return d>=lundi&&d<=dimanche;});
+
+  if(!semaine.length){
+    wa.innerHTML='<div class="card" style="border-left:4px solid var(--y)"><div class="chd">📊 Résumé hebdo — semaine en cours</div><div class="em" style="padding:16px"><div class="em-tx">Aucun rapport cette semaine.</div></div></div>';
+    return;
+  }
+  var anomalies=semaine.filter(function(r){return r.type==='anomalie';});
+  var avgNote=Math.round(semaine.reduce(function(s,r){return s+parseInt(r.note||3);},0)/semaine.length);
+  var stars='⭐'.repeat(avgNote);
+  var byLeader={};
+  semaine.forEach(function(r){if(!byLeader[r.user])byLeader[r.user]=[];byLeader[r.user].push(r);});
+
+  var html='<div class="card" style="border-left:4px solid var(--y);margin-bottom:14px">'+
+    '<div class="chd">📊 Résumé de la semaine — Lundi '+lundi.toLocaleDateString('fr-FR',{day:'numeric',month:'long'})+
+      ' au Dimanche '+dimanche.toLocaleDateString('fr-FR',{day:'numeric',month:'long'})+
+    '</div>'+
+    '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px">'+
+      '<div style="background:var(--y-lt);border-radius:var(--r2);padding:12px;text-align:center"><div class="kpi-lbl">Rapports</div><div style="font-size:22px;font-weight:800;color:#92400E">'+semaine.length+'</div></div>'+
+      '<div style="background:'+(anomalies.length>0?'var(--r-lt)':'var(--g-lt)')+';border-radius:var(--r2);padding:12px;text-align:center"><div class="kpi-lbl">Anomalies</div><div style="font-size:22px;font-weight:800;color:'+(anomalies.length>0?'var(--r)':'var(--g)')+'">'+anomalies.length+'</div></div>'+
+      '<div style="background:var(--g-lt);border-radius:var(--r2);padding:12px;text-align:center"><div class="kpi-lbl">Note moy.</div><div style="font-size:16px;font-weight:800;color:var(--g)">'+stars+'</div></div>'+
+      '<div style="background:var(--bg3);border-radius:var(--r2);padding:12px;text-align:center"><div class="kpi-lbl">Leaders</div><div style="font-size:22px;font-weight:800;color:var(--tx)">'+Object.keys(byLeader).length+'</div></div>'+
+    '</div>';
+
+  // Rapports par leader
+  Object.keys(byLeader).forEach(function(uk){
+    var lraps=byLeader[uk];var lnom=lraps[0].auteur;var lzone=lraps[0].zone;
+    var lcolor=uk==='choaib'?'#F39C12':'#27AE60';
+    html+='<div style="border:1px solid var(--bd);border-radius:var(--r2);margin-bottom:10px;overflow:hidden">'+
+      '<div style="background:var(--bg3);padding:8px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--bd)">'+
+        '<div class="av av-sm" style="background:'+lcolor+'">'+ini(lnom)+'</div>'+
+        '<div style="font-size:12px;font-weight:700">'+lnom+' — '+lzone+'</div>'+
+        '<span style="font-size:10px;color:var(--tx3);margin-left:auto">'+lraps.length+' rapport(s)</span>'+
+      '</div>';
+    lraps.forEach(function(r){
+      html+='<div style="padding:10px 14px;border-bottom:1px solid rgba(0,0,0,.04)">'+
+        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">'+
+          '<span style="font-size:11px;font-weight:700;color:var(--tx)">'+new Date(r.date).toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'short'})+'</span>'+
+          '<span class="rp-badge '+(r.type||'normal')+'">'+{normal:'✅ Normal',anomalie:'⚠️ Anomalie',info:'ℹ️ Info'}[r.type||'normal']+'</span>'+
+        '</div>'+
+        (r.resume?'<div style="font-size:11px;color:var(--tx2);margin-bottom:3px">'+r.resume+'</div>':'')+
+        (r.anomalies?'<div style="font-size:11px;color:var(--r);padding:4px 8px;background:var(--r-lt);border-radius:var(--r3)">⚠️ '+r.anomalies+'</div>':'')+
+      '</div>';
+    });
+    html+='</div>';
+  });
+  html+='</div>';
+  wa.innerHTML=html;
 }
 
 function openRapportForm(){
@@ -1418,7 +1638,8 @@ function openRapportForm(){
   var sub=document.getElementById('rp-modal-sub');if(sub)sub.textContent=u.nom+' — '+zone;
   var zoneEl=document.getElementById('rp-zone');if(zoneEl)zoneEl.value=zone;
   var dateEl=document.getElementById('rp-date');if(dateEl)dateEl.value=new Date().toISOString().split('T')[0];
-  ['rp-presents','rp-absents','rp-controles','rp-positifs','rp-incidents','rp-actions'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
+  ['rp-resume','rp-anomalies','rp-remarques'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
+  var typeEl=document.getElementById('rp-type');if(typeEl)typeEl.value='normal';
   var noteEl=document.getElementById('rp-note');if(noteEl)noteEl.value='3';
   document.getElementById('rpOverlay').classList.add('show');
 }
@@ -1426,32 +1647,102 @@ function openRapportForm(){
 function saveRapport(){
   var u=currentUser;if(!u)return;
   var dateEl=document.getElementById('rp-date');
+  var resumeEl=document.getElementById('rp-resume');
   if(!dateEl||!dateEl.value){toast('Date obligatoire','er');return;}
+  if(!resumeEl||!resumeEl.value.trim()){toast('Résumé obligatoire','er');return;}
   var rapports=getRapports();
   var zone=u.villes.map(function(v){return CLA[v].replace(/🏙|🌴|🌿|🏛/g,'').trim();}).join(', ');
+  var type=document.getElementById('rp-type').value;
+  var anomalies=document.getElementById('rp-anomalies').value;
   rapports.push({
     user:u.key,auteur:u.nom,zone:zone,
-    date:dateEl.value,
-    presents:document.getElementById('rp-presents').value,
-    absents:document.getElementById('rp-absents').value,
-    controles:document.getElementById('rp-controles').value,
-    positifs:document.getElementById('rp-positifs').value,
-    incidents:document.getElementById('rp-incidents').value,
-    actions:document.getElementById('rp-actions').value,
+    date:dateEl.value,type:type,
+    resume:resumeEl.value,
+    anomalies:anomalies,
+    remarques:document.getElementById('rp-remarques').value,
     note:document.getElementById('rp-note').value,
     createdAt:new Date().toISOString()
   });
-  saveRapports(rapports);closeModal('rpOverlay');rRapports();toast('Rapport enregistré !','ok');
+  saveRapports(rapports);
+  addAudit('rapport','Rapport '+type+' soumis par '+u.nom+' ('+new Date(dateEl.value).toLocaleDateString('fr-FR')+')');
+  closeModal('rpOverlay');rRapports();toast('Rapport enregistré !','ok');
+  // Notifier admin via broadcast
+  broadcastChange('rapport');
 }
 
 function deleteRapport(i){
   if(!confirm('Supprimer ce rapport ?'))return;
   var u=currentUser;if(!u)return;
-  var rapports=getRapports().filter(function(r){return r.user===u.key;});
-  var allRapports=getRapports();
-  var toDelete=rapports[i];
-  var newRap=allRapports.filter(function(r){return r!==toDelete;});
+  var allRap=getRapports();
+  var shown=u.role==='admin'?allRap:allRap.filter(function(r){return r.user===u.key;});
+  var toDelete=shown[i];
+  var newRap=allRap.filter(function(r){return r!==toDelete;});
   saveRapports(newRap);rRapports();toast('Rapport supprimé','ok');
+}
+
+// ══ HOTSPOT EXCEL IMPORT/EXPORT ══
+function exportHotspotsExcel(){
+  var hs=getHotspots();
+  var html='<html xmlns:o="urn:schemas-microsoft-com:office:office"><head><meta charset="UTF-8"></head><body>'+
+    '<table><tr><th>Ville</th><th>Nom Hotspot</th><th>Heure de Pointe</th><th>Nb Agents</th></tr>'+
+    hs.map(function(h){return '<tr><td>'+h.ville+'</td><td>'+h.nom+'</td><td>'+h.pk+'</td><td>'+h.agents+'</td></tr>';}).join('')+
+    '</table></body></html>';
+  dlXls(html,'Hotspots_SENTINEL.xls');
+  toast('Hotspots exportés !','ok');
+}
+
+function importHotspotsExcel(event){
+  var file=event.target.files[0];if(!file)return;
+  var ext=file.name.split('.').pop().toLowerCase();
+  if(ext==='csv'){
+    var r=new FileReader();
+    r.onload=function(e){
+      var lines=e.target.result.split('\n').filter(function(l){return l.trim();});
+      var hs=getHotspots();var added=0;
+      lines.forEach(function(line,i){
+        if(i===0&&(line.toLowerCase().indexOf('ville')>-1||line.toLowerCase().indexOf('nom')>-1))return;
+        var p=line.split(',');
+        if(p.length>=3&&p[0].trim()&&p[1].trim()){
+          var ville=p[0].trim().toUpperCase();
+          if(['CAS','DRB','BSK','RBT'].indexOf(ville)<0)return;
+          hs.push({ville:ville,nom:p[1].trim(),pk:(p[2]||'12:00').trim(),agents:parseInt(p[3])||2});
+          added++;
+        }
+      });
+      saveHotspots(hs);
+      addAudit('hotspot','Import bulk : '+added+' hotspot(s) ajouté(s)');
+      localStorage.removeItem(getPlanKey(weekOffset));
+      loadData(weekOffset);
+      toast(added+' hotspot(s) importé(s) !','ok');
+    };
+    r.readAsText(file);
+  } else {
+    // XLS/XLSX — parse as text (tab/semicolon separated)
+    var r=new FileReader();
+    r.onload=function(e){
+      var txt=e.target.result;
+      var lines=txt.split('\n').filter(function(l){return l.trim();});
+      var hs=getHotspots();var added=0;
+      var sep=txt.indexOf('\t')>-1?'\t':',';
+      lines.forEach(function(line,i){
+        if(i===0)return;
+        var p=line.split(sep).map(function(x){return x.trim().replace(/^"|"$/g,'');});
+        if(p.length>=3&&p[0]&&p[1]){
+          var ville=p[0].toUpperCase();
+          if(['CAS','DRB','BSK','RBT'].indexOf(ville)<0)return;
+          hs.push({ville:ville,nom:p[1],pk:(p[2]||'12:00'),agents:parseInt(p[3])||2});
+          added++;
+        }
+      });
+      saveHotspots(hs);
+      addAudit('hotspot','Import Excel : '+added+' hotspot(s) ajouté(s)');
+      localStorage.removeItem(getPlanKey(weekOffset));
+      loadData(weekOffset);
+      toast(added+' hotspot(s) importé(s) !','ok');
+    };
+    r.readAsText(file);
+  }
+  event.target.value='';
 }
 
 // ── MODALS ──
