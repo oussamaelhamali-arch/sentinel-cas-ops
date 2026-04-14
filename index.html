@@ -1201,7 +1201,13 @@ function loadData(off){
 
 function regenererPlanning(){localStorage.removeItem(getPlanKey(weekOffset));loadData(weekOffset);toast('Planning régénéré !','ok');}
 
-function rAll(){rOv();rPlanning();rAgents();rHs();rAbs();rPay();rReportsSummary();rAudit();}
+function rAll(){rOv();rPlanning();rAgents();rHs();rAbs();rPay();rReportsSummary();rAudit();
+  // Résumé quotidien toujours visible pour admin
+  if(currentUser&&currentUser.role==='admin'){
+    var wa=document.getElementById('rp-weekly-admin');
+    if(wa){wa.style.display='block';rWeeklySummary();}
+  }
+}
 
 // Audit display
 function rAudit(){
@@ -1679,17 +1685,24 @@ function rRapports(){
 
 function rWeeklySummary(){
   var wa=document.getElementById('rp-weekly-admin');if(!wa)return;
+  if(!currentUser||currentUser.role!=='admin'){wa.style.display='none';return;}
+  wa.style.display='block';
   var rapports=getRapports();
-  // Rapports de cette semaine (lundi au dimanche)
-  var now=new Date(),dow=now.getDay(),diff=dow===1?0:dow===0?-6:1-dow;
-  var lundi=new Date(now);lundi.setDate(now.getDate()+diff);lundi.setHours(0,0,0,0);
-  var dimanche=new Date(lundi);dimanche.setDate(lundi.getDate()+6);dimanche.setHours(23,59,59,999);
-  var semaine=rapports.filter(function(r){var d=new Date(r.date);return d>=lundi&&d<=dimanche;});
+  // 7 derniers jours glissants (mis à jour chaque jour)
+  var now=new Date();
+  var il7=new Date(now);il7.setDate(now.getDate()-6);il7.setHours(0,0,0,0);
+  var semaine=rapports.filter(function(r){var d=new Date(r.date);return d>=il7&&d<=now;});
+  var dateLabel=il7.toLocaleDateString('fr-FR',{day:'numeric',month:'long'})+
+    ' → '+now.toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
 
   if(!semaine.length){
-    wa.innerHTML='<div class="card" style="border-left:4px solid var(--y)"><div class="chd">📊 Résumé hebdo — semaine en cours</div><div class="em" style="padding:16px"><div class="em-tx">Aucun rapport cette semaine.</div></div></div>';
+    wa.innerHTML='<div class="card" style="border-left:4px solid var(--y)">'+
+      '<div class="chd">📊 Résumé des 7 derniers jours <span style="font-size:10px;color:var(--tx3);font-weight:400">'+dateLabel+'</span></div>'+
+      '<div class="em" style="padding:16px"><div class="em-tx">Aucun rapport ces 7 derniers jours.</div>'+
+      '<div style="font-size:11px;color:var(--tx3);margin-top:6px">Les rapports de Choaib et Loutfi apparaîtront ici dès qu\'ils en soumettent.</div></div></div>';
     return;
   }
+
   var anomalies=semaine.filter(function(r){return r.type==='anomalie';});
   var avgNote=Math.round(semaine.reduce(function(s,r){return s+parseInt(r.note||3);},0)/semaine.length);
   var stars='⭐'.repeat(avgNote);
@@ -1697,38 +1710,57 @@ function rWeeklySummary(){
   semaine.forEach(function(r){if(!byLeader[r.user])byLeader[r.user]=[];byLeader[r.user].push(r);});
 
   var html='<div class="card" style="border-left:4px solid var(--y);margin-bottom:14px">'+
-    '<div class="chd">📊 Résumé de la semaine — Lundi '+lundi.toLocaleDateString('fr-FR',{day:'numeric',month:'long'})+
-      ' au Dimanche '+dimanche.toLocaleDateString('fr-FR',{day:'numeric',month:'long'})+
+    '<div class="chd">📊 Résumé des 7 derniers jours <span style="font-size:10px;color:var(--tx3);font-weight:400">'+dateLabel+'</span>'+
+      '<button class="btn btn-gh btn-sm" onclick="refreshAuditNow()" style="margin-left:auto">↻ Actualiser</button>'+
     '</div>'+
     '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px">'+
-      '<div style="background:var(--y-lt);border-radius:var(--r2);padding:12px;text-align:center"><div class="kpi-lbl">Rapports</div><div style="font-size:22px;font-weight:800;color:#92400E">'+semaine.length+'</div></div>'+
-      '<div style="background:'+(anomalies.length>0?'var(--r-lt)':'var(--g-lt)')+';border-radius:var(--r2);padding:12px;text-align:center"><div class="kpi-lbl">Anomalies</div><div style="font-size:22px;font-weight:800;color:'+(anomalies.length>0?'var(--r)':'var(--g)')+'">'+anomalies.length+'</div></div>'+
-      '<div style="background:var(--g-lt);border-radius:var(--r2);padding:12px;text-align:center"><div class="kpi-lbl">Note moy.</div><div style="font-size:16px;font-weight:800;color:var(--g)">'+stars+'</div></div>'+
-      '<div style="background:var(--bg3);border-radius:var(--r2);padding:12px;text-align:center"><div class="kpi-lbl">Leaders</div><div style="font-size:22px;font-weight:800;color:var(--tx)">'+Object.keys(byLeader).length+'</div></div>'+
+      '<div style="background:var(--y-lt);border-radius:var(--r2);padding:12px;text-align:center"><div class="kpi-lbl">Total rapports</div><div style="font-size:24px;font-weight:800;color:#92400E">'+semaine.length+'</div></div>'+
+      '<div style="background:'+(anomalies.length>0?'var(--r-lt)':'var(--g-lt)')+';border-radius:var(--r2);padding:12px;text-align:center"><div class="kpi-lbl">Anomalies</div><div style="font-size:24px;font-weight:800;color:'+(anomalies.length>0?'var(--r)':'var(--g)')+'">'+anomalies.length+'</div></div>'+
+      '<div style="background:var(--g-lt);border-radius:var(--r2);padding:12px;text-align:center"><div class="kpi-lbl">Note moyenne</div><div style="font-size:18px;font-weight:800;color:var(--g)">'+stars+'</div></div>'+
+      '<div style="background:var(--bg3);border-radius:var(--r2);padding:12px;text-align:center"><div class="kpi-lbl">Leaders actifs</div><div style="font-size:24px;font-weight:800;color:var(--tx)">'+Object.keys(byLeader).length+'/2</div></div>'+
     '</div>';
 
-  // Rapports par leader
+  // Détail par leader
   Object.keys(byLeader).forEach(function(uk){
-    var lraps=byLeader[uk];var lnom=lraps[0].auteur;var lzone=lraps[0].zone;
+    var lraps=byLeader[uk];
+    var lnom=lraps[0].auteur;var lzone=lraps[0].zone;
     var lcolor=uk==='choaib'?'#F39C12':'#27AE60';
-    html+='<div style="border:1px solid var(--bd);border-radius:var(--r2);margin-bottom:10px;overflow:hidden">'+
-      '<div style="background:var(--bg3);padding:8px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--bd)">'+
+    var lanomalies=lraps.filter(function(r){return r.type==='anomalie';}).length;
+    html+='<div style="border:1px solid var(--bd);border-radius:var(--r);margin-bottom:10px;overflow:hidden">'+
+      '<div style="background:var(--bg3);padding:10px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--bd)">'+
         '<div class="av av-sm" style="background:'+lcolor+'">'+ini(lnom)+'</div>'+
-        '<div style="font-size:12px;font-weight:700">'+lnom+' — '+lzone+'</div>'+
-        '<span style="font-size:10px;color:var(--tx3);margin-left:auto">'+lraps.length+' rapport(s)</span>'+
-      '</div>';
-    lraps.forEach(function(r){
-      html+='<div style="padding:10px 14px;border-bottom:1px solid rgba(0,0,0,.04)">'+
-        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">'+
-          '<span style="font-size:11px;font-weight:700;color:var(--tx)">'+new Date(r.date).toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'short'})+'</span>'+
-          '<span class="rp-badge '+(r.type||'normal')+'">'+{normal:'✅ Normal',anomalie:'⚠️ Anomalie',info:'ℹ️ Info'}[r.type||'normal']+'</span>'+
+        '<div style="flex:1"><div style="font-size:13px;font-weight:700">'+lnom+'</div>'+
+          '<div style="font-size:10px;color:var(--tx3)">'+lzone+'</div></div>'+
+        '<div style="display:flex;gap:6px">'+
+          '<span style="background:var(--y-lt);color:#92400E;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700">'+lraps.length+' rapport(s)</span>'+
+          (lanomalies>0?'<span style="background:var(--r-lt);color:var(--r);padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700">⚠️ '+lanomalies+' anomalie(s)</span>':'')+
         '</div>'+
-        (r.resume?'<div style="font-size:11px;color:var(--tx2);margin-bottom:3px">'+r.resume+'</div>':'')+
-        (r.anomalies?'<div style="font-size:11px;color:var(--r);padding:4px 8px;background:var(--r-lt);border-radius:var(--r3)">⚠️ '+r.anomalies+'</div>':'')+
+      '</div>';
+
+    // Chaque rapport du leader
+    lraps.slice(0,5).forEach(function(r){
+      var typeIc={normal:'✅',anomalie:'⚠️',info:'ℹ️'};
+      var typeClr={normal:'var(--g)',anomalie:'var(--r)',info:'var(--b)'};
+      var tc=typeClr[r.type||'normal'];var tic=typeIc[r.type||'normal'];
+      var stars2='⭐'.repeat(parseInt(r.note)||3);
+      html+='<div style="padding:10px 14px;border-bottom:1px solid rgba(0,0,0,.04)">'+
+        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">'+
+          '<span style="font-size:12px;font-weight:700;color:var(--tx)">'+
+            new Date(r.date).toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'short'})+
+          '</span>'+
+          '<div style="display:flex;align-items:center;gap:5px">'+
+            '<span style="background:'+tc+'20;color:'+tc+';padding:1px 7px;border-radius:10px;font-size:10px;font-weight:700">'+tic+' '+(r.type==='anomalie'?'Anomalie':r.type==='info'?'Info':'Normal')+'</span>'+
+            '<span style="font-size:11px">'+stars2+'</span>'+
+          '</div>'+
+        '</div>'+
+        (r.resume?'<div style="font-size:11px;color:var(--tx2);margin-bottom:4px;line-height:1.5">'+r.resume+'</div>':'')+
+        (r.anomalies?'<div style="font-size:11px;color:var(--r);padding:5px 10px;background:var(--r-lt);border-radius:var(--r3);border-left:3px solid var(--r)">⚠️ '+r.anomalies+'</div>':'')+
+        (r.remarques?'<div style="font-size:10px;color:var(--b);margin-top:4px;padding:4px 8px;background:var(--b-lt);border-radius:var(--r3)">💬 '+r.remarques+'</div>':'')+
       '</div>';
     });
     html+='</div>';
   });
+
   html+='</div>';
   wa.innerHTML=html;
 }
