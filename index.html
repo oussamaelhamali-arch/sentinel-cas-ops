@@ -481,8 +481,24 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
   <!-- RAPPORT -->
   <div class="pg" id="pg-rp">
     <div class="ph">
-      <div><div class="ph-t">📋 Rapport Journalier</div><div class="txs tx2c" id="rp-subtitle"></div></div>
-      <button class="btn btn-y" onclick="openRapportForm()">➕ Nouveau Rapport</button>
+      <div><div class="ph-t">📋 Rapports</div><div class="txs tx2c" id="rp-subtitle"></div></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap" id="rp-actions-bar">
+        <button class="btn btn-y" onclick="openRapportForm()" id="btn-new-rapport">➕ Nouveau Rapport</button>
+        <!-- Admin only buttons -->
+        <button class="btn btn-gh btn-sm" onclick="exportRapportsExcel()" id="btn-export-rp" style="display:none">📊 Export Excel</button>
+        <button class="btn btn-gh btn-sm" onclick="refreshRapportsCloud()" id="btn-refresh-rp" style="display:none">↻ Actualiser</button>
+        <select class="sel" id="rp-filter-user" onchange="rRapports()" style="display:none">
+          <option value="ALL">Tous les leaders</option>
+          <option value="choaib">Choaib Knari</option>
+          <option value="loutfi">Loutfi Ouzguite</option>
+        </select>
+        <select class="sel" id="rp-filter-type" onchange="rRapports()" style="display:none">
+          <option value="ALL">Tous types</option>
+          <option value="normal">✅ Normal</option>
+          <option value="anomalie">⚠️ Anomalie</option>
+          <option value="info">ℹ️ Info</option>
+        </select>
+      </div>
     </div>
     <div id="rp-weekly-admin"></div>
     <div id="rp-list"></div>
@@ -931,7 +947,7 @@ function buildNav(){
     {id:'hs',ic:'📍',label:'Hotspots',admin:true},
     {id:'ab',ic:'🚨',label:'Absences',all:true,badge:'abBadge'},
     {id:'py',ic:'💰',label:'Paie',admin:true},
-    {id:'rp',ic:'📋',label:'Rapport',leader:true}
+    {id:'rp',ic:'📋',label:'Rapports',all:true,badge:'rpBadge'}
   ];
   var nav=document.getElementById('navLinks');
   nav.innerHTML=links.filter(function(l){
@@ -1628,34 +1644,89 @@ function rRapports(){
   var rpl=document.getElementById('rp-list');if(!rpl)return;
   var sub=document.getElementById('rp-subtitle');
   var u=currentUser;if(!u)return;
-  var zone=u.villes.map(function(v){return CLA[v];}).join(' · ');
-  if(sub)sub.textContent=u.nom+' — '+zone;
 
-  // Admin voit TOUS les rapports + résumé hebdo
+  // Show/hide admin tools
+  var btnExport=document.getElementById('btn-export-rp');
+  var btnRefresh=document.getElementById('btn-refresh-rp');
+  var filterUser=document.getElementById('rp-filter-user');
+  var filterType=document.getElementById('rp-filter-type');
+  var btnNew=document.getElementById('btn-new-rapport');
+
+  if(u.role==='admin'){
+    if(btnExport)btnExport.style.display='inline-flex';
+    if(btnRefresh)btnRefresh.style.display='inline-flex';
+    if(filterUser)filterUser.style.display='inline-block';
+    if(filterType)filterType.style.display='inline-block';
+    if(btnNew)btnNew.style.display='none'; // admin ne fait pas de rapport
+    if(sub)sub.textContent='Consolidé — Choaib Knari & Loutfi Ouzguite';
+  } else {
+    if(btnExport)btnExport.style.display='none';
+    if(btnRefresh)btnRefresh.style.display='none';
+    if(filterUser)filterUser.style.display='none';
+    if(filterType)filterType.style.display='none';
+    if(btnNew)btnNew.style.display='inline-flex';
+    var zone=u.villes.map(function(v){return CLA[v];}).join(' · ');
+    if(sub)sub.textContent=u.nom+' — '+zone;
+  }
+
+  // Get rapports
+  var allRap=getRapports();
   var rapports;
   var weeklyDiv=document.getElementById('rp-weekly-admin');
+
   if(u.role==='admin'){
-    rapports=getRapports().sort(function(a,b){return b.date.localeCompare(a.date);});
+    rapports=allRap.sort(function(a,b){return b.date.localeCompare(a.date);});
+    // Apply filters
+    var fu=filterUser?filterUser.value:'ALL';
+    var ft=filterType?filterType.value:'ALL';
+    if(fu!=='ALL')rapports=rapports.filter(function(r){return r.user===fu;});
+    if(ft!=='ALL')rapports=rapports.filter(function(r){return r.type===ft;});
     if(weeklyDiv)weeklyDiv.style.display='block';
     rWeeklySummary();
   } else {
-    rapports=getRapports().filter(function(r){return r.user===u.key;}).sort(function(a,b){return b.date.localeCompare(a.date);});
+    rapports=allRap.filter(function(r){return r.user===u.key;}).sort(function(a,b){return b.date.localeCompare(a.date);});
     if(weeklyDiv)weeklyDiv.style.display='none';
   }
 
-  if(!rapports.length){rpl.innerHTML='<div class="em"><div class="em-ic">📋</div><div class="em-tx">Aucun rapport. Cliquez "Nouveau Rapport".</div></div>';return;}
+  // Update badge
+  var rpBadge=document.getElementById('rpBadge');
+  if(rpBadge){
+    var today=new Date().toISOString().split('T')[0];
+    var todayCount=allRap.filter(function(r){return r.date===today&&r.user!==u.key;}).length;
+    rpBadge.style.display=todayCount>0?'inline':'none';
+    rpBadge.textContent=todayCount;
+  }
 
-  rpl.innerHTML=rapports.map(function(r,i){
+  if(!rapports.length){
+    rpl.innerHTML='<div class="em"><div class="em-ic">📋</div>'+
+      '<div class="em-tx">'+(u.role==='admin'?'Aucun rapport soumis par les leaders.':'Aucun rapport. Cliquez "Nouveau Rapport".')+'</div></div>';
+    return;
+  }
+
+  // Stats bar (admin only)
+  var statsHtml='';
+  if(u.role==='admin'){
+    var nAno=rapports.filter(function(r){return r.type==='anomalie';}).length;
+    var nNorm=rapports.filter(function(r){return r.type==='normal';}).length;
+    var nInfo=rapports.filter(function(r){return r.type==='info';}).length;
+    statsHtml='<div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">'+
+      '<div style="background:var(--bg3);border:1px solid var(--bd);border-radius:var(--r2);padding:8px 14px;font-size:11px;font-weight:700">📋 Total : '+rapports.length+'</div>'+
+      '<div style="background:var(--g-lt);border:1px solid rgba(0,160,130,.2);border-radius:var(--r2);padding:8px 14px;font-size:11px;font-weight:700;color:var(--g)">✅ Normal : '+nNorm+'</div>'+
+      (nAno?'<div style="background:var(--r-lt);border:1px solid rgba(229,57,53,.2);border-radius:var(--r2);padding:8px 14px;font-size:11px;font-weight:700;color:var(--r)">⚠️ Anomalies : '+nAno+'</div>':'')+
+      (nInfo?'<div style="background:var(--b-lt);border:1px solid rgba(21,101,192,.2);border-radius:var(--r2);padding:8px 14px;font-size:11px;font-weight:700;color:var(--b)">ℹ️ Info : '+nInfo+'</div>':'')+
+    '</div>';
+  }
+
+  var canDelete=(u.role==='admin');
+
+  rpl.innerHTML=statsHtml+rapports.map(function(r,i){
     var stars='⭐'.repeat(parseInt(r.note)||3);
     var typeClr={normal:'var(--g)',anomalie:'var(--r)',info:'var(--b)'};
     var typeIc={normal:'✅',anomalie:'⚠️',info:'ℹ️'};
     var tc=typeClr[r.type||'normal']||'var(--g)';
     var tic=typeIc[r.type||'normal']||'✅';
-    var lc=r.user==='choaib'?'#F39C12':'r.user==="loutfi"'?'#27AE60':'#E74C3C';
-    if(r.user==='loutfi')lc='#27AE60';
-    else if(r.user==='admin')lc='#E74C3C';
-    var badgeStyle='background:'+tc+'20;color:'+tc+';border:1px solid '+tc+'40';
-    return '<div class="rp-simple">'+
+    var lc=r.user==='choaib'?'#F39C12':r.user==='loutfi'?'#27AE60':'#E74C3C';
+    return '<div class="rp-simple" style="'+(r.type==='anomalie'?'border-left-color:var(--r)':r.type==='info'?'border-left-color:var(--b)':'')+'">'+
       '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">'+
         '<div style="display:flex;align-items:center;gap:8px">'+
           '<div class="av av-sm" style="background:'+lc+'">'+ini(r.auteur)+'</div>'+
@@ -1664,11 +1735,13 @@ function rRapports(){
             '<div style="font-size:10px;color:var(--tx3)">'+r.zone+'</div>'+
           '</div>'+
         '</div>'+
-        '<div style="display:flex;align-items:center;gap:6px">'+
-          '<span class="rp-badge '+( r.type||'normal')+'">'+tic+' '+(r.type==='anomalie'?'Anomalie':r.type==='info'?'Info':'Normal')+'</span>'+
-          '<span style="font-size:10px;color:var(--tx3);background:var(--bg3);padding:2px 8px;border-radius:10px">'+new Date(r.date).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'})+'</span>'+
-          '<span style="font-size:12px">'+stars+'</span>'+
-          '<button class="btn btn-r btn-ico btn-sm" onclick="deleteRapport('+i+')">🗑️</button>'+
+        '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end">'+
+          '<span class="rp-badge '+(r.type||'normal')+'">'+tic+' '+(r.type==='anomalie'?'Anomalie':r.type==='info'?'Info':'Normal')+'</span>'+
+          '<span style="font-size:10px;color:var(--tx3);background:var(--bg3);padding:2px 8px;border-radius:10px">'+
+            new Date(r.date).toLocaleDateString('fr-FR',{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'})+
+          '</span>'+
+          '<span style="font-size:11px">'+stars+'</span>'+
+          (canDelete||r.user===u.key?'<button class="btn btn-r btn-ico btn-sm" onclick="deleteRapport('+i+')">🗑️</button>':'')+
         '</div>'+
       '</div>'+
       (r.resume?'<div style="font-size:12px;color:var(--tx2);margin-bottom:6px;line-height:1.5">'+r.resume+'</div>':'')+
@@ -1677,10 +1750,49 @@ function rRapports(){
         '<div style="font-size:12px;color:var(--r)">'+r.anomalies+'</div>'+
       '</div>':'')+
       (r.remarques?'<div style="padding:6px 10px;background:var(--b-lt);border-radius:var(--r3);font-size:11px;color:var(--b)">'+
-        '<span style="font-weight:700">💬 </span>'+r.remarques+
-      '</div>':'')+
+        '<span style="font-weight:700">💬 </span>'+r.remarques+'</div>':'')+
     '</div>';
   }).join('');
+}
+
+function refreshRapportsCloud(){
+  cloudGetRapports(function(r){
+    localStorage.setItem(SK.RAPPORTS,JSON.stringify(r));
+    rRapports();rWeeklySummary();
+    toast('Rapports actualisés !','ok',2000);
+  });
+}
+
+function exportRapportsExcel(){
+  var rapports=getRapports().sort(function(a,b){return b.date.localeCompare(a.date);});
+  if(!rapports.length){toast('Aucun rapport à exporter','er');return;}
+  var now=new Date();
+  var html='<html xmlns:o="urn:schemas-microsoft-com:office:office"><head><meta charset="UTF-8">'+
+  '<style>body{font-family:Arial;font-size:10pt}th{background:#1A1A2E;color:white;font-weight:bold;padding:8px}'+
+  'td{border:1px solid #ddd;padding:6px 10px}'+
+  '.hdr{background:#FFC244;font-weight:bold;font-size:12pt;text-align:center}'+
+  '.normal{background:#D1FAE5;color:#065F46}.anomalie{background:#FEE2E2;color:#991B1B}.info{background:#DBEAFE;color:#1E40AF}'+
+  '.choaib{background:#FEF3C7;color:#92400E}.loutfi{background:#DCFCE7;color:#166534}</style></head><body>'+
+  '<table><tr><td colspan="7" class="hdr">RAPPORTS LEADERS — SENTINEL CAS OPS — Exporté le '+now.toLocaleDateString('fr-FR')+'</td></tr>'+
+  '<tr><th>Date</th><th>Leader</th><th>Zone</th><th>Type</th><th>Résumé</th><th>Anomalies</th><th>Remarques</th><th>Note</th></tr>'+
+  rapports.map(function(r){
+    var lc=r.user==='choaib'?'choaib':'loutfi';
+    var tc=r.type||'normal';
+    var stars='⭐'.repeat(parseInt(r.note)||3);
+    return '<tr>'+
+      '<td>'+new Date(r.date).toLocaleDateString('fr-FR')+'</td>'+
+      '<td class="'+lc+'"><b>'+r.auteur+'</b></td>'+
+      '<td>'+r.zone+'</td>'+
+      '<td class="'+tc+'"><b>'+(tc==='anomalie'?'⚠️ Anomalie':tc==='info'?'ℹ️ Info':'✅ Normal')+'</b></td>'+
+      '<td>'+(r.resume||'')+'</td>'+
+      '<td style="'+(r.anomalies?'color:#991B1B;background:#FEE2E2':'')+'">'+( r.anomalies||'—')+'</td>'+
+      '<td>'+(r.remarques||'—')+'</td>'+
+      '<td style="text-align:center">'+stars+'</td>'+
+    '</tr>';
+  }).join('')+
+  '</table></body></html>';
+  dlXls(html,'Rapports_SENTINEL_'+now.toLocaleDateString('fr-FR').replace(/\//g,'-')+'.xls');
+  toast('Rapports exportés !','ok');
 }
 
 function rWeeklySummary(){
