@@ -1000,7 +1000,23 @@ function goPage(id,btn){
 }
 
 // ── STORAGE ──
-function getAgents(){var a=localStorage.getItem(SK.AGENTS);if(!a){localStorage.setItem(SK.AGENTS,JSON.stringify(DEFAULT_AGENTS));return DEFAULT_AGENTS;}return JSON.parse(a);}
+// ── DATA VERSION — changer ce numéro force le rechargement des agents ──
+var DATA_VERSION='2025-04-14-v43';
+
+function getAgents(){
+  // Si version différente → forcer rechargement avec nouveaux agents
+  var savedVersion=localStorage.getItem('s_data_version');
+  if(savedVersion!==DATA_VERSION){
+    localStorage.setItem(SK.AGENTS,JSON.stringify(DEFAULT_AGENTS));
+    localStorage.setItem('s_data_version',DATA_VERSION);
+    // Supprimer tous les plannings pour régénérer avec nouveaux agents
+    Object.keys(localStorage).forEach(function(k){if(k.indexOf('s_plan_')===0)localStorage.removeItem(k);});
+    return DEFAULT_AGENTS;
+  }
+  var a=localStorage.getItem(SK.AGENTS);
+  if(!a){localStorage.setItem(SK.AGENTS,JSON.stringify(DEFAULT_AGENTS));return DEFAULT_AGENTS;}
+  return JSON.parse(a);
+}
 function saveAgents(ag){localStorage.setItem(SK.AGENTS,JSON.stringify(ag));broadcastChange('agents');}
 function getHotspots(){var h=localStorage.getItem(SK.HOTSPOTS);if(!h){localStorage.setItem(SK.HOTSPOTS,JSON.stringify(DEFAULT_HOTSPOTS));return DEFAULT_HOTSPOTS;}return JSON.parse(h);}
 function saveHotspots(hs){localStorage.setItem(SK.HOTSPOTS,JSON.stringify(hs));broadcastChange('hotspots');}
