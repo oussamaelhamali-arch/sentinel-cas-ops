@@ -1057,17 +1057,37 @@ function goPage(id,btn){
 var DATA_VERSION='2025-04-14-v43';
 
 function getAgents(){
-  // Si version différente → forcer rechargement avec nouveaux agents
+  var a=localStorage.getItem(SK.AGENTS);
   var savedVersion=localStorage.getItem('s_data_version');
-  if(savedVersion!==DATA_VERSION){
+
+  if(!a){
+    // Première fois — charger les defaults
     localStorage.setItem(SK.AGENTS,JSON.stringify(DEFAULT_AGENTS));
     localStorage.setItem('s_data_version',DATA_VERSION);
-    // Supprimer tous les plannings pour régénérer avec nouveaux agents
-    Object.keys(localStorage).forEach(function(k){if(k.indexOf('s_plan_')===0)localStorage.removeItem(k);});
     return DEFAULT_AGENTS;
   }
-  var a=localStorage.getItem(SK.AGENTS);
-  if(!a){localStorage.setItem(SK.AGENTS,JSON.stringify(DEFAULT_AGENTS));return DEFAULT_AGENTS;}
+
+  // Si nouvelle version → MERGE intelligent (ajoute les nouveaux agents sans écraser les modifs)
+  if(savedVersion!==DATA_VERSION){
+    var existing=JSON.parse(a);
+    var existingNames=existing.map(function(x){return x.nom.toUpperCase();});
+    var added=0;
+    DEFAULT_AGENTS.forEach(function(def){
+      if(existingNames.indexOf(def.nom.toUpperCase())<0){
+        // Nouvel agent dans defaults → ajouter
+        existing.push(def);added++;
+      } else {
+        // Agent existant → mettre à jour SEULEMENT l'email si vide
+        var ex=existing.filter(function(e){return e.nom.toUpperCase()===def.nom.toUpperCase();})[0];
+        if(ex&&!ex.email&&def.email)ex.email=def.email;
+      }
+    });
+    localStorage.setItem(SK.AGENTS,JSON.stringify(existing));
+    localStorage.setItem('s_data_version',DATA_VERSION);
+    if(added>0){Object.keys(localStorage).forEach(function(k){if(k.indexOf('s_plan_')===0)localStorage.removeItem(k);});}
+    return existing;
+  }
+
   return JSON.parse(a);
 }
 function saveAgents(ag){localStorage.setItem(SK.AGENTS,JSON.stringify(ag));broadcastChange('agents');}
@@ -1520,7 +1540,7 @@ function showAg(idx){
   var shifts=p?p.shifts:[],hs=p?p.hotspots||[]:[];var clr=CC[a.ville]||{};
   var mini=JOURS.map(function(j,i){var s=shifts[i]||'—',h=hs[i]||'',lbl=s==='OFF'?'⬜':s==='ABSENT'?'🚫':s==='CONGE'?'🏖':s;
     return '<div class="dm"><div class="dm-l">'+j.slice(0,3)+'</div><div class="dm-s" style="color:'+sColor(s)+'">'+lbl+'</div>'+(h?'<div style="font-size:7px;color:var(--g);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+h.substring(0,12)+'</div>':'')+'</div>';}).join('');
-  var canEdit=currentUser&&currentUser.role==='admin';
+  var canEdit=currentUser&&(currentUser.role==='admin'||(currentUser.role==='leader'&&currentUser.villes.indexOf(a.ville)>-1));
   var detBody=document.getElementById('ag-det-body');if(!detBody)return;
   detBody.innerHTML='<div class="card"><div class="det-hd">'+
     '<div class="det-av" style="background:'+avc(a.nom)+'">'+ini(a.nom)+'</div>'+
