@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -286,6 +286,11 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
         <div class="u-nm">Loutfi</div>
         <div class="u-role">Leader</div>
       </div>
+    </div>
+    <div class="login-user" id="lu-temara" onclick="selUser('temara')">
+      <div class="u-av" style="background:#2980B9">TR</div>
+      <div class="u-nm">Temara RBT</div>
+      <div class="u-role">Planning</div>
     </div>
     <input type="hidden" id="selUser" value="">
     <div class="lf"><label>Mot de passe</label><input type="password" id="loginPwd" placeholder="Entrez votre mot de passe" onkeydown="if(event.key==='Enter')doLogin()"></div>
@@ -701,7 +706,8 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
 var USERS={
   admin:{pwd:'sentinel2026',nom:'Oussama E.',role:'admin',villes:['CAS','DRB','BSK','RBT'],offDay:1,color:'#E74C3C'},
   choaib:{pwd:'choaib2026',nom:'Choaib Knari',role:'leader',villes:['CAS','DRB','BSK'],offDay:1,email:'choaib.knari@providers.glovoapp.com',color:'#F39C12'},
-  loutfi:{pwd:'loutfi2026',nom:'Loutfi Ouzguite',role:'leader',villes:['DRB','BSK'],offDay:1,email:'loutfiouzguite@gmail.com',color:'#27AE60'}
+  loutfi:{pwd:'loutfi2026',nom:'Loutfi Ouzguite',role:'leader',villes:['DRB','BSK'],offDay:1,email:'loutfiouzguite@gmail.com',color:'#27AE60'},
+  temara:{pwd:'temara2026',nom:'Temara RBT',role:'viewer_planning',villes:['RBT'],offDay:1,color:'#2980B9'}
 };
 var AVC=['#E74C3C','#E67E22','#27AE60','#2980B9','#8E44AD','#16A085','#D35400','#C0392B','#1ABC9C','#F39C12','#2ECC71','#3498DB','#9B59B6','#E91E63'];
 var currentUser=null;
@@ -830,21 +836,20 @@ var DEFAULT_AGENTS=[
   {nom:'Abdelali Toubi',ville:'CAS',zone:'CAS',tel:'',email:'toubiabdelali@gmail.com',statut:'Actif'},
   {nom:'Morad Mourid',ville:'BSK',zone:'BSK',tel:'',email:'m.morid1993@gmail.com',statut:'Actif'},
   {nom:'Baidi Abdelbasset',ville:'BSK',zone:'BSK',tel:'',email:'abdelbasstbaidi@gmail.com',statut:'Actif'},
-  {nom:'Oussama Chenaoui',ville:'RBT',zone:'Souissi / Hay Riad',tel:'',email:'ossolivan06@gmail.com',statut:'Actif'},
   {nom:'Youssef Derkaoui',ville:'RBT',zone:'Hay Riad / Mall Carrousel',tel:'',email:'altuslabcom@gmail.com',statut:'Actif'},
-  {nom:'Islam Elmardi',ville:'RBT',zone:'Medina / Agdal',tel:'',email:'islamelmardi.1993@gmail.com',statut:'Actif'},
-  {nom:'Achraf Akhlij',ville:'RBT',zone:'Medina / Ocean / Agdal',tel:'',email:'achraf.akhlij2005@gmail.com',statut:'Actif'},
-  {nom:'Yahya Rhallab',ville:'RBT',zone:'Agdal / Mall Carrousel',tel:'',email:'yahyarhallab00@gmail.com',statut:'Actif'},
+  {nom:'Achraf Akhlij',ville:'RBT',zone:'Médina / Océan / Agdal',tel:'',email:'achraf.akhlij2005@gmail.com',statut:'Actif'},
+  {nom:'Ayoub Ben Malek',ville:'RBT',zone:'Salé',tel:'',email:'jadalaeayoub@gmail.com',statut:'Actif'},
+  {nom:'Oussama Chennaoui',ville:'RBT',zone:'Souissi / Hay Riad',tel:'',email:'ossolivan06@gmail.com',statut:'Actif'},
+  {nom:'Hassan Azgoune',ville:'RBT',zone:'Salé',tel:'',email:'hassan.azgoune95@gmail.com',statut:'Actif'},
   {nom:'Mourad Cherradi',ville:'RBT',zone:'Hay Riad',tel:'',email:'raxmou96@gmail.com',statut:'Actif'},
-  {nom:'Aymane Chlifane',ville:'RBT',zone:'Agdal / Souissi',tel:'',email:'aymanechlihfane639@gmail.com',statut:'Actif'},
-  {nom:'Charaf Loummihi',ville:'RBT',zone:'Sale',tel:'',email:'loummihic@gmail.com',statut:'Actif'},
-  {nom:'Hassan Azgoune',ville:'RBT',zone:'Sale',tel:'',email:'hassan.azgoune95@gmail.com',statut:'Actif'},
-  {nom:'Imad Tamdi',ville:'RBT',zone:'Agdal / Hay Riad',tel:'',email:'tamdiimad.2018@gmail.com',statut:'Actif'},
-  {nom:'Ayoub Abssi',ville:'RBT',zone:'Medina / Souissi / Agdal',tel:'',email:'ayoubabssi05@gmail.com',statut:'Actif'},
-  {nom:'Ayoub Ben Malek',ville:'RBT',zone:'Sale',tel:'',email:'jadalaeayoub@gmail.com',statut:'Actif'},
-  {nom:'Zakariae Benali',ville:'RBT',zone:'Sale',tel:'',email:'zakariaebenaliwork@gmail.com',statut:'Actif'},
-  {nom:'Najib Harati',ville:'RBT',zone:'Temara / Hay Riad',tel:'',email:'najib.harati@gmail.com',statut:'Actif'},
-  {nom:'Oussama El Atrach',ville:'RBT',zone:'Temara / Hay Riad',tel:'',email:'oussamaelat@gmail.com',statut:'Actif'},
+  {nom:'Yahya Rhalab',ville:'RBT',zone:'Agdal / Mall Carrousel',tel:'',email:'yahyarhallab00@gmail.com',statut:'Actif'},
+  {nom:'Zakaria Benali',ville:'RBT',zone:'Salé',tel:'',email:'zakariaebenaliwork@gmail.com',statut:'Actif'},
+  {nom:'Aymane Chlihfane',ville:'RBT',zone:'Agdal / Souissi',tel:'',email:'aymanechlihfane639@gmail.com',statut:'Actif'},
+  {nom:'Islam Elmardi',ville:'RBT',zone:'Médina / Agdal',tel:'',email:'islamelmardi.1993@gmail.com',statut:'Actif'},
+  {nom:'Charaf Loummihi',ville:'RBT',zone:'Salé',tel:'',email:'loummihic@gmail.com',statut:'Actif'},
+  {nom:'Ayoub Abbsi',ville:'RBT',zone:'Médina / Souissi / Agdal',tel:'',email:'ayoubabssi05@gmail.com',statut:'Actif'},
+  {nom:'Oussama El Atrach',ville:'RBT',zone:'Témara / Hay Riad',tel:'',email:'oussamaelat@gmail.com',statut:'Actif'},
+  {nom:'Najib Harati',ville:'RBT',zone:'Témara / Hay Riad',tel:'',email:'najib.harati@gmail.com',statut:'Actif'},
   {nom:'Aziz Essaili',ville:'DRB',zone:'DRB',tel:'',email:'azizessaili@gmail.com',statut:'Actif'},
   {nom:'Said Oumbarek',ville:'DRB',zone:'DRB',tel:'',email:'oumbarek90@gmail.com',statut:'Actif'},
   {nom:'Abdelkrim Sabbane',ville:'DRB',zone:'DRB',tel:'',email:'abdelkrimsabbane@gmail.com',statut:'Actif'},
@@ -859,11 +864,6 @@ var DEFAULT_HOTSPOTS=[
   {ville:'CAS',nom:"O'Village Sidi Maarouf (Macdo, O'Village)",pk:'15:00',agents:3},
   {ville:'CAS',nom:"Lissasfa (Carrefour)",pk:'13:00',agents:2},
   {ville:'CAS',nom:"Boulevard Al Qods (PAUL, les qautres cerices, o'Tacos)",pk:'20:00',agents:2},
-  {ville:'RBT',nom:'Agdal Centre',pk:'12:00',agents:2},
-  {ville:'RBT',nom:'Hassan II',pk:'14:00',agents:2},
-  {ville:'RBT',nom:'Souissi',pk:'11:00',agents:1},
-  {ville:'RBT',nom:'Hay Riad',pk:'19:00',agents:2},
-  {ville:'RBT',nom:'Ocean Atlantique',pk:'13:00',agents:1},
   {ville:'DRB',nom:'Dar Bouazza Centre',pk:'12:00',agents:2},
   {ville:'DRB',nom:'Ouled Farhan',pk:'15:00',agents:1},
   {ville:'BSK',nom:'Bouskoura Ville',pk:'12:00',agents:2},
@@ -945,6 +945,7 @@ function initLogin(){
 
 function selUser(k){
   selUserKey=k;
+  document.getElementById('selUser').value=k;
   document.querySelectorAll('.login-user').forEach(function(el){el.classList.remove('sel');});
   var el=document.getElementById('lu-'+k);if(el)el.classList.add('sel');
   document.getElementById('loginPwd').focus();
@@ -1013,6 +1014,7 @@ function buildNav(){
   ];
   var nav=document.getElementById('navLinks');
   nav.innerHTML=links.filter(function(l){
+    if(u.role==='viewer_planning')return l.id==='pl';
     if(l.all)return true;
     if(l.admin&&u.role==='admin')return true;
     if(l.leader&&u.role==='leader')return true;
