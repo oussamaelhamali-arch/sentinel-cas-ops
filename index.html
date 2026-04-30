@@ -339,12 +339,12 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
     </div>
     <div class="card"><div class="chd">🗺 Zones</div><div class="zones" id="ov-zones"></div></div>
     <div class="card"><div class="chd">📍 Hotspots actifs <span style="font-size:10px;color:var(--tx3)" id="ov-hs-ct"></span></div><div id="ov-hs"></div></div>
-    <div class="card" id="rapports-summary-card">
+    <div class="card" id="rapports-summary-card" style="display:none">
       <div class="chd">📋 Rapports Leaders — Consolidé <span style="font-size:10px;color:var(--tx3);font-weight:400" id="rp-sum-date"></span></div>
       <div id="rp-summary-content"></div>
     </div>
     <!-- AUDIT LOG ADMIN -->
-    <div class="card" id="audit-card">
+    <div class="card" id="audit-card" style="display:none">
       <div class="chd">
         🕵️ Historique des modifications
         <div style="display:flex;gap:6px;flex-wrap:wrap">
@@ -459,7 +459,6 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
       <div class="ph-t">Paie Mensuelle</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
         <select class="sel" id="pay-mois-sel" onchange="rPay()"></select>
-        <select class="sel" id="pay-annee-sel" onchange="rPay()"></select>
         <select class="sel" onchange="fPay(this.value)"><option value="ALL">Toutes</option><option value="CAS">Casablanca</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option><option value="RBT">Rabat-Salé</option></select>
         <button class="btn btn-gh btn-sm" onclick="exportPaieExcel()">📊 Export Excel</button>
       </div>
@@ -482,26 +481,10 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
   <!-- RAPPORT -->
   <div class="pg" id="pg-rp">
     <div class="ph">
-      <div><div class="ph-t">📋 Rapports</div><div class="txs tx2c" id="rp-subtitle"></div></div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap" id="rp-actions-bar">
-        <button class="btn btn-y" onclick="openRapportForm()" id="btn-new-rapport">➕ Nouveau Rapport</button>
-        <!-- Admin only buttons -->
-        <button class="btn btn-gh btn-sm" onclick="exportRapportsExcel()" id="btn-export-rp" style="display:none">📊 Export Excel</button>
-        <button class="btn btn-gh btn-sm" onclick="refreshRapportsCloud()" id="btn-refresh-rp" style="display:none">↻ Actualiser</button>
-        <select class="sel" id="rp-filter-user" onchange="rRapports()" style="display:none">
-          <option value="ALL">Tous les leaders</option>
-          <option value="choaib">Choaib Knari</option>
-          <option value="loutfi">Loutfi Ouzguite</option>
-        </select>
-        <select class="sel" id="rp-filter-type" onchange="rRapports()" style="display:none">
-          <option value="ALL">Tous types</option>
-          <option value="normal">✅ Normal</option>
-          <option value="anomalie">⚠️ Anomalie</option>
-          <option value="info">ℹ️ Info</option>
-        </select>
-      </div>
+      <div><div class="ph-t">📋 Rapport Journalier</div><div class="txs tx2c" id="rp-subtitle"></div></div>
+      <button class="btn btn-y" onclick="openRapportForm()">➕ Nouveau Rapport</button>
     </div>
-    <div id="rp-weekly-admin"></div>
+    <div id="rp-weekly-admin" style="display:none"></div>
     <div id="rp-list"></div>
   </div>
 
@@ -605,90 +588,40 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
 
 <!-- MODAL RAPPORT -->
 <div class="overlay" id="rpOverlay" onclick="overlayClose(event,'rpOverlay')">
-  <div class="modal modal-lg">
-    <div class="modal-hd">
-      <div>
-        <div class="modal-hd-t">📋 Rapport Journalier — <span id="rp-modal-sub"></span></div>
-        <div style="font-size:10px;color:rgba(0,0,0,.5);margin-top:2px">Glovo Maroc · CAS OPS · SENTINEL</div>
-      </div>
-      <button class="m-close" onclick="closeModal('rpOverlay')">✕</button>
-    </div>
+  <div class="modal">
+    <div class="modal-hd"><div><div class="modal-hd-t">📋 Rapport de la journée</div><div style="font-size:11px;color:rgba(0,0,0,.55)" id="rp-modal-sub"></div></div><button class="m-close" onclick="closeModal('rpOverlay')">✕</button></div>
     <div class="m-body">
-      <!-- Header info -->
-      <div style="background:#0B1628;border-radius:var(--r2);padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px">
-        <div id="rp-modal-av" style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0"></div>
-        <div>
-          <div style="font-size:14px;font-weight:700;color:#E2E8F0" id="rp-modal-name"></div>
-          <div style="font-size:11px;color:#4A6080" id="rp-modal-zone"></div>
-        </div>
-        <div style="margin-left:auto;text-align:right">
-          <div style="font-size:10px;color:#4A6080">Date du rapport</div>
-          <input type="date" class="fc" id="rp-date" style="margin-top:4px;width:150px;font-size:12px;padding:6px 10px">
+      <div class="fgrid" style="margin-bottom:14px">
+        <div class="fgl"><label>Date *</label><input type="date" class="fc" id="rp-date"></div>
+        <div class="fgl"><label>Type de rapport</label>
+          <select class="fc" id="rp-type">
+            <option value="normal">✅ Journée normale</option>
+            <option value="anomalie">⚠️ Anomalie / Incident</option>
+            <option value="info">ℹ️ Information</option>
+          </select>
         </div>
       </div>
-
-      <!-- Type -->
-      <div class="fg">
-        <label>Type de rapport</label>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-          <div class="rp-type-btn" id="rpt-normal" onclick="selectRpType('normal')" style="padding:10px;border:2px solid var(--g);border-radius:var(--r2);text-align:center;cursor:pointer;background:var(--g-lt)">
-            <div style="font-size:18px">✅</div><div style="font-size:11px;font-weight:700;color:var(--g);margin-top:4px">Journée normale</div>
-          </div>
-          <div class="rp-type-btn" id="rpt-anomalie" onclick="selectRpType('anomalie')" style="padding:10px;border:2px solid var(--bd2);border-radius:var(--r2);text-align:center;cursor:pointer;background:var(--bg3)">
-            <div style="font-size:18px">⚠️</div><div style="font-size:11px;font-weight:700;color:var(--tx3);margin-top:4px">Anomalie / Incident</div>
-          </div>
-          <div class="rp-type-btn" id="rpt-info" onclick="selectRpType('info')" style="padding:10px;border:2px solid var(--bd2);border-radius:var(--r2);text-align:center;cursor:pointer;background:var(--bg3)">
-            <div style="font-size:18px">ℹ️</div><div style="font-size:11px;font-weight:700;color:var(--tx3);margin-top:4px">Information</div>
-          </div>
-        </div>
-        <input type="hidden" id="rp-type" value="normal">
+      <div class="fg"><label>Zone supervisée</label><input type="text" class="fc" id="rp-zone" readonly></div>
+      <div class="fg"><label>Résumé de la journée *</label>
+        <textarea class="fc fc-ta" id="rp-resume" rows="3" placeholder="Résumé rapide de la journée..."></textarea>
       </div>
-
-      <!-- Résumé -->
-      <div class="fg">
-        <label>Résumé de la journée *</label>
-        <textarea class="fc fc-ta" id="rp-resume" rows="3" placeholder="Décrivez brièvement le déroulement de la journée..."></textarea>
+      <div class="fg"><label>Anomalies / Incidents</label>
+        <textarea class="fc fc-ta" id="rp-anomalies" rows="3" placeholder="Laisser vide si aucun incident..."></textarea>
       </div>
-
-      <!-- Anomalies -->
-      <div class="fg" id="rp-anomalie-section">
-        <label style="color:var(--r)">⚠️ Anomalies / Incidents signalés</label>
-        <textarea class="fc fc-ta" id="rp-anomalies" rows="3" style="border-color:var(--r)" placeholder="Décrivez les incidents, problèmes rencontrés..."></textarea>
+      <div class="fg"><label>Remarques</label>
+        <textarea class="fc fc-ta" id="rp-remarques" rows="2" placeholder="Observations, suggestions..."></textarea>
       </div>
-
-      <!-- Remarques -->
-      <div class="fg">
-        <label>💬 Remarques & Observations</label>
-        <textarea class="fc fc-ta" id="rp-remarques" rows="2" placeholder="Suggestions, observations générales..."></textarea>
-      </div>
-
-      <!-- Note -->
-      <div class="fg">
-        <label>Note globale de la journée</label>
-        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px">
-          <div class="rp-note-btn" onclick="selectNote(5)" id="rpn-5" style="padding:8px;border:2px solid var(--y);border-radius:var(--r2);text-align:center;cursor:pointer;background:var(--y-lt)">
-            <div style="font-size:16px">⭐⭐⭐⭐⭐</div><div style="font-size:9px;font-weight:700;color:#92400E;margin-top:2px">Excellente</div>
-          </div>
-          <div class="rp-note-btn" onclick="selectNote(4)" id="rpn-4" style="padding:8px;border:2px solid var(--bd2);border-radius:var(--r2);text-align:center;cursor:pointer;background:var(--bg3)">
-            <div style="font-size:16px">⭐⭐⭐⭐</div><div style="font-size:9px;font-weight:700;color:var(--tx3);margin-top:2px">Bonne</div>
-          </div>
-          <div class="rp-note-btn" onclick="selectNote(3)" id="rpn-3" style="padding:8px;border:2px solid var(--bd2);border-radius:var(--r2);text-align:center;cursor:pointer;background:var(--bg3)">
-            <div style="font-size:16px">⭐⭐⭐</div><div style="font-size:9px;font-weight:700;color:var(--tx3);margin-top:2px">Correcte</div>
-          </div>
-          <div class="rp-note-btn" onclick="selectNote(2)" id="rpn-2" style="padding:8px;border:2px solid var(--bd2);border-radius:var(--r2);text-align:center;cursor:pointer;background:var(--bg3)">
-            <div style="font-size:16px">⭐⭐</div><div style="font-size:9px;font-weight:700;color:var(--tx3);margin-top:2px">Difficile</div>
-          </div>
-          <div class="rp-note-btn" onclick="selectNote(1)" id="rpn-1" style="padding:8px;border:2px solid var(--bd2);border-radius:var(--r2);text-align:center;cursor:pointer;background:var(--bg3)">
-            <div style="font-size:16px">⭐</div><div style="font-size:9px;font-weight:700;color:var(--tx3);margin-top:2px">Très diff.</div>
-          </div>
-        </div>
-        <input type="hidden" id="rp-note" value="5">
+      <div class="fg"><label>Note journée</label>
+        <select class="fc" id="rp-note">
+          <option value="5">⭐⭐⭐⭐⭐ Excellente</option>
+          <option value="4">⭐⭐⭐⭐ Bonne</option>
+          <option value="3" selected>⭐⭐⭐ Correcte</option>
+          <option value="2">⭐⭐ Difficile</option>
+          <option value="1">⭐ Très difficile</option>
+        </select>
       </div>
     </div>
-    <div class="m-footer">
-      <button class="btn btn-gh btn-sm" onclick="closeModal('rpOverlay')">Annuler</button>
-      <button class="btn btn-y" onclick="saveRapport()">💾 Soumettre le rapport</button>
-    </div>
+    <div class="m-footer"><button class="btn btn-gh btn-sm" onclick="closeModal('rpOverlay')">Annuler</button><button class="btn btn-y btn-sm" onclick="saveRapport()">💾 Enregistrer</button></div>
   </div>
 </div>
 
@@ -701,7 +634,7 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
 var USERS={
   admin:{pwd:'sentinel2026',nom:'Oussama E.',role:'admin',villes:['CAS','DRB','BSK','RBT'],offDay:1,color:'#E74C3C'},
   choaib:{pwd:'choaib2026',nom:'Choaib Knari',role:'leader',villes:['CAS','DRB','BSK'],offDay:1,email:'choaib.knari@providers.glovoapp.com',color:'#F39C12'},
-  loutfi:{pwd:'loutfi2026',nom:'Loutfi Ouzguite',role:'leader',villes:['DRB','BSK'],offDay:1,email:'loutfiouzguite@gmail.com',color:'#27AE60'}
+  loutfi:{pwd:'loutfi2026',nom:'Loutfi Ouzguite',role:'leader',villes:['RBT'],offDay:1,email:'loutfiouzguite@gmail.com',color:'#27AE60'}
 };
 var AVC=['#E74C3C','#E67E22','#27AE60','#2980B9','#8E44AD','#16A085','#D35400','#C0392B','#1ABC9C','#F39C12','#2ECC71','#3498DB','#9B59B6','#E91E63'];
 var currentUser=null;
@@ -715,26 +648,14 @@ var SK={AGENTS:'s_agents',HOTSPOTS:'s_hotspots',ABSENCES:'s_absences',PLAN:'s_pl
 // ══ CLOUD SYNC CONFIG (JSONBin.io) ══
 // Crée un compte sur jsonbin.io → Copie ton API key et BIN ID ici
 var CLOUD={
-  ENABLED: true,
-  API_KEY: '$2a$10$2UAmdVsMhCVntgYL5F/RS.KvbKxaxpDTXSPzAyD/9nhcq4HK3Jyzq',
-  BIN_RAPPORTS: '69e0bb5e856a6821893dbe64',
-  BIN_AUDIT: '69e0bb8eaaba88219705fa6c',
-  BIN_PLANNING: '69e0bb5e856a6821893dbe64', // même bin, clé différente
+  ENABLED: false, // Mettre true après avoir configuré
+  API_KEY: '$2a$10$VOTRE_API_KEY_ICI',
+  BIN_RAPPORTS: 'VOTRE_BIN_ID_RAPPORTS',
+  BIN_AUDIT: 'VOTRE_BIN_ID_AUDIT',
   BASE_URL: 'https://api.jsonbin.io/v3/b'
 };
 
 // Récupère les rapports depuis le cloud
-// ── CLOUD SYNC : Rapports, Audit, Planning ──
-function getCloudPlanningData(){
-  var plans={};
-  Object.keys(localStorage).forEach(function(k){
-    if(k.indexOf('s_plan_')===0){
-      try{plans[k]=JSON.parse(localStorage.getItem(k));}catch(e){}
-    }
-  });
-  return plans;
-}
-
 function cloudGetRapports(cb){
   if(!CLOUD.ENABLED){cb(JSON.parse(localStorage.getItem(SK.RAPPORTS)||'[]'));return;}
   fetch(CLOUD.BASE_URL+'/'+CLOUD.BIN_RAPPORTS+'/latest',{
@@ -744,6 +665,7 @@ function cloudGetRapports(cb){
     .catch(function(){cb(JSON.parse(localStorage.getItem(SK.RAPPORTS)||'[]'));});
 }
 
+// Sauvegarde les rapports dans le cloud
 function cloudSaveRapports(rapports,cb){
   localStorage.setItem(SK.RAPPORTS,JSON.stringify(rapports));
   if(!CLOUD.ENABLED){if(cb)cb();return;}
@@ -754,75 +676,41 @@ function cloudSaveRapports(rapports,cb){
   }).then(function(){if(cb)cb();}).catch(function(){if(cb)cb();});
 }
 
+// Récupère l'audit depuis le cloud
 function cloudGetAudit(cb){
   if(!CLOUD.ENABLED){cb(JSON.parse(localStorage.getItem(SK.AUDIT)||'[]'));return;}
   fetch(CLOUD.BASE_URL+'/'+CLOUD.BIN_AUDIT+'/latest',{
     headers:{'X-Master-Key':CLOUD.API_KEY,'X-Bin-Meta':'false'}
   }).then(function(r){return r.json();})
-    .then(function(data){
-      var payload=data||{};
-      var audit=Array.isArray(payload)?payload:(payload.audit||[]);
-      var plans=payload.plans||{};
-      localStorage.setItem(SK.AUDIT,JSON.stringify(audit));
-      // Merge planning du cloud vers localStorage
-      Object.keys(plans).forEach(function(k){
-        var cp=plans[k];var lp=null;
-        try{lp=JSON.parse(localStorage.getItem(k));}catch(e){}
-        if(cp&&(!lp||(cp.savedAt&&lp.savedAt&&cp.savedAt>lp.savedAt)||!lp.savedAt)){
-          localStorage.setItem(k,JSON.stringify(cp));
-        }
-      });
-      cb(audit);
-    })
+    .then(function(data){var a=Array.isArray(data)?data:[];localStorage.setItem(SK.AUDIT,JSON.stringify(a));cb(a);})
     .catch(function(){cb(JSON.parse(localStorage.getItem(SK.AUDIT)||'[]'));});
 }
 
+// Sauvegarde audit dans le cloud
 function cloudSaveAudit(log){
   localStorage.setItem(SK.AUDIT,JSON.stringify(log));
   if(!CLOUD.ENABLED)return;
-  var plans=getCloudPlanningData();
   fetch(CLOUD.BASE_URL+'/'+CLOUD.BIN_AUDIT,{
     method:'PUT',
     headers:{'Content-Type':'application/json','X-Master-Key':CLOUD.API_KEY},
-    body:JSON.stringify({audit:log,plans:plans})
+    body:JSON.stringify(log)
   }).catch(function(){});
 }
 
-// Sauvegarde le planning dans le cloud aussi
-function cloudSavePlan(key,plan){
-  plan.savedAt=new Date().toISOString();
-  localStorage.setItem(key,JSON.stringify(plan));
-  if(!CLOUD.ENABLED)return;
-  var audit=getAudit();
-  var plans=getCloudPlanningData();
-  plans[key]=plan;
-  fetch(CLOUD.BASE_URL+'/'+CLOUD.BIN_AUDIT,{
-    method:'PUT',
-    headers:{'Content-Type':'application/json','X-Master-Key':CLOUD.API_KEY},
-    body:JSON.stringify({audit:audit,plans:plans})
-  }).catch(function(){});
-}
-
-// Auto-refresh toutes les 30s pour TOUS les utilisateurs
+// Auto-refresh cloud data toutes les 30 secondes (pour admin)
 var cloudRefreshTm=null;
 function startCloudRefresh(){
   if(!CLOUD.ENABLED)return;
   clearInterval(cloudRefreshTm);
   cloudRefreshTm=setInterval(function(){
-    if(!currentUser)return;
-    // Charger planning + audit depuis cloud
-    cloudGetAudit(function(a){
-      localStorage.setItem(SK.AUDIT,JSON.stringify(a));
-      if(currentUser.role==='admin'){rAudit();}
-      // Actualiser le planning si la page est visible
-      var pg=document.querySelector('.pg.active');
-      if(pg&&pg.id==='pg-pl')rPlanning();
-    });
-    // Admin recharge aussi les rapports
-    if(currentUser.role==='admin'){
+    if(currentUser&&currentUser.role==='admin'){
       cloudGetRapports(function(r){
         localStorage.setItem(SK.RAPPORTS,JSON.stringify(r));
-        rRapports();rReportsSummary();rWeeklySummary();
+        rRapports();rReportsSummary();
+      });
+      cloudGetAudit(function(a){
+        localStorage.setItem(SK.AUDIT,JSON.stringify(a));
+        rAudit();
       });
     }
   },30000);
@@ -831,7 +719,7 @@ var MOIS_NOM=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août'
 
 var SHIFTS={
   CAS:['OFF','ABSENT','CONGE','09:00-16:00','09:00-17:00','10:00-17:00','10:00-18:00','11:00-18:00','11:00-19:00','12:00-19:00','12:00-20:00','13:00-20:00','13:00-21:00','14:00-21:00','14:00-22:00','15:00-22:00','15:00-23:00','16:00-23:00','17:00-00:00','18:00-01:00','19:00-02:00','19:00-03:00','20:00-03:00','20:00-04:00','21:00-04:00','21:00-05:00'],
-  RBT:['OFF','ABSENT','CONGE','08:00-15:00','09:00-15:00','09:00-16:00','09:00-17:00','10:00-17:00','11:00-18:00','11:00-19:00','12:00-19:00','12:00-20:00','14:00-21:00','14:00-22:00','15:00-22:00','15:00-23:00','19:00-03:00','20:00-03:00'],
+  RBT:['OFF','ABSENT','CONGE','08:00-15:00','08:00-16:00','09:00-16:00','09:00-17:00','10:00-17:00','10:00-18:00','11:00-18:00','12:00-19:00','12:00-20:00','14:00-21:00','14:00-22:00','15:00-22:00','15:00-23:00','19:00-02:00','19:00-03:00','20:30-03:30','20:30-04:30'],
   DRB:['OFF','ABSENT','CONGE','09:00-16:00','09:00-17:00','10:00-17:00','12:00-19:00','12:00-20:00','13:00-20:00','13:00-21:00','14:00-21:00','14:00-22:00','15:00-23:00','17:00-00:00','18:00-01:00','18:00-02:00'],
   BSK:['OFF','ABSENT','CONGE','09:00-16:00','09:00-17:00','10:00-17:00','12:00-19:00','12:00-20:00','13:00-20:00','14:00-21:00','14:00-22:00','15:00-22:00','15:00-23:00','18:00-01:00','18:00-02:00']
 };
@@ -839,61 +727,51 @@ var SHIFTS={
 // Pools JEU→MER (7h / 8h) inchangés mais on garde pour compatibilité
 var POOL7={
   CAS:[['09:00-16:00','10:00-17:00','11:00-18:00','12:00-19:00'],['12:00-19:00','13:00-20:00','14:00-21:00','15:00-22:00'],['16:00-23:00','17:00-00:00','18:00-01:00'],['19:00-02:00','20:00-03:00','21:00-04:00']],
-  RBT:[['08:00-15:00','09:00-16:00','09:00-15:00','10:00-17:00','11:00-19:00'],['11:00-18:00','12:00-19:00','14:00-21:00','15:00-22:00'],['15:00-22:00'],['20:00-03:00']],
+  RBT:[['08:00-15:00','09:00-16:00','10:00-17:00'],['11:00-18:00','12:00-19:00','14:00-21:00'],['15:00-22:00'],['20:30-03:30']],
   DRB:[['09:00-16:00','10:00-17:00'],['12:00-19:00','13:00-20:00'],['14:00-21:00','16:00-23:00','17:00-00:00'],['18:00-01:00']],
   BSK:[['09:00-16:00','10:00-17:00'],['12:00-19:00','13:00-20:00'],['14:00-21:00','15:00-22:00'],['18:00-01:00']]
 };
 var POOL8={
   CAS:[['09:00-17:00','10:00-18:00','11:00-19:00'],['12:00-20:00','13:00-21:00','14:00-22:00'],['15:00-23:00','16:00-00:00','17:00-01:00'],['19:00-03:00','20:00-04:00','21:00-05:00']],
-  RBT:[['08:00-16:00','09:00-17:00','10:00-18:00'],['11:00-19:00','12:00-20:00','14:00-22:00'],['15:00-23:00'],['19:00-03:00']],
+  RBT:[['08:00-16:00','09:00-17:00','10:00-18:00'],['11:00-19:00','12:00-20:00','14:00-22:00'],['15:00-23:00'],['19:00-03:00','20:30-04:30']],
   DRB:[['09:00-17:00','10:00-18:00'],['12:00-20:00','13:00-21:00'],['14:00-22:00','15:00-23:00'],['17:00-01:00','18:00-02:00']],
   BSK:[['09:00-17:00','10:00-18:00'],['12:00-20:00','13:00-21:00'],['14:00-22:00','15:00-23:00'],['17:00-01:00','18:00-02:00']]
 };
 
 var DEFAULT_AGENTS=[
-  {nom:'Salah Eddine Jalil',ville:'CAS',zone:'CAS',tel:'',email:'salahvenom19@gmail.com',statut:'Actif'},
-  {nom:'Oussama Mkiriz',ville:'CAS',zone:'CAS',tel:'',email:'oussamamkiriz04@gmail.com',statut:'Actif'},
-  {nom:'El Mehdi El Barnoussi',ville:'CAS',zone:'CAS',tel:'',email:'elbarnossi.elmehdi93@gmail.com',statut:'Actif'},
-  {nom:'Hamza Karim',ville:'CAS',zone:'CAS',tel:'',email:'fzislamkarim@gmail.com',statut:'Actif'},
-  {nom:'Brahim Lachguer',ville:'CAS',zone:'CAS',tel:'',email:'brahimlachguer28@gmail.com',statut:'Actif'},
-  {nom:'Ayoub Mensour',ville:'CAS',zone:'CAS',tel:'',email:'ayoubmans378@gmail.com',statut:'Actif'},
-  {nom:'Rajid Annas',ville:'CAS',zone:'CAS',tel:'',email:'anoussrajid37@gmail.com',statut:'Actif'},
-  {nom:'Ahmed Habib Eddine',ville:'CAS',zone:'CAS',tel:'',email:'habibeddine.ahmed.1993@gmail.com',statut:'Actif'},
-  {nom:'Ayeman Belgara',ville:'CAS',zone:'CAS',tel:'',email:'aymanbelgara43@gmail.com',statut:'Actif'},
-  {nom:'Hamza Achoubi',ville:'CAS',zone:'CAS',tel:'',email:'hamza.10achoubi@gmail.com',statut:'Actif'},
-  {nom:'Reda Lkouhel',ville:'CAS',zone:'CAS',tel:'',email:'redakouhel123@gmail.com',statut:'Actif'},
-  {nom:'Mohamed Albouhaji',ville:'CAS',zone:'CAS',tel:'',email:'simobouhaji.123@gmail.com',statut:'Actif'},
-  {nom:'Abdelkhalek Nainia',ville:'CAS',zone:'CAS',tel:'',email:'abdou.nainia87@gmail.com',statut:'Actif'},
-  {nom:'Abdelaziz Salimi',ville:'CAS',zone:'CAS',tel:'',email:'aziz36928@gmail.com',statut:'Actif'},
-  {nom:'Kamal Jaghar',ville:'CAS',zone:'CAS',tel:'',email:'kamaljaghar0707@gmail.com',statut:'Actif'},
-  {nom:'Lahcen Elkhodry',ville:'CAS',zone:'CAS',tel:'',email:'lhssankhoudri@gmail.com',statut:'Actif'},
-  {nom:'Ismail Baha',ville:'CAS',zone:'CAS',tel:'',email:'ismailbahi68@gmail.com',statut:'Actif'},
-  {nom:'Tarik Hamid',ville:'CAS',zone:'CAS',tel:'',email:'hamidtarik995@gmail.com',statut:'Actif'},
-  {nom:'Aymen Ghazi',ville:'CAS',zone:'CAS',tel:'',email:'aymenghazi490@gmail.com',statut:'Actif'},
-  {nom:'Zakaria Elaissi',ville:'CAS',zone:'CAS',tel:'',email:'elaissizakaria72@gmail.com',statut:'Actif'},
-  {nom:'Yassine Baddi',ville:'CAS',zone:'CAS',tel:'',email:'baddiy700@gmail.com',statut:'Actif'},
-  {nom:'Abdelali Toubi',ville:'CAS',zone:'CAS',tel:'',email:'toubiabdelali@gmail.com',statut:'Actif'},
-  {nom:'Morad Mourid',ville:'BSK',zone:'BSK',tel:'',email:'m.morid1993@gmail.com',statut:'Actif'},
-  {nom:'Baidi Abdelbasset',ville:'BSK',zone:'BSK',tel:'',email:'abdelbasstbaidi@gmail.com',statut:'Actif'},
-  {nom:'Oussama Chenaoui',ville:'RBT',zone:'Souissi / Hay Riad',tel:'',email:'ossolivan06@gmail.com',statut:'Actif'},
-  {nom:'Youssef Derkaoui',ville:'RBT',zone:'Hay Riad / Mall Carrousel',tel:'',email:'altuslabcom@gmail.com',statut:'Actif'},
-  {nom:'Islam Elmardi',ville:'RBT',zone:'Medina / Agdal',tel:'',email:'islamelmardi.1993@gmail.com',statut:'Actif'},
-  {nom:'Achraf Akhlij',ville:'RBT',zone:'Medina / Ocean / Agdal',tel:'',email:'achraf.akhlij2005@gmail.com',statut:'Actif'},
-  {nom:'Yahya Rhallab',ville:'RBT',zone:'Agdal / Mall Carrousel',tel:'',email:'yahyarhallab00@gmail.com',statut:'Actif'},
-  {nom:'Mourad Cherradi',ville:'RBT',zone:'Hay Riad',tel:'',email:'raxmou96@gmail.com',statut:'Actif'},
-  {nom:'Aymane Chlifane',ville:'RBT',zone:'Agdal / Souissi',tel:'',email:'aymanechlihfane639@gmail.com',statut:'Actif'},
-  {nom:'Charaf Loummihi',ville:'RBT',zone:'Sale',tel:'',email:'loummihic@gmail.com',statut:'Actif'},
-  {nom:'Hassan Azgoune',ville:'RBT',zone:'Sale',tel:'',email:'hassan.azgoune95@gmail.com',statut:'Actif'},
-  {nom:'Imad Tamdi',ville:'RBT',zone:'Agdal / Hay Riad',tel:'',email:'tamdiimad.2018@gmail.com',statut:'Actif'},
-  {nom:'Ayoub Abssi',ville:'RBT',zone:'Medina / Souissi / Agdal',tel:'',email:'ayoubabssi05@gmail.com',statut:'Actif'},
-  {nom:'Ayoub Ben Malek',ville:'RBT',zone:'Sale',tel:'',email:'jadalaeayoub@gmail.com',statut:'Actif'},
-  {nom:'Zakariae Benali',ville:'RBT',zone:'Sale',tel:'',email:'zakariaebenaliwork@gmail.com',statut:'Actif'},
-  {nom:'Najib Harati',ville:'RBT',zone:'Temara / Hay Riad',tel:'',email:'najib.harati@gmail.com',statut:'Actif'},
-  {nom:'Oussama El Atrach',ville:'RBT',zone:'Temara / Hay Riad',tel:'',email:'oussamaelat@gmail.com',statut:'Actif'},
-  {nom:'Aziz Essaili',ville:'DRB',zone:'DRB',tel:'',email:'azizessaili@gmail.com',statut:'Actif'},
-  {nom:'Said Oumbarek',ville:'DRB',zone:'DRB',tel:'',email:'oumbarek90@gmail.com',statut:'Actif'},
-  {nom:'Abdelkrim Sabbane',ville:'DRB',zone:'DRB',tel:'',email:'abdelkrimsabbane@gmail.com',statut:'Actif'},
-  {nom:'Oussama Ouakil',ville:'DRB',zone:'DRB',tel:'',email:'oussamaouakil21@gmail.com',statut:'Actif'}
+  {nom:'choaib knari',ville:'CAS',zone:'CAS',tel:'',email:'',statut:'Actif'},
+  {nom:'HABIB EDDINE AHMED',ville:'CAS',zone:'CAS',tel:'',email:'',statut:'Actif'},
+  {nom:'AYMNE BELGARA',ville:'CAS',zone:'CAS',tel:'',email:'',statut:'Actif'},
+  {nom:'MOHAMED BOUHAJI',ville:'CAS',zone:'CAS',tel:'',email:'',statut:'Actif'},
+  {nom:'ISMAIL BAHI',ville:'CAS',zone:'CAS',tel:'',email:'',statut:'Actif'},
+  {nom:'HAMZA KARIM',ville:'CAS',zone:'CAS',tel:'',email:'',statut:'Actif'},
+  {nom:'LAHCANE KHOUDRY',ville:'CAS',zone:'CAS',tel:'',email:'',statut:'Actif'},
+  {nom:'ANAS RAJID',ville:'CAS',zone:'CAS',tel:'',email:'',statut:'Actif'},
+  {nom:'HAMZA ACHOUBI',ville:'CAS',zone:'CAS',tel:'',email:'',statut:'Actif'},
+  {nom:'BRAHIM LACHGUIR',ville:'CAS',zone:'CAS',tel:'',email:'',statut:'Actif'},
+  {nom:'ABDELKHALEQ',ville:'CAS',zone:'CAS',tel:'',email:'',statut:'Actif'},
+  {nom:'ISLAM ELMARDI',ville:'RBT',zone:'RBT',tel:'',email:'',statut:'Actif'},
+  {nom:'AYOUB ABSSI',ville:'RBT',zone:'RBT',tel:'',email:'',statut:'Actif'},
+  {nom:'AYOUB BEN MALEK',ville:'RBT',zone:'RBT',tel:'',email:'',statut:'Actif'},
+  {nom:'AYMANE CHLIFANE',ville:'RBT',zone:'RBT',tel:'',email:'',statut:'Actif'},
+  {nom:'ZAKARIE BENALI',ville:'RBT',zone:'RBT',tel:'',email:'',statut:'Actif'},
+  {nom:'NAJIB HARATI',ville:'RBT',zone:'RBT',tel:'',email:'',statut:'Actif'},
+  {nom:'OUSSAMA CHENNAOUI',ville:'RBT',zone:'RBT',tel:'',email:'',statut:'Actif'},
+  {nom:'YOUSSEF DERKAOUI',ville:'RBT',zone:'RBT',tel:'',email:'',statut:'Actif'},
+  {nom:'HASSAN AZGOUNE',ville:'RBT',zone:'RBT',tel:'',email:'',statut:'Actif'},
+  {nom:'ACHRAF AKHLIJ',ville:'RBT',zone:'RBT',tel:'',email:'',statut:'Actif'},
+  {nom:'MOURAD CHERRADI',ville:'RBT',zone:'RBT',tel:'',email:'',statut:'Actif'},
+  {nom:'CHARAF LOUMMIHI',ville:'RBT',zone:'RBT',tel:'',email:'',statut:'Actif'},
+  {nom:'YAHYA RHALLAB',ville:'RBT',zone:'RBT',tel:'',email:'',statut:'Actif'},
+  {nom:'OUSSAMA EL ATRACH',ville:'RBT',zone:'RBT',tel:'',email:'',statut:'Actif'},
+  {nom:'IMAD TAMIDI',ville:'RBT',zone:'RBT',tel:'',email:'',statut:'Actif'},
+  {nom:'SAID OUMBAREK',ville:'DRB',zone:'DRB',tel:'',email:'',statut:'Actif'},
+  {nom:'AZIZ ESSAILI',ville:'DRB',zone:'DRB',tel:'',email:'',statut:'Actif'},
+  {nom:'OUSSAMA OUAKIL',ville:'DRB',zone:'DRB',tel:'',email:'',statut:'Actif'},
+  {nom:'ABDELKARIM SABBANE',ville:'DRB',zone:'DRB',tel:'',email:'',statut:'Actif'},
+  {nom:'MORAD MURID',ville:'BSK',zone:'BSK',tel:'',email:'',statut:'Actif'},
+  {nom:'HAMID TARIK',ville:'BSK',zone:'BSK',tel:'',email:'',statut:'Actif'},
+  {nom:'ABDELBASSET BAIDI',ville:'BSK',zone:'BSK',tel:'',email:'',statut:'Actif'}
 ];
 
 var DEFAULT_HOTSPOTS=[
@@ -1035,19 +913,13 @@ function startApp(){
   // Build nav
   buildNav();
   initPaieMois();
-  // Auto-load cloud config
-  loadCloudConfigUI();
-  if(CLOUD.ENABLED){
-    // Charger rapports + audit + planning depuis cloud
+  if(currentUser&&currentUser.role==='admin'){
+    // Admin: load rapports from cloud then refresh
     cloudGetRapports(function(r){localStorage.setItem(SK.RAPPORTS,JSON.stringify(r));});
-    cloudGetAudit(function(a){
-      localStorage.setItem(SK.AUDIT,JSON.stringify(a));
-      loadData(); // Recharger après avoir eu les données cloud
-    });
+    cloudGetAudit(function(a){localStorage.setItem(SK.AUDIT,JSON.stringify(a));});
     startCloudRefresh();
-  } else {
-    loadData();
   }
+  loadData();
 }
 
 function buildNav(){
@@ -1055,11 +927,11 @@ function buildNav(){
   var links=[
     {id:'ov',ic:'📊',label:'Dashboard',all:true},
     {id:'pl',ic:'📅',label:'Planning',all:true},
-    {id:'ag',ic:'👥',label:'Agents',all:true},
+    {id:'ag',ic:'👥',label:'Agents',admin:true},
     {id:'hs',ic:'📍',label:'Hotspots',admin:true},
     {id:'ab',ic:'🚨',label:'Absences',all:true,badge:'abBadge'},
     {id:'py',ic:'💰',label:'Paie',admin:true},
-    {id:'rp',ic:'📋',label:'Rapports',all:true,badge:'rpBadge'}
+    {id:'rp',ic:'📋',label:'Rapport',leader:true}
   ];
   var nav=document.getElementById('navLinks');
   nav.innerHTML=links.filter(function(l){
@@ -1072,9 +944,10 @@ function buildNav(){
     return '<div class="ni" id="ni-'+l.id+'" onclick="goPage(\''+l.id+'\',this)">'+
       '<span class="ni-ic">'+l.ic+'</span><span>'+l.label+'</span>'+badge+'</div>';
   }).join('');
+  // Activate first
   var first=nav.querySelector('.ni');if(first)first.classList.add('active');
 
-  // Agent buttons — leaders can add/edit agents in their cities
+  // Agent buttons based on role
   var agBtns=document.getElementById('agBtns');
   if(agBtns){
     if(u.role==='admin'){
@@ -1082,8 +955,6 @@ function buildNav(){
         '<button class="btn btn-gh btn-sm" onclick="exportAgentsExcel()">📊 Excel</button>'+
         '<button class="btn btn-gh btn-sm" onclick="exportAgentsCSV()">📤 CSV</button>'+
         '<label class="btn btn-gh btn-sm" style="cursor:pointer">📥 Import CSV<input type="file" accept=".csv" style="display:none" onchange="importAgentsCSV(event)"></label>';
-    } else if(u.role==='leader'){
-      agBtns.innerHTML='<button class="btn btn-y btn-sm" onclick="openAddAgent()">➕ Ajouter Agent</button>';
     }
   }
   var hsBtns=document.getElementById('hsBtns');
@@ -1103,43 +974,7 @@ function goPage(id,btn){
 }
 
 // ── STORAGE ──
-// ── DATA VERSION — changer ce numéro force le rechargement des agents ──
-var DATA_VERSION='2026-04-18-v45-rbt-zones';
-
-function getAgents(){
-  var a=localStorage.getItem(SK.AGENTS);
-  var savedVersion=localStorage.getItem('s_data_version');
-
-  if(!a){
-    // Première fois — charger les defaults
-    localStorage.setItem(SK.AGENTS,JSON.stringify(DEFAULT_AGENTS));
-    localStorage.setItem('s_data_version',DATA_VERSION);
-    return DEFAULT_AGENTS;
-  }
-
-  // Si nouvelle version → MERGE intelligent (ajoute les nouveaux agents sans écraser les modifs)
-  if(savedVersion!==DATA_VERSION){
-    var existing=JSON.parse(a);
-    var existingNames=existing.map(function(x){return x.nom.toUpperCase();});
-    var added=0;
-    DEFAULT_AGENTS.forEach(function(def){
-      if(existingNames.indexOf(def.nom.toUpperCase())<0){
-        // Nouvel agent dans defaults → ajouter
-        existing.push(def);added++;
-      } else {
-        // Agent existant → mettre à jour SEULEMENT l'email si vide
-        var ex=existing.filter(function(e){return e.nom.toUpperCase()===def.nom.toUpperCase();})[0];
-        if(ex&&!ex.email&&def.email)ex.email=def.email;
-      }
-    });
-    localStorage.setItem(SK.AGENTS,JSON.stringify(existing));
-    localStorage.setItem('s_data_version',DATA_VERSION);
-    if(added>0){Object.keys(localStorage).forEach(function(k){if(k.indexOf('s_plan_')===0)localStorage.removeItem(k);});}
-    return existing;
-  }
-
-  return JSON.parse(a);
-}
+function getAgents(){var a=localStorage.getItem(SK.AGENTS);if(!a){localStorage.setItem(SK.AGENTS,JSON.stringify(DEFAULT_AGENTS));return DEFAULT_AGENTS;}return JSON.parse(a);}
 function saveAgents(ag){localStorage.setItem(SK.AGENTS,JSON.stringify(ag));broadcastChange('agents');}
 function getHotspots(){var h=localStorage.getItem(SK.HOTSPOTS);if(!h){localStorage.setItem(SK.HOTSPOTS,JSON.stringify(DEFAULT_HOTSPOTS));return DEFAULT_HOTSPOTS;}return JSON.parse(h);}
 function saveHotspots(hs){localStorage.setItem(SK.HOTSPOTS,JSON.stringify(hs));broadcastChange('hotspots');}
@@ -1150,14 +985,12 @@ function saveRapports(r){cloudSaveRapports(r,function(){broadcastChange('rapport
 function getAudit(){return JSON.parse(localStorage.getItem(SK.AUDIT)||'[]');}
 function addAudit(type,msg){
   var log=getAudit();
-  var who=currentUser?currentUser.nom:'Système';
-  log.unshift({type:type,msg:msg,who:who,role:currentUser?currentUser.role:'',ts:new Date().toISOString()});
+  var who=currentUser?currentUser.nom:'?';
+  log.unshift({type:type,msg:msg,who:who,ts:new Date().toISOString()});
   if(log.length>500)log=log.slice(0,500);
   cloudSaveAudit(log);
   broadcastChange('audit');
-  // Refresh audit panel if visible
-  var auditCard=document.getElementById('audit-card');
-  if(auditCard&&auditCard.style.display!=='none')rAudit();
+  if(currentUser&&currentUser.role==='admin')rAudit();
 }
 // BroadcastChannel pour sync entre onglets
 var bc=null;
@@ -1195,12 +1028,7 @@ function getPlanKey(wOff){
   return SK.PLAN+numSem(lundi)+'_'+lundi.getFullYear();
 }
 function getSavedPlan(wOff){var p=localStorage.getItem(getPlanKey(wOff));return p?JSON.parse(p):null;}
-function savePlan(plan,wOff){
-  var key=getPlanKey(wOff);
-  cloudSavePlan(key,plan);
-  addAudit('planning','Planning W sauvegardé par '+( currentUser?currentUser.nom:'?'));
-  broadcastChange('planning');
-}
+function savePlan(plan,wOff){localStorage.setItem(getPlanKey(wOff),JSON.stringify(plan));}
 
 // ── GÉNÉRATION PLANNING 44h LUN→DIM ──
 function toMin(x){var hm=x.trim().split(':');return parseInt(hm[0])*60+(parseInt(hm[1])||0);}
@@ -1220,152 +1048,85 @@ function assignHotspotToShift(shift,hotspots){
   return matched[0].nom;
 }
 
-// ══ RBT ZONE GROUPS ══
-var RBT_ZONES={
-  Sale:['Ayoub Ben Malek','Hassan Azgoune','Zakariae Benali','Charaf Loummihi'],
-  Temara:['Najib Harati','Oussama El Atrach']
-};
-
-// Bands: 0=matin, 1=soir, 2=nuit
-var RBT_BANDS7=['09:00-16:00','15:00-22:00','20:00-03:00'];
-var RBT_BANDS8=['09:00-17:00','15:00-23:00','19:00-03:00'];
-var RBT_TEMARA7=['14:00-21:00','20:00-03:00'];
-var RBT_TEMARA8=['14:00-22:00','19:00-03:00'];
-
-function correctTo44h(shifts,ville){
+function genPlanningAgent(ag,idx,dates,absences,hotspots,weekNum){
+  var ville=ag.ville;
   var p7=POOL7[ville]||POOL7.CAS,p8=POOL8[ville]||POOL8.CAS;
-  var all7=p7.reduce(function(a,b){return a.concat(b);},[]);
-  var all8=p8.reduce(function(a,b){return a.concat(b);},[]);
+  // Rotation forte : band change chaque semaine par agent
+  // Utilise un hash de weekNum+idx pour maximiser la variété
+  var primes=[7,11,13,17,19,23];
+  var weekSeed=(weekNum*primes[idx%primes.length]+idx*3)%100;
+  var band=weekSeed%p7.length;
+  // OFF day : jamais SAM(5) ni DIM(6) — varie chaque semaine
+  var offOpts=[0,1,2,3,4];
+  var offDay=offOpts[(idx+weekNum*3)%offOpts.length];
+
+  var shifts=Array(7).fill(null);
+
+  // Marquer absences
+  for(var d=0;d<7;d++){
+    var absDay=absences.filter(function(ab){return ab.nom.toUpperCase()===ag.nom.toUpperCase()&&ab.date===dates[d];})[0];
+    if(absDay)shifts[d]=absDay.type;
+    else if(d===offDay)shifts[d]='OFF';
+  }
+
+  var workDays=[];
+  for(var d=0;d<7;d++){if(shifts[d]===null)workDays.push(d);}
+
+  // SAM(5) et DIM(6) = 8h en priorité
+  var work8=[];
+  workDays.forEach(function(d){if(work8.length<2&&(d===5||d===6))work8.push(d);});
+  workDays.forEach(function(d){if(work8.length<2&&work8.indexOf(d)<0)work8.push(d);});
+
+  for(var d=0;d<7;d++){
+    if(shifts[d]!==null)continue;
+    var is8=work8.indexOf(d)>-1;
+    var pool=is8?p8[band%p8.length]:p7[band%p7.length];
+    if(!pool||!pool.length)pool=is8?['09:00-17:00']:['09:00-16:00'];
+    // Varier selon jour + agent + semaine pour éviter la monotonie
+    var shiftIdx=(d*7+idx+weekNum*5)%pool.length;
+    shifts[d]=pool[shiftIdx];
+  }
+
+  // CORRECTION 44h EXACTES
   var total=Math.round(shifts.reduce(function(s,sh){return s+calcH(sh);},0)*10)/10;
   var iter=0;
-  while(Math.abs(total-44)>0.05&&iter++<30){
-    var delta=44-total;var fixed=false;
+  while(total!==44&&iter++<30){
+    var delta=Math.round((44-total)*10)/10;var fixed=false;
     for(var d=0;d<7;d++){
       var h=calcH(shifts[d]);if(h===0)continue;
-      if(delta>0.05&&h<8){
-        for(var qi=0;qi<all8.length;qi++){if(calcH(all8[qi])>h){shifts[d]=all8[qi];fixed=true;break;}}
-        if(fixed)break;
-      }else if(delta<-0.05&&h>7){
-        for(var qi=0;qi<all7.length;qi++){if(calcH(all7[qi])<h){shifts[d]=all7[qi];fixed=true;break;}}
-        if(fixed)break;
-      }
+      if(delta>0&&h<8){var p8b=p8[band%p8.length]||['09:00-17:00'];for(var qi=0;qi<p8b.length;qi++){if(calcH(p8b[qi])>h){shifts[d]=p8b[qi];fixed=true;break;}}if(fixed)break;}
+      else if(delta<0&&h>7){var p7b=p7[band%p7.length]||['09:00-16:00'];for(var qi=0;qi<p7b.length;qi++){if(calcH(p7b[qi])<h){shifts[d]=p7b[qi];fixed=true;break;}}if(fixed)break;}
     }
     total=Math.round(shifts.reduce(function(s,sh){return s+calcH(sh);},0)*10)/10;
     if(!fixed)break;
   }
-}
 
-function genPlanningAgent(ag,idx,dates,absences,hotspots,weekNum){
-  var ville=ag.ville;
-  var nom=ag.nom;
-  var shifts=Array(7).fill(null);
-
-  // 1) Marquer absences
+  // Assigner hotspots selon heure de pointe dans le shift
+  var villeHs=hotspots.filter(function(hs){return hs.ville===ville;});
+  var agHotspots=Array(7).fill('');
+  // Compteur de visites pour équilibrer
+  var visits={};villeHs.forEach(function(hs){visits[hs.nom]=0;});
   for(var d=0;d<7;d++){
-    var ab=absences.filter(function(x){return x.nom.toUpperCase()===nom.toUpperCase()&&x.date===dates[d];})[0];
-    if(ab)shifts[d]=ab.type;
+    if(calcH(shifts[d])===0)continue;
+    var raw=shifts[d].split('-');if(raw.length<2)continue;
+    var s=toMin(raw[0]),e=toMin(raw[1]);if(e<s)e+=1440;
+    // Trouver hotspots couverts par ce shift (heure de pointe dans la plage)
+    var covered=villeHs.filter(function(hs){var pk=toMin(hs.pk);if(pk<s)pk+=1440;return pk>=s&&pk<e;});
+    if(covered.length){
+      // Choisir le moins visité
+      covered.sort(function(a,b){return(visits[a.nom]||0)-(visits[b.nom]||0);});
+      agHotspots[d]=covered[0].nom;
+      visits[covered[0].nom]=(visits[covered[0].nom]||0)+1;
+    }else if(villeHs.length){
+      // Fallback : hotspot le moins visité
+      villeHs.sort(function(a,b){return(visits[a.nom]||0)-(visits[b.nom]||0);});
+      agHotspots[d]=villeHs[0].nom;
+      visits[villeHs[0].nom]=(visits[villeHs[0].nom]||0)+1;
+    }
   }
 
-  if(ville==='RBT'){
-    var saleIdx=RBT_ZONES.Sale.indexOf(nom);
-    var temaraIdx=RBT_ZONES.Temara.indexOf(nom);
-
-    // 2) OFF day : tourne LUN→VEN (+1 par semaine), unique par agent
-    var agOff=saleIdx>=0?saleIdx:temaraIdx>=0?(temaraIdx+4):idx;
-    var offDay=(weekNum+agOff)%5; // 0=Lun..4=Ven
-    for(var d=0;d<7;d++){if(shifts[d]===null&&d===offDay)shifts[d]='OFF';}
-
-    if(saleIdx>=0){
-      // ── Salé : 4 agents, 3 bandes rotatifs ──
-      // Rotation : band = (weekNum + saleIdx) % 3
-      // Garantit que les 3 agents actifs couvrent les 3 shifts
-      var band=(weekNum+saleIdx)%3;
-      for(var d=0;d<7;d++){
-        if(shifts[d]!==null)continue;
-        var isWE=(d===5||d===6);
-        shifts[d]=isWE?RBT_BANDS8[band]:RBT_BANDS7[band];
-      }
-
-    }else if(temaraIdx>=0){
-      // ── Témara : 2 agents, soir+nuit rotatifs ──
-      // Renforcement : si partenaire OFF → travaille 19:00-03:00 (8h)
-      var tBand=(weekNum+temaraIdx)%2;
-      var partnerNom=RBT_ZONES.Temara[1-temaraIdx];
-      var partnerOffDay=(weekNum+(4-temaraIdx))%5;
-
-      for(var d=0;d<7;d++){
-        if(shifts[d]!==null)continue;
-        var isWE=(d===5||d===6);
-        // Partenaire absent ?
-        var partnerAbsent=d===partnerOffDay||absences.some(function(x){
-          return x.nom.toUpperCase()===partnerNom.toUpperCase()&&x.date===dates[d];
-        });
-        if(partnerAbsent){
-          // Seul → 19:00-03:00 (8h) pour couvrir la ville
-          shifts[d]='19:00-03:00';
-        }else{
-          shifts[d]=isWE?RBT_TEMARA8[tBand]:RBT_TEMARA7[tBand];
-        }
-      }
-
-    }else{
-      // ── Autres RBT (Hay Riad, Agdal, Medina) : rotation libre ──
-      var band2=(weekNum+idx)%3;
-      for(var d=0;d<7;d++){
-        if(shifts[d]!==null)continue;
-        var isWE2=(d===5||d===6);
-        shifts[d]=isWE2?RBT_BANDS8[band2]:RBT_BANDS7[band2];
-      }
-    }
-
-    // 3) Correction 44h
-    correctTo44h(shifts,ville);
-
-    // 4) Hotspot = zone de l'agent (définie par le fichier zones)
-    var agHotspots=Array(7).fill('');
-    var agZone=ag.zone||ag.ville;
-    for(var d=0;d<7;d++){if(calcH(shifts[d])>0)agHotspots[d]=agZone;}
-
-    return{nom:nom,ville:ville,zone:agZone,shifts:shifts,hotspots:agHotspots,
-      totalH:Math.round(shifts.reduce(function(s,sh){return s+calcH(sh);},0)*10)/10};
-
-  }else{
-    // ── Autres villes (CAS, DRB, BSK) ──
-    var p7=POOL7[ville]||POOL7.CAS,p8=POOL8[ville]||POOL8.CAS;
-    var primes=[7,11,13,17,19,23];
-    var weekSeed=(weekNum*primes[idx%primes.length]+idx*3)%100;
-    var band3=weekSeed%p7.length;
-    var offOpts=[0,1,2,3,4];
-    var offDay2=offOpts[(idx+weekNum*3)%offOpts.length];
-    for(var d=0;d<7;d++){if(shifts[d]===null&&d===offDay2)shifts[d]='OFF';}
-
-    var workDays=[];for(var d=0;d<7;d++){if(shifts[d]===null)workDays.push(d);}
-    var work8=[];
-    workDays.forEach(function(d){if(work8.length<2&&(d===5||d===6))work8.push(d);});
-    workDays.forEach(function(d){if(work8.length<2&&work8.indexOf(d)<0)work8.push(d);});
-    for(var d=0;d<7;d++){
-      if(shifts[d]!==null)continue;
-      var is8b=work8.indexOf(d)>-1;
-      var pool=is8b?p8[band3%p8.length]:p7[band3%p7.length];
-      if(!pool||!pool.length)pool=is8b?['09:00-17:00']:['09:00-16:00'];
-      shifts[d]=pool[(d*7+idx+weekNum*5)%pool.length];
-    }
-    correctTo44h(shifts,ville);
-
-    var villeHs=hotspots.filter(function(hs){return hs.ville===ville;});
-    var agHotspots2=Array(7).fill('');
-    var visits={};villeHs.forEach(function(hs){visits[hs.nom]=0;});
-    for(var d=0;d<7;d++){
-      if(calcH(shifts[d])===0)continue;
-      var raw=shifts[d].split('-');if(raw.length<2)continue;
-      var s=toMin(raw[0]),e=toMin(raw[1]);if(e<s)e+=1440;
-      var covered=villeHs.filter(function(hs){var pk=toMin(hs.pk);if(pk<s)pk+=1440;return pk>=s&&pk<e;});
-      if(covered.length){covered.sort(function(a,b){return(visits[a.nom]||0)-(visits[b.nom]||0);});agHotspots2[d]=covered[0].nom;visits[covered[0].nom]=(visits[covered[0].nom]||0)+1;}
-      else if(villeHs.length){villeHs.sort(function(a,b){return(visits[a.nom]||0)-(visits[b.nom]||0);});agHotspots2[d]=villeHs[0].nom;visits[villeHs[0].nom]=(visits[villeHs[0].nom]||0)+1;}
-    }
-    return{nom:nom,ville:ville,zone:ag.zone||ville,shifts:shifts,hotspots:agHotspots2,
-      totalH:Math.round(shifts.reduce(function(s,sh){return s+calcH(sh);},0)*10)/10};
-  }
+  return{nom:ag.nom,ville:ag.ville,zone:ag.zone||ag.ville,shifts:shifts,hotspots:agHotspots,
+    totalH:Math.round(shifts.reduce(function(s,sh){return s+calcH(sh);},0)*10)/10};
 }
 
 function genPlanning(agents,hotspots,absences,wOff){
@@ -1457,13 +1218,13 @@ function rAudit(){
   var filter=window._auditFilter||'all';
   var shown=log.filter(function(l){return filter==='all'||l.type===filter||l.type.indexOf(filter)>-1;});
   var list=document.getElementById('audit-list');if(!list)return;
-  if(!shown.length){list.innerHTML='<div class="em" style="padding:20px"><div class="em-tx">Aucune activité encore — les modifications apparaîtront ici.</div></div>';return;}
+  if(!shown.length){list.innerHTML='<div class="em" style="padding:20px"><div class="em-tx">Aucune activité</div></div>';return;}
   var dotClass={add:'add',edit:'edit',del:'del',login:'login',planning:'plan',plan:'plan',absence:'del',rapport:'login',hotspot:'add',agent:'edit'};
   list.innerHTML=shown.slice(0,100).map(function(l){
     var dc=dotClass[l.type]||'edit';
     var d=new Date(l.ts);
     var timeStr=d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'})+' '+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
-    var uc={'Oussama E.':'#E74C3C','Choaib Knari':'#F39C12','Loutfi Ouzguite':'#27AE60'};
+    var uc={OE:'#E74C3C','Choaib Knari':'#F39C12','Loutfi Ouzguite':'#27AE60'};
     var ub=uc[l.who]||'#64748B';
     return '<div class="audit-item">'+
       '<div class="audit-dot '+dc+'"></div>'+
@@ -1662,7 +1423,7 @@ function showAg(idx){
   var shifts=p?p.shifts:[],hs=p?p.hotspots||[]:[];var clr=CC[a.ville]||{};
   var mini=JOURS.map(function(j,i){var s=shifts[i]||'—',h=hs[i]||'',lbl=s==='OFF'?'⬜':s==='ABSENT'?'🚫':s==='CONGE'?'🏖':s;
     return '<div class="dm"><div class="dm-l">'+j.slice(0,3)+'</div><div class="dm-s" style="color:'+sColor(s)+'">'+lbl+'</div>'+(h?'<div style="font-size:7px;color:var(--g);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+h.substring(0,12)+'</div>':'')+'</div>';}).join('');
-  var canEdit=currentUser&&(currentUser.role==='admin'||(currentUser.role==='leader'&&currentUser.villes.indexOf(a.ville)>-1));
+  var canEdit=currentUser&&currentUser.role==='admin';
   var detBody=document.getElementById('ag-det-body');if(!detBody)return;
   detBody.innerHTML='<div class="card"><div class="det-hd">'+
     '<div class="det-av" style="background:'+avc(a.nom)+'">'+ini(a.nom)+'</div>'+
@@ -1784,34 +1545,23 @@ function deleteAbsence(i){if(!confirm('Supprimer cette absence ?'))return;var ab
 var gFP='ALL';
 
 function initPaieMois(){
-  var selM=document.getElementById('pay-mois-sel');if(!selM)return;
-  var selA=document.getElementById('pay-annee-sel');
-  var now=new Date();
-  // Mois dropdown
-  selM.innerHTML=MOIS_NOM.map(function(m,i){
-    return '<option value="'+(i+1)+'"'+(i===now.getMonth()?' selected':'')+'>'+m+'</option>';
-  }).join('');
-  // Années dropdown (3 ans)
-  if(selA){
-    var opts='';
-    for(var y=now.getFullYear();y>=now.getFullYear()-2;y--){
-      opts+='<option value="'+y+'"'+(y===now.getFullYear()?' selected':'')+'>'+y+'</option>';
-    }
-    selA.innerHTML=opts;
-  }
+  var sel=document.getElementById('pay-mois-sel');if(!sel)return;
+  var now=new Date();var opts='';
+  for(var m=0;m<12;m++){var d=new Date(now.getFullYear(),now.getMonth()-m,1);var val=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');var lbl=MOIS_NOM[d.getMonth()]+' '+d.getFullYear();opts+='<option value="'+val+'"'+(m===0?' selected':'')+'>'+lbl+'</option>';}
+  sel.innerHTML=opts;
 }
 
 function fPay(v){gFP=v;rPay();}
 
 function rPay(){
-  var selM=document.getElementById('pay-mois-sel');
-  var selA=document.getElementById('pay-annee-sel');
-  var now=new Date();
-  var selMoisIdx=selM?parseInt(selM.value)-1:now.getMonth();
-  var selAn=selA?parseInt(selA.value):now.getFullYear();
+  var selMois=document.getElementById('pay-mois-sel');
+  var moisVal=selMois?selMois.value:'';
+  var parts=moisVal?moisVal.split('-'):[String(new Date().getFullYear()),String(new Date().getMonth()+1)];
+  var selAn=parseInt(parts[0]),selMoisIdx=parseInt(parts[1])-1;
 
   // Période : 21 mois précédent → 22 mois actuel
   var prevMois=selMoisIdx===0?11:selMoisIdx-1;var prevAn=selMoisIdx===0?selAn-1:selAn;
+  var now=new Date();
   var isCurrentMonth=(selAn===now.getFullYear()&&selMoisIdx===now.getMonth());
   var jp=isCurrentMonth?Math.min(now.getDate(),22):22;
 
@@ -1878,89 +1628,34 @@ function rRapports(){
   var rpl=document.getElementById('rp-list');if(!rpl)return;
   var sub=document.getElementById('rp-subtitle');
   var u=currentUser;if(!u)return;
+  var zone=u.villes.map(function(v){return CLA[v];}).join(' · ');
+  if(sub)sub.textContent=u.nom+' — '+zone;
 
-  // Show/hide admin tools
-  var btnExport=document.getElementById('btn-export-rp');
-  var btnRefresh=document.getElementById('btn-refresh-rp');
-  var filterUser=document.getElementById('rp-filter-user');
-  var filterType=document.getElementById('rp-filter-type');
-  var btnNew=document.getElementById('btn-new-rapport');
-
-  if(u.role==='admin'){
-    if(btnExport)btnExport.style.display='inline-flex';
-    if(btnRefresh)btnRefresh.style.display='inline-flex';
-    if(filterUser)filterUser.style.display='inline-block';
-    if(filterType)filterType.style.display='inline-block';
-    if(btnNew)btnNew.style.display='none'; // admin ne fait pas de rapport
-    if(sub)sub.textContent='Consolidé — Choaib Knari & Loutfi Ouzguite';
-  } else {
-    if(btnExport)btnExport.style.display='none';
-    if(btnRefresh)btnRefresh.style.display='none';
-    if(filterUser)filterUser.style.display='none';
-    if(filterType)filterType.style.display='none';
-    if(btnNew)btnNew.style.display='inline-flex';
-    var zone=u.villes.map(function(v){return CLA[v];}).join(' · ');
-    if(sub)sub.textContent=u.nom+' — '+zone;
-  }
-
-  // Get rapports
-  var allRap=getRapports();
+  // Admin voit TOUS les rapports + résumé hebdo
   var rapports;
   var weeklyDiv=document.getElementById('rp-weekly-admin');
-
   if(u.role==='admin'){
-    rapports=allRap.sort(function(a,b){return b.date.localeCompare(a.date);});
-    // Apply filters
-    var fu=filterUser?filterUser.value:'ALL';
-    var ft=filterType?filterType.value:'ALL';
-    if(fu!=='ALL')rapports=rapports.filter(function(r){return r.user===fu;});
-    if(ft!=='ALL')rapports=rapports.filter(function(r){return r.type===ft;});
+    rapports=getRapports().sort(function(a,b){return b.date.localeCompare(a.date);});
     if(weeklyDiv)weeklyDiv.style.display='block';
     rWeeklySummary();
   } else {
-    rapports=allRap.filter(function(r){return r.user===u.key;}).sort(function(a,b){return b.date.localeCompare(a.date);});
+    rapports=getRapports().filter(function(r){return r.user===u.key;}).sort(function(a,b){return b.date.localeCompare(a.date);});
     if(weeklyDiv)weeklyDiv.style.display='none';
   }
 
-  // Update badge
-  var rpBadge=document.getElementById('rpBadge');
-  if(rpBadge){
-    var today=new Date().toISOString().split('T')[0];
-    var todayCount=allRap.filter(function(r){return r.date===today&&r.user!==u.key;}).length;
-    rpBadge.style.display=todayCount>0?'inline':'none';
-    rpBadge.textContent=todayCount;
-  }
+  if(!rapports.length){rpl.innerHTML='<div class="em"><div class="em-ic">📋</div><div class="em-tx">Aucun rapport. Cliquez "Nouveau Rapport".</div></div>';return;}
 
-  if(!rapports.length){
-    rpl.innerHTML='<div class="em"><div class="em-ic">📋</div>'+
-      '<div class="em-tx">'+(u.role==='admin'?'Aucun rapport soumis par les leaders.':'Aucun rapport. Cliquez "Nouveau Rapport".')+'</div></div>';
-    return;
-  }
-
-  // Stats bar (admin only)
-  var statsHtml='';
-  if(u.role==='admin'){
-    var nAno=rapports.filter(function(r){return r.type==='anomalie';}).length;
-    var nNorm=rapports.filter(function(r){return r.type==='normal';}).length;
-    var nInfo=rapports.filter(function(r){return r.type==='info';}).length;
-    statsHtml='<div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">'+
-      '<div style="background:var(--bg3);border:1px solid var(--bd);border-radius:var(--r2);padding:8px 14px;font-size:11px;font-weight:700">📋 Total : '+rapports.length+'</div>'+
-      '<div style="background:var(--g-lt);border:1px solid rgba(0,160,130,.2);border-radius:var(--r2);padding:8px 14px;font-size:11px;font-weight:700;color:var(--g)">✅ Normal : '+nNorm+'</div>'+
-      (nAno?'<div style="background:var(--r-lt);border:1px solid rgba(229,57,53,.2);border-radius:var(--r2);padding:8px 14px;font-size:11px;font-weight:700;color:var(--r)">⚠️ Anomalies : '+nAno+'</div>':'')+
-      (nInfo?'<div style="background:var(--b-lt);border:1px solid rgba(21,101,192,.2);border-radius:var(--r2);padding:8px 14px;font-size:11px;font-weight:700;color:var(--b)">ℹ️ Info : '+nInfo+'</div>':'')+
-    '</div>';
-  }
-
-  var canDelete=(u.role==='admin');
-
-  rpl.innerHTML=statsHtml+rapports.map(function(r,i){
+  rpl.innerHTML=rapports.map(function(r,i){
     var stars='⭐'.repeat(parseInt(r.note)||3);
     var typeClr={normal:'var(--g)',anomalie:'var(--r)',info:'var(--b)'};
     var typeIc={normal:'✅',anomalie:'⚠️',info:'ℹ️'};
     var tc=typeClr[r.type||'normal']||'var(--g)';
     var tic=typeIc[r.type||'normal']||'✅';
-    var lc=r.user==='choaib'?'#F39C12':r.user==='loutfi'?'#27AE60':'#E74C3C';
-    return '<div class="rp-simple" style="'+(r.type==='anomalie'?'border-left-color:var(--r)':r.type==='info'?'border-left-color:var(--b)':'')+'">'+
+    var lc=r.user==='choaib'?'#F39C12':'r.user==="loutfi"'?'#27AE60':'#E74C3C';
+    if(r.user==='loutfi')lc='#27AE60';
+    else if(r.user==='admin')lc='#E74C3C';
+    var badgeStyle='background:'+tc+'20;color:'+tc+';border:1px solid '+tc+'40';
+    return '<div class="rp-simple">'+
       '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">'+
         '<div style="display:flex;align-items:center;gap:8px">'+
           '<div class="av av-sm" style="background:'+lc+'">'+ini(r.auteur)+'</div>'+
@@ -1969,13 +1664,11 @@ function rRapports(){
             '<div style="font-size:10px;color:var(--tx3)">'+r.zone+'</div>'+
           '</div>'+
         '</div>'+
-        '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end">'+
-          '<span class="rp-badge '+(r.type||'normal')+'">'+tic+' '+(r.type==='anomalie'?'Anomalie':r.type==='info'?'Info':'Normal')+'</span>'+
-          '<span style="font-size:10px;color:var(--tx3);background:var(--bg3);padding:2px 8px;border-radius:10px">'+
-            new Date(r.date).toLocaleDateString('fr-FR',{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'})+
-          '</span>'+
-          '<span style="font-size:11px">'+stars+'</span>'+
-          (canDelete||r.user===u.key?'<button class="btn btn-r btn-ico btn-sm" onclick="deleteRapport('+i+')">🗑️</button>':'')+
+        '<div style="display:flex;align-items:center;gap:6px">'+
+          '<span class="rp-badge '+( r.type||'normal')+'">'+tic+' '+(r.type==='anomalie'?'Anomalie':r.type==='info'?'Info':'Normal')+'</span>'+
+          '<span style="font-size:10px;color:var(--tx3);background:var(--bg3);padding:2px 8px;border-radius:10px">'+new Date(r.date).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'})+'</span>'+
+          '<span style="font-size:12px">'+stars+'</span>'+
+          '<button class="btn btn-r btn-ico btn-sm" onclick="deleteRapport('+i+')">🗑️</button>'+
         '</div>'+
       '</div>'+
       (r.resume?'<div style="font-size:12px;color:var(--tx2);margin-bottom:6px;line-height:1.5">'+r.resume+'</div>':'')+
@@ -1984,49 +1677,10 @@ function rRapports(){
         '<div style="font-size:12px;color:var(--r)">'+r.anomalies+'</div>'+
       '</div>':'')+
       (r.remarques?'<div style="padding:6px 10px;background:var(--b-lt);border-radius:var(--r3);font-size:11px;color:var(--b)">'+
-        '<span style="font-weight:700">💬 </span>'+r.remarques+'</div>':'')+
+        '<span style="font-weight:700">💬 </span>'+r.remarques+
+      '</div>':'')+
     '</div>';
   }).join('');
-}
-
-function refreshRapportsCloud(){
-  cloudGetRapports(function(r){
-    localStorage.setItem(SK.RAPPORTS,JSON.stringify(r));
-    rRapports();rWeeklySummary();
-    toast('Rapports actualisés !','ok',2000);
-  });
-}
-
-function exportRapportsExcel(){
-  var rapports=getRapports().sort(function(a,b){return b.date.localeCompare(a.date);});
-  if(!rapports.length){toast('Aucun rapport à exporter','er');return;}
-  var now=new Date();
-  var html='<html xmlns:o="urn:schemas-microsoft-com:office:office"><head><meta charset="UTF-8">'+
-  '<style>body{font-family:Arial;font-size:10pt}th{background:#1A1A2E;color:white;font-weight:bold;padding:8px}'+
-  'td{border:1px solid #ddd;padding:6px 10px}'+
-  '.hdr{background:#FFC244;font-weight:bold;font-size:12pt;text-align:center}'+
-  '.normal{background:#D1FAE5;color:#065F46}.anomalie{background:#FEE2E2;color:#991B1B}.info{background:#DBEAFE;color:#1E40AF}'+
-  '.choaib{background:#FEF3C7;color:#92400E}.loutfi{background:#DCFCE7;color:#166534}</style></head><body>'+
-  '<table><tr><td colspan="7" class="hdr">RAPPORTS LEADERS — SENTINEL CAS OPS — Exporté le '+now.toLocaleDateString('fr-FR')+'</td></tr>'+
-  '<tr><th>Date</th><th>Leader</th><th>Zone</th><th>Type</th><th>Résumé</th><th>Anomalies</th><th>Remarques</th><th>Note</th></tr>'+
-  rapports.map(function(r){
-    var lc=r.user==='choaib'?'choaib':'loutfi';
-    var tc=r.type||'normal';
-    var stars='⭐'.repeat(parseInt(r.note)||3);
-    return '<tr>'+
-      '<td>'+new Date(r.date).toLocaleDateString('fr-FR')+'</td>'+
-      '<td class="'+lc+'"><b>'+r.auteur+'</b></td>'+
-      '<td>'+r.zone+'</td>'+
-      '<td class="'+tc+'"><b>'+(tc==='anomalie'?'⚠️ Anomalie':tc==='info'?'ℹ️ Info':'✅ Normal')+'</b></td>'+
-      '<td>'+(r.resume||'')+'</td>'+
-      '<td style="'+(r.anomalies?'color:#991B1B;background:#FEE2E2':'')+'">'+( r.anomalies||'—')+'</td>'+
-      '<td>'+(r.remarques||'—')+'</td>'+
-      '<td style="text-align:center">'+stars+'</td>'+
-    '</tr>';
-  }).join('')+
-  '</table></body></html>';
-  dlXls(html,'Rapports_SENTINEL_'+now.toLocaleDateString('fr-FR').replace(/\//g,'-')+'.xls');
-  toast('Rapports exportés !','ok');
 }
 
 function rWeeklySummary(){
@@ -2111,42 +1765,15 @@ function rWeeklySummary(){
   wa.innerHTML=html;
 }
 
-function selectRpType(type){
-  document.getElementById('rp-type').value=type;
-  ['normal','anomalie','info'].forEach(function(t){
-    var btn=document.getElementById('rpt-'+t);if(!btn)return;
-    var colors={normal:'var(--g)',anomalie:'var(--r)',info:'var(--b)'};
-    var bgs={normal:'var(--g-lt)',anomalie:'var(--r-lt)',info:'var(--b-lt)'};
-    if(t===type){btn.style.border='2px solid '+colors[t];btn.style.background=bgs[t];}
-    else{btn.style.border='2px solid var(--bd2)';btn.style.background='var(--bg3)';}
-  });
-  // Show/hide anomalie section
-  var as=document.getElementById('rp-anomalie-section');
-  if(as)as.style.display=type==='anomalie'?'block':'none';
-}
-
-function selectNote(n){
-  document.getElementById('rp-note').value=n;
-  for(var i=1;i<=5;i++){
-    var btn=document.getElementById('rpn-'+i);if(!btn)continue;
-    if(i===n){btn.style.border='2px solid var(--y)';btn.style.background='var(--y-lt)';}
-    else{btn.style.border='2px solid var(--bd2)';btn.style.background='var(--bg3)';}
-  }
-}
-
 function openRapportForm(){
   var u=currentUser;if(!u)return;
   var zone=u.villes.map(function(v){return CLA[v].replace(/🏙|🌴|🌿|🏛/g,'').trim();}).join(', ');
-  var sub=document.getElementById('rp-modal-sub');if(sub)sub.textContent=u.nom;
-  var nameEl=document.getElementById('rp-modal-name');if(nameEl)nameEl.textContent=u.nom;
-  var zoneEl2=document.getElementById('rp-modal-zone');if(zoneEl2)zoneEl2.textContent=zone;
-  var avEl=document.getElementById('rp-modal-av');if(avEl){avEl.textContent=ini(u.nom);avEl.style.background=u.color;}
+  var sub=document.getElementById('rp-modal-sub');if(sub)sub.textContent=u.nom+' — '+zone;
   var zoneEl=document.getElementById('rp-zone');if(zoneEl)zoneEl.value=zone;
   var dateEl=document.getElementById('rp-date');if(dateEl)dateEl.value=new Date().toISOString().split('T')[0];
   ['rp-resume','rp-anomalies','rp-remarques'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
-  // Reset type to normal
-  selectRpType('normal');
-  selectNote(5);
+  var typeEl=document.getElementById('rp-type');if(typeEl)typeEl.value='normal';
+  var noteEl=document.getElementById('rp-note');if(noteEl)noteEl.value='3';
   document.getElementById('rpOverlay').classList.add('show');
 }
 
@@ -2271,114 +1898,18 @@ function openEmailModal(){
   document.getElementById('emailOverlay').classList.add('show');
 }
 
-function buildEmailHTML(ag,planAg,dates,wn){
-  var prenom=ag.nom.split(' ')[0];
-  var initials=ini(ag.nom);
-  var color=avc(ag.nom);
-  var villeLabel=(CLA[ag.ville]||ag.ville).replace(/🏙|🌴|🌿|🏛/g,'').trim();
-  var lignes=JOURS.map(function(j,i){
-    var s=planAg.shifts[i]||'—';
-    var hs=planAg.hotspots[i]||'';
-    var isOff=['OFF','ABSENT','CONGE'].indexOf(s)>-1||s==='—';
-    var label=s==='OFF'?'Repos':s==='ABSENT'?'Absent':s==='CONGE'?'Conge':s;
-    var bg=isOff?'#132035':'#FFC244';
-    var tx=isOff?'#4A6080':'#000000';
-    return '<tr>'+
-      '<td style="padding:13px 20px;border-bottom:1px solid #1E2D45;vertical-align:middle;min-width:120px">'+
-        '<div style="font-size:13px;font-weight:700;color:#8AABCC">'+j+'</div>'+
-        '<div style="font-size:11px;color:#3A5570;margin-top:2px">'+dates[i]+'</div>'+
-      '</td>'+
-      '<td style="padding:13px 20px;border-bottom:1px solid #1E2D45;vertical-align:middle">'+
-        '<span style="display:inline-block;background:'+bg+';color:'+tx+';padding:6px 16px;border-radius:6px;font-size:13px;font-weight:700">'+label+'</span>'+
-        (hs&&!isOff?'<div style="margin-top:6px;font-size:12px;color:#00C896;font-weight:600">Hotspot : '+hs+'</div>':'')+
-      '</td>'+
-    '</tr>';
-  }).join('');
-
-  return '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>'+
-  '<body style="margin:0;padding:0;background:#0B1628;font-family:Arial,Helvetica,sans-serif">'+
-  '<div style="max-width:580px;margin:28px auto;background:#0F1E35;border-radius:14px;overflow:hidden;border:1px solid #1A2D48">'+
-
-    // Header jaune
-    '<div style="background:#FFC244;padding:18px 28px">'+
-      '<div style="font-size:11px;font-weight:800;color:#000;letter-spacing:3px;text-transform:uppercase">SENTINEL</div>'+
-      '<div style="font-size:14px;font-weight:700;color:#000;margin-top:2px">Planning Semaine W'+wn+'</div>'+
-      '<div style="font-size:11px;color:rgba(0,0,0,.6);margin-top:2px">'+dates[0]+' (Lun) au '+dates[6]+' (Dim)</div>'+
-    '</div>'+
-
-    // Body
-    '<div style="padding:24px 28px">'+
-      '<p style="font-size:14px;color:#D0DCE8;margin:0 0 6px;font-weight:600">Bonjour '+prenom+',</p>'+
-      '<p style="font-size:13px;color:#5A7090;margin:0 0 20px;line-height:1.7">'+
-        'Voici votre planning pour la semaine <strong style="color:#FFC244">W'+wn+'</strong>. '+
-        'Merci de respecter vos horaires et de vous presenter ponctuellement sur votre hotspot assigne.'+
-      '</p>'+
-
-      // Agent card
-      '<div style="background:#0B1628;border-radius:10px;padding:14px 18px;margin-bottom:20px;border-left:3px solid #FFC244">'+
-        '<table cellpadding="0" cellspacing="0" border="0" style="width:100%"><tr>'+
-          '<td style="width:48px;vertical-align:middle">'+
-            '<div style="width:44px;height:44px;background:'+color+';border-radius:50%;text-align:center;line-height:44px;font-size:15px;font-weight:800;color:#fff">'+initials+'</div>'+
-          '</td>'+
-          '<td style="padding-left:14px;vertical-align:middle">'+
-            '<div style="font-size:14px;font-weight:700;color:#E2E8F0">'+ag.nom+'</div>'+
-            '<div style="font-size:11px;color:#4A6080;margin-top:2px">'+villeLabel+' - Zone '+ag.zone+'</div>'+
-          '</td>'+
-        '</tr></table>'+
-      '</div>'+
-
-      // Planning table
-      '<table cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;border:1px solid #1A2D48;border-radius:10px;overflow:hidden">'+
-        '<thead><tr style="background:#0B1628">'+
-          '<th style="padding:10px 20px;color:#3A5570;text-align:left;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid #1A2D48">Jour</th>'+
-          '<th style="padding:10px 20px;color:#3A5570;text-align:left;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid #1A2D48">Horaire et Hotspot</th>'+
-        '</tr></thead>'+
-        '<tbody>'+lignes+'</tbody>'+
-      '</table>'+
-
-      // Note
-      '<div style="margin-top:18px;padding:12px 16px;background:#0B1628;border-radius:8px;border-left:3px solid #D4900A">'+
-        '<p style="font-size:12px;color:#9A7020;margin:0;line-height:1.7">'+
-          '<strong style="color:#D4900A">Note :</strong> '+
-          'Ce planning peut etre modifie en cas de force majeure ou changement operationnel. '+
-          'Tout ajustement vous sera communique dans les meilleurs delais.'+
-        '</p>'+
-      '</div>'+
-
-      '<p style="font-size:13px;color:#4A6080;margin:18px 0 0;line-height:1.7">'+
-        'Bonne semaine.<br>'+
-        '<strong style="color:#D0DCE8">Operations - Glovo Maroc</strong>'+
-      '</p>'+
-    '</div>'+
-
-    // Footer
-    '<div style="background:#0B1628;border-top:1px solid #1A2D48;padding:12px 28px;text-align:center">'+
-      '<p style="font-size:10px;color:#243650;margin:0">SENTINEL - Glovo Maroc CAS OPS</p>'+
-    '</div>'+
-  '</div>'+
-  '</body></html>';
-}
-
 function buildEmailText(ag,planAg,dates,wn){
   var prenom=ag.nom.split(' ')[0];
+  var jours=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
   var body='Bonjour '+prenom+',\n\nVoici votre planning pour la semaine W'+wn+' ('+dates[0]+' au '+dates[6]+').\n\n';
   body+='AGENT : '+ag.nom+'\nVILLE : '+ag.ville+' - Zone '+ag.zone+'\n\nPLANNING :\n'+'─'.repeat(30)+'\n';
-  JOURS.forEach(function(j,i){
-    var s=planAg.shifts[i]||'—';var hs=planAg.hotspots[i]||'';
-    var label=s==='OFF'?'Repos':s==='ABSENT'?'Absent':s==='CONGE'?'Conge':s;
-    body+=j+' ('+dates[i]+') : '+label+(hs?' | Hotspot : '+hs:'')+'\n';
-  });
+  jours.forEach(function(j,i){var s=planAg.shifts[i]||'—';var hs=planAg.hotspots[i]||'';var label=s==='OFF'?'Repos':s==='ABSENT'?'Absent':s==='CONGE'?'Conge':s;body+=j+' ('+dates[i]+') : '+label+(hs?' | Hotspot : '+hs:'')+'\n';});
   body+='\nTotal : '+planAg.totalH+'h / 44h\n\nMerci de respecter vos horaires.\n\nCordialement,\nOperations - Glovo Maroc';
   return body;
 }
 
 function buildGmailLink(em){
-  var body=em.textBody||'';
-  if(body.length>1500)body=body.substring(0,1500)+'...';
-  return 'https://mail.google.com/mail/?view=cm&fs=1&to='+
-    encodeURIComponent(em.to)+
-    '&su='+encodeURIComponent(em.subject)+
-    '&body='+encodeURIComponent(body);
+  return 'https://mail.google.com/mail/?view=cm&to='+encodeURIComponent(em.to)+'&su='+encodeURIComponent(em.subject)+'&body='+encodeURIComponent(em.textBody);
 }
 
 function preparerEmails(){
@@ -2395,29 +1926,11 @@ function preparerEmails(){
   agents.forEach(function(ag){
     var planAg=(planData.planning||[]).filter(function(p){return p.nom.toUpperCase()===ag.nom.toUpperCase();})[0];
     if(!planAg)return;
-    preparedEmails.push({
-      ag:ag,
-      subject:subject,
-      textBody:buildEmailText(ag,planAg,dates,wn),
-      htmlBody:buildEmailHTML(ag,planAg,dates,wn),
-      to:ag.email
-    });
+    preparedEmails.push({ag:ag,subject:subject,textBody:buildEmailText(ag,planAg,dates,wn),to:ag.email});
   });
-  var html='<div style="padding:10px 14px;background:var(--g-lt);border-radius:var(--r2);color:var(--g);font-weight:600;font-size:12px;margin-bottom:12px">'+
-    '✅ '+preparedEmails.length+' email(s) prêts avec le thème dark navy SENTINEL</div>';
-  html+='<div style="display:flex;flex-direction:column;gap:6px;max-height:280px;overflow-y:auto">';
-  preparedEmails.forEach(function(em){
-    var clr=CC[em.ag.ville]||{};
-    html+='<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg3);border-radius:var(--r2);border:1px solid var(--bd)">'+
-      '<div class="av av-sm" style="background:'+avc(em.ag.nom)+'">'+ini(em.ag.nom)+'</div>'+
-      '<div style="flex:1">'+
-        '<div style="font-size:12px;font-weight:700">'+em.ag.nom+'</div>'+
-        '<div class="txxs tx3c">'+em.to+'</div>'+
-      '</div>'+
-      '<span style="background:'+clr.bg+';color:'+clr.tx+';padding:2px 8px;border-radius:var(--r3);font-size:10px;font-weight:700">'+em.ag.ville+'</span>'+
-      '<a href="'+buildGmailLink(em)+'" target="_blank" class="btn btn-g btn-sm" style="text-decoration:none;font-size:11px">📧 Gmail</a>'+
-    '</div>';
-  });
+  var html='<div style="font-size:12px;margin-bottom:10px;padding:8px 12px;background:var(--g-lt);border-radius:var(--r2);color:var(--g);font-weight:600">✅ '+preparedEmails.length+' email(s) prêts — cliquez "Envoyer Tout" pour ouvrir Gmail</div>';
+  html+='<div style="display:flex;flex-direction:column;gap:6px;max-height:300px;overflow-y:auto">';
+  preparedEmails.forEach(function(em){var clr=CC[em.ag.ville]||{};html+='<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg3);border-radius:var(--r2);border:1px solid var(--bd)"><div class="av av-sm" style="background:'+avc(em.ag.nom)+'">'+ini(em.ag.nom)+'</div><div style="flex:1"><div style="font-size:12px;font-weight:700">'+em.ag.nom+'</div><div class="txxs tx3c">'+em.to+'</div></div><span style="background:'+clr.bg+';color:'+clr.tx+';padding:2px 8px;border-radius:var(--r3);font-size:10px;font-weight:700">'+em.ag.ville+'</span><a href="'+buildGmailLink(em)+'" target="_blank" class="btn btn-g btn-sm" style="text-decoration:none;font-size:11px">📧 Gmail</a></div>';});
   html+='</div>';
   document.getElementById('email-preview').innerHTML=html;
   document.getElementById('btn-send-all').style.display='inline-flex';
@@ -2443,19 +1956,11 @@ function copyAllEmailsText(){
 function rReportsSummary(){
   var card=document.getElementById('rapports-summary-card');if(!card)return;
   if(!currentUser||currentUser.role!=='admin'){card.style.display='none';return;}
-  card.style.display='block';
   var rapports=getRapports().sort(function(a,b){return b.date.localeCompare(a.date);});
+  if(!rapports.length){card.style.display='none';return;}
+  card.style.display='block';
   var recents=rapports.filter(function(r){var d=new Date(r.date),now=new Date();return(now-d)<7*24*3600*1000;});
-  var sub=document.getElementById('rp-sum-date');if(sub)sub.textContent=recents.length+' rapport(s) — 7 jours';
-  if(!rapports.length){
-    document.getElementById('rp-summary-content').innerHTML=
-      '<div class="em" style="padding:16px">'+
-        '<div class="em-ic">📋</div>'+
-        '<div class="em-tx">Aucun rapport reçu</div>'+
-        '<div style="font-size:11px;color:var(--tx3);margin-top:6px">Les rapports de Choaib et Loutfi apparaîtront ici dès qu\'ils en soumettent un.</div>'+
-      '</div>';
-    return;
-  }
+  var sub=document.getElementById('rp-sum-date');if(sub)sub.textContent=recents.length+' rapport(s) — 7 derniers jours';
   var totalRap=recents.length;
   var avgNote=totalRap?Math.round(recents.reduce(function(s,r){return s+parseInt(r.note||3);},0)/totalRap):0;
   var stars='⭐'.repeat(avgNote);
@@ -2557,14 +2062,13 @@ function exportAgentsExcel(){
 }
 
 function exportPaieExcel(){
-  var selM=document.getElementById('pay-mois-sel');
-  var selA=document.getElementById('pay-annee-sel');
-  var now=new Date();
-  var selMoisIdx=selM?parseInt(selM.value)-1:now.getMonth();
-  var selAn=selA?parseInt(selA.value):now.getFullYear();
+  var selMois=document.getElementById('pay-mois-sel');
+  var moisVal=selMois?selMois.value:'';
+  var parts=moisVal?moisVal.split('-'):[String(new Date().getFullYear()),String(new Date().getMonth()+1)];
+  var selAn=parseInt(parts[0]),selMoisIdx=parseInt(parts[1])-1;
   var moisNom=MOIS_NOM[selMoisIdx]+' '+selAn;
   var prevMois=selMoisIdx===0?11:selMoisIdx-1;var prevAn=selMoisIdx===0?selAn-1:selAn;
-  var jp=Math.min(now.getDate(),22);
+  var now=new Date();var jp=Math.min(now.getDate(),22);
   var absences=getAbsences();
   var agents=(D.allAgents||[]).filter(function(a){return a.statut==='Actif'&&D.visibleVilles.indexOf(a.ville)>-1;});
   var totNet=0,totDed=0,totBal=0;
@@ -2657,15 +2161,13 @@ function loadCloudConfigUI(){
   if(saved){
     try{
       var cfg=JSON.parse(saved);
-      if(cfg.enabled&&cfg.key&&cfg.binR&&cfg.binA){
+      if(cfg.enabled){
         CLOUD.ENABLED=true;CLOUD.API_KEY=cfg.key;CLOUD.BIN_RAPPORTS=cfg.binR;CLOUD.BIN_AUDIT=cfg.binA;
-        // Auto-start refresh for ALL users (so leaders sync too)
-        startCloudRefresh();
         var f1=document.getElementById('jb-apikey');if(f1)f1.value=cfg.key;
         var f2=document.getElementById('jb-bin-r');if(f2)f2.value=cfg.binR;
         var f3=document.getElementById('jb-bin-a');if(f3)f3.value=cfg.binA;
         var statusEl=document.getElementById('cloud-status');
-        if(statusEl){statusEl.textContent='Actif ✅ (Auto)';statusEl.style.background='var(--g-lt)';statusEl.style.color='var(--g)';}
+        if(statusEl){statusEl.textContent='Actif ✅';statusEl.style.background='var(--g-lt)';statusEl.style.color='var(--g)';}
       }
     }catch(e){}
   }
