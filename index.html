@@ -19,6 +19,8 @@
   --drb-bg:#DBEAFE;--drb-tx:#1E40AF;--drb-bd:#3B82F6;
   --bsk-bg:#F3E8FF;--bsk-tx:#6B21A8;--bsk-bd:#8B5CF6;
   --rbt-bg:#DCFCE7;--rbt-tx:#166534;--rbt-bd:#10B981;
+  --tem-bg:#E0F2FE;--tem-tx:#0369A1;--tem-bd:#38BDF8;
+  --sal-bg:#FCE7F3;--sal-tx:#BE185D;--sal-bd:#F472B6;
   --agd-bg:#FFE4E6;--agd-tx:#BE123C;--agd-bd:#F43F5E;
   --moh-bg:#E0E7FF;--moh-tx:#3730A3;--moh-bd:#6366F1;
   --lyn-bg:#FEF08A;--lyn-tx:#854D0E;--lyn-bd:#EAB308;
@@ -375,7 +377,9 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
       <button class="ft" onclick="fC('CAS',this)">🏙 Casablanca</button>
       <button class="ft" onclick="fC('DRB',this)">🌴 Dar Bouazza</button>
       <button class="ft" onclick="fC('BSK',this)">🌿 Bouskoura</button>
-      <button class="ft" onclick="fC('RBT',this)">🏛 Rabat-Salé</button>
+      <button class="ft" onclick="fC('RBT',this)">🏛 Rabat</button>
+      <button class="ft" onclick="fC('TEM',this)">🏖 Temara</button>
+      <button class="ft" onclick="fC('SAL',this)">🏰 Salé</button>
       <button class="ft" onclick="fC('AGD',this)">🌊 Agadir</button>
       <button class="ft" onclick="fC('MOH',this)">🌸 Mohammadia</button>
       <button class="ft" onclick="fC('LYN',this)">🐪 Laayoune</button>
@@ -397,7 +401,18 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
       </div>
       <div class="srch">
         <input class="si" type="text" id="ag-q" placeholder="🔍 Rechercher..." oninput="rAgents()">
-        <select class="sel" id="ag-vf" onchange="rAgents()"><option value="ALL">Toutes les villes</option><option value="CAS">Casablanca</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option><option value="RBT">Rabat-Salé</option><option value="AGD">Agadir</option><option value="MOH">Mohammadia</option><option value="LYN">Laayoune</option></select>
+        <select class="sel" id="ag-vf" onchange="rAgents()">
+          <option value="ALL">Toutes les villes</option>
+          <option value="CAS">Casablanca</option>
+          <option value="DRB">Dar Bouazza</option>
+          <option value="BSK">Bouskoura</option>
+          <option value="RBT">Rabat</option>
+          <option value="TEM">Temara</option>
+          <option value="SAL">Salé</option>
+          <option value="AGD">Agadir</option>
+          <option value="MOH">Mohammadia</option>
+          <option value="LYN">Laayoune</option>
+        </select>
         <select class="sel" id="ag-sf" onchange="rAgents()"><option value="ALL">Tous statuts</option><option value="Actif">Actif</option><option value="Inactif">Inactif</option></select>
       </div>
       <div class="ag-grid" id="ag-grid"><div class="sw"><div class="spin"></div></div></div>
@@ -409,7 +424,18 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
       <div class="ph-t">Hotspots</div>
       <div style="display:flex;gap:8px" id="hsBtns"></div>
     </div>
-    <div class="srch"><select class="sel" onchange="fHs(this.value)"><option value="ALL">Toutes</option><option value="CAS">Casablanca</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option><option value="RBT">Rabat-Salé</option><option value="AGD">Agadir</option><option value="MOH">Mohammadia</option><option value="LYN">Laayoune</option></select></div>
+    <div class="srch"><select class="sel" onchange="fHs(this.value)">
+      <option value="ALL">Toutes</option>
+      <option value="CAS">Casablanca</option>
+      <option value="DRB">Dar Bouazza</option>
+      <option value="BSK">Bouskoura</option>
+      <option value="RBT">Rabat</option>
+      <option value="TEM">Temara</option>
+      <option value="SAL">Salé</option>
+      <option value="AGD">Agadir</option>
+      <option value="MOH">Mohammadia</option>
+      <option value="LYN">Laayoune</option>
+    </select></div>
     <div id="hs-list"><div class="sw"><div class="spin"></div></div></div>
   </div>
 
@@ -435,7 +461,16 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
       <div class="ph-t">Paie Mensuelle</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
         <select class="sel" id="pay-mois-sel" onchange="rPay()"></select>
-        <select class="sel" onchange="fPay(this.value)"><option value="ALL">Toutes</option><option value="CAS">Casablanca</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option><option value="RBT">Rabat-Salé</option><option value="AGD">Agadir</option></select>
+        <select class="sel" onchange="fPay(this.value)">
+          <option value="ALL">Toutes</option>
+          <option value="CAS">Casablanca</option>
+          <option value="DRB">Dar Bouazza</option>
+          <option value="BSK">Bouskoura</option>
+          <option value="RBT">Rabat</option>
+          <option value="TEM">Temara</option>
+          <option value="SAL">Salé</option>
+          <option value="AGD">Agadir</option>
+        </select>
         <button class="btn btn-gh btn-sm" onclick="exportPaieExcel()">📊 Export Excel</button>
       </div>
     </div>
@@ -484,7 +519,17 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
     <div class="m-body">
       <div class="fg"><label>Nom *</label><input type="text" class="fc" id="ag-f-nom"></div>
       <div class="fgrid" style="margin-bottom:0">
-        <div class="fgl"><label>Ville *</label><select class="fc" id="ag-f-ville"><option value="CAS">Casablanca</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option><option value="RBT">Rabat-Salé</option><option value="AGD">Agadir</option><option value="MOH">Mohammadia</option><option value="LYN">Laayoune</option></select></div>
+        <div class="fgl"><label>Ville *</label><select class="fc" id="ag-f-ville">
+          <option value="CAS">Casablanca</option>
+          <option value="DRB">Dar Bouazza</option>
+          <option value="BSK">Bouskoura</option>
+          <option value="RBT">Rabat</option>
+          <option value="TEM">Temara</option>
+          <option value="SAL">Salé</option>
+          <option value="AGD">Agadir</option>
+          <option value="MOH">Mohammadia</option>
+          <option value="LYN">Laayoune</option>
+        </select></div>
         <div class="fgl"><label>Zone</label><input type="text" class="fc" id="ag-f-zone"></div>
         <div class="fgl"><label>Téléphone</label><input type="text" class="fc" id="ag-f-tel"></div>
         <div class="fgl"><label>Email</label><input type="email" class="fc" id="ag-f-email"></div>
@@ -500,7 +545,17 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
     <div class="modal-hd"><div><div class="modal-hd-t">📍 Ajouter un Hotspot</div></div><button class="m-close" onclick="closeModal('hsOverlay')">✕</button></div>
     <div class="m-body">
       <div class="fgrid" style="margin-bottom:0">
-        <div class="fgl"><label>Ville *</label><select class="fc" id="hs-f-ville"><option value="CAS">Casablanca</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option><option value="RBT">Rabat-Salé</option><option value="AGD">Agadir</option><option value="MOH">Mohammadia</option><option value="LYN">Laayoune</option></select></div>
+        <div class="fgl"><label>Ville *</label><select class="fc" id="hs-f-ville">
+          <option value="CAS">Casablanca</option>
+          <option value="DRB">Dar Bouazza</option>
+          <option value="BSK">Bouskoura</option>
+          <option value="RBT">Rabat</option>
+          <option value="TEM">Temara</option>
+          <option value="SAL">Salé</option>
+          <option value="AGD">Agadir</option>
+          <option value="MOH">Mohammadia</option>
+          <option value="LYN">Laayoune</option>
+        </select></div>
         <div class="fgl"><label>Nom *</label><input type="text" class="fc" id="hs-f-nom"></div>
         <div class="fgl"><label>Heure de pointe *</label><input type="time" class="fc" id="hs-f-pk" value="12:00"></div>
         <div class="fgl"><label>Agents requis</label><input type="number" class="fc" id="hs-f-ag" value="2" min="1"></div>
@@ -532,7 +587,9 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
             <option value="CAS">Casablanca</option>
             <option value="DRB">Dar Bouazza</option>
             <option value="BSK">Bouskoura</option>
-            <option value="RBT">Rabat-Salé</option>
+            <option value="RBT">Rabat</option>
+            <option value="TEM">Temara</option>
+            <option value="SAL">Salé</option>
             <option value="AGD">Agadir</option>
           </select>
         </div>
@@ -587,26 +644,26 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
 
 <script>
 // ═══════════════════════════════════════════════════════════
-//  SENTINEL v6.5 — FULL ADMIN, MULTI-SESSIONS & CLOUD SYNC
+//  SENTINEL v7.0 — FULL ADMIN & SÉPARATION RABAT/TEMARA/SALÉ
 // ═══════════════════════════════════════════════════════════
 
 var USERS={
-  admin:{pwd:'sentinel2026',nom:'Oussama E.',role:'admin',villes:['CAS','DRB','BSK','RBT','AGD','MOH','LYN'],color:'#E74C3C'},
+  admin:{pwd:'sentinel2026',nom:'Oussama E.',role:'admin',villes:['CAS','DRB','BSK','RBT','TEM','SAL','AGD','MOH','LYN'],color:'#E74C3C'},
   choaib:{pwd:'choaib2026',nom:'Choaib Knari',role:'leader',villes:['CAS','DRB','BSK'],color:'#F39C12'},
   agd:{pwd:'AGD2026',nom:'Leader Agadir',role:'leader',villes:['AGD'],color:'#3498DB'},
-  rbt:{pwd:'RBT2030',nom:'Leader Rabat',role:'leader',villes:['RBT'],color:'#2ECC71'}
+  rbt:{pwd:'RBT2030',nom:'Leader Rabat',role:'leader',villes:['RBT','TEM','SAL'],color:'#2ECC71'}
 };
 var AVC=['#E74C3C','#E67E22','#27AE60','#2980B9','#8E44AD','#16A085','#D35400','#C0392B','#1ABC9C','#F39C12','#2ECC71','#3498DB','#9B59B6','#E91E63'];
 var currentUser=null;
 var TAUX=192,SALAIRE=5000;
 var JOURS=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
-var SK={AGENTS:'s_agents_v3',HOTSPOTS:'s_hotspots_v3',ABSENCES:'s_absences_v3',PLAN:'s_plan_v3_',RAPPORTS:'s_rapports_v3',AUDIT:'s_audit_v3'};
+var SK={AGENTS:'s_agents_v4',HOTSPOTS:'s_hotspots_v4',ABSENCES:'s_absences_v4',PLAN:'s_plan_v4_',RAPPORTS:'s_rapports_v4',AUDIT:'s_audit_v4'};
 
 // ══ CLOUD SYNC CONFIG (JSONBin.io) ══
 var CLOUD={
   ENABLED: false, 
   API_KEY: '',
-  BIN_DATA: '', // <-- Nouveau: Stocke Agents, Hotspots, Absences, Planning actif
+  BIN_DATA: '', 
   BIN_RAPPORTS: '',
   BIN_AUDIT: '',
   BASE_URL: 'https://api.jsonbin.io/v3/b'
@@ -673,7 +730,7 @@ function startCloudRefresh(){
   clearInterval(cloudRefreshTm);
   cloudRefreshTm=setInterval(function(){
     cloudPullAll(function(){ if(document.querySelector('.pg.active')){ loadData(weekOffset); } });
-  }, 45000); // Sync toutes les 45 secondes
+  }, 45000); 
 }
 
 var DEFAULT_AGENTS=[
@@ -714,13 +771,13 @@ var DEFAULT_AGENTS=[
   {nom:'Mohammed Naenai',ville:'MOH',zone:'Mohammadia',email:'simonaenai435@gmail.com',statut:'Actif'},
   {nom:'Amine HASSANE',ville:'MOH',zone:'Mohammadia',email:'hassaneamineamine@gmail.com',statut:'Actif'},
   {nom:'Ayoub Abssi',ville:'RBT',zone:'Rabat',email:'Ayoubabssi05@gmail.com',statut:'Actif'},
-  {nom:'Islam Elmardi',ville:'RBT',zone:'Temara',email:'islamelmardi.1993@gmail.com',statut:'Actif'},
-  {nom:'Zakariae Benali',ville:'RBT',zone:'Salé',email:'Zakariaebenaliwork@gmail.com',statut:'Actif'},
-  {nom:'Hassan Azgoune',ville:'RBT',zone:'Salé',email:'hassan.azgoune95@gmail.com',statut:'Actif'},
+  {nom:'Islam Elmardi',ville:'TEM',zone:'Temara',email:'islamelmardi.1993@gmail.com',statut:'Actif'},
+  {nom:'Zakariae Benali',ville:'SAL',zone:'Salé',email:'Zakariaebenaliwork@gmail.com',statut:'Actif'},
+  {nom:'Hassan Azgoune',ville:'SAL',zone:'Salé',email:'hassan.azgoune95@gmail.com',statut:'Actif'},
   {nom:'Yahya Rhallab',ville:'RBT',zone:'Rabat',email:'Yahyarhallab00@gmail.com',statut:'Actif'},
   {nom:'Achraf Akhlij',ville:'RBT',zone:'Rabat',email:'Achraf.akhlij2005@gmail.com',statut:'Actif'},
   {nom:'Mourad Cherradi',ville:'RBT',zone:'Rabat',email:'raxmou96@gmail.com',statut:'Actif'},
-  {nom:'Oussama El Atrach',ville:'RBT',zone:'Rabat',email:'oussamaelat@gmail.com',statut:'Actif'},
+  {nom:'Oussama El Atrach',ville:'TEM',zone:'Temara',email:'oussamaelat@gmail.com',statut:'Actif'},
   {nom:'Ayoub Ben Malek',ville:'RBT',zone:'Rabat',email:'jadalaeayoub@gmail.com',statut:'Actif'},
   {nom:'Aymane Chlifane',ville:'RBT',zone:'Rabat',email:'aymanechlihfane639@gmail.com',statut:'Actif'},
   {nom:'Youssef Derkaoui',ville:'RBT',zone:'Rabat',email:'Altuslabcom@gmail.com',statut:'Actif'},
@@ -730,13 +787,15 @@ var DEFAULT_AGENTS=[
 var DEFAULT_HOTSPOTS=[
   {ville:'CAS',nom:"Maarif (Macdo, kfc)",pk:'12:00',agents:3},
   {ville:'RBT',nom:'Agdal Centre',pk:'12:00',agents:2},
+  {ville:'TEM',nom:'Temara Centre',pk:'12:00',agents:1},
+  {ville:'SAL',nom:'Salé Marina',pk:'12:00',agents:1},
   {ville:'DRB',nom:'Dar Bouazza Centre',pk:'12:00',agents:2},
   {ville:'BSK',nom:'Bouskoura Ville',pk:'12:00',agents:2},
   {ville:'AGD',nom:'Agadir Centre',pk:'12:00',agents:2}
 ];
 
-var CC={CAS:{bg:'var(--cas-bg)',tx:'var(--cas-tx)',bd:'var(--cas-bd)'},DRB:{bg:'var(--drb-bg)',tx:'var(--drb-tx)',bd:'var(--drb-bd)'},BSK:{bg:'var(--bsk-bg)',tx:'var(--bsk-tx)',bd:'var(--bsk-bd)'},RBT:{bg:'var(--rbt-bg)',tx:'var(--rbt-tx)',bd:'var(--rbt-bd)'},AGD:{bg:'var(--agd-bg)',tx:'var(--agd-tx)',bd:'var(--agd-bd)'},MOH:{bg:'var(--moh-bg)',tx:'var(--moh-tx)',bd:'var(--moh-bd)'},LYN:{bg:'var(--lyn-bg)',tx:'var(--lyn-tx)',bd:'var(--lyn-bd)'}};
-var CLA={CAS:'🏙 Casablanca',DRB:'🌴 Dar Bouazza',BSK:'🌿 Bouskoura',RBT:'🏛 Rabat-Salé',AGD:'🌊 Agadir',MOH:'🌸 Mohammadia',LYN:'🐪 Laayoune'};
+var CC={CAS:{bg:'var(--cas-bg)',tx:'var(--cas-tx)',bd:'var(--cas-bd)'},DRB:{bg:'var(--drb-bg)',tx:'var(--drb-tx)',bd:'var(--drb-bd)'},BSK:{bg:'var(--bsk-bg)',tx:'var(--bsk-tx)',bd:'var(--bsk-bd)'},RBT:{bg:'var(--rbt-bg)',tx:'var(--rbt-tx)',bd:'var(--rbt-bd)'},TEM:{bg:'var(--tem-bg)',tx:'var(--tem-tx)',bd:'var(--tem-bd)'},SAL:{bg:'var(--sal-bg)',tx:'var(--sal-tx)',bd:'var(--sal-bd)'},AGD:{bg:'var(--agd-bg)',tx:'var(--agd-tx)',bd:'var(--agd-bd)'},MOH:{bg:'var(--moh-bg)',tx:'var(--moh-tx)',bd:'var(--moh-bd)'},LYN:{bg:'var(--lyn-bg)',tx:'var(--lyn-tx)',bd:'var(--lyn-bd)'}};
+var CLA={CAS:'🏙 Casablanca',DRB:'🌴 Dar Bouazza',BSK:'🌿 Bouskoura',RBT:'🏛 Rabat',TEM:'🏖 Temara',SAL:'🏰 Salé',AGD:'🌊 Agadir',MOH:'🌸 Mohammadia',LYN:'🐪 Laayoune'};
 var HI={Macdo:'🍔',kfc:'🍗',Agdal:'🏢',Dar:'🏠'};
 
 var D={};
@@ -812,7 +871,7 @@ function buildNav(){
     {id:'pl',ic:'📅',label:'Planning',all:true},
     {id:'ag',ic:'👥',label:'Agents',admin:true},
     {id:'hs',ic:'📍',label:'Hotspots',admin:true},
-    {id:'ab',ic:'🚨',label:'Absences',all:true}, // Accessible par Admin ET Leaders
+    {id:'ab',ic:'🚨',label:'Absences',all:true}, 
     {id:'py',ic:'💰',label:'Paie',admin:true},
     {id:'rp',ic:'📋',label:'Rapport',all:true}
   ];
@@ -869,7 +928,7 @@ function genPlanningAgent(ag, idx, dates, wn){
   var poolMatin = ['09:00-16:00', '09:00-17:00', '10:00-17:00', '10:00-18:00'];
   var poolSoir = [];
   
-  if (ville === 'CAS' || ville === 'RBT') {
+  if (ville === 'CAS' || ville === 'RBT' || ville === 'TEM' || ville === 'SAL') {
     poolSoir = ['18:00-01:00', '18:00-02:00', '19:00-02:00', '19:00-03:00'];
   } else if (ville === 'BSK' || ville === 'DRB' || ville === 'MOH') { 
     poolSoir = ['16:00-00:00', '17:00-01:00', '18:00-02:00'];
