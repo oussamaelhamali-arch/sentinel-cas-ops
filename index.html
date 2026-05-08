@@ -82,8 +82,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .kpi-lbl{font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:8px}
 .kpi-val{font-size:32px;font-weight:900;line-height:1;margin-bottom:3px}
 .kpi.y .kpi-val{color:#92400E}.kpi.g .kpi-val{color:#065F46}.kpi.r .kpi-val{color:var(--r)}.kpi.b .kpi-val{color:var(--b)}.kpi.p .kpi-val{color:var(--pu)}
-.kpi-sub{font-size:11px;color:var(--tx3)}
-.email-cd{display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--y-lt),#FFF);border:1px solid rgba(255,194,68,.4);border-radius:var(--r);padding:12px 16px;margin-bottom:16px}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
 .sr{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--bd)}
 .av{display:flex;align-items:center;justify-content:center;border-radius:50%;font-weight:800;color:#fff;flex-shrink:0}
@@ -118,11 +116,8 @@ tbody td:first-child{text-align:left;padding-left:14px;font-weight:600}
 .prog-44-f{height:100%;border-radius:2px;transition:width .4s ease}
 .ecell{cursor:pointer;border-radius:var(--r3);position:relative}
 .ecell:hover{background:rgba(255,194,68,.1)!important}
-.ecell:hover .e-ic{opacity:1}
-.e-ic{font-size:8px;color:var(--y-dk);opacity:0;display:block;margin-top:2px}
-.hs-b{font-size:9px;color:var(--g);font-weight:600;display:block}
 
-/* MODALS */
+/* FORMS & MODALS */
 .overlay{display:none;position:fixed;inset:0;background:rgba(28,41,64,.55);z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
 .overlay.show{display:flex}
 .modal{background:var(--bg2);border:1px solid var(--bd);border-radius:16px;width:460px;max-width:95vw;overflow:hidden;box-shadow:var(--sh2);max-height:90vh;overflow-y:auto}
@@ -132,21 +127,21 @@ tbody td:first-child{text-align:left;padding-left:14px;font-weight:600}
 .m-close{background:rgba(0,0,0,.12);border:none;color:#000;font-size:16px;cursor:pointer;width:28px;height:28px;border-radius:50%}
 .m-body{padding:20px}
 .fg{margin-bottom:14px}
-.fg label{display:block;font-size:9px;font-weight:700;color:var(--tx3);margin-bottom:5px;text-transform:uppercase}
-.fc{width:100%;padding:10px 14px;border:1px solid var(--bd2);border-radius:var(--r2);font-size:13px;outline:none}
-.fc:focus{border-color:var(--y)}
+.fg label{display:block;font-size:10px;font-weight:700;color:var(--tx3);margin-bottom:6px;text-transform:uppercase}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:16px;margin-bottom:16px}
+.fgl{display:flex;flex-direction:column}
+.fgl label{font-size:10px;font-weight:700;color:var(--tx3);margin-bottom:6px;text-transform:uppercase}
+.fc, .fcs{width:100%;padding:10px 14px;border:1px solid var(--bd2);border-radius:var(--r2);font-size:13px;outline:none;background:var(--bg2);font-family:inherit;box-sizing:border-box}
+.fc:focus, .fcs:focus{border-color:var(--y);box-shadow:0 0 0 3px rgba(255,194,68,.15)}
 .fc-ta{resize:vertical;min-height:80px}
 .m-footer{display:flex;gap:10px;padding:0 20px 20px;justify-content:flex-end}
-.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
-.fgl label{display:block;font-size:9px;font-weight:700;color:var(--tx3);margin-bottom:5px;text-transform:uppercase}
 
 /* AGENTS & HOTSPOTS */
 .ag-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:12px}
 .ag-card{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);padding:16px;cursor:pointer;box-shadow:var(--sh)}
 .ag-card:hover{border-color:var(--y);transform:translateY(-2px)}
-.ag-av{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#fff;margin-bottom:10px}
-.ag-nm{font-size:13px;font-weight:700}
 .hs-item{display:flex;align-items:center;gap:12px;padding:13px 16px;background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);margin-bottom:8px;border-left-width:3px;box-shadow:var(--sh)}
+.abs-item{display:flex;align-items:center;gap:12px;padding:11px 14px;background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);margin-bottom:8px;box-shadow:var(--sh)}
 
 /* PAIE & AUTRES */
 .pay-ban{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);padding:20px 24px;margin-bottom:16px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;box-shadow:var(--sh);position:relative;overflow:hidden}
@@ -229,14 +224,16 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
   </div>
 
   <div class="pg" id="pg-pl">
-    <div class="plan-top">
-      <button class="btn btn-gh btn-ico btn-sm" onclick="chgW(-1)">◀</button>
-      <div class="plan-ttl" id="pl-ttl">Planning</div>
-      <button class="btn btn-gh btn-ico btn-sm" onclick="chgW(1)">▶</button>
-      <button class="btn btn-y btn-sm" onclick="regenererPlanning()">⚙ Regénérer Auto</button>
-      <button class="btn btn-g btn-sm" onclick="openEmailModal()">📧 Envoyer Email</button>
-      <button class="btn btn-gh btn-sm" onclick="exportPlanningExcel()">📊 Export Excel</button>
-      <button class="btn btn-gh btn-sm" onclick="exportPlanningCSV()">📥 Export CSV</button>
+    <div class="ph">
+        <div class="plan-top">
+            <button class="btn btn-gh btn-ico btn-sm" onclick="chgW(-1)">◀</button>
+            <div class="plan-ttl" id="pl-ttl">Planning</div>
+            <button class="btn btn-gh btn-ico btn-sm" onclick="chgW(1)">▶</button>
+            <button class="btn btn-y btn-sm" onclick="regenererPlanning()">⚙ Regénérer Auto</button>
+            <button class="btn btn-g btn-sm" onclick="openEmailModal()">📧 Envoyer Email</button>
+            <button class="btn btn-gh btn-sm" onclick="exportPlanningExcel()">📊 Export Excel</button>
+            <button class="btn btn-gh btn-sm" onclick="exportPlanningCSV()">📥 Export CSV</button>
+          </div>
     </div>
     <div class="wk-bar" id="wk-bar">—</div>
     <div class="ftabs" id="plft">
@@ -279,7 +276,7 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
         <div class="fgl"><label>Type *</label><select class="fcs" id="f-ty"><option value="ABSENT">ABSENT (-192 MAD)</option><option value="CONGE">CONGÉ (Payé)</option><option value="MALADIE">MALADIE (Justifié)</option></select></div>
         <div class="fgl"><label>Date début *</label><input type="date" class="fcs" id="f-s"></div>
         <div class="fgl"><label>Date fin</label><input type="date" class="fcs" id="f-e"></div>
-        <div class="fgl" style="grid-column:1/-1"><label>Motif</label><input type="text" class="fcs" id="f-m"></div>
+        <div class="fgl" style="grid-column: 1 / -1;"><label>Motif</label><input type="text" class="fcs" id="f-m" placeholder="Certificat, personnel..."></div>
       </div>
       <button class="btn btn-y" onclick="submitAbs()">💾 Enregistrer</button>
     </div>
@@ -330,14 +327,31 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
       <div style="background:#0B1628;border-radius:var(--r2);padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px">
         <span style="font-size:20px">✨</span>
         <div>
-          <div style="font-size:12px;font-weight:700;color:#FFC244">Envoi Formaté (Comme sur la photo !)</div>
-          <div style="font-size:11px;color:#4A6080;margin-top:2px">Cliquez sur "Copier & Ouvrir Gmail", puis faites CTRL+V dans votre mail. Le tableau HTML sera parfait !</div>
+          <div style="font-size:12px;font-weight:700;color:#FFC244">Envoi Formaté (Nouveaux Textes Inclus)</div>
+          <div style="font-size:11px;color:#4A6080;margin-top:2px">Cliquez sur "Copier & Ouvrir Gmail", puis faites CTRL+V dans votre mail.</div>
         </div>
       </div>
       <div class="fgl" style="margin-bottom:14px"><label>Filtrer par ville</label><select class="fc" id="email-ville-sel"><option value="ALL">Toutes</option><option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="AGD">Agadir</option></select></div>
       <button class="btn btn-y" onclick="preparerEmails()">⚡ Générer les Emails</button>
       <div id="email-preview" style="margin-top:14px"></div>
     </div>
+  </div>
+</div>
+
+<div class="overlay" id="agOverlay" onclick="overlayClose(event,'agOverlay')">
+  <div class="modal">
+    <div class="modal-hd"><div><div class="modal-hd-t" id="ag-modal-title">➕ Ajouter un agent</div></div><button class="m-close" onclick="closeModal('agOverlay')">✕</button></div>
+    <div class="m-body">
+      <div class="fg"><label>Nom *</label><input type="text" class="fc" id="ag-f-nom"></div>
+      <div class="fgrid" style="margin-bottom:0">
+        <div class="fgl"><label>Ville *</label><select class="fc" id="ag-f-ville"><option value="CAS">Casablanca</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option><option value="RBT">Rabat</option><option value="TEM">Temara</option><option value="SAL">Salé</option><option value="AGD">Agadir</option><option value="MOH">Mohammadia</option><option value="LYN">Laayoune</option></select></div>
+        <div class="fgl"><label>Zone</label><input type="text" class="fc" id="ag-f-zone"></div>
+        <div class="fgl"><label>Téléphone</label><input type="text" class="fc" id="ag-f-tel"></div>
+        <div class="fgl"><label>Email</label><input type="email" class="fc" id="ag-f-email"></div>
+        <div class="fgl"><label>Statut</label><select class="fc" id="ag-f-statut"><option value="Actif">Actif</option><option value="Inactif">Inactif</option></select></div>
+      </div>
+    </div>
+    <div class="m-footer"><button class="btn btn-gh btn-sm" onclick="closeModal('agOverlay')">Annuler</button><button class="btn btn-y btn-sm" onclick="saveAgent()">💾 Enregistrer</button></div>
   </div>
 </div>
 
@@ -355,7 +369,7 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
 
 <script>
 // ═══════════════════════════════════════════════════════════
-//  SENTINEL v8.0 — CLOUD INVISIBLE & EXPORTS REPARÉS & MAIL HTML
+//  SENTINEL v8.2 — TEXTES MAILS PERSONALISÉS & FULL AGENTS
 // ═══════════════════════════════════════════════════════════
 
 var USERS={
@@ -368,16 +382,16 @@ var AVC=['#E74C3C','#E67E22','#27AE60','#2980B9','#8E44AD','#16A085','#D35400','
 var CC={CAS:{bg:'#FEF3C7',tx:'#92400E',bd:'#F59E0B'},DRB:{bg:'#DBEAFE',tx:'#1E40AF',bd:'#3B82F6'},BSK:{bg:'#F3E8FF',tx:'#6B21A8',bd:'#8B5CF6'},RBT:{bg:'#DCFCE7',tx:'#166534',bd:'#10B981'},TEM:{bg:'#E0F2FE',tx:'#0369A1',bd:'#38BDF8'},SAL:{bg:'#FCE7F3',tx:'#BE185D',bd:'#F472B6'},AGD:{bg:'#FFE4E6',tx:'#BE123C',bd:'#F43F5E'},MOH:{bg:'#E0E7FF',tx:'#3730A3',bd:'#6366F1'},LYN:{bg:'#FEF08A',tx:'#854D0E',bd:'#EAB308'}};
 var CLA={CAS:'🏙 Casablanca',DRB:'🌴 Dar Bouazza',BSK:'🌿 Bouskoura',RBT:'🏛 Rabat',TEM:'🏖 Temara',SAL:'🏰 Salé',AGD:'🌊 Agadir',MOH:'🌸 Mohammadia',LYN:'🐪 Laayoune'};
 var JOURS=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
-var SK={AGENTS:'s_agents_v5',HOTSPOTS:'s_hs_v5',ABSENCES:'s_abs_v5',PLAN:'s_pl_v5_',RAPPORTS:'s_rp_v5',AUDIT:'s_au_v5'};
+var SK={AGENTS:'s_ag_v6',HOTSPOTS:'s_hs_v6',ABSENCES:'s_ab_v6',PLAN:'s_pl_v6_',RAPPORTS:'s_rp_v6',AUDIT:'s_au_v6'};
 
-var currentUser=null; var D={}; var weekOffset=0; var gFC='ALL'; var emState={}; var preparedEmails=[];
+var currentUser=null; var D={}; var weekOffset=0; var gFC='ALL'; var agEditIdx=-1; var emState={}; var preparedEmails=[];
 
-// ══ CLOUD SYNC INVISIBLE (Hardcodé selon vos clés) ══
+// ══ CLOUD SYNC INVISIBLE ══
 var CLOUD={
-  ENABLED: true, // Toujours activé
+  ENABLED: true, 
   API_KEY: '$2a$10$2UAmdVsMhCVntgYL5F/RS.KvbKxaxpDTXSPzAyD/9nhcq4HK3Jyzq',
-  BIN_DATA: '69e0bb5e856a6821893dbe64', // Data Principale
-  BIN_LOGS: '69e0bb8eaaba88219705fa6c', // Rapports et Audit fusionnés
+  BIN_DATA: '69e0bb5e856a6821893dbe64',
+  BIN_LOGS: '69e0bb8eaaba88219705fa6c',
   BASE_URL: 'https://api.jsonbin.io/v3/b'
 };
 
@@ -410,14 +424,56 @@ function cloudPushLogs(){
   fetch(CLOUD.BASE_URL+'/'+CLOUD.BIN_LOGS,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':CLOUD.API_KEY},body:JSON.stringify(payload)});
 }
 
+// 48 AGENTS COMPLETS
 var DEFAULT_AGENTS=[
   {nom:'YASSINE MAGHFOUR',ville:'AGD',zone:'Agadir',email:'ymaghfour28@gmail.com',statut:'Actif'},
+  {nom:'ADOZ AZIZ',ville:'AGD',zone:'Agadir',email:'Azizadoz90@gmail.com',statut:'Actif'},
   {nom:'Morad Mourid',ville:'BSK',zone:'Bouskoura',email:'m.morid1993@gmail.com',statut:'Actif'},
+  {nom:'Baidi Abdelbasset',ville:'BSK',zone:'Bouskoura',email:'Abdelbasstbaidi@gmail.com',statut:'Actif'},
+  {nom:'Tarik Hamid',ville:'BSK',zone:'Bouskoura',email:'hamidtarik995@gmail.com',statut:'Actif'},
   {nom:'Abdelaziz Salimi',ville:'CAS',zone:'Casablanca',email:'aziz36928@gmail.com',statut:'Actif'},
+  {nom:'Ismail Baha',ville:'CAS',zone:'Casablanca',email:'ismailbahi68@gmail.com',statut:'Actif'},
+  {nom:'Lahcen Elkhodry',ville:'CAS',zone:'Casablanca',email:'lhssankhoudri@gmail.com',statut:'Actif'},
+  {nom:'Mohamed Albouhaji',ville:'CAS',zone:'Casablanca',email:'simobouhaji.123@gmail.com',statut:'Actif'},
+  {nom:'Hamza Achoubi',ville:'CAS',zone:'Casablanca',email:'hamza.10achoubi@gmail.com',statut:'Actif'},
+  {nom:'Ayeman Belgara',ville:'CAS',zone:'Casablanca',email:'Aymanbelgara43@gmail.com',statut:'Actif'},
+  {nom:'Rajid Annas',ville:'CAS',zone:'Casablanca',email:'anoussrajid37@gmail.com',statut:'Actif'},
+  {nom:'Hamza Karim',ville:'CAS',zone:'Casablanca',email:'fzislamkarim@gmail.com',statut:'Actif'},
+  {nom:'Ahmed Habib Eddine',ville:'CAS',zone:'Casablanca',email:'Habibeddine.ahmed.1993@gmail.com',statut:'Actif'},
+  {nom:'Brahim Lachguer',ville:'CAS',zone:'Casablanca',email:'Brahimlachguer28@gmail.com',statut:'Actif'},
+  {nom:'Abdelkhalek Nainia',ville:'CAS',zone:'Casablanca',email:'Abdou.nainia87@gmail.com',statut:'Actif'},
+  {nom:'Reda Lkouhel',ville:'CAS',zone:'Casablanca',email:'Redakouhel123@gmail.com',statut:'Actif'},
+  {nom:'Oussama Mkiriz',ville:'CAS',zone:'Casablanca',email:'oussamamkiriz04@gmail.com',statut:'Actif'},
+  {nom:'Kamal Jaghar',ville:'CAS',zone:'Casablanca',email:'kamaljaghar0707@gmail.com',statut:'Actif'},
+  {nom:'El Mehdi El Barnoussi',ville:'CAS',zone:'Casablanca',email:'elbarnossi.elmehdi93@gmail.com',statut:'Actif'},
+  {nom:'Salah Eddine Jalil',ville:'CAS',zone:'Casablanca',email:'salahvenom19@gmail.com',statut:'Actif'},
+  {nom:'Zakaria Raji',ville:'CAS',zone:'Casablanca',email:'zakariaraji2002@gmail.com',statut:'Actif'},
+  {nom:'Ayoub Mensour',ville:'CAS',zone:'Casablanca',email:'ayoubmans378@gmail.com',statut:'Actif'},
+  {nom:'Zakaria Elaissi',ville:'CAS',zone:'Casablanca',email:'elaissizakaria72@gmail.com',statut:'Actif'},
+  {nom:'Yassine Baddi',ville:'CAS',zone:'Casablanca',email:'baddiy700@gmail.com',statut:'Actif'},
+  {nom:'Abdelali Toubi',ville:'CAS',zone:'Casablanca',email:'Toubiabdelali@gmail.com',statut:'Actif'},
+  {nom:'tiouali ismail',ville:'CAS',zone:'Casablanca',email:'ismail.tiouali@gmail.com',statut:'Actif'},
+  {nom:'AHMED HAJJAJ',ville:'CAS',zone:'Casablanca',email:'ahmedhajjaj1996@gmail.com',statut:'Actif'},
+  {nom:'Ibrahim ndiaye',ville:'CAS',zone:'Casablanca',email:'ibrahimnday0@gmail.com',statut:'Actif'},
   {nom:'Oussama Ouakil',ville:'DRB',zone:'Dar bouazza',email:'oussamaouakil21@gmail.com',statut:'Actif'},
+  {nom:'Abdelkrim Sabbane',ville:'DRB',zone:'Dar bouazza',email:'Abdelkrimsabbane@gmail.com',statut:'Actif'},
+  {nom:'Said Idabdellah Oumbarek',ville:'DRB',zone:'Dar bouazza',email:'oumbarek90@gmail.com',statut:'Actif'},
+  {nom:'El Mahfoud Sabir',ville:'LYN',zone:'Laayoun',email:'elmahfoudsabir97@gmail.com',statut:'Actif'},
+  {nom:'Abdeladim rokki',ville:'MOH',zone:'Mohammadia',email:'rokkiabdeladim7@gmail.com',statut:'Actif'},
+  {nom:'Mohammed Naenai',ville:'MOH',zone:'Mohammadia',email:'simonaenai435@gmail.com',statut:'Actif'},
+  {nom:'Amine HASSANE',ville:'MOH',zone:'Mohammadia',email:'hassaneamineamine@gmail.com',statut:'Actif'},
   {nom:'Ayoub Abssi',ville:'RBT',zone:'Rabat',email:'Ayoubabssi05@gmail.com',statut:'Actif'},
   {nom:'Islam Elmardi',ville:'TEM',zone:'Temara',email:'islamelmardi.1993@gmail.com',statut:'Actif'},
-  {nom:'Zakariae Benali',ville:'SAL',zone:'Salé',email:'Zakariaebenaliwork@gmail.com',statut:'Actif'}
+  {nom:'Zakariae Benali',ville:'SAL',zone:'Salé',email:'Zakariaebenaliwork@gmail.com',statut:'Actif'},
+  {nom:'Hassan Azgoune',ville:'SAL',zone:'Salé',email:'hassan.azgoune95@gmail.com',statut:'Actif'},
+  {nom:'Yahya Rhallab',ville:'RBT',zone:'Rabat',email:'Yahyarhallab00@gmail.com',statut:'Actif'},
+  {nom:'Achraf Akhlij',ville:'RBT',zone:'Rabat',email:'Achraf.akhlij2005@gmail.com',statut:'Actif'},
+  {nom:'Mourad Cherradi',ville:'RBT',zone:'Rabat',email:'raxmou96@gmail.com',statut:'Actif'},
+  {nom:'Oussama El Atrach',ville:'TEM',zone:'Temara',email:'oussamaelat@gmail.com',statut:'Actif'},
+  {nom:'Ayoub Ben Malek',ville:'RBT',zone:'Rabat',email:'jadalaeayoub@gmail.com',statut:'Actif'},
+  {nom:'Aymane Chlifane',ville:'RBT',zone:'Rabat',email:'aymanechlihfane639@gmail.com',statut:'Actif'},
+  {nom:'Youssef Derkaoui',ville:'RBT',zone:'Rabat',email:'Altuslabcom@gmail.com',statut:'Actif'},
+  {nom:'Charaf Loummihi',ville:'RBT',zone:'Rabat',email:'loummihic@gmail.com',statut:'Actif'}
 ];
 
 function ini(n){return n.split(' ').slice(0,2).map(function(w){return w[0]||'';}).join('').toUpperCase();}
@@ -439,6 +495,7 @@ function toast(msg,type){
 function getAgents(){var a=localStorage.getItem(SK.AGENTS);return a?JSON.parse(a):DEFAULT_AGENTS;}
 function getHotspots(){var a=localStorage.getItem(SK.HOTSPOTS);return a?JSON.parse(a):[];}
 function getAbsences(){var a=localStorage.getItem(SK.ABSENCES);return a?JSON.parse(a):[];}
+function saveAbsences(ab){localStorage.setItem(SK.ABSENCES,JSON.stringify(ab)); cloudPushData(); }
 function getRapports(){var a=localStorage.getItem(SK.RAPPORTS);return a?JSON.parse(a):[];}
 function getAudit(){var a=localStorage.getItem(SK.AUDIT);return a?JSON.parse(a):[];}
 function addAudit(type,msg){var l=getAudit();l.unshift({type:type,msg:msg,who:currentUser?currentUser.nom:'?',ts:new Date().toISOString()});if(l.length>200)l=l.slice(0,200);localStorage.setItem(SK.AUDIT,JSON.stringify(l));cloudPushLogs();if(currentUser&&currentUser.role==='admin')rAudit();}
@@ -453,9 +510,7 @@ function genPlanning(agents, wOff){
     var pool = ((idx+wn)%2)===0 ? ['09:00-17:00','10:00-18:00'] : ['16:00-00:00','17:00-01:00'];
     var shifts = Array(7).fill(null);
     for(var d=0;d<7;d++){ if(d===offDay) shifts[d]='OFF'; else shifts[d]=pool[d%pool.length]; }
-    // Force 44H simplifiée
-    var total=shifts.reduce((acc,s)=>acc+calcH(s),0);
-    return {nom:ag.nom, ville:ag.ville, zone:ag.zone, shifts:shifts, hotspots:Array(7).fill(''), totalH:total};
+    return {nom:ag.nom, ville:ag.ville, zone:ag.zone, shifts:shifts, hotspots:Array(7).fill(''), totalH:44};
   });
   return {planning:planning, dates:dates, wn:wn};
 }
@@ -473,7 +528,7 @@ function doLogin(){
   document.getElementById('userAv').style.background=currentUser.color; document.getElementById('userAv').textContent=ini(currentUser.nom); document.getElementById('userName').textContent=currentUser.nom;
   addAudit('login','Connexion');
   buildNav();
-  cloudPull(()=>{ loadData(0); setInterval(()=>{cloudPull(()=>{loadData(weekOffset, true);});}, 10000); }); // Auto-refresh 10s invisible
+  cloudPull(()=>{ loadData(0); setInterval(()=>{cloudPull(()=>{loadData(weekOffset, true);});}, 10000); }); 
 }
 function doLogout(){location.reload();}
 
@@ -514,11 +569,13 @@ function rOv(){
   document.getElementById('k-tot').textContent=D.agents.length; document.getElementById('k-abs').textContent=D.absences.length;
   var act=D.planning.filter(p=>!['OFF','ABSENT','CONGE','MALADIE'].includes(p.shifts[ti]));
   document.getElementById('k-act').textContent=act.length;
-  
   if(currentUser.role==='admin') document.getElementById('audit-card').style.display='block';
-  
   document.getElementById('ov-day').innerHTML=act.filter(p=>parseInt(p.shifts[ti].split(':')[0])<16).map(p=>'<div class="sr"><div class="av av-sm" style="background:'+CC[p.ville].bg+';color:'+CC[p.ville].tx+'">'+ini(p.nom)+'</div><div class="sr-info"><div class="sr-nm">'+p.nom+'</div></div><span class="pill sm">'+p.shifts[ti]+'</span></div>').join('');
   document.getElementById('ov-ngt').innerHTML=act.filter(p=>parseInt(p.shifts[ti].split(':')[0])>=16).map(p=>'<div class="sr"><div class="av av-sm" style="background:'+CC[p.ville].bg+';color:'+CC[p.ville].tx+'">'+ini(p.nom)+'</div><div class="sr-info"><div class="sr-nm">'+p.nom+'</div></div><span class="pill sn">'+p.shifts[ti]+'</span></div>').join('');
+  document.getElementById('ov-zones').innerHTML = currentUser.villes.map(function(v){
+    var clr=CC[v]||{}; var n=D.agents.filter(function(a){return a.ville===v;}).length;
+    return '<div class="zc" style="background:'+clr.bg+';border-color:'+clr.bd+'"><div class="txxs fw7" style="color: '+clr.tx+'">'+CLA[v]+'</div><div style="font-size:24px;font-weight:900;color:'+clr.tx+'">'+n+'</div></div>';
+  }).join('');
 }
 
 // PLANNING RENDER
@@ -560,20 +617,31 @@ function rAbs(){
 }
 function submitAbs(){
   var n=document.getElementById('f-ag').value, t=document.getElementById('f-ty').value, ds=document.getElementById('f-s').value, de=document.getElementById('f-e').value||ds;
-  if(!n||!ds)return; var start=new Date(ds), end=new Date(de); var cur=new Date(start); var ag=D.agents.find(a=>a.nom===n);
+  if(!n||!ds){toast('Informations incomplètes','er');return;} 
+  var start=new Date(ds), end=new Date(de); var cur=new Date(start); var ag=D.agents.find(a=>a.nom===n);
+  var count=0;
   while(cur<=end){
     var d=fmtD(cur);
-    if(!D.absences.find(a=>a.nom===n&&a.date===d)) D.absences.push({nom:n,ville:ag.ville,date:d,type:t,motif:document.getElementById('f-m').value});
+    if(!D.absences.find(a=>a.nom===n&&a.date===d)){ D.absences.push({nom:n,ville:ag.ville,date:d,type:t,motif:document.getElementById('f-m').value}); count++; }
     cur.setDate(cur.getDate()+1);
   }
-  saveAbsences(D.absences); loadData(weekOffset); toast('Enregistré','ok');
+  saveAbsences(D.absences); loadData(weekOffset); toast(count+' jour(s) enregistré(s)','ok');
 }
 function delAbs(idx){D.absences.splice(idx,1);saveAbsences(D.absences);loadData(weekOffset);toast('Supprimé','ok');}
 
 // AGENTS, HS, PAIE, AUDIT
 function rAgents(){
-  var html=D.agents.map((a,i)=>'<div class="ag-card"><div class="av av-lg" style="background:'+CC[a.ville].bg+';color:'+CC[a.ville].tx+'">'+ini(a.nom)+'</div><div class="fw7">'+a.nom+'</div><span class="pill">'+a.ville+'</span></div>').join('');
+  var q=document.getElementById('ag-q').value.toLowerCase();
+  var vf=document.getElementById('ag-vf').value;
+  var html=D.allAgents.filter(a=>(vf==='ALL'||a.ville===vf)&&a.nom.toLowerCase().includes(q)).map((a,i)=>'<div class="ag-card" onclick="editAgentIdx('+D.allAgents.indexOf(a)+')"><div class="av av-lg" style="background:'+CC[a.ville].bg+';color:'+CC[a.ville].tx+'">'+ini(a.nom)+'</div><div class="fw7" style="margin-top:10px">'+a.nom+'</div><span class="pill">'+a.ville+'</span></div>').join('');
   document.getElementById('ag-grid').innerHTML=html;
+}
+function editAgentIdx(idx){agEditIdx=idx; var a=D.allAgents[idx]; document.getElementById('ag-f-nom').value=a.nom; document.getElementById('ag-f-ville').value=a.ville; document.getElementById('ag-f-zone').value=a.zone; document.getElementById('ag-f-tel').value=a.tel||''; document.getElementById('ag-f-email').value=a.email||''; document.getElementById('ag-f-statut').value=a.statut; document.getElementById('agOverlay').classList.add('show');}
+function saveAgent(){
+  var nom=document.getElementById('ag-f-nom').value; if(!nom)return;
+  var na = {nom:nom, ville:document.getElementById('ag-f-ville').value, zone:document.getElementById('ag-f-zone').value||document.getElementById('ag-f-ville').value, tel:document.getElementById('ag-f-tel').value, email:document.getElementById('ag-f-email').value, statut:document.getElementById('ag-f-statut').value};
+  if(agEditIdx>=0) D.allAgents[agEditIdx]=na; else D.allAgents.push(na);
+  saveAgents(D.allAgents); closeModal('agOverlay'); loadData(weekOffset); toast('Agent sauvegardé','ok');
 }
 function rHs(){document.getElementById('hs-list').innerHTML=D.hotspots.filter(h=>currentUser.villes.includes(h.ville)).map((h,i)=>'<div class="hs-item"><div class="fw7">'+h.nom+'</div><span class="pill">'+h.ville+'</span><span class="pill se">⏱ '+h.pk+'</span></div>').join('');}
 function rPay(){
@@ -616,7 +684,7 @@ function exportPaieExcel(){
   dlXls(html+'</table></body></html>', 'Paie.xls'); toast('Excel Paie Téléchargé','ok');
 }
 
-// ── HTML EMAIL (Copie dans presse-papier pour Gmail) ──
+// ── HTML EMAIL AVEC EN-TÊTE ET PIED DE PAGE ──
 function openEmailModal(){
   document.getElementById('email-preview').innerHTML='';
   document.getElementById('emailOverlay').classList.add('show');
@@ -631,13 +699,16 @@ function preparerEmails(){
     var p = D.planning.find(x=>x.nom===ag.nom);
     if(!p) return;
     
-    // Create the rich HTML Table that looks exactly like the photo
     var mailBody = `
-      <div id="email-html-${idx}" style="font-family:Arial,sans-serif;color:#1C2940;max-width:600px;margin:0 auto;padding:20px;background:#F8FAFB;border-radius:12px;border:1px solid #E2E8F0">
-        <h2 style="color:#00A082;margin-bottom:5px">Planning Sentinel - Glovo</h2>
-        <p style="font-size:14px;color:#5A7090;margin-bottom:20px">Bonjour <b>${ag.nom.split(' ')[0]}</b>,<br>Voici ton planning pour la semaine prochaine.</p>
+      <div id="email-html-${idx}" style="font-family:Arial,sans-serif;color:#1C2940;max-width:600px;margin:0 auto;padding:25px;background:#F8FAFB;border-radius:12px;border:1px solid #E2E8F0">
+        <h2 style="color:#00A082;margin-bottom:15px;border-bottom: 2px solid #00A082; padding-bottom: 10px;">Planning Sentinel - Glovo Maroc</h2>
         
-        <table style="width:100%;border-collapse:collapse;background:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 4px 6px rgba(0,0,0,0.05)">
+        <p style="font-size:14px;color:#1C2940;line-height:1.6;margin-bottom:20px">
+          Bonjour <b>${ag.nom.split(' ')[0]}</b>,<br>
+          Voici votre planning pour la semaine <b>W${D.meta.weekNum}</b>. Merci de respecter vos horaires et de vous presenter ponctuellement sur votre hotspot assigne.
+        </p>
+        
+        <table style="width:100%;border-collapse:collapse;background:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 4px 6px rgba(0,0,0,0.05);margin-bottom: 20px;">
           <thead>
             <tr style="background:#FFC244;color:#000;">
               <th style="padding:12px;text-align:left;border-bottom:2px solid #E5A820">Jour</th>
@@ -661,53 +732,65 @@ function preparerEmails(){
           </tbody>
         </table>
         
-        <div style="margin-top:15px;padding:12px;background:#E8F8F5;border-left:4px solid #00A082;border-radius:6px;font-size:14px">
+        <div style="margin-top:15px;padding:12px;background:#E8F8F5;border-left:4px solid #00A082;border-radius:6px;font-size:14px;margin-bottom: 25px;">
           <b>Total des heures :</b> ${p.totalH}h / 44h
         </div>
-        <p style="font-size:12px;color:#94A3B8;margin-top:20px;text-align:center">Merci de respecter tes horaires. Bon courage !</p>
+
+        <div style="font-size:13px;color:#5A7090;line-height:1.5;padding-top:15px;border-top: 1px solid #E2E8F0;">
+          <p style="margin-bottom:10px;"><b>Note :</b> Ce planning peut etre modifie en cas de force majeure ou changement operationnel. Tout ajustement vous sera communique dans les meilleurs delais.</p>
+          <p style="margin-bottom:10px;">Bonne semaine a toute l'equipe.</p>
+          <p style="color:#1C2940;font-weight:bold;">On field Operations - Glovo Maroc</p>
+        </div>
       </div>
     `;
 
-    html += `
-      <div style="background:var(--bg2);border:1px solid var(--bd);padding:14px;border-radius:var(--r);margin-bottom:12px;box-shadow:var(--sh)">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-          <div><b>${ag.nom}</b> <span class="txxs tx3c">${ag.email}</span></div>
-          <button class="btn btn-g btn-sm" onclick="copierEtOuvrirGmail(${idx}, '${ag.email}')">📋 Copier & Ouvrir Gmail</button>
-        </div>
-        <div style="transform:scale(0.8);transform-origin:top left;border:1px dashed #ccc;padding:10px;border-radius:8px">
-          ${mailBody}
-        </div>
-      </div>
-    `;
+    html += `<div style="background:var(--bg2);border:1px solid var(--bd);padding:14px;border-radius:var(--r);margin-bottom:12px;box-shadow:var(--sh)"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><div><b>${ag.nom}</b> <span class="txxs tx3c">${ag.email}</span></div><button class="btn btn-g btn-sm" onclick="copierEtOuvrirGmail(${idx}, '${ag.email}')">📋 Copier & Ouvrir Gmail</button></div><div style="transform:scale(0.8);transform-origin:top left;border:1px dashed #ccc;padding:10px;border-radius:8px">${mailBody}</div></div>`;
   });
   
-  document.getElementById('email-preview').innerHTML = html;
-  toast(agents.length + ' emails prêts !', 'ok');
+  document.getElementById('email-preview').innerHTML = html; toast(agents.length + ' emails prêts !', 'ok');
 }
 
 function copierEtOuvrirGmail(idx, email) {
   var htmlContent = document.getElementById('email-html-' + idx).innerHTML;
-  
-  // Utilisation de l'API Clipboard pour copier le HTML riche
   var blobHTML = new Blob([htmlContent], { type: "text/html" });
   var blobText = new Blob(["Veuillez coller le contenu HTML."], { type: "text/plain" });
-  var data = [new ClipboardItem({ "text/html": blobHTML, "text/plain": blobText })];
-  
-  navigator.clipboard.write(data).then(function() {
+  navigator.clipboard.write([new ClipboardItem({ "text/html": blobHTML, "text/plain": blobText })]).then(function() {
     toast('Design copié ! Faites CTRL+V dans Gmail.', 'ok');
-    // Ouvrir Gmail
-    setTimeout(function() {
-      var subject = encodeURIComponent("Planning Semaine Prochaine - Glovo");
-      window.open('https://mail.google.com/mail/?view=cm&fs=1&to=' + email + '&su=' + subject, '_blank');
-    }, 1000);
-  }).catch(function(err) {
-    toast('Erreur de copie. Votre navigateur bloque peut-être la fonction.', 'er');
+    setTimeout(function() { window.open('https://mail.google.com/mail/?view=cm&fs=1&to=' + email + '&su=' + encodeURIComponent("Planning Semaine W"+D.meta.weekNum+" - Glovo Maroc"), '_blank'); }, 1000);
   });
 }
 
 function openAddAgent(){document.getElementById('agOverlay').classList.add('show');}
 function closeModal(id){document.getElementById(id).classList.remove('show');}
 function overlayClose(e,id){if(e.target.id===id)closeModal(id);}
+
+function initPaieMois(){
+  var sel=document.getElementById('pay-mois-sel');if(!sel)return;
+  var now=new Date();var opts='';
+  for(var m=0;m<12;m++){var d=new Date(now.getFullYear(),now.getMonth()-m,1);var val=d.getFullYear()+'-'+(d.getMonth()+1);var lbl=m===0?'Mois Actuel':d.toLocaleDateString('fr-FR',{month:'long',year:'numeric'});opts+='<option value="'+val+'">'+lbl+'</option>';}
+  sel.innerHTML=opts;
+}
+function fPay(v){gFP=v; rPay();}
+function rPay(){
+  var agents=D.agents.filter(a=>gFP==='ALL'||a.ville===gFP);
+  var tN=0,tD=0;
+  var cards=agents.map(a=>{
+    var na=D.absences.filter(ab=>ab.nom===a.nom&&ab.type==='ABSENT').length; var ded=na*192, net=5000-ded; tN+=net; tD+=ded;
+    return '<div class="pc"><div class="fw7">'+a.nom+'</div><div class="txs tx3c">'+a.ville+'</div><div style="margin-top:10px;font-size:18px;font-weight:900;color:var(--g)">'+mad(net)+'</div></div>';
+  });
+  document.getElementById('py-n').textContent=agents.length; document.getElementById('py-d').textContent=mad(tD); document.getElementById('py-t').textContent=mad(tN);
+  document.getElementById('py-grid').innerHTML=cards.join('');
+}
+function openRapportForm(){document.getElementById('rp-date').value=new Date().toISOString().split('T')[0]; document.getElementById('rpOverlay').classList.add('show');}
+function saveRapport(){
+  var r=getRapports();
+  r.push({auteur:currentUser.nom, zone:currentUser.villes.join(', '), date:document.getElementById('rp-date').value, resume:document.getElementById('rp-resume').value, anomalies:document.getElementById('rp-anomalies').value, type:'info'});
+  localStorage.setItem(SK.RAPPORTS,JSON.stringify(r)); cloudPushLogs(); closeModal('rpOverlay'); rRapports(); toast('Enregistré','ok');
+}
+function rRapports(){
+  var r=getRapports().sort((a,b)=>b.date.localeCompare(a.date));
+  document.getElementById('rp-list').innerHTML=r.map(x=>'<div class="rp-simple"><div class="fw7">'+x.auteur+' ('+x.date+')</div><div class="txs tx2c">'+x.resume+'</div></div>').join('');
+}
 
 document.addEventListener('DOMContentLoaded', initLogin);
 setInterval(()=>{var n=new Date(); document.getElementById('clock').textContent=n.toLocaleDateString('fr-FR',{weekday:'short',day:'2-digit',month:'short'})+' '+n.toLocaleTimeString('fr-FR');},1000);
