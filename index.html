@@ -144,7 +144,8 @@ tbody tr:hover td{background:var(--bg)}
 .fgrid{display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:12px;margin-bottom:16px}
 .fgl{display:flex;flex-direction:column;margin-bottom:12px}
 .fgl label{font-size:11px;font-weight:700;color:var(--tx2);margin-bottom:6px}
-.fc{width:100%;padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);font-size:13px;outline:none;background:#fff;font-family:inherit;box-sizing:border-box;transition:border-color 0.2s}
+/* Correction des inputs pour eviter l'affichage ecrasé */
+.fc{width:100%;padding:10px 12px;border:1px solid var(--bd2);border-radius:var(--r2);font-size:13px;outline:none;background:#fff;font-family:inherit;box-sizing:border-box;transition:border-color 0.2s}
 .fc:focus{border-color:var(--b);box-shadow:0 0 0 2px var(--b-lt)}
 .fc-ta{resize:vertical;min-height:80px}
 .m-footer{display:flex;gap:10px;padding:16px 20px;background:var(--bg);border-top:1px solid var(--bd);justify-content:flex-end}
@@ -158,6 +159,7 @@ tbody tr:hover td{background:var(--bg)}
 
 /* PAIE & AUTRES */
 .pay-ban{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;box-shadow:var(--sh)}
+.pdiv{width:1px;height:36px;background:var(--bd);flex-shrink:0}
 .pk{text-align:center;flex:1;min-width:80px}
 .pk-l{font-size:10px;color:var(--tx3);text-transform:uppercase;font-weight:700;margin-bottom:4px}
 .pk-v{font-size:20px;font-weight:800;color:var(--tx)}
@@ -168,8 +170,8 @@ tbody tr:hover td{background:var(--bg)}
 .rp-simple{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);padding:14px;margin-bottom:10px;box-shadow:var(--sh);border-left:4px solid var(--y)}
 
 .srch{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;background:var(--bg2);padding:12px;border-radius:var(--r);box-shadow:var(--sh);border:1px solid var(--bd)}
-.si{flex:1;min-width:180px;padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);font-size:13px;outline:none}
-select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);font-size:13px;outline:none;background:var(--bg2)}
+.si{flex:1;min-width:180px;padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);font-size:13px;outline:none;box-sizing:border-box}
+select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);font-size:13px;outline:none;background:var(--bg2);box-sizing:border-box}
 .em{text-align:center;padding:30px 20px;color:var(--tx3);background:var(--bg2);border-radius:var(--r);border:1px dashed var(--bd2)}.em-ic{font-size:32px;margin-bottom:10px;opacity:.5}.em-tx{font-size:14px;font-weight:600}
 
 .toast-wrap{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:10px}
@@ -203,6 +205,7 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
   <div class="nav-brand"><div class="nav-logo">🛵</div><div><div class="nb-name">SENTINEL</div><div class="nb-sub">Glovo · CAS OPS</div></div></div>
   <div class="nav-links" id="navLinks"></div>
   <div class="nav-right">
+    <span id="syncStatus" style="font-size:11px;color:var(--g);font-weight:800;margin-right:10px;padding:4px 10px;background:var(--g-lt);border-radius:10px">☁️ Synchro Active</span>
     <div class="clock" id="clock"></div>
     <div class="user-badge" id="userBadge"><div class="user-av" id="userAv">?</div><span id="userName">—</span></div>
     <button class="btn btn-gh btn-ico btn-sm" onclick="doLogout()" title="Déconnexion">🚪</button>
@@ -214,13 +217,13 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
   <div class="pg active" id="pg-ov">
     <div class="ph"><div><div class="ph-t" id="ov-title">Tableau de bord</div><div style="font-size:13px;color:var(--tx2);font-weight:600;margin-top:4px" id="ov-date"></div></div></div>
     
-    <div class="card" id="cloud-config-card" style="display:none;border-left:4px solid var(--b)">
-      <div class="chd">☁️ Administration Système (Cloud & Secours)</div>
+    <div class="card" id="cloud-config-card" style="display:none;border-left:4px solid var(--r)">
+      <div class="chd">⚠️ Administration Système (Secours Data)</div>
       <div style="font-size:13px;color:var(--tx2);margin-bottom:14px;line-height:1.5">
-        Base de données en ligne synchronisée en temps réel.<br>
-        <b>Si les agents n'apparaissent pas ou qu'un bug survient, utilisez le bouton ci-dessous.</b>
+        <b>Si les agents n'apparaissent pas ou qu'un bug survient, utilisez ce bouton pour forcer la réparation.</b><br>
+        Le système rechargera instantanément les 48 agents officiels et réparera le Cloud.
       </div>
-      <button class="btn btn-r" onclick="hardResetDatabase()">⚠️ Rétablir la Base de Données (Force Reset)</button>
+      <button class="btn btn-r" onclick="hardResetDatabase()">⚙️ Rétablir la Base de Données (Force Reset)</button>
     </div>
 
     <div class="krow">
@@ -278,6 +281,14 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
 
   <div class="pg" id="pg-hs">
     <div class="ph"><div class="ph-t">Hotspots Opérationnels</div><div id="hsBtns"></div></div>
+    <div class="srch">
+        <select class="sel" onchange="fHs(this.value)">
+          <option value="ALL">Toutes les villes</option>
+          <option value="CAS">Casablanca</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option>
+          <option value="RBT">Rabat</option><option value="TEM">Temara</option><option value="SAL">Salé</option>
+          <option value="AGD">Agadir</option><option value="MOH">Mohammadia</option><option value="LYN">Laayoune</option>
+        </select>
+      </div>
     <div id="hs-list"></div>
   </div>
 
@@ -292,7 +303,7 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
         <div class="fgl"><label>Date de fin (Optionnel)</label><input type="date" class="fc" id="f-e"></div>
         <div class="fgl" style="grid-column: 1 / -1;"><label>Motif / Justification</label><input type="text" class="fc" id="f-m" placeholder="Certificat médical, problème personnel..."></div>
       </div>
-      <button class="btn btn-r" onclick="submitAbs()" style="width:100%">💾 Confirmer l'absence</button>
+      <button class="btn btn-r" onclick="submitAbs()" style="width:100%;justify-content:center">💾 Confirmer l'absence</button>
     </div>
     <div class="card"><div class="chd">📋 Historique des absences</div><div id="abs-list"></div></div>
   </div>
@@ -300,7 +311,22 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
   <div class="pg" id="pg-py">
     <div class="ph">
       <div class="ph-t">Suivi de Paie Mensuelle</div>
-      <div style="display:flex;gap:12px"><select class="sel" id="pay-mois-sel" onchange="rPay()"></select><button class="btn btn-gh" onclick="exportPaieExcel()">📊 Export Excel</button></div>
+      <div style="display:flex;gap:12px">
+          <select class="sel" onchange="fPay(this.value)">
+            <option value="ALL">Toutes les villes</option>
+            <option value="CAS">Casablanca</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option>
+            <option value="RBT">Rabat</option><option value="TEM">Temara</option><option value="SAL">Salé</option>
+            <option value="AGD">Agadir</option><option value="MOH">Mohammadia</option><option value="LYN">Laayoune</option>
+          </select>
+          <button class="btn btn-gh" onclick="exportPaieExcel()">📊 Export Excel</button>
+      </div>
+    </div>
+    <div class="pay-ban">
+        <div class="pk"><div class="pk-l">Agents</div><div class="pk-v" style="color:#92400E" id="py-n">—</div></div>
+        <div class="pdiv"></div>
+        <div class="pk"><div class="pk-l">Déductions</div><div class="pk-v" style="color:var(--r)" id="py-d">—</div></div>
+        <div class="pdiv"></div>
+        <div class="pk"><div class="pk-l">Masse Nette</div><div class="pk-v" style="color:var(--g)" id="py-t">—</div></div>
     </div>
     <div class="pay-grid" id="py-grid"></div>
   </div>
@@ -334,8 +360,15 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
         <div style="font-size:14px;font-weight:700;color:var(--tx);margin-bottom:4px">Génération des Modèles Gmail</div>
         <div style="font-size:12px;color:var(--tx2)">Sélectionnez la ville, cliquez sur générer, puis copiez le modèle pour le coller directement dans votre mail.</div>
       </div>
-      <div class="fgl" style="margin-bottom:20px"><label>Filtrer par ville :</label><select class="fc" id="email-ville-sel"><option value="ALL">Toutes les villes</option><option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="AGD">Agadir</option></select></div>
-      <button class="btn btn-y" onclick="preparerEmails()" style="width:100%">⚡ Générer les Modèles HTML</button>
+      <div class="fgl" style="margin-bottom:20px"><label>Filtrer par ville :</label>
+        <select class="fc" id="email-ville-sel">
+            <option value="ALL">Toutes les villes</option>
+            <option value="CAS">Casablanca</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option>
+            <option value="RBT">Rabat</option><option value="TEM">Temara</option><option value="SAL">Salé</option>
+            <option value="AGD">Agadir</option><option value="MOH">Mohammadia</option><option value="LYN">Laayoune</option>
+        </select>
+      </div>
+      <button class="btn btn-y" onclick="preparerEmails()" style="width:100%;justify-content:center;font-size:14px">⚡ Générer les Modèles HTML</button>
       <div id="email-preview" style="margin-top:20px; max-height:400px; overflow-y:auto; padding-right:10px;"></div>
     </div>
   </div>
@@ -345,9 +378,10 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
   <div class="modal">
     <div class="modal-hd"><div><div class="modal-hd-t" id="ag-modal-title">➕ Fiche Agent</div></div><button class="m-close" onclick="closeModal('agOverlay')">✕</button></div>
     <div class="m-body">
-      <div class="fgl" style="margin-bottom:15px"><label>Nom Complet *</label><input type="text" class="fc" id="ag-f-nom"></div>
+      <div class="fgl"><label>Nom Complet *</label><input type="text" class="fc" id="ag-f-nom"></div>
       <div class="fgrid">
         <div class="fgl"><label>Ville *</label><select class="fc" id="ag-f-ville"><option value="CAS">Casablanca</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option><option value="RBT">Rabat</option><option value="TEM">Temara</option><option value="SAL">Salé</option><option value="AGD">Agadir</option><option value="MOH">Mohammadia</option><option value="LYN">Laayoune</option></select></div>
+        <div class="fgl"><label>Zone</label><input type="text" class="fc" id="ag-f-zone"></div>
         <div class="fgl"><label>Email Gmail</label><input type="email" class="fc" id="ag-f-email"></div>
         <div class="fgl"><label>Téléphone</label><input type="text" class="fc" id="ag-f-tel"></div>
         <div class="fgl"><label>Statut</label><select class="fc" id="ag-f-statut"><option value="Actif">Actif</option><option value="Inactif">Inactif</option></select></div>
@@ -362,7 +396,7 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
     <div class="modal-hd"><div><div class="modal-hd-t">📍 Nouveau Hotspot</div></div><button class="m-close" onclick="closeModal('hsOverlay')">✕</button></div>
     <div class="m-body">
       <div class="fgrid">
-        <div class="fgl"><label>Ville *</label><select class="fc" id="hs-f-ville"><option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="AGD">Agadir</option><option value="BSK">Bouskoura</option></select></div>
+        <div class="fgl"><label>Ville *</label><select class="fc" id="hs-f-ville"><option value="CAS">Casablanca</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option><option value="RBT">Rabat</option><option value="TEM">Temara</option><option value="SAL">Salé</option><option value="AGD">Agadir</option><option value="MOH">Mohammadia</option><option value="LYN">Laayoune</option></select></div>
         <div class="fgl"><label>Nom (Ex: Macdo Maarif) *</label><input type="text" class="fc" id="hs-f-nom"></div>
         <div class="fgl"><label>Heure de pointe (Rush) *</label><input type="time" class="fc" id="hs-f-pk" value="12:00"></div>
       </div>
@@ -385,7 +419,7 @@ select.sel{padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);
 
 <script>
 // ═══════════════════════════════════════════════════════════
-//  SENTINEL v9.0 — ALGORITHME 44H STRICT & FULL CORRECTION
+//  SENTINEL v10.0 — COUVERTURE OPTIMALE INTRA-VILLE & DATA FIX
 // ═══════════════════════════════════════════════════════════
 
 var USERS={
@@ -398,12 +432,12 @@ var CC={CAS:{bg:'#FEF3C7',tx:'#92400E',bd:'#F59E0B'},DRB:{bg:'#DBEAFE',tx:'#1E40
 var CLA={CAS:'🏙 Casablanca',DRB:'🌴 Dar Bouazza',BSK:'🌿 Bouskoura',RBT:'🏛 Rabat',TEM:'🏖 Temara',SAL:'🏰 Salé',AGD:'🌊 Agadir',MOH:'🌸 Mohammadia',LYN:'🐪 Laayoune'};
 var JOURS=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
 
-// CLES V9 POUR ÉVITER LES BUGS ANCIENS
-var SK={AGENTS:'s_ag_v9',HOTSPOTS:'s_hs_v9',ABSENCES:'s_ab_v9',PLAN:'s_pl_v9_',RAPPORTS:'s_rp_v9',AUDIT:'s_au_v9'};
+// CLES V10 POUR REGENERER LA NOUVELLE LOGIQUE DE COUVERTURE
+var SK={AGENTS:'s_ag_v10',HOTSPOTS:'s_hs_v10',ABSENCES:'s_ab_v10',PLAN:'s_pl_v10_',RAPPORTS:'s_rp_v10',AUDIT:'s_au_v10'};
 
-var currentUser=null; var D={}; var weekOffset=0; var gFC='ALL'; var agEditIdx=-1; var emState={};
+var currentUser=null; var D={}; var weekOffset=0; var gFC='ALL'; var gFP='ALL'; var agEditIdx=-1; var emState={};
 
-// ══ DATA 48 AGENTS COMPLETS ══
+// ══ DATA 48 AGENTS COMPLETS ET SECURISÉS ══
 var DEFAULT_AGENTS=[
   {nom:'YASSINE MAGHFOUR',ville:'AGD',zone:'Agadir',email:'ymaghfour28@gmail.com',statut:'Actif'},
   {nom:'ADOZ AZIZ',ville:'AGD',zone:'Agadir',email:'Azizadoz90@gmail.com',statut:'Actif'},
@@ -465,14 +499,13 @@ function cloudPull(cb){
     fetch(CLOUD.BASE_URL+'/'+CLOUD.BIN_LOGS+'/latest',{headers:{'X-Master-Key':CLOUD.API_KEY,'X-Bin-Meta':'false'}}).then(r=>r.json()).catch(()=>({}))
   ]).then(res=>{
     var d=res[0], l=res[1];
-    // SÉCURITÉ: On ne remplace que si les données cloud existent et ne sont pas vides
     if(d.agents && d.agents.length>0) localStorage.setItem(SK.AGENTS, JSON.stringify(d.agents));
     if(d.hotspots) localStorage.setItem(SK.HOTSPOTS, JSON.stringify(d.hotspots));
     if(d.absences) localStorage.setItem(SK.ABSENCES, JSON.stringify(d.absences));
     if(d.planKey && d.planData) localStorage.setItem(d.planKey, JSON.stringify(d.planData));
     if(l.rapports) localStorage.setItem(SK.RAPPORTS, JSON.stringify(l.rapports));
     if(cb) cb();
-  });
+  }).catch(()=>{if(cb)cb();});
 }
 
 function cloudPushData(){
@@ -484,14 +517,13 @@ function cloudPushLogs(){
   fetch(CLOUD.BASE_URL+'/'+CLOUD.BIN_LOGS,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':CLOUD.API_KEY},body:JSON.stringify({rapports: getRapports()})}).catch(()=>{});
 }
 
-// FONCTION DE SECOURS ABSOLUE POUR L'ADMINISTRATEUR
+// ── FONCTION REPARATION D'URGENCE ──
 function hardResetDatabase(){
   if(confirm("⚠️ ATTENTION: Ceci va écraser le cloud et recharger les 48 agents de base (Utile si bug). Continuer ?")){
     localStorage.clear(); 
     saveAgents(DEFAULT_AGENTS); saveHotspots(DEFAULT_HOTSPOTS); saveAbsences([]); 
     cloudPushLogs(); cloudPushData();
-    toast('Base réinitialisée et envoyée sur le Cloud !','ok'); 
-    setTimeout(()=>location.reload(), 1500);
+    toast('Base réinitialisée et synchronisée !','ok'); setTimeout(()=>location.reload(), 1500);
   }
 }
 
@@ -520,38 +552,35 @@ function getAbsences(){var a=localStorage.getItem(SK.ABSENCES);return a?JSON.par
 function saveAbsences(ab){localStorage.setItem(SK.ABSENCES,JSON.stringify(ab)); cloudPushData(); }
 function getRapports(){var a=localStorage.getItem(SK.RAPPORTS);return a?JSON.parse(a):[];}
 
-// ── ALGORITHME 44H STRICT ──
+// ── ALGORITHME 10.0 : COUVERTURE INTRA-VILLE ET HORAIRES CASA ──
 function genPlanning(agents, wOff){
   var lundi=getLundi((wOff||0)+1); var wn=numSem(lundi);
   var dates=[]; for(var i=0;i<7;i++){var d=new Date(lundi);d.setDate(lundi.getDate()+i);dates.push(fmtD(d));}
   var actifs=agents.filter(a=>a.statut==='Actif');
   
-  var planning=actifs.map((ag,idx)=>{
-    // 1. Repos (Jour OFF) - Entre Lundi et Jeudi (0,1,2,3)
-    var offDay = [0,1,2,3][(idx+wn)%4];
+  var cityCounts = {};
+  var planning=actifs.map((ag)=>{
+    // Index intra-ville pour assurer que l'Agent 1 et l'Agent 2 d'une même ville n'ont pas le même shift
+    if(cityCounts[ag.ville] === undefined) cityCounts[ag.ville] = 0;
+    var c_idx = cityCounts[ag.ville]++;
     
-    // 2. Rotation Hebdomadaire (Matin ou Soir)
-    var isMorning = ((idx+wn)%2) === 0;
+    // Repos: Décalé pour que les agents d'une même ville n'aient pas OFF le même jour
+    var offDay = [0,1,2,3][(c_idx + wn) % 4];
+    
+    // Rotation Matin/Soir intra-ville: Agent 0 Matin, Agent 1 Soir, etc.
+    var isMorning = ((c_idx + wn) % 2) === 0;
 
-    // 3. Selection des Pools selon la ville (Fermetures respectées)
+    // HORAIRES BASÉS SUR CASA POUR TOUTES LES VILLES
     var p7, p8;
     if(isMorning) {
         p7 = ['09:00-16:00', '10:00-17:00', '11:00-18:00'];
-        p8 = ['09:00-17:00', '10:00-18:00', '11:00-19:00'];
+        p8 = ['09:00-17:00', '10:00-18:00'];
     } else {
-        if (['CAS','RBT','TEM','SAL'].includes(ag.ville)) {
-            p7 = ['18:00-01:00', '19:00-02:00', '20:00-03:00'];
-            p8 = ['18:00-02:00', '19:00-03:00'];
-        } else if (['BSK','DRB','MOH'].includes(ag.ville)) {
-            p7 = ['17:00-00:00', '18:00-01:00', '19:00-02:00'];
-            p8 = ['16:00-00:00', '17:00-01:00', '18:00-02:00'];
-        } else {
-            p7 = ['16:00-23:00', '17:00-00:00', '18:00-01:00'];
-            p8 = ['15:00-23:00', '16:00-00:00', '17:00-01:00'];
-        }
+        // Accès large jusqu'à 02:00/03:00 pour couvrir la journée max
+        p7 = ['17:00-00:00', '18:00-01:00', '19:00-02:00'];
+        p8 = ['17:00-01:00', '18:00-02:00'];
     }
 
-    // 4. Constitution Strict 44H (4 jours de 7h + 2 jours de 8h)
     var template = [7, 7, 7, 7, 8, 8];
     template.sort(()=> 0.5 - Math.random());
     
@@ -561,7 +590,8 @@ function genPlanning(agents, wOff){
         if(d===offDay){ shifts[d]='OFF'; continue; }
         var reqH = template[tIdx++];
         var pool = (reqH === 7) ? p7 : p8;
-        shifts[d] = pool[(d+idx) % pool.length];
+        // On assigne le shift du pool en fonction du jour pour varier
+        shifts[d] = pool[(d + c_idx) % pool.length];
     }
     
     var totalH = shifts.reduce((acc,s)=>acc+calcH(s),0);
@@ -590,7 +620,7 @@ function doLogin(isAuto){
   var k=document.getElementById('selUser').value, p=document.getElementById('loginPwd').value;
   if(!k||USERS[k].pwd!==p){document.getElementById('loginErr').textContent='Accès refusé. Mot de passe incorrect.';return;}
   currentUser={key:k, ...USERS[k]};
-  sessionStorage.setItem('sentinel_session', k); // Mémorisation de la session
+  sessionStorage.setItem('sentinel_session', k); 
   
   document.getElementById('loginScreen').style.display='none'; document.getElementById('app').style.display='flex';
   document.getElementById('userAv').style.background=currentUser.color; document.getElementById('userAv').textContent=ini(currentUser.nom); document.getElementById('userName').textContent=currentUser.nom;
@@ -622,25 +652,17 @@ function goPage(id,btn){document.querySelectorAll('.pg, .ni').forEach(e=>e.class
 
 function loadData(off, silent){
   if(off!==undefined) weekOffset=off;
-  var agents=getAgents() || []; 
-  var absences=getAbsences() || []; 
-  var hotspots=getHotspots() || [];
+  var agents=getAgents() || []; var absences=getAbsences() || []; var hotspots=getHotspots() || [];
   
   var lundi=getLundi(weekOffset+1); var pk=SK.PLAN+numSem(lundi)+'_'+lundi.getFullYear();
   var pData = JSON.parse(localStorage.getItem(pk));
-  
-  // Si pas de planning généré pour cette semaine, on le génère.
   if(!pData){ pData=genPlanning(agents, weekOffset); localStorage.setItem(pk,JSON.stringify(pData)); if(!silent)cloudPushData();}
   
   D.allAgents=agents; 
   D.agents=agents.filter(a=>a.statut==='Actif'&&currentUser.villes.includes(a.ville));
   D.planning=pData.planning.filter(p=>currentUser.villes.includes(p.ville));
-  D.absences=absences; 
-  D.hotspots=hotspots; 
-  D.meta={dates:pData.dates, weekNum:pData.wn}; 
-  D.planKey=pk;
+  D.absences=absences; D.hotspots=hotspots; D.meta={dates:pData.dates, weekNum:pData.wn}; D.planKey=pk;
   
-  // Injection des absences dans le planning visuel
   D.planning.forEach(p=>{
     for(var d=0;d<7;d++){ var ab=absences.find(a=>a.nom===p.nom&&a.date===D.meta.dates[d]); if(ab)p.shifts[d]=ab.type; }
     p.totalH=p.shifts.reduce((acc,s)=>acc+calcH(s),0);
@@ -649,7 +671,7 @@ function loadData(off, silent){
   var sag=document.getElementById('f-ag'); if(sag)sag.innerHTML=D.agents.map(a=>'<option value="'+a.nom+'">'+a.nom+'</option>').join('');
   rOv(); rPlanning(); rAgents(); rHs(); rAbs(); rPay();
 }
-function regenererPlanning(){localStorage.removeItem(D.planKey); loadData(weekOffset); toast('Généré (Strict 44H)','ok');}
+function regenererPlanning(){localStorage.removeItem(D.planKey); loadData(weekOffset); toast('Généré (Strict 44H & Couverture max)','ok');}
 
 // ── RENDER ──
 function rOv(){
@@ -663,7 +685,7 @@ function rOv(){
   
   document.getElementById('ov-day').innerHTML=act.filter(p=>parseInt(p.shifts[ti].split(':')[0])<16).map(p=>'<div class="sr"><div class="av av-sm" style="background:'+(CC[p.ville]?.bg||'#eee')+';color:'+(CC[p.ville]?.tx||'#000')+'">'+ini(p.nom)+'</div><div class="sr-info"><div class="sr-nm">'+p.nom+'</div></div><span class="pill sm">'+p.shifts[ti]+'</span></div>').join('');
   document.getElementById('ov-ngt').innerHTML=act.filter(p=>parseInt(p.shifts[ti].split(':')[0])>=16).map(p=>'<div class="sr"><div class="av av-sm" style="background:'+(CC[p.ville]?.bg||'#eee')+';color:'+(CC[p.ville]?.tx||'#000')+'">'+ini(p.nom)+'</div><div class="sr-info"><div class="sr-nm">'+p.nom+'</div></div><span class="pill sn">'+p.shifts[ti]+'</span></div>').join('');
-  document.getElementById('ov-zones').innerHTML = currentUser.villes.map(v=>'<div class="zc"><div class="txxs fw7" style="color: '+(CC[v]?.tx||'#000')+'">'+(CLA[v]||v)+'</div><div style="font-size:24px;font-weight:900;color:'+(CC[v]?.tx||'#000')+'">'+D.agents.filter(a=>a.ville===v).length+'</div></div>').join('');
+  document.getElementById('ov-zones').innerHTML = currentUser.villes.map(v=>'<div class="zc"><div style="font-size:12px;font-weight:700;color: '+(CC[v]?.tx||'#000')+'">'+(CLA[v]||v)+'</div><div style="font-size:28px;font-weight:900;color:'+(CC[v]?.tx||'#000')+'">'+D.agents.filter(a=>a.ville===v).length+'</div></div>').join('');
 }
 
 function chgW(dir){weekOffset+=dir; loadData(weekOffset);}
@@ -719,18 +741,30 @@ function rAgents(){
   var list=D.allAgents.filter(a=>(vf==='ALL'||a.ville===vf)&&a.nom.toLowerCase().includes(q));
   document.getElementById('ag-grid').innerHTML=list.length?list.map(a=>'<div class="ag-card" onclick="editAgentIdx('+D.allAgents.indexOf(a)+')"><div class="av av-lg" style="background:'+(CC[a.ville]?.bg||'#eee')+';color:'+(CC[a.ville]?.tx||'#000')+'">'+ini(a.nom)+'</div><div><div style="font-weight:700;font-size:13px;margin-bottom:4px">'+a.nom+'</div><span class="pill">'+a.ville+'</span></div></div>').join(''):'<div class="em">Aucun agent trouvé</div>';
 }
-function editAgentIdx(idx){agEditIdx=idx; var a=D.allAgents[idx]; document.getElementById('ag-f-nom').value=a.nom; document.getElementById('ag-f-ville').value=a.ville; document.getElementById('ag-f-zone').value=a.zone; document.getElementById('ag-f-tel').value=a.tel||''; document.getElementById('ag-f-email').value=a.email||''; document.getElementById('ag-f-statut').value=a.statut; document.getElementById('agOverlay').classList.add('show');}
+function editAgentIdx(idx){
+    agEditIdx=idx; var a=D.allAgents[idx]; 
+    document.getElementById('ag-f-nom').value=a.nom; 
+    document.getElementById('ag-f-ville').value=a.ville; 
+    document.getElementById('ag-f-zone').value=a.zone; 
+    document.getElementById('ag-f-email').value=a.email||''; 
+    document.getElementById('ag-f-tel').value=a.tel||''; 
+    document.getElementById('ag-f-statut').value=a.statut; 
+    document.getElementById('agOverlay').classList.add('show');
+}
 function saveAgent(){
   var nom=document.getElementById('ag-f-nom').value; if(!nom)return;
   if(!D.allAgents) D.allAgents = [];
-  var na = {nom:nom, ville:document.getElementById('ag-f-ville').value, zone:document.getElementById('ag-f-zone').value||document.getElementById('ag-f-ville').value, tel:document.getElementById('ag-f-tel').value, email:document.getElementById('ag-f-email').value, statut:document.getElementById('ag-f-statut').value};
+  var na = {nom:nom, ville:document.getElementById('ag-f-ville').value, zone:document.getElementById('ag-f-zone').value||document.getElementById('ag-f-ville').value, email:document.getElementById('ag-f-email').value, tel:document.getElementById('ag-f-tel').value, statut:document.getElementById('ag-f-statut').value};
   if(agEditIdx>=0) D.allAgents[agEditIdx]=na; else D.allAgents.push(na);
   saveAgents(D.allAgents); closeModal('agOverlay'); loadData(weekOffset); toast('Agent sauvegardé','ok');
 }
 
 function rHs(){
-    document.getElementById('hs-list').innerHTML=D.hotspots.filter(h=>currentUser.villes.includes(h.ville)).map(h=>'<div class="hs-item"><div style="font-weight:700;font-size:14px;flex:1">'+h.nom+'</div><span class="pill">'+h.ville+'</span><span class="pill se">⏱ '+h.pk+'</span><button class="btn btn-gh btn-sm" onclick="delHs('+D.hotspots.indexOf(h)+')">✕</button></div>').join('') || '<div class="em">Aucun hotspot configuré</div>';
+    var v=document.querySelector('#pg-hs .sel').value;
+    var list=D.hotspots.filter(h=>currentUser.villes.includes(h.ville) && (v==='ALL'||h.ville===v));
+    document.getElementById('hs-list').innerHTML=list.map(h=>'<div class="hs-item"><div style="font-weight:700;font-size:14px;flex:1">'+h.nom+'</div><span class="pill">'+h.ville+'</span><span class="pill se">⏱ '+h.pk+'</span><button class="btn btn-gh btn-sm" onclick="delHs('+D.hotspots.indexOf(h)+')">✕</button></div>').join('') || '<div class="em">Aucun hotspot configuré</div>';
 }
+function fHs(v){ rHs(); }
 function saveHotspot(){
     var n=document.getElementById('hs-f-nom').value;if(!n)return;
     if(!D.hotspots) D.hotspots = [];
@@ -745,11 +779,20 @@ function initPaieMois(){
   for(var m=0;m<12;m++){var d=new Date(now.getFullYear(),now.getMonth()-m,1);var val=d.getFullYear()+'-'+(d.getMonth()+1);var lbl=m===0?'Mois Actuel':d.toLocaleDateString('fr-FR',{month:'long',year:'numeric'});opts+='<option value="'+val+'">'+lbl+'</option>';}
   sel.innerHTML=opts;
 }
+function fPay(v){gFP=v; rPay();}
 function rPay(){
-  document.getElementById('py-grid').innerHTML=D.agents.map(a=>{
-    var na=D.absences.filter(ab=>ab.nom===a.nom&&ab.type==='ABSENT').length; var net=5000-(na*192);
+  var agents = D.agents.filter(a => gFP === 'ALL' || a.ville === gFP);
+  var tN = 0, tD = 0;
+  var cards = agents.map(a => {
+    var na = D.absences.filter(ab => ab.nom === a.nom && ab.type === 'ABSENT').length;
+    var ded = na * 192, net = 5000 - ded;
+    tN += net; tD += ded;
     return '<div class="pc"><div style="font-weight:700;font-size:14px">'+a.nom+'</div><div style="font-size:11px;color:#94A3B8">'+a.ville+'</div><div style="margin-top:12px;font-size:20px;font-weight:900;color:#00A082">'+mad(net)+'</div></div>';
-  }).join('');
+  });
+  document.getElementById('py-n').textContent = agents.length;
+  document.getElementById('py-d').textContent = mad(tD);
+  document.getElementById('py-t').textContent = mad(tN);
+  document.getElementById('py-grid').innerHTML = cards.join('') || '<div class="em" style="grid-column: 1 / -1;">Aucun agent trouvé</div>';
 }
 
 function openRapportForm(){document.getElementById('rp-date').value=new Date().toISOString().split('T')[0]; document.getElementById('rpOverlay').classList.add('show');}
@@ -773,7 +816,6 @@ function preparerEmails(){
   var html = '';
   agents.forEach((ag, idx) => {
     var p = D.planning.find(x=>x.nom===ag.nom); if(!p) return;
-    
     var mailBody = `
       <div id="email-html-${idx}" style="font-family:Arial,sans-serif;color:#0F172A;max-width:600px;margin:0 auto;padding:25px;background:#F8FAFB;border-radius:12px;border:1px solid #E2E8F0">
         <h2 style="color:#00A082;margin-bottom:15px;border-bottom: 2px solid #00A082; padding-bottom: 10px;">Planning Sentinel - Glovo Maroc</h2>
@@ -812,7 +854,6 @@ function exportPaieExcel(){var html='<html xmlns:x="urn:schemas-microsoft-com:of
 
 function closeModal(id){document.getElementById(id).classList.remove('show');}
 function overlayClose(e,id){if(e.target.classList.contains('overlay'))closeModal(id);}
-setInterval(()=>{var n=new Date(); document.getElementById('clock').textContent=n.toLocaleDateString('fr-FR',{weekday:'short',day:'2-digit',month:'short'})+' '+n.toLocaleTimeString('fr-FR');},1000);
 </script>
 </body>
 </html>
