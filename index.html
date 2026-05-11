@@ -23,19 +23,15 @@
         font-family: 'Inter', sans-serif;
         background: var(--bg);
         color: var(--tx);
+        height: 100vh;
         display: flex;
         flex-direction: column;
+        overflow: hidden;
         font-size: 13px;
         -webkit-font-smoothing: antialiased;
-        margin: 0;
     }
 
-    #app {
-        display: none;
-        flex-direction: column;
-        height: 100vh;
-        overflow: hidden;
-    }
+    #app { display: none; flex-direction: column; height: 100vh; overflow: hidden; }
 
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
@@ -59,105 +55,104 @@
     .login-btn:hover { background: var(--y-dk); transform: translateY(-1px); }
     .login-err { color: var(--r); font-size: 13px; font-weight: 600; min-height: 18px; margin-bottom: 10px; }
 
-    /* --- NAVBAR --- */
-    .navbar { background: #fff; border-bottom: 1px solid var(--bd); height: 64px; display: flex; align-items: center; padding: 0 24px; flex-shrink: 0; z-index: 100; }
-    .nav-brand { display: flex; align-items: center; gap: 12px; border-right: 1px solid var(--bd); padding-right: 24px; }
-    .nav-logo { width: 36px; height: 36px; background: var(--y); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
-    .nav-links { display: flex; gap: 6px; flex: 1; margin-left: 24px; overflow-x: auto; }
-    .ni { padding: 8px 16px; border-radius: 8px; cursor: pointer; color: var(--tx2); font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.2s; font-size: 14px; white-space: nowrap; }
+    /* --- NAVBAR COMPACTE PRO --- */
+    .navbar { background: #fff; border-bottom: 1px solid var(--bd); height: 50px; display: flex; align-items: center; padding: 0 20px; flex-shrink: 0; z-index: 100; }
+    .nav-brand { display: flex; align-items: center; gap: 10px; border-right: 1px solid var(--bd); padding-right: 20px; }
+    .nav-logo { width: 28px; height: 28px; background: var(--y); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+    .nav-links { display: flex; gap: 4px; flex: 1; margin-left: 20px; overflow-x: auto; }
+    .ni { padding: 6px 12px; border-radius: 6px; cursor: pointer; color: var(--tx2); font-weight: 600; display: flex; align-items: center; gap: 6px; transition: 0.2s; font-size: 12px; white-space: nowrap; }
     .ni:hover { background: var(--bg); color: var(--tx); }
     .ni.active { background: var(--tx); color: #fff; }
-    .nav-right { display: flex; align-items: center; gap: 16px; margin-left: auto; }
-    .clock { font-size: 13px; font-family: monospace; background: var(--bg); padding: 8px 14px; border-radius: 8px; font-weight: 700; border: 1px solid var(--bd); color: var(--tx2); }
-    .sync-badge { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--g); font-weight: 700; background: var(--g-lt); padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(0,160,130,0.2); }
-    .sync-dot { width: 8px; height: 8px; background: var(--g); border-radius: 50%; animation: pulse 1.5s infinite; }
+    .nav-right { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+    .clock { font-size: 11px; font-family: monospace; background: var(--bg); padding: 4px 10px; border-radius: 6px; font-weight: 700; border: 1px solid var(--bd); color: var(--tx2); }
+    .sync-badge { display: flex; align-items: center; gap: 6px; font-size: 10px; color: var(--g); font-weight: 700; background: var(--g-lt); padding: 4px 8px; border-radius: 20px; border: 1px solid rgba(0,160,130,0.2); text-transform: uppercase; letter-spacing: 0.5px; }
+    .sync-dot { width: 6px; height: 6px; background: var(--g); border-radius: 50%; animation: pulse 1.5s infinite; }
     @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.3); } 100% { opacity: 1; transform: scale(1); } }
 
     /* --- CONTENT AREA --- */
-    .content { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 30px; }
+    .content { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 24px; }
     .pg { display: none; animation: fadeIn 0.3s ease; max-width: 1400px; margin: 0 auto; }
     .pg.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: none; } }
 
     /* --- CARDS & UI --- */
-    .card { background: #fff; border-radius: 16px; border: 1px solid var(--bd); padding: 24px; margin-bottom: 24px; box-shadow: var(--sh); }
-    .ph { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 15px; }
-    .ph-t { font-size: 24px; font-weight: 800; color: var(--tx); letter-spacing: -0.5px; }
-    .chd { font-size: 16px; font-weight: 800; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--bd); padding-bottom: 12px; color: var(--tx); }
+    .card { background: #fff; border-radius: 12px; border: 1px solid var(--bd); padding: 20px; margin-bottom: 24px; box-shadow: var(--sh); }
+    .ph { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
+    .ph-t { font-size: 20px; font-weight: 800; color: var(--tx); letter-spacing: -0.5px; }
+    .chd { font-size: 14px; font-weight: 800; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--bd); padding-bottom: 10px; color: var(--tx); }
 
     /* --- BUTTONS --- */
-    .btn { padding: 10px 18px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; border: 1px solid transparent; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; font-family: inherit; white-space: nowrap; }
+    .btn { padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; border: 1px solid transparent; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; font-family: inherit; white-space: nowrap; }
     .btn-y { background: var(--y); color: #000; border-color: var(--y-dk); box-shadow: 0 2px 4px rgba(255,194,68,0.2); }
     .btn-y:hover { background: var(--y-dk); transform: translateY(-1px); }
     .btn-gh { background: #fff; border-color: var(--bd); color: var(--tx2); box-shadow: var(--sh); }
     .btn-gh:hover { background: var(--bg); color: var(--tx); border-color: var(--bd2); }
     .btn-g { background: var(--g); color: #fff; }
     .btn-r { background: var(--r); color: #fff; }
-    .btn-sm { padding: 8px 14px; font-size: 12px; }
+    .btn-sm { padding: 6px 12px; font-size: 11px; }
 
     /* --- DASHBOARD KPI --- */
-    .krow { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
-    .kpi { background: #fff; border: 1px solid var(--bd); border-radius: 16px; padding: 24px; position: relative; box-shadow: var(--sh); }
-    .kpi-top { height: 4px; position: absolute; top: 0; left: 0; right: 0; border-radius: 16px 16px 0 0; }
-    .kpi-lbl { font-size: 12px; font-weight: 800; color: var(--tx3); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px; }
-    .kpi-val { font-size: 36px; font-weight: 900; color: var(--tx); }
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .krow { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .kpi { background: #fff; border: 1px solid var(--bd); border-radius: 12px; padding: 20px; position: relative; box-shadow: var(--sh); }
+    .kpi-top { height: 4px; position: absolute; top: 0; left: 0; right: 0; border-radius: 12px 12px 0 0; }
+    .kpi-lbl { font-size: 11px; font-weight: 800; color: var(--tx3); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .kpi-val { font-size: 28px; font-weight: 900; color: var(--tx); }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
-    /* --- TABLES --- */
-    .tbl-wr { background: #fff; border-radius: 16px; border: 1px solid var(--bd); overflow: auto; box-shadow: var(--sh); width: 100%; -webkit-overflow-scrolling: touch; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    thead th { background: var(--bg); padding: 16px 12px; font-size: 11px; font-weight: 800; color: var(--tx2); text-transform: uppercase; border-bottom: 2px solid var(--bd); text-align: center; white-space: nowrap; }
-    thead th:first-child { text-align: left; padding-left: 24px; }
-    tbody td { padding: 14px 10px; border-bottom: 1px solid var(--bd); text-align: center; color: var(--tx); font-weight: 500; }
-    tbody td:first-child { text-align: left; padding-left: 24px; font-weight: 700; }
+    /* --- TABLES (PLANNING) --- */
+    .tbl-wr { overflow: auto; -webkit-overflow-scrolling: touch; background: #fff; border-radius: 12px; border: 1px solid var(--bd); box-shadow: var(--sh); width: 100%; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    thead th { background: var(--bg); padding: 12px 10px; font-size: 10px; font-weight: 800; color: var(--tx2); text-transform: uppercase; border-bottom: 1px solid var(--bd); text-align: center; white-space: nowrap; }
+    thead th:first-child { text-align: left; padding-left: 20px; }
+    tbody td { padding: 12px 10px; border-bottom: 1px solid var(--bd); text-align: center; color: var(--tx); font-weight: 500; }
+    tbody td:first-child { text-align: left; padding-left: 20px; font-weight: 700; }
     tbody tr:hover td { background: #f8fafc; }
     
     /* --- PILLS & BADGES --- */
-    .pill { padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 800; display: inline-block; white-space: nowrap; }
+    .pill { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; display: inline-block; white-space: nowrap; }
     .pill.sm { background: var(--g-lt); color: var(--g); border: 1px solid rgba(0,160,130,0.2); }
     .pill.sa { background: var(--r-lt); color: var(--r); border: 1px solid rgba(229,57,53,0.2); }
     .pill.so { background: var(--bg); color: var(--tx2); border: 1px solid var(--bd); }
     
     .ecell { cursor: pointer; transition: 0.2s; position: relative; border-radius: 8px; }
     .ecell:hover { background: var(--y-lt) !important; box-shadow: inset 0 0 0 2px var(--y); transform: scale(1.02); z-index: 10; }
-    .hs-badge { display: block; font-size: 10px; color: var(--g); font-weight: 800; margin-top: 4px; background: var(--g-lt); padding: 2px 6px; border-radius: 4px; display: inline-block; }
+    .hs-badge { display: block; font-size: 9px; color: var(--g); font-weight: 800; margin-top: 4px; background: var(--g-lt); padding: 2px 6px; border-radius: 4px; display: inline-block; }
 
     /* --- FORMS --- */
-    .fgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px; }
+    .fgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
     .fgl { display: flex; flex-direction: column; }
-    .fgl label { font-size: 12px; font-weight: 800; color: var(--tx2); margin-bottom: 8px; text-transform: uppercase; }
-    .fc { width: 100%; padding: 12px 16px; border: 1.5px solid var(--bd2); border-radius: 10px; font-size: 14px; font-family: inherit; outline: none; transition: 0.2s; background: #fff; }
+    .fgl label { font-size: 11px; font-weight: 800; color: var(--tx2); margin-bottom: 6px; text-transform: uppercase; }
+    .fc { width: 100%; padding: 10px 14px; border: 1px solid var(--bd2); border-radius: 8px; font-size: 13px; font-family: inherit; outline: none; transition: 0.2s; background: #fff; }
     .fc:focus { border-color: var(--b); box-shadow: 0 0 0 3px var(--b-lt); }
 
     /* --- PAIE HR --- */
-    .pay-city-header { background: var(--tx); color: #fff; padding: 16px 24px; border-radius: 12px 12px 0 0; font-weight: 800; margin-top: 30px; display: flex; justify-content: space-between; align-items: center; font-size: 15px; }
-    .hr-table th { font-size: 11px; }
-    .pay-ban { background: #fff; border: 1px solid var(--bd); border-radius: 16px; padding: 24px; display: flex; justify-content: space-around; margin-bottom: 30px; box-shadow: var(--sh); }
+    .pay-city-header { background: var(--tx); color: #fff; padding: 12px 20px; border-radius: 8px 8px 0 0; font-weight: 800; margin-top: 24px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
+    .hr-table th { font-size: 10px; }
+    .pay-ban { background: #fff; border: 1px solid var(--bd); border-radius: 12px; padding: 20px; display: flex; justify-content: space-around; margin-bottom: 24px; box-shadow: var(--sh); }
     .pk { text-align: center; }
 
     /* --- MODALS --- */
     .overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.8); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
     .overlay.show { display: flex; }
-    .modal { background: #fff; border-radius: 20px; width: 550px; max-width: 95vw; box-shadow: 0 25px 50px rgba(0,0,0,0.3); max-height: 90vh; display: flex; flex-direction: column; }
-    .modal-lg { width: 850px; }
-    .modal-hd { padding: 24px; border-bottom: 1px solid var(--bd); display: flex; justify-content: space-between; align-items: center; background: var(--bg); border-radius: 20px 20px 0 0; }
-    .modal-hd-t { font-size: 18px; font-weight: 900; color: var(--tx); }
-    .m-close { background: transparent; border: none; color: var(--tx2); font-size: 20px; cursor: pointer; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; transition: 0.2s; }
+    .modal { background: #fff; border-radius: 16px; width: 500px; max-width: 95vw; box-shadow: 0 25px 50px rgba(0,0,0,0.3); max-height: 90vh; display: flex; flex-direction: column; }
+    .modal-lg { width: 800px; }
+    .modal-hd { padding: 20px; border-bottom: 1px solid var(--bd); display: flex; justify-content: space-between; align-items: center; background: var(--bg); border-radius: 16px 16px 0 0; }
+    .modal-hd-t { font-size: 16px; font-weight: 900; color: var(--tx); }
+    .m-close { background: transparent; border: none; color: var(--tx2); font-size: 20px; cursor: pointer; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 8px; transition: 0.2s; }
     .m-close:hover { background: var(--bd); color: #000; }
-    .m-body { padding: 24px; flex: 1; overflow-y: auto; }
-    .m-footer { padding: 20px 24px; border-top: 1px solid var(--bd); display: flex; justify-content: flex-end; gap: 12px; background: var(--bg); border-radius: 0 0 20px 20px; }
+    .m-body { padding: 20px; flex: 1; overflow-y: auto; }
+    .m-footer { padding: 16px 20px; border-top: 1px solid var(--bd); display: flex; justify-content: flex-end; gap: 10px; background: var(--bg); border-radius: 0 0 16px 16px; }
 
     /* --- TOAST --- */
-    .toast-wrap { position: fixed; bottom: 30px; right: 30px; z-index: 9999; display: flex; flex-direction: column; gap: 12px; }
-    .toast { padding: 16px 24px; background: #fff; border-radius: 12px; border-left: 5px solid var(--g); box-shadow: 0 15px 30px rgba(0,0,0,0.15); font-weight: 700; font-size: 14px; animation: slideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: var(--tx); display: flex; align-items: center; gap: 10px; }
-    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    .toast-wrap { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+    .toast { padding: 14px 20px; background: #fff; border-radius: 8px; border-left: 5px solid var(--g); box-shadow: 0 10px 25px rgba(0,0,0,0.15); font-weight: 700; font-size: 13px; color: var(--tx); display: flex; align-items: center; gap: 10px; }
 
     /* --- LISTS --- */
-    .ag-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-    .ag-card { display: flex; align-items: center; gap: 16px; background: #fff; padding: 20px; border-radius: 16px; border: 1px solid var(--bd); cursor: pointer; transition: 0.2s; box-shadow: var(--sh); }
-    .ag-card:hover { border-color: var(--y); transform: translateY(-4px); box-shadow: var(--sh2); }
-    .hs-item { display: flex; justify-content: space-between; align-items: center; padding: 18px 24px; background: #fff; border-radius: 12px; border: 1px solid var(--bd); margin-bottom: 12px; border-left: 5px solid var(--y); box-shadow: var(--sh); }
-    .sr { display: flex; align-items: center; gap: 15px; padding: 12px 15px; background: #fff; border: 1px solid var(--bd); border-radius: 8px; margin-bottom: 8px; }
+    .ag-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+    .ag-card { display: flex; align-items: center; gap: 16px; background: #fff; padding: 16px; border-radius: 12px; border: 1px solid var(--bd); cursor: pointer; transition: 0.2s; box-shadow: var(--sh); }
+    .ag-card:hover { border-color: var(--y); transform: translateY(-2px); box-shadow: var(--sh2); }
+    .hs-item { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: #fff; border-radius: 10px; border: 1px solid var(--bd); margin-bottom: 10px; border-left: 4px solid var(--y); box-shadow: var(--sh); }
+    .sr { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: #fff; border: 1px solid var(--bd); border-radius: 8px; margin-bottom: 8px; }
 </style>
 </head>
 <body>
@@ -174,7 +169,7 @@
         <input type="password" id="loginPwd" class="login-input" placeholder="Saisissez votre mot de passe..." onkeydown="if(event.key==='Enter')doLogin()">
     </div>
     <div class="login-err" id="loginErr"></div>
-    <button class="login-btn" onclick="doLogin()">DÉVERROUILLER LE SYSTÈME</button>
+    <button class="login-btn" onclick="doLogin()">DÉVERROUILLER</button>
   </div>
 </div>
 
@@ -184,19 +179,19 @@
     <div class="nav-brand">
         <div class="nav-logo">🛵</div>
         <div>
-            <div style="font-weight:900;font-size:16px;line-height:1.2;color:var(--tx);letter-spacing:-0.5px">SENTINEL</div>
-            <div style="font-size:10px;font-weight:800;color:var(--g);letter-spacing:1px">GLOVO MAROC</div>
+            <div style="font-weight:900;font-size:14px;line-height:1.2;color:var(--tx);letter-spacing:-0.5px">SENTINEL</div>
+            <div style="font-size:9px;font-weight:800;color:var(--g);letter-spacing:1px">GLOVO MAROC</div>
         </div>
     </div>
     <div class="nav-links" id="navLinks"></div>
     <div class="nav-right">
         <div class="sync-badge" id="syncStatus"><div class="sync-dot"></div><span>Sync Auto</span></div>
         <div class="clock" id="clock">00:00:00</div>
-        <div style="display:flex;align-items:center;gap:10px;padding:6px 16px 6px 6px;border-radius:30px;border:1px solid var(--bd);background:var(--bg)">
-            <div id="userAv" style="width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:800"></div>
-            <span id="userName" style="font-weight:700;font-size:13px"></span>
+        <div style="display:flex;align-items:center;gap:8px;padding:4px 10px 4px 4px;border-radius:20px;border:1px solid var(--bd);background:var(--bg)">
+            <div id="userAv" style="width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:900"></div>
+            <span id="userName" style="font-weight:700;font-size:11px"></span>
         </div>
-        <button class="btn btn-gh" onclick="doLogout()">Déconnexion</button>
+        <button class="btn btn-gh btn-sm" onclick="doLogout()">Déconnexion</button>
     </div>
   </nav>
 
@@ -204,14 +199,14 @@
 
     <div class="pg active" id="pg-ov">
         <div class="ph">
-            <div class="ph-t">Vue d'ensemble <span style="font-size:16px;color:var(--tx2);font-weight:600;margin-left:12px" id="ov-date"></span></div>
+            <div class="ph-t">Vue d'ensemble <span style="font-size:14px;color:var(--tx2);font-weight:600;margin-left:12px" id="ov-date"></span></div>
         </div>
         
         <div class="krow" id="ov-kpi"></div>
 
         <div class="grid-2">
-            <div class="card"><div class="chd">☀️ Présents de Jour (Avant 16h)</div><div id="ov-day" style="display:flex;flex-direction:column;gap:12px"></div></div>
-            <div class="card"><div class="chd">🌙 Présents de Nuit (Après 16h)</div><div id="ov-ngt" style="display:flex;flex-direction:column;gap:12px"></div></div>
+            <div class="card"><div class="chd">☀️ Présents de Jour (Avant 16h)</div><div id="ov-day" style="display:flex;flex-direction:column;gap:8px"></div></div>
+            <div class="card"><div class="chd">🌙 Présents de Nuit (Après 16h)</div><div id="ov-ngt" style="display:flex;flex-direction:column;gap:8px"></div></div>
         </div>
     </div>
 
@@ -219,18 +214,18 @@
         <div class="ph">
             <div style="display:flex;align-items:center;gap:12px">
                 <button class="btn btn-gh" onclick="chgW(-1)">◀ Sem. Précédente</button>
-                <div id="pl-ttl" style="font-size:16px;font-weight:900;background:#fff;padding:10px 20px;border-radius:10px;border:1px solid var(--bd);color:var(--tx)">Planning</div>
+                <div id="pl-ttl" style="font-size:15px;font-weight:900;background:#fff;padding:8px 16px;border-radius:8px;border:1px solid var(--bd);color:var(--tx)">Planning</div>
                 <button class="btn btn-gh" onclick="chgW(1)">Sem. Suivante ▶</button>
             </div>
-            <div style="display:flex;gap:12px">
+            <div style="display:flex;gap:10px">
                 <button class="btn btn-y" onclick="regenererPlanning()">⚙ Recalculer (44H Strict)</button>
-                <button class="btn btn-g" onclick="openEmailModal()">📧 Générer Mails Glovo</button>
+                <button class="btn btn-g" onclick="openEmailModal()">📧 Envoyer Mails</button>
                 <button class="btn btn-gh" onclick="exportPlanningExcel()">⬇ Excel Planning</button>
                 <button class="btn btn-gh" onclick="exportPlanningCSV()">⬇ CSV</button>
             </div>
         </div>
         
-        <div style="display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap" id="plft">
+        <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap" id="plft">
             <button class="btn btn-gh active" onclick="fC('ALL',this)">Toutes Villes</button>
             <button class="btn btn-gh" onclick="fC('CAS',this)">Casablanca</button>
             <button class="btn btn-gh" onclick="fC('RBT',this)">Rabat</button>
@@ -249,14 +244,14 @@
 
     <div class="pg" id="pg-py">
         <div class="ph">
-            <div class="ph-t">Rapport Financier RH</div>
+            <div class="ph-t">Rapport Financier RH (Base 26 Jours)</div>
             <div style="display:flex;gap:12px">
-                <select class="fc" id="pay-mois-sel" style="width:220px;padding:10px 16px;font-weight:700" onchange="rPay()"></select>
+                <select class="fc" id="pay-mois-sel" style="width:200px;padding:10px;font-weight:700" onchange="rPay()"></select>
                 <button class="btn btn-y" onclick="exportPaieExcel()">📊 Exporter Tableau RH</button>
             </div>
         </div>
         <div class="pay-ban">
-            <div class="pk"><div class="pk-l">Période Validée</div><div class="pk-v" style="font-size:18px;color:var(--tx2)">Du 22 au 22</div></div>
+            <div class="pk"><div class="pk-l">Période Validée</div><div class="pk-v" style="font-size:16px;color:var(--tx2)">Du 22 au 21</div></div>
             <div class="pk"><div class="pk-l">Agents Facturés</div><div class="pk-v" id="py-n">—</div></div>
             <div class="pk"><div class="pk-l">Total Déductions</div><div class="pk-v" style="color:var(--r)" id="py-d">—</div></div>
             <div class="pk"><div class="pk-l">Masse Nette Totale</div><div class="pk-v" style="color:var(--g)" id="py-t">—</div></div>
@@ -272,13 +267,12 @@
                 <button class="btn btn-y" onclick="openAddAgent()">➕ Nouvel Agent</button>
             </div>
         </div>
-        <div style="display:flex;gap:15px;margin-bottom:24px;background:#fff;padding:16px;border-radius:16px;border:1px solid var(--bd);box-shadow:var(--sh)">
+        <div style="display:flex;gap:12px;margin-bottom:20px;background:#fff;padding:12px;border-radius:12px;border:1px solid var(--bd)">
             <input type="text" id="ag-q" class="fc" placeholder="Rechercher par nom..." oninput="rAgents()" style="flex:2;margin:0">
             <select id="ag-vf" class="fc" onchange="rAgents()" style="flex:1;margin:0">
                 <option value="ALL">Toutes les villes</option>
                 <option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option><option value="AGD">Agadir</option>
                 <option value="TEM">Temara</option><option value="SAL">Salé</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option>
-                <option value="MOH">Mohammadia</option><option value="LYN">Laayoune</option>
             </select>
             <select id="ag-sf" class="fc" onchange="rAgents()" style="flex:1;margin:0">
                 <option value="ALL">Tous les statuts</option><option value="Actif">Actifs uniquement</option><option value="Inactif">Inactifs</option>
@@ -293,7 +287,7 @@
             <button class="btn btn-y" onclick="document.getElementById('hsOverlay').classList.add('show')">➕ Créer Hotspot</button>
         </div>
         <div class="card">
-            <select class="fc" onchange="rHs()" style="width:300px;margin-bottom:20px" id="hs-view-filter">
+            <select class="fc" onchange="fHs(this.value)" style="width:300px;margin-bottom:20px" id="hs-view-filter">
                 <option value="ALL">Afficher toutes les villes</option>
                 <option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option>
                 <option value="AGD">Agadir</option><option value="TEM">Temara</option><option value="SAL">Salé</option>
@@ -314,18 +308,23 @@
                 <div class="fgl"><label>Date de début</label><input type="date" id="f-s" class="fc"></div>
                 <div class="fgl"><label>Date de fin (Optionnel)</label><input type="date" id="f-e" class="fc"></div>
             </div>
-            <button class="btn btn-r" onclick="submitAbs()" style="width:100%;justify-content:center;margin-top:15px;padding:14px;font-size:15px">💾 Enregistrer l'absence en temps réel</button>
+            <button class="btn btn-r" onclick="submitAbs()" style="width:100%;justify-content:center;margin-top:15px;padding:12px;font-size:14px">💾 Enregistrer l'absence en temps réel</button>
         </div>
-        <div class="card"><div class="chd">Historique Récent</div><div id="abs-list" style="display:flex;flex-direction:column;gap:10px"></div></div>
+        <div class="card"><div class="chd">Historique Récent</div><div id="abs-list" style="display:flex;flex-direction:column;gap:8px"></div></div>
+    </div>
+
+    <div class="pg" id="pg-rp">
+        <div class="ph"><div class="ph-t">Rapports de Fin de Shift</div><button class="btn btn-y" onclick="openRapportForm()">➕ Rédiger un Rapport</button></div>
+        <div id="rp-list"></div>
     </div>
   </div>
 </div>
 
 <div class="overlay" id="editOverlay" onclick="if(event.target===this)closeModal('editOverlay')">
   <div class="modal">
-    <div class="modal-hd"><div class="modal-hd-t">✏️ Modification d'Horaire</div><button class="m-close" onclick="closeModal('editOverlay')">✕</button></div>
+    <div class="modal-hd"><div class="modal-hd-t">✏️ Modifier le Shift</div><button class="m-close" onclick="closeModal('editOverlay')">✕</button></div>
     <div class="m-body">
-      <div style="font-size:18px;font-weight:900;margin-bottom:24px;color:var(--tx)" id="em-agent"></div>
+      <div style="font-size:16px;font-weight:800;margin-bottom:20px;color:var(--tx)" id="em-agent"></div>
       <div class="fgl"><label>Nouvel Horaire</label><select class="fc" id="em-shift"></select></div>
       <div class="fgl"><label>Hotspot assigné</label><select class="fc" id="em-hs"></select></div>
     </div>
@@ -340,25 +339,23 @@
   <div class="modal modal-lg">
     <div class="modal-hd"><div class="modal-hd-t">📧 Générateur Email Officiel Glovo</div><button class="m-close" onclick="closeModal('emailOverlay')">✕</button></div>
     <div class="m-body">
-      <div style="background:var(--y-lt);border:1px solid var(--y-md);padding:20px;border-radius:12px;margin-bottom:24px;display:flex;align-items:center;gap:20px">
-        <span style="font-size:32px">✨</span>
+      <div style="background:var(--y-lt);border:1px solid var(--y-md);padding:15px;border-radius:10px;margin-bottom:20px;display:flex;align-items:center;gap:15px">
+        <span style="font-size:24px">✨</span>
         <div>
-          <div style="font-weight:900;font-size:15px;color:#92400E;margin-bottom:6px">Procédure d'envoi PRO</div>
-          <div style="font-size:13px;color:var(--tx2);line-height:1.5">Sélectionnez la ville, cliquez sur générer. Ensuite, cliquez sur <b style="color:var(--g)">Copier HTML</b> pour un agent, puis faites <kbd>Ctrl + V</kbd> dans le corps du message Gmail.</div>
+          <div style="font-weight:900;font-size:14px;color:#92400E;margin-bottom:4px">Génération Pro pour Gmail</div>
+          <div style="font-size:12px;color:var(--tx2);line-height:1.5">Sélectionnez la ville, cliquez sur générer. Ensuite, cliquez sur <b style="color:var(--g)">Copier HTML</b> pour un agent, puis faites <kbd>Ctrl + V</kbd> dans le corps du message Gmail.</div>
         </div>
       </div>
       <div class="fgrid">
         <div class="fgl"><label>Filtrer par ville :</label>
-            <select class="fc" id="email-ville-sel" style="padding:14px;font-size:14px">
+            <select class="fc" id="email-ville-sel" style="padding:12px;font-size:13px">
                 <option value="ALL">Toutes les villes</option>
                 <option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option><option value="AGD">Agadir</option>
-                <option value="TEM">Temara</option><option value="SAL">Salé</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option>
-                <option value="MOH">Mohammadia</option><option value="LYN">Laayoune</option>
             </select>
         </div>
-        <div class="fgl" style="justify-content:flex-end"><button class="btn btn-y" onclick="preparerEmails()" style="padding:14px;font-size:14px">⚡ Générer les Modèles</button></div>
+        <div class="fgl" style="justify-content:flex-end"><button class="btn btn-y" onclick="preparerEmails()" style="padding:12px;font-size:13px">⚡ Générer les Modèles</button></div>
       </div>
-      <div id="email-preview" style="margin-top:24px;max-height:450px;overflow-y:auto;padding-right:15px;display:flex;flex-direction:column;gap:15px"></div>
+      <div id="email-preview" style="margin-top:20px;max-height:400px;overflow-y:auto;padding-right:10px;display:flex;flex-direction:column;gap:15px"></div>
     </div>
   </div>
 </div>
@@ -373,7 +370,7 @@
         <div class="fgl"><label>Date d'Embauche (Pour Paie)</label><input type="date" id="ag-emb" class="fc"></div>
       </div>
       <div class="fgl"><label>Email Gmail</label><input type="email" id="ag-email" class="fc"></div>
-      <div class="fgl"><label>Statut (Si inactif, il disparaît des plannings)</label><select id="ag-stat" class="fc"><option value="Actif">Actif</option><option value="Inactif">Inactif</option></select></div>
+      <div class="fgl"><label>Statut</label><select id="ag-stat" class="fc"><option value="Actif">Actif</option><option value="Inactif">Inactif</option></select></div>
     </div>
     <div class="m-footer">
         <button class="btn btn-gh" onclick="closeModal('agOverlay')">Annuler</button>
@@ -386,18 +383,7 @@
   <div class="modal">
     <div class="modal-hd"><div class="modal-hd-t">📍 Créer un Hotspot</div><button class="m-close" onclick="closeModal('hsOverlay')">✕</button></div>
     <div class="m-body">
-      <div class="fgl"><label>Ville</label><select id="hs-f-ville" class="fc">
-        <option value="CAS">Casablanca</option>
-        <option value="RBT">Rabat</option>
-        <option value="MAR">Marrakech</option>
-        <option value="AGD">Agadir</option>
-        <option value="TEM">Temara</option>
-        <option value="SAL">Salé</option>
-        <option value="DRB">Dar Bouazza</option>
-        <option value="BSK">Bouskoura</option>
-        <option value="MOH">Mohammadia</option>
-        <option value="LYN">Laayoune</option>
-      </select></div>
+      <div class="fgl"><label>Ville</label><select id="hs-f-ville" class="fc"><option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option><option value="AGD">Agadir</option><option value="TEM">Temara</option><option value="SAL">Salé</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option><option value="MOH">Mohammadia</option><option value="LYN">Laayoune</option></select></div>
       <div class="fgl"><label>Nom du Point (Ex: Macdo Maarif)</label><input type="text" id="hs-f-nom" class="fc"></div>
       <div class="fgl"><label>Heure de pointe estimée</label><input type="time" id="hs-f-pk" class="fc" value="12:00"></div>
     </div>
@@ -405,11 +391,23 @@
   </div>
 </div>
 
+<div class="overlay" id="rpOverlay" onclick="if(event.target===this)closeModal('rpOverlay')">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-hd-t">Rapport de Fin de Shift</div><button class="m-close" onclick="closeModal('rpOverlay')">✕</button></div>
+    <div class="m-body">
+      <div class="fgl"><label>Date du Shift</label><input type="date" id="rp-date" class="fc"></div>
+      <div class="fgl"><label>Résumé de la journée</label><textarea id="rp-resume" class="fc" style="resize:vertical;min-height:80px" placeholder="Déroulement global..."></textarea></div>
+      <div class="fgl"><label>Anomalies / Retards rencontrés</label><textarea id="rp-anomalies" class="fc" style="resize:vertical;min-height:60px" placeholder="Laisser vide si RAS..."></textarea></div>
+    </div>
+    <div class="m-footer"><button class="btn btn-gh" onclick="closeModal('rpOverlay')">Annuler</button><button class="btn btn-y" onclick="saveRapport()">💾 Transmettre Rapport</button></div>
+  </div>
+</div>
+
 <div class="toast-wrap" id="toastWrap"></div>
 
 <script>
 // ═══════════════════════════════════════════════════════════
-//  SENTINEL v19.0 — FULL CORPORATE + SMART FIXES
+//  SENTINEL v20.0 — FULL CORPORATE + 26 DAYS HR PAYROLL
 // ═══════════════════════════════════════════════════════════
 
 const USERS = {
@@ -421,7 +419,7 @@ const USERS = {
 };
 
 const CLOUD = {KEY:'$2a$10$2UAmdVsMhCVntgYL5F/RS.KvbKxaxpDTXSPzAyD/9nhcq4HK3Jyzq', BIN:'69e0bb5e856a6821893dbe64'};
-const SK = {AGENTS:'s_ag_v19', ABSENCES:'s_ab_v19', PLAN:'s_pl_v19_', HOTSPOTS:'s_hs_v19'};
+const SK = {AGENTS:'s_ag_v20', ABSENCES:'s_ab_v20', PLAN:'s_pl_v20_', HOTSPOTS:'s_hs_v20', RAPPORTS:'s_rp_v20'};
 
 // DONNÉES SÉCURISÉES : 53 AGENTS
 const RAW_AGENTS = [
@@ -487,7 +485,6 @@ const RAW_HOTSPOTS = [
 ];
 
 var CLA={CAS:'Casablanca',DRB:'Dar Bouazza',BSK:'Bouskoura',RBT:'Rabat',TEM:'Temara',SAL:'Salé',AGD:'Agadir',MOH:'Mohammadia',LYN:'Laayoune',MAR:'Marrakech'};
-
 var currentUser=null; var D={}; var weekOffset=0; var gFC='ALL'; var agEditIdx=-1; var emState={};
 var JOURS=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
 
@@ -508,6 +505,7 @@ function getHotspots(){
 function saveHotspots(hs){localStorage.setItem(SK.HOTSPOTS,JSON.stringify(hs)); cloudPushData();}
 function getAbsences(){var a=localStorage.getItem(SK.ABSENCES);return a?JSON.parse(a):[];}
 function saveAbsences(ab){localStorage.setItem(SK.ABSENCES,JSON.stringify(ab)); cloudPushData(); }
+function getRapports(){var a=localStorage.getItem(SK.RAPPORTS);return a?JSON.parse(a):[];}
 
 // HELPERS
 function ini(n){return n?n.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase():'?';}
@@ -517,8 +515,6 @@ function getLundi(off){var t=new Date(),d=t.getDay();var df=d===1?0:d===0?-6:1-d
 function numSem(dt){var s=new Date(dt.getFullYear(),0,1);return Math.ceil(((dt-s)/86400000+s.getDay()+1)/7);}
 function calcH(s){if(!s||['OFF','ABSENT','CONGE','MALADIE','—'].includes(s.toUpperCase()))return 0;var r=s.split('-');if(r.length<2)return 0;var t=x=>{var p=x.split(':');return parseInt(p[0])*60+parseInt(p[1]);};var d=t(r[1])-t(r[0]);if(d<0)d+=1440;return Math.round(d/6)/10;}
 function sClass(s){if(!s||s==='OFF'||s==='—')return 'so';if(['ABSENT','CONGE','MALADIE'].includes(s))return 'sa';return 'sm';}
-
-// CORRECTION 14: TOAST SIGNATURE
 function toast(m, err=false){
     var e=document.createElement('div');
     e.className='toast';
@@ -531,7 +527,21 @@ function toast(m, err=false){
     },3000);
 }
 
-// CORRECTION 8: CLOUD SYNC VERSIONING FALSE
+// 26-DAY COUNT HELPER (Excluding Sundays)
+function countWorkingDays(startDate, endDate) {
+    var count = 0;
+    var cur = new Date(startDate);
+    cur.setHours(0,0,0,0);
+    var end = new Date(endDate);
+    end.setHours(0,0,0,0);
+    while (cur <= end) {
+        if (cur.getDay() !== 0) count++; // Not Sunday
+        cur.setDate(cur.getDate() + 1);
+    }
+    return count;
+}
+
+// CLOUD SYNC
 function cloudPull(){
   fetch(`https://api.jsonbin.io/v3/b/${CLOUD.BIN}/latest`,{headers:{'X-Master-Key':CLOUD.KEY,'X-Bin-Meta':'false'}})
   .then(r=>r.json()).then(d=>{
@@ -543,15 +553,24 @@ function cloudPull(){
       }
       if(d.abs) localStorage.setItem(SK.ABSENCES, JSON.stringify(d.abs));
       if(d.hs) localStorage.setItem(SK.HOTSPOTS, JSON.stringify(d.hs));
+      if(d.rap) localStorage.setItem(SK.RAPPORTS, JSON.stringify(d.rap));
       if(d.pk && d.pd) localStorage.setItem(d.pk, JSON.stringify(d.pd));
       
       if(updateNeeded) cloudPushData();
       else loadData(weekOffset);
   }).catch(()=>{});
 }
+
 function cloudPushData(){
   var pk = SK.PLAN+numSem(getLundi(weekOffset+1))+'_'+getLundi(weekOffset+1).getFullYear();
-  var payload = { agents: getAgents(), abs: getAbsences(), hs: getHotspots(), pk: pk, pd: JSON.parse(localStorage.getItem(pk)||'null') };
+  var payload = { 
+      agents: getAgents(), 
+      abs: getAbsences(), 
+      hs: getHotspots(), 
+      rap: getRapports(),
+      pk: pk, 
+      pd: JSON.parse(localStorage.getItem(pk)||'null') 
+  };
   fetch(`https://api.jsonbin.io/v3/b/${CLOUD.BIN}`,{
       method:'PUT',
       headers:{
@@ -563,12 +582,8 @@ function cloudPushData(){
   }).catch(()=>{});
 }
 
-// CORRECTION 13: AUTO SAVE
-window.addEventListener('beforeunload',()=>{
-    cloudPushData();
-});
-
-// BONUS FIX: Window focus update
+// AUTO SAVE
+window.addEventListener('beforeunload',()=>{ cloudPushData(); });
 window.addEventListener('focus', () => {
     if (currentUser) {
         D.abs = getAbsences();
@@ -576,7 +591,7 @@ window.addEventListener('focus', () => {
     }
 });
 
-// SESSION & CORRECTION 4: CLOCK
+// SESSION
 document.addEventListener('DOMContentLoaded', function(){
   document.getElementById('loginUsers').innerHTML=Object.keys(USERS).map(k=>`<div class="login-user" onclick="selUser('${k}')" id="lu-${k}"><div class="login-user-av" style="background:${USERS[k].color}">${ini(USERS[k].nom)}</div><div class="login-user-nm">${USERS[k].nom.split(' ')[0]}</div><div style="font-size:9px;color:var(--tx3)">${USERS[k].role==='admin'?'Admin':'Leader'}</div></div>`).join('');
   var s=sessionStorage.getItem('sentinel_session'); if(s && USERS[s]){ selUser(s); document.getElementById('loginPwd').value=USERS[s].pwd; doLogin(); }
@@ -591,30 +606,24 @@ function doLogin(){
   document.getElementById('app').style.display='flex';
   document.getElementById('userName').textContent=currentUser.nom;document.getElementById('userAv').textContent=ini(currentUser.nom);document.getElementById('userAv').style.background=currentUser.color;
   
-  // CORRECTION 4
   setInterval(()=>{
       const now = new Date();
       const clock = document.getElementById('clock');
-      if(clock){
-          clock.textContent = now.toLocaleTimeString('fr-FR');
-      }
+      if(clock){ clock.textContent = now.toLocaleTimeString('fr-FR'); }
   },1000);
 
-  buildNav(); 
-  cloudPull(); 
-  // CORRECTION 11: SYNC LIMIT TO 15s (better performance)
-  setInterval(()=>cloudPull(), 15000); 
+  buildNav(); cloudPull(); setInterval(()=>cloudPull(), 15000); 
 }
 function doLogout(){sessionStorage.removeItem('sentinel_session');location.reload();}
 
 function buildNav(){
-  var l=[{id:'ov',la:'Dashboard'},{id:'pl',la:'Planning'},{id:'py',la:'Paie HR',ad:1},{id:'ag',la:'Agents',ad:1},{id:'ab',la:'Absences'},{id:'hs',la:'Hotspots',ad:1}];
+  var l=[{id:'ov',la:'Dashboard'},{id:'pl',la:'Planning'},{id:'py',la:'Paie HR',ad:1},{id:'ag',la:'Agents',ad:1},{id:'ab',la:'Absences'},{id:'hs',la:'Hotspots',ad:1},{id:'rp',la:'Rapports'}];
   document.getElementById('navLinks').innerHTML=l.filter(x=>!x.ad||currentUser.role==='admin').map(x=>`<div class="ni" onclick="goPage('${x.id}',this)" id="ni-${x.id}">${x.la}</div>`).join('');
   document.getElementById('ni-ov').classList.add('active');
 }
 function goPage(id,btn){document.querySelectorAll('.pg, .ni').forEach(e=>e.classList.remove('active'));document.getElementById('pg-'+id).classList.add('active');if(btn)btn.classList.add('active');}
 
-// CORE DATA
+// CORE DATA & ALGORITHM 44H
 function loadData(off){
   weekOffset=off; 
   var agents=getAgents(), abs=getAbsences(), hs=getHotspots();
@@ -633,7 +642,6 @@ function loadData(off){
           if(agD && agD.embauche && dtStr < agD.embauche) p.shifts[d]='—'; 
           var a=abs.find(x=>x.nom===p.nom&&x.date===D.meta.dates[d]); if(a)p.shifts[d]=a.type;
       }
-      // CORRECTION 15: PROTECT REDUCE
       p.totalH=(p.shifts || []).reduce((acc,s)=>acc+calcH(s),0);
   });
   renderUI();
@@ -668,12 +676,11 @@ function genPlanning(agents, hotspots, off){
   return {planning:planning,dates:dates,wn:wn};
 }
 
-// CORRECTION 1: RENDER UI
+// RENDER ALL
 function renderUI(){
   var ti=new Date().getDay(); ti=ti===0?6:ti-1;
   document.getElementById('ov-date').textContent=new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
   
-  // CORRECTION 1 : ov-kpi
   document.getElementById('ov-kpi').innerHTML=`
     <div class="kpi"><div class="kpi-top" style="background:var(--tx)"></div><div class="kpi-lbl">Agents Officiels</div><div class="kpi-val" style="color:var(--tx)">${D.actifs.length}</div></div>
     <div class="kpi"><div class="kpi-top" style="background:var(--g)"></div><div class="kpi-lbl">Présents Aujourd'hui</div><div class="kpi-val" style="color:var(--g)">
@@ -683,7 +690,6 @@ function renderUI(){
     <div class="kpi"><div class="kpi-top" style="background:var(--b)"></div><div class="kpi-lbl">Couverture 44H</div><div class="kpi-val" style="color:var(--b)">${D.plan.length?Math.round((D.plan.filter(p=>p.totalH==44).length/D.plan.length)*100):0}%</div></div>
   `;
   
-  // CORRECTION 7: SAFE SHIFT OFF PARSING
   document.getElementById('ov-day').innerHTML=D.plan.filter(p=>{
         if(!p.shifts[ti] || ['OFF','ABSENT','CONGE','MALADIE','—'].includes(p.shifts[ti])) return false;
         return parseInt(p.shifts[ti].split(':')[0]) < 16;
@@ -705,11 +711,11 @@ function renderUI(){
   });
   document.getElementById('pl-tbl').innerHTML=plHtml+'</tbody>';
 
-  // CORRECTION 5: rPay instead of renderPaie
   rPay();
-
   rAgents();
   rHs();
+  rRapports();
+  
   document.getElementById('f-ag').innerHTML=D.actifs.map(a=>`<option value="${a.nom}">${a.nom}</option>`).join('');
   document.getElementById('abs-list').innerHTML=D.abs.slice(-10).reverse().map(a=>`<div class="sr" style="background:#fff;padding:12px 16px;border:1px solid var(--bd);border-radius:12px;margin-bottom:10px"><div style="flex:1"><b style="font-size:14px">${a.nom}</b><br><span style="color:var(--tx3);font-size:12px">${a.date}</span></div><span class="pill sa">${a.type}</span><button class="btn btn-gh btn-sm" onclick="delAbs(${D.abs.indexOf(a)})" style="margin-left:15px">✕</button></div>`).join('');
   initPaieMois();
@@ -735,7 +741,7 @@ function saveCell(){
   localStorage.setItem(D.pk,JSON.stringify(pd)); cloudPushData(); closeModal('editOverlay'); loadData(weekOffset); toast('Shift Modifié');
 }
 
-// CORRECTION 2: PAIE HR PRECISION (22 AU 22 + PRORATA)
+// ── PAIE HR PRECISION (22 AU 21 + 26 JOURS BASE) ──
 function initPaieMois(){
   var sel=document.getElementById('pay-mois-sel');if(sel.options.length>0)return;
   var now=new Date(), opts='';
@@ -744,12 +750,13 @@ function initPaieMois(){
 }
 function rPay(){
   var val = document.getElementById('pay-mois-sel').value.split('-');
-  var y=parseInt(val[0]), m=parseInt(val[1])-1; // Mois cible (m=4 pour Mai)
+  var y=parseInt(val[0]), m=parseInt(val[1])-1;
   
-  // CORRECTION 2 : Du 22 au 22
+  // LOGIQUE HR MAROCAINE: Période du 22 du mois précédent au 21 du mois en cours
   var start = new Date(y, m - 1, 22);
-  var end   = new Date(y, m, 22);
-  var totalDays = Math.floor((end - start)/(1000*60*60*24)) + 1; 
+  var end   = new Date(y, m, 21);
+  var BASE_DAYS = 26;
+  var DAILY_RATE = 5000 / 26; // ~192.3
   
   var html='', tN=0, tD=0;
   var byCity={}; D.actifs.forEach(a=>{if(!byCity[a.ville])byCity[a.ville]=[]; byCity[a.ville].push(a);});
@@ -759,21 +766,31 @@ function rPay(){
       <table class="tbl-wr hr-table" style="margin-bottom:30px;width:100%">
       <thead><tr><th>Agent</th><th>Date d'Embauche</th><th>Jours Prestés</th><th>Absences</th><th>Retenue</th><th>Salaire Net</th></tr></thead><tbody>`;
       byCity[v].forEach(a=>{
-          var nAbs=D.abs.filter(ab=>{if(ab.nom!==a.nom||ab.type!=='ABSENT')return false; var d=new Date(ab.date.split('/').reverse().join('-')); return d>=start&&d<=end;}).length;
+          var nAbs=D.abs.filter(ab=>{
+              if(ab.nom!==a.nom||ab.type!=='ABSENT') return false; 
+              var p=ab.date.split('/'); var dAbs=new Date(p[2], p[1]-1, p[0]); 
+              return dAbs>=start && dAbs<=end;
+          }).length;
           
-          // CORRECTION 2 : Logique Embauche Pro
-          var baseSalary = 5000;
-          var startWork = start;
+          var jP = BASE_DAYS;
           if(a.embauche){
               var emb = new Date(a.embauche);
-              if(emb > start){ startWork = emb; }
+              if(emb > end){
+                  jP = 0;
+              } else if(emb > start){
+                  jP = countWorkingDays(emb, end);
+              }
           }
-          var jP = Math.max(0, Math.floor((end - startWork) / (1000*60*60*24)) + 1);
-          var base = Math.round((jP / totalDays) * baseSalary);
-          if(a.embauche && new Date(a.embauche) > end) { base = 0; jP = 0; } // Sécurité
           
-          var ded=nAbs*192, net=base-ded; if(net<0) net=0; tN+=net; tD+=ded;
-          html+=`<tr><td>${a.nom}</td><td>${a.embauche?new Date(a.embauche).toLocaleDateString('fr-FR'):'Ancien'}</td><td>${jP} j</td><td><span style="color:var(--r);font-weight:bold">${nAbs} j</span></td><td><span style="color:var(--r)">-${ded} MAD</span></td><td><span style="color:var(--g);font-weight:900">${net} MAD</span></td></tr>`;
+          // Calcul final strict
+          var netDays = jP - nAbs;
+          if(netDays < 0) netDays = 0;
+          
+          var net = Math.round(netDays * DAILY_RATE);
+          var ded = Math.round(nAbs * DAILY_RATE);
+          tN+=net; tD+=ded;
+          
+          html+=`<tr><td>${a.nom}</td><td>${a.embauche?new Date(a.embauche).toLocaleDateString('fr-FR'):'Ancien'}</td><td>${jP} j / 26</td><td><span style="color:var(--r);font-weight:bold">${nAbs} j</span></td><td><span style="color:var(--r)">-${ded} MAD</span></td><td><span style="color:var(--g);font-weight:900">${net} MAD</span></td></tr>`;
       });
       html+=`</tbody></table>`;
   });
@@ -781,7 +798,7 @@ function rPay(){
   document.getElementById('py-n').textContent=D.actifs.length; document.getElementById('py-d').textContent='-'+mad(tD); document.getElementById('py-t').textContent=mad(tN);
 }
 
-// CORRECTION 1: ABSENCES FIX
+// ── AGENTS & ABS ──
 function submitAbs(){
     var n = document.getElementById('f-ag').value;
     var t = document.getElementById('f-ty').value;
@@ -789,7 +806,7 @@ function submitAbs(){
     var e = document.getElementById('f-e').value || s;
     if(!s){ toast('Date obligatoire', true); return; }
     
-    var abs = getAbsences();
+    var abs = getAbsences(); 
     var cur = new Date(s);
     var end = new Date(e);
     
@@ -799,7 +816,7 @@ function submitAbs(){
     }
     
     saveAbsences(abs);
-    D.abs = abs; // update live state
+    D.abs = abs; // update live
     loadData(weekOffset);
     toast('Absence enregistrée');
 }
@@ -818,9 +835,8 @@ function rAgents(){
     document.getElementById('ag-grid').innerHTML=list.map((a,i)=>`<div class="ag-card" onclick="editAgentIdx(${D.all.indexOf(a)})"><div class="av av-lg" style="background:var(--bg);color:var(--tx);border:1px solid var(--bd)">${ini(a.nom)}</div><div style="flex:1"><div style="font-weight:800;font-size:14px;margin-bottom:6px">${a.nom}</div><div><span class="pill so">${a.ville}</span> ${a.statut==='Inactif'?'<span class="pill sa" style="margin-left:4px">Inactif</span>':''}</div></div></div>`).join('') || '<div class="em" style="grid-column:1/-1">Aucun agent trouvé</div>';
 }
 
-// CORRECTION 3 & 4: HOTSPOTS FIX
 function rHs(){
-    var v = document.getElementById('hs-view-filter').value;
+    var v = document.querySelector('#pg-hs select').value;
     fHs(v);
 }
 function fHs(v){
@@ -837,11 +853,31 @@ function fHs(v){
 function saveHotspot(){var n=document.getElementById('hs-f-nom').value;if(!n)return;D.hs.push({ville:document.getElementById('hs-f-ville').value,nom:n,pk:document.getElementById('hs-f-pk').value});saveHotspots(D.hs);closeModal('hsOverlay');loadData(weekOffset);toast('Hotspot ajouté');}
 function delHs(i){if(confirm("Supprimer ce hotspot ?")){D.hs.splice(i,1);saveHotspots(D.hs);loadData(weekOffset);toast('Supprimé');}}
 
-// CORRECTION 5: MAILS GLOVO DESIGN AVEC FALLBACK
+// ── RAPPORTS ──
+function openRapportForm(){document.getElementById('rp-date').value=new Date().toISOString().split('T')[0]; document.getElementById('rpOverlay').classList.add('show');}
+function saveRapport(){
+  var r = getRapports(); 
+  r.push({auteur:currentUser.nom, date:document.getElementById('rp-date').value, resume:document.getElementById('rp-resume').value, anomalies:document.getElementById('rp-anomalies').value}); 
+  localStorage.setItem(SK.RAPPORTS,JSON.stringify(r)); cloudPushData(); closeModal('rpOverlay'); rRapports(); toast('Transmis au Dashboard');
+}
+function rRapports(){
+  var r = getRapports().sort((a,b)=>b.date.localeCompare(a.date)); 
+  if(currentUser.role !== 'admin') r = r.filter(x => x.auteur === currentUser.nom);
+  document.getElementById('rp-list').innerHTML = r.length ? r.map(x=>`
+    <div class="card" style="margin-bottom:12px;padding:16px">
+        <div style="font-weight:800;font-size:14px;margin-bottom:8px;color:var(--tx)">
+            ${x.auteur} <span style="font-weight:normal;color:var(--tx3);font-size:12px">(${x.date})</span>
+        </div>
+        <div style="font-size:13px;color:var(--tx2);margin-bottom:8px"><b>Résumé:</b> ${x.resume}</div>
+        ${x.anomalies?`<div style="padding:10px;background:var(--r-lt);color:var(--r);border-radius:8px;font-size:12px"><b>Incidents:</b> ${x.anomalies}</div>`:''}
+    </div>
+  `).join('') : '<div class="em">Aucun rapport disponible</div>';
+}
+
+// ── MAILS GLOVO DESIGN ──
 function openEmailModal(){document.getElementById('email-preview').innerHTML=''; document.getElementById('emailOverlay').classList.add('show');}
 function preparerEmails(){
     var ville = document.getElementById('email-ville-sel').value;
-    // CORRECTION 2: D.all au lieu de D.agents
     var agents = D.all.filter(a => a.email && (ville==='ALL'||a.ville===ville));
     if(!agents.length){toast('Aucun email trouvé.', true);return;}
     
@@ -868,43 +904,25 @@ function preparerEmails(){
                 </div>
             </div>
         </div>`;
-        html+=`<div class="card" style="margin-bottom:20px;background:#f8fafc"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><b style="font-size:15px;color:var(--tx)">${ag.nom}</b><button class="btn btn-g" onclick="copyMail(${idx},'${ag.email}')">📋 Copier HTML & Ouvrir Gmail</button></div><div style="transform:scale(0.85);transform-origin:top left">${mailBody}</div></div>`;
+        html+=`<div class="card" style="margin-bottom:20px;background:#f8fafc"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><b style="font-size:15px;color:var(--tx)">${ag.nom}</b><button class="btn btn-g" onclick="copyMail(${idx},'${ag.email}')">📋 Copier HTML</button></div><div style="transform:scale(0.85);transform-origin:top left">${mailBody}</div></div>`;
     });
     document.getElementById('email-preview').innerHTML=html; toast('Modèles générés');
 }
 
-// CORRECTION 5: COPY MAIL FALLBACK
 function copyMail(idx, email){
     var el = document.getElementById('m-'+idx);
     var html = el.innerHTML;
-
-    function openMail(){
-        window.open(
-            `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${encodeURIComponent('Planning Semaine W'+D.meta.wn)}&body=${encodeURIComponent('Bonjour, veuillez trouver votre planning ci-dessous (CTRL+V).')}`,
-            '_blank'
-        );
-    }
+    function openMail(){ window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${encodeURIComponent('Planning Semaine W'+D.meta.wn)}&body=Bonjour, veuillez trouver votre planning en pièce jointe.`, '_blank'); }
 
     try {
         if(navigator.clipboard && window.ClipboardItem){
             var blobHTML = new Blob([html], {type: "text/html"});
             var blobText = new Blob(["Planning Glovo W"+D.meta.wn], {type: "text/plain"});
-
-            navigator.clipboard.write([
-                new ClipboardItem({
-                    "text/html": blobHTML,
-                    "text/plain": blobText
-                })
-            ]).then(()=>{
-                toast("Planning copié");
-                setTimeout(openMail, 600);
+            navigator.clipboard.write([new ClipboardItem({"text/html": blobHTML, "text/plain": blobText})]).then(()=>{
+                toast("Planning copié"); setTimeout(openMail, 600);
             }).catch(()=>{ openMail(); });
-        } else {
-            openMail();
-        }
-    } catch(e){
-        openMail();
-    }
+        } else { openMail(); }
+    } catch(e){ openMail(); }
 }
 
 // ── EXPORTS CSV / EXCEL ──
@@ -916,27 +934,18 @@ function exportPlanningExcel(){
     D.plan.forEach(p=>{ html+=`<tr><td><b>${p.nom}</b></td><td>${p.ville}</td>`+p.shifts.map(s=>`<td>${s}</td>`).join('')+`<td><b>${p.totalH}h</b></td></tr>`; });
     html+='</table></body></html>'; dlXls(html, 'Planning_W'+D.meta.wn+'.xls');
 }
-
-// CORRECTION 2: PAIE 22 AU 22
 function exportPaieExcel(){
     var val = document.getElementById('pay-mois-sel').value.split('-'); var y=parseInt(val[0]), m=parseInt(val[1])-1;
-    var start = new Date(y, m - 1, 22);
-    var end   = new Date(y, m, 22);
-    var totalDays = Math.floor((end - start)/(1000*60*60*24)) + 1;
-    
-    var html='<html xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"><style>td,th{border:1px solid #000}</style></head><body><table><tr><th colspan="6" style="background:#0F172A;color:#fff">Rapport Paie (Du 22 au 22)</th></tr><tr><th>Agent</th><th>Ville</th><th>Embauche</th><th>Absences (Jours)</th><th>Deduction (MAD)</th><th>NET (MAD)</th></tr>';
+    var start=new Date(y, m-1, 22), end=new Date(y, m, 21), totalDays = Math.floor((end - start)/(1000*60*60*24)) + 1;
+    var html='<html xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"><style>td,th{border:1px solid #000}</style></head><body><table><tr><th colspan="6" style="background:#0F172A;color:#fff">Rapport Paie (Du 22 au 21)</th></tr><tr><th>Agent</th><th>Ville</th><th>Embauche</th><th>Absences (Jours)</th><th>Deduction (MAD)</th><th>NET (MAD)</th></tr>';
     D.actifs.forEach(a=>{
         var nAbs=D.abs.filter(ab=>{if(ab.nom!==a.nom||ab.type!=='ABSENT')return false; var d=new Date(ab.date.split('/').reverse().join('-')); return d>=start&&d<=end;}).length;
-        var baseSalary = 5000;
-        var startWork = start;
-        if(a.embauche){
-            var emb = new Date(a.embauche);
-            if(emb > start){ startWork = emb; }
-        }
+        var baseSalary = 5000, startWork = start;
+        if(a.embauche){ var emb = new Date(a.embauche); if(emb > start){ startWork = emb; } }
         var jP = Math.max(0, Math.floor((end - startWork) / (1000*60*60*24)) + 1);
         var base = Math.round((jP / totalDays) * baseSalary);
         if(a.embauche && new Date(a.embauche) > end) { base = 0; jP = 0; }
-        var ded=nAbs*192, net=base-ded; if(net<0) net=0;
+        var ded=Math.round((nAbs/26)*5000), net=base-ded; if(net<0) net=0;
         html+=`<tr><td>${a.nom}</td><td>${a.ville}</td><td>${a.embauche||'Ancien'}</td><td>${nAbs}</td><td>-${ded}</td><td><b>${net}</b></td></tr>`;
     });
     dlXls(html+'</table></body></html>', 'Paie_HR.xls');
