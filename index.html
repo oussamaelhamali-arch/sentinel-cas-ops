@@ -3,108 +3,81 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>SENTINEL — CAS OPS · Glovo</title>
+<title>SENTINEL — Glovo Maroc · OPS</title>
 <style>
+/* CSS MODERN & PROFESSIONAL */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --y:#FFC244;--y-dk:#E5A820;--y-lt:#FFF8E8;--y-md:rgba(255,194,68,.18);
-  --g:#00A082;--g-lt:#E8F8F5;--g-md:rgba(0,160,130,.15);
-  --r:#E53935;--r-lt:#FEECEC;--r-md:rgba(229,57,53,.12);
-  --b:#1565C0;--b-lt:#E3F0FF;--b-md:rgba(21,101,192,.12);
-  --pu:#7B1FA2;--pu-lt:#F5EAF8;--pu-md:rgba(123,31,162,.12);
-  --bg:#F1F5F9;--bg2:#FFFFFF;--bg3:#F8FAFB;
-  --tx:#0F172A;--tx2:#475569;--tx3:#94A3B8;
-  --bd:#E2E8F0;--bd2:#CBD5E1;
-  --r:8px;--r2:6px;--r3:4px;--sh:0 1px 3px rgba(0,0,0,0.1);--sh2:0 10px 25px rgba(0,0,0,0.15);
+  --y:#FFC244;--y-dk:#E5A820;--y-lt:#FFF8E8;
+  --g:#00A082;--g-lt:#E8F8F5;--r:#E53935;--r-lt:#FEECEC;
+  --b:#1565C0;--b-lt:#E3F0FF;--tx:#0F172A;--tx2:#475569;--tx3:#94A3B8;
+  --bg:#F8FAFC;--card:#FFFFFF;--bd:#E2E8F0;
+  --cas-bg:#FEF3C7;--cas-tx:#92400E;--rbt-bg:#DCFCE7;--rbt-tx:#166534;
+  --agd-bg:#FFE4E6;--agd-tx:#BE123C;--kech-bg:#FFEDD5;--kech-tx:#9A3412;
+  --sh:0 1px 3px rgba(0,0,0,0.1);--sh2:0 15px 35px rgba(0,0,0,0.1);
 }
-html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;font-size:13px}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--tx);height:100vh;display:flex;flex-direction:column;overflow:hidden}
 
-/* LOGIN & NAV */
-#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0F172A}
-.login-box{background:#fff;border-radius:12px;padding:32px;width:420px;box-shadow:var(--sh2)}
-.login-logo{width:56px;height:56px;background:var(--y);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px}
-.login-title{font-size:20px;font-weight:800;text-align:center;margin-bottom:4px}
-.login-sub{font-size:12px;color:var(--tx3);text-align:center;margin-bottom:24px}
-.login-users{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
-.login-user{padding:10px;border:1px solid var(--bd2);border-radius:var(--r2);text-align:center;cursor:pointer;transition:all .15s;background:#fff}
-.login-user:hover,.login-user.sel{border-color:var(--y);background:var(--y-lt);box-shadow:0 0 0 1px var(--y)}
-.login-user .u-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:11px;margin:0 auto 6px}
-.login-user .u-nm{font-size:11px;font-weight:700;color:var(--tx)}
-.lf{margin-bottom:16px}
-.lf label{display:block;font-size:10px;font-weight:700;color:var(--tx2);margin-bottom:6px;text-transform:uppercase}
-.lf input{width:100%;padding:10px 12px;border:1px solid var(--bd2);border-radius:var(--r2);font-size:14px;outline:none;font-family:inherit}
-.lf input:focus{border-color:var(--y);box-shadow:0 0 0 3px rgba(255,194,68,.15)}
-.login-btn{width:100%;padding:12px;background:var(--y);border:1px solid var(--y-dk);border-radius:var(--r2);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:var(--sh)}
-.login-btn:hover{background:var(--y-dk)}
-.login-err{color:var(--r);font-size:12px;text-align:center;margin-bottom:12px;min-height:16px;font-weight:600}
+/* LOGIN DESIGN - PREMUM DARK */
+#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:radial-gradient(circle at top right,#1e293b,#0f172a)}
+.login-box{background:#fff;border-radius:20px;padding:40px;width:440px;box-shadow:var(--sh2);text-align:center}
+.login-logo{width:64px;height:64px;background:var(--y);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 20px;box-shadow:0 8px 20px rgba(255,194,68,0.3)}
+.login-title{font-size:24px;font-weight:800;letter-spacing:-0.5px;margin-bottom:8px}
+.login-sub{font-size:13px;color:var(--tx3);margin-bottom:30px}
+.login-users{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
+.login-user{padding:12px 8px;border:2px solid var(--bd);border-radius:12px;cursor:pointer;transition:all 0.2s}
+.login-user:hover,.login-user.sel{border-color:var(--y);background:var(--y-lt)}
+.login-user .u-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:11px;margin:0 auto 8px}
+.login-user .u-nm{font-size:11px;font-weight:700}
+.login-input-group{text-align:left;margin-bottom:20px}
+.login-input-group label{display:block;font-size:10px;font-weight:800;color:var(--tx2);margin-bottom:8px;text-transform:uppercase}
+.login-input-group input{width:100%;padding:14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;outline:none}
+.login-input-group input:focus{border-color:var(--y);box-shadow:0 0 0 4px rgba(255,194,68,0.15)}
+.login-btn{width:100%;padding:14px;background:var(--y);border:none;border-radius:10px;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 4px 12px rgba(255,194,68,0.2)}
 
-.navbar{background:var(--bg2);border-bottom:1px solid var(--bd);height:54px;display:flex;align-items:center;padding:0 20px;flex-shrink:0;box-shadow:var(--sh);z-index:100}
-.nav-brand{display:flex;align-items:center;gap:10px;margin-right:24px;flex-shrink:0;border-right:1px solid var(--bd);padding-right:24px}
-.nav-logo{width:32px;height:32px;background:var(--y);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
-.nb-name{font-size:14px;font-weight:800;color:var(--tx)}
-.nb-sub{font-size:10px;color:var(--g);text-transform:uppercase;font-weight:700}
-.nav-links{display:flex;align-items:center;gap:4px;flex:1;overflow-x:auto}
-.ni{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:var(--r2);cursor:pointer;color:var(--tx2);font-size:13px;font-weight:600;transition:all .15s}
-.ni:hover{background:var(--bg3);color:var(--tx)}
-.ni.active{background:var(--y-lt);color:#92400E;border:1px solid var(--y-md)}
-.nav-right{display:flex;align-items:center;gap:12px;margin-left:auto;flex-shrink:0}
-.clock{font-size:11px;color:var(--tx2);font-family:monospace;background:var(--bg);padding:4px 8px;border-radius:var(--r3);border:1px solid var(--bd)}
-.user-badge{display:flex;align-items:center;gap:8px;padding:4px 10px;border-radius:20px;background:var(--bg);border:1px solid var(--bd);font-size:12px;font-weight:600;color:var(--tx)}
-.user-av{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#fff}
+/* APP LAYOUT */
+.navbar{background:#fff;border-bottom:1.5px solid var(--bd);height:60px;display:flex;align-items:center;padding:0 24px;z-index:100}
+.nav-links{display:flex;gap:4px;flex:1;margin:0 24px}
+.ni{padding:8px 16px;border-radius:8px;cursor:pointer;color:var(--tx2);font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;transition:0.2s}
+.ni:hover{background:var(--bg)}
+.ni.active{background:var(--tx);color:#fff}
+.content{flex:1;overflow-y:auto;padding:24px;scrollbar-width:thin}
 
-/* CONTENT & TABLES */
-.content{flex:1;overflow-y:auto;padding:20px;scrollbar-width:thin}
-.pg{display:none;animation:fi .2s ease;max-width:1400px;margin:0 auto}
-.pg.active{display:block}
-@keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
-.card{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);padding:16px;margin-bottom:14px;box-shadow:var(--sh)}
-.chd{font-size:13px;font-weight:700;color:var(--tx);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bd);padding-bottom:8px}
+/* DASHBOARD & KPI */
+.krow{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:24px}
+.kpi{background:#fff;padding:20px;border-radius:12px;border:1.5px solid var(--bd);box-shadow:var(--sh)}
+.kpi-lbl{font-size:11px;font-weight:800;color:var(--tx3);text-transform:uppercase;margin-bottom:10px}
+.kpi-val{font-size:28px;font-weight:900;color:var(--tx)}
 
-/* BOUTONS COMPACTS & PROS */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;border:1px solid transparent;font-family:inherit;transition:all .15s;white-space:nowrap}
-.btn-y{background:#FFC244;color:#000;border-color:#F59E0B}
-.btn-g{background:#00A082;color:#fff;border-color:#008A70}
-.btn-r{background:#EF4444;color:#fff;border-color:#DC2626}
-.btn-gh{background:#fff;color:#334155;border-color:#CBD5E1}
-.btn-sm{padding:5px 10px;font-size:11px}
-
-/* PLANNING & TABLES */
-.tbl-wr{overflow-x:auto;border-radius:var(--r);border:1px solid var(--bd);box-shadow:var(--sh);background:var(--bg2)}
+/* TABLES */
+.tbl-wr{background:#fff;border-radius:12px;border:1.5px solid var(--bd);overflow:hidden;box-shadow:var(--sh)}
 table{width:100%;border-collapse:collapse;font-size:12px}
-thead tr{background:var(--bg3)}
-thead th{color:var(--tx2);padding:10px 8px;text-align:center;font-size:10px;font-weight:800;border-bottom:1px solid var(--bd2);text-transform:uppercase}
-tbody td{padding:8px 6px;border-bottom:1px solid rgba(0,0,0,.04);text-align:center}
-tbody td:first-child{text-align:left;padding-left:16px;font-weight:700}
-.pill{display:inline-block;padding:2px 8px;border-radius:var(--r3);font-size:10px;font-weight:700;border:1px solid transparent}
-.pill.sm{background:var(--g-lt);color:#065F46;border-color:var(--g-md)}
-.pill.sa{background:var(--r-lt);color:var(--r);border-color:var(--r-md)}
-.pill.so{background:var(--bg);color:var(--tx3);border-color:var(--bd)}
+thead th{background:var(--bg);padding:12px 10px;font-weight:800;color:var(--tx2);border-bottom:1.5px solid var(--bd);text-transform:uppercase;font-size:10px}
+tbody td{padding:10px 8px;border-bottom:1px solid #f1f5f9;text-align:center}
+tbody td:first-child{text-align:left;padding-left:18px;font-weight:700}
+.pill{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:800;white-space:nowrap}
+.pill.sm{background:var(--g-lt);color:var(--g)}
+.pill.sa{background:var(--r-lt);color:var(--r)}
+.pill.so{background:var(--bg);color:var(--tx3)}
 
-/* KPI & PAIE */
-.krow{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:16px}
-.kpi{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);padding:14px;position:relative}
-.kpi-top{height:3px;position:absolute;top:0;left:0;right:0}
-.kpi.y .kpi-top{background:var(--y)}.kpi.g .kpi-top{background:var(--g)}.kpi.r .kpi-top{background:var(--r)}
-.kpi-lbl{font-size:10px;color:var(--tx3);text-transform:uppercase;font-weight:700;margin-bottom:6px}
-.kpi-val{font-size:24px;font-weight:900}
-
-.pay-ban{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);padding:12px 20px;margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.pay-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
-.pc{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);padding:14px;box-shadow:var(--sh)}
+/* BUTTONS PRO */
+.btn{padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid transparent;font-family:inherit;display:inline-flex;align-items:center;gap:8px}
+.btn-y{background:var(--y);border-color:var(--y-dk)}
+.btn-gh{background:#fff;border-color:var(--bd);color:var(--tx2)}
+.btn-g{background:var(--g);color:#fff}
+.btn-r{background:var(--r);color:#fff}
 
 /* MODALS */
-.overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.7);z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
+.overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,0.8);z-index:2000;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
 .overlay.show{display:flex}
-.modal{background:var(--bg2);border:1px solid var(--bd);border-radius:12px;width:480px;max-width:95vw;overflow:hidden;box-shadow:var(--sh2);max-height:90vh;overflow-y:auto}
-.modal-lg{width:800px}
-.modal-hd{background:var(--bg);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bd)}
-.m-body{padding:20px}
-.fgl{display:flex;flex-direction:column;margin-bottom:12px}
-.fgl label{font-size:11px;font-weight:700;color:var(--tx2);margin-bottom:6px}
-.fc{width:100%;padding:8px 12px;border:1px solid var(--bd2);border-radius:var(--r2);font-size:13px;outline:none}
-
-.toast-wrap{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px}
-.toast{display:flex;align-items:center;gap:10px;padding:12px 18px;border-radius:8px;background:#fff;border-left:4px solid var(--g);box-shadow:0 10px 30px rgba(0,0,0,.15);font-size:13px;font-weight:700}
+.modal{background:#fff;border-radius:16px;width:500px;max-width:95vw;overflow:hidden;box-shadow:var(--sh2)}
+.modal-hd{padding:20px 24px;border-bottom:1.5px solid var(--bd);display:flex;align-items:center;justify-content:space-between;background:var(--bg)}
+.m-body{padding:24px}
+.fgl{display:flex;flex-direction:column;margin-bottom:16px}
+.fgl label{font-size:11px;font-weight:800;color:var(--tx2);margin-bottom:8px;text-transform:uppercase}
+.fc{padding:12px;border:1.5px solid var(--bd);border-radius:10px;outline:none;font-family:inherit;font-size:13px}
+.fc:focus{border-color:var(--y)}
 </style>
 </head>
 <body>
@@ -112,106 +85,107 @@ tbody td:first-child{text-align:left;padding-left:16px;font-weight:700}
 <div id="loginScreen">
   <div class="login-box">
     <div class="login-logo">🛵</div>
-    <div class="login-title">SENTINEL</div>
-    <div class="login-sub">Connexion sécurisée</div>
+    <div class="login-title">SENTINEL ACCESS</div>
+    <div class="login-sub">Glovo Maroc · Operations Control</div>
     <div class="login-users" id="loginUsers"></div>
     <input type="hidden" id="selUser" value="">
-    <div class="lf"><label>Mot de passe</label><input type="password" id="loginPwd" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <div class="login-input-group">
+        <label>Password</label>
+        <input type="password" id="loginPwd" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
     <div class="login-err" id="loginErr"></div>
-    <button class="login-btn" onclick="doLogin()" style="width:100%">🔑 Connexion</button>
+    <button class="login-btn" onclick="doLogin()">SECURE LOGIN</button>
   </div>
 </div>
 
 <div id="app" style="display:none;height:100%;flex-direction:column">
-<nav class="navbar">
-  <div class="nav-brand"><div class="nav-logo">🛵</div><div><div class="nb-name">SENTINEL</div><div class="nb-sub">Glovo · CAS OPS</div></div></div>
-  <div class="nav-links" id="navLinks"></div>
-  <div class="nav-right">
-    <div class="clock" id="clock"></div>
-    <div class="user-badge" id="userBadge"><div class="user-av" id="userAv">?</div><span id="userName">—</span></div>
-    <button class="btn btn-gh btn-ico btn-sm" onclick="doLogout()">🚪</button>
-  </div>
-</nav>
-
-<div class="content" id="appContent">
-  <div class="pg active" id="pg-ov">
-    <div class="ph"><div class="ph-t">Tableau de bord</div></div>
-    <div class="krow" id="ov-kpi"></div>
-    <div class="g2">
-        <div class="card"><div class="chd">Équipe de Jour</div><div id="ov-day"></div></div>
-        <div class="card"><div class="chd">Équipe de Nuit</div><div id="ov-ngt"></div></div>
+  <nav class="navbar">
+    <div class="nav-brand"><div class="nav-logo">🛵</div><div><div class="nb-name">SENTINEL</div><div class="nb-sub">OPS CONTROL</div></div></div>
+    <div class="nav-links" id="navLinks"></div>
+    <div class="nav-right">
+        <div class="clock" id="clock">00:00:00</div>
+        <div class="user-badge"><div class="user-av" id="userAv"></div><span id="userName">Admin</span></div>
+        <button class="btn btn-gh btn-sm" onclick="doLogout()">Déconnexion</button>
     </div>
-  </div>
+  </nav>
 
-  <div class="pg" id="pg-pl">
-    <div class="plan-top">
-        <button class="btn btn-gh btn-sm" onclick="chgW(-1)">◀</button>
-        <div class="plan-ttl" id="pl-ttl">Planning Semaine</div>
-        <button class="btn btn-gh btn-sm" onclick="chgW(1)">▶</button>
-        <button class="btn btn-y btn-sm" onclick="regenererPlanning()">⚙ Recalculer</button>
-        <button class="btn btn-g btn-sm" onclick="openEmailModal()">📧 Envoyer Mails</button>
-        <button class="btn btn-gh btn-sm" onclick="exportPlanningExcel()">📊 Excel</button>
-    </div>
-    <div class="ftabs" id="plft"></div>
-    <div class="tbl-wr"><table id="pl-tbl"></table></div>
-  </div>
-
-  <div class="pg" id="pg-ag">
-    <div class="ph"><div class="ph-t">Gestion des Agents</div><button class="btn btn-y btn-sm" onclick="openAddAgent()">➕ Nouvel Agent</button></div>
-    <div class="ag-grid" id="ag-grid"></div>
-  </div>
-
-  <div class="pg" id="pg-py">
-    <div class="ph"><div class="ph-t">Paie & Pointage (21 au 22)</div></div>
-    <div class="pay-ban" id="py-totals"></div>
-    <div id="py-content"></div>
-  </div>
-
-  <div class="pg" id="pg-ab">
-    <div class="ph"><div class="ph-t">Absences & Congés</div></div>
-    <div class="card">
-        <div class="chd">➕ Enregistrer une absence</div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px">
-            <div class="fgl"><label>Agent</label><select class="fc" id="f-ag"></select></div>
-            <div class="fgl"><label>Type</label><select class="fc" id="f-ty"><option value="ABSENT">ABSENT</option><option value="MALADIE">MALADIE</option><option value="CONGE">CONGÉ</option></select></div>
-            <div class="fgl"><label>Date début</label><input type="date" class="fc" id="f-s"></div>
-            <div class="fgl"><label>Date fin</label><input type="date" class="fc" id="f-e"></div>
+  <div class="content" id="appContent">
+    <div class="pg active" id="pg-ov">
+        <div class="ph"><div class="ph-t">Dashboard</div><div id="ov-date" style="font-weight:700;color:var(--tx2)"></div></div>
+        <div class="krow" id="ov-kpi"></div>
+        <div class="g2">
+            <div class="card"><div class="chd">Équipe de Jour</div><div id="ov-day"></div></div>
+            <div class="card"><div class="chd">Équipe de Nuit</div><div id="ov-ngt"></div></div>
         </div>
-        <button class="btn btn-r" onclick="submitAbs()" style="width:100%;margin-top:15px">💾 Valider l'absence</button>
+        <div class="card"><div class="chd">Agents par Ville</div><div class="zones" id="ov-zones"></div></div>
+        <button class="btn btn-r" onclick="hardResetDatabase()" style="margin-top:20px">⚙️ Rétablir Base de Données (Force Fix)</button>
     </div>
-    <div id="abs-list"></div>
-  </div>
-</div>
-</div>
 
-<div class="toast-wrap" id="toastWrap"></div>
+    <div class="pg" id="pg-pl">
+        <div class="ph">
+            <div class="plan-top">
+                <button class="btn btn-gh btn-sm" onclick="chgW(-1)">◀</button>
+                <div class="plan-ttl" id="pl-ttl">Planning W</div>
+                <button class="btn btn-gh btn-sm" onclick="chgW(1)">▶</button>
+                <button class="btn btn-y btn-sm" onclick="regenererPlanning()">⚙ Recalculer 44H</button>
+                <button class="btn btn-g btn-sm" onclick="openEmailModal()">📧 Bulk Emails</button>
+            </div>
+        </div>
+        <div class="ftabs" id="plft"></div>
+        <div class="tbl-wr"><table id="pl-tbl"></table></div>
+    </div>
 
-<div class="overlay" id="emailOverlay" onclick="if(event.target===this)closeModal('emailOverlay')">
-  <div class="modal modal-lg">
-    <div class="modal-hd"><div style="font-weight:800">📧 Envoi Bulk des Plannings</div><button class="btn btn-gh btn-sm" onclick="closeModal('emailOverlay')">✕</button></div>
-    <div class="m-body">
-      <div style="margin-bottom:15px"><button class="btn btn-y" onclick="preparerEmails()">⚡ Générer tous les modèles</button></div>
-      <div id="email-preview"></div>
+    <div class="pg" id="pg-py">
+        <div class="ph"><div class="ph-t">Paie & Pointage (21 au 22)</div><button class="btn btn-gh btn-sm" onclick="exportPaieExcel()">📊 Export pour HR</button></div>
+        <div id="py-content"></div>
+    </div>
+
+    <div class="pg" id="pg-ag">
+        <div class="ph"><div class="ph-t">Agents Management</div><button class="btn btn-y btn-sm" onclick="openAddAgent()">➕ Nouvel Agent</button></div>
+        <div class="tbl-wr"><table id="ag-tbl"></table></div>
+    </div>
+
+    <div class="pg" id="pg-ab">
+        <div class="ph"><div class="ph-t">Absences & Congés</div></div>
+        <div class="card">
+            <div class="fgrid">
+                <div class="fgl"><label>Agent</label><select class="fc" id="f-ag"></select></div>
+                <div class="fgl"><label>Type</label><select class="fc" id="f-ty"><option value="ABSENT">ABSENCE (-192 MAD)</option><option value="MALADIE">MALADIE</option><option value="CONGE">CONGÉ</option></select></div>
+                <div class="fgl"><label>Date</label><input type="date" class="fc" id="f-s"></div>
+            </div>
+            <button class="btn btn-r" onclick="submitAbs()" style="width:100%">💾 Enregistrer l'absence</button>
+        </div>
+        <div id="abs-list"></div>
     </div>
   </div>
 </div>
 
 <div class="overlay" id="agOverlay" onclick="if(event.target===this)closeModal('agOverlay')">
     <div class="modal">
-      <div class="modal-hd"><div style="font-weight:800">➕ Fiche Agent</div></div>
-      <div class="m-body">
-        <div class="fgl"><label>Nom Complet</label><input type="text" class="fc" id="ag-f-nom"></div>
-        <div class="fgl"><label>Ville</label><select class="fc" id="ag-f-ville"><option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option><option value="AGD">Agadir</option><option value="BSK">Bouskoura</option><option value="DRB">Dar Bouazza</option></select></div>
-        <div class="fgl"><label>Email</label><input type="email" class="fc" id="ag-f-email"></div>
-        <div class="fgl"><label>Date d'embauche</label><input type="date" class="fc" id="ag-f-date"></div>
-        <button class="btn btn-y" onclick="saveAgent()" style="width:100%;margin-top:10px">💾 Sauvegarder</button>
-      </div>
+        <div class="modal-hd"><div class="modal-hd-t">Fiche Agent</div><button class="m-close" onclick="closeModal('agOverlay')">✕</button></div>
+        <div class="m-body">
+            <div class="fgl"><label>Nom Complet</label><input type="text" class="fc" id="ag-nom"></div>
+            <div class="fgrid">
+                <div class="fgl"><label>Ville</label><select class="fc" id="ag-ville"><option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="TEM">Temara</option><option value="SAL">Salé</option><option value="AGD">Agadir</option><option value="MAR">Marrakech</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option></select></div>
+                <div class="fgl"><label>Embauche</label><input type="date" class="fc" id="ag-emb"></div>
+            </div>
+            <div class="fgl"><label>Email</label><input type="email" class="fc" id="ag-email"></div>
+            <div class="fgl"><label>Statut</label><select class="fc" id="ag-statut"><option value="Actif">Actif</option><option value="Inactif">Inactif</option></select></div>
+            <button class="btn btn-y" onclick="saveAgent()" style="width:100%">💾 Enregistrer</button>
+        </div>
+    </div>
+</div>
+
+<div class="overlay" id="emailOverlay" onclick="if(event.target===this)closeModal('emailOverlay')">
+    <div class="modal modal-lg">
+        <div class="modal-hd"><div class="modal-hd-t">Bulk Emailing - Glovo Design</div><button class="m-close" onclick="closeModal('emailOverlay')">✕</button></div>
+        <div class="m-body" id="email-preview" style="max-height:500px;overflow-y:auto"></div>
     </div>
 </div>
 
 <script>
 // ═══════════════════════════════════════════════════════════
-//  SENTINEL v11.0 — SESSION PERSISTENCE & PAYROLL HR FIX
+//  SENTINEL v12.0 — EXPERT OPS CORE
 // ═══════════════════════════════════════════════════════════
 
 var USERS={
@@ -222,185 +196,190 @@ var USERS={
   kech:{pwd:'KECH2020',nom:'Leader Marrakech',role:'leader',villes:['MAR'],color:'#E67E22'}
 };
 
-var SK={AGENTS:'s_ag_v11',ABSENCES:'s_ab_v11',PLAN:'s_pl_v11_'};
-var currentUser=null; var D={}; var weekOffset=0;
+var SK={AGENTS:'s_ag_v12',ABSENCES:'s_ab_v12',PLAN:'s_pl_v12_'};
+var CLOUD={KEY:'$2a$10$2UAmdVsMhCVntgYL5F/RS.KvbKxaxpDTXSPzAyD/9nhcq4HK3Jyzq', DATA:'69e0bb5e856a6821893dbe64'};
 
-// DATA AGENTS COMPLETE (47+)
 var DEFAULT_AGENTS=[
-  {nom:'YASSINE MAGHFOUR',ville:'AGD',email:'ymaghfour28@gmail.com',embauche:'2026-05-06',statut:'Actif'},
-  {nom:'ADOZ AZIZ',ville:'AGD',email:'Azizadoz90@gmail.com',embauche:'2026-05-06',statut:'Actif'},
-  {nom:'Aymane Bouraoua',ville:'MAR',email:'Aymane1996bouraoia1@gmail.com',embauche:'2026-05-11',statut:'Actif'},
-  {nom:'Houssam En-neddam',ville:'MAR',email:'houssamenne@gmail.com',embauche:'2026-05-11',statut:'Actif'},
-  {nom:'Abdelmoughit El Bitar',ville:'MAR',email:'elbitarabdelmoughit@gmail.com',embauche:'2026-05-11',statut:'Actif'},
-  {nom:'Jaouad Elkhabzi',ville:'MAR',email:'jelkhabzi@gmail.com',embauche:'2026-05-11',statut:'Actif'},
-  {nom:'Noureddine Belioute',ville:'MAR',email:'noureddinebelioute6@gmail.com',embauche:'2026-05-11',statut:'Actif'},
-  {nom:'Achraf ElBouzidi',ville:'MAR',email:'achraflbzd@gmail.com',embauche:'2026-05-11',statut:'Actif'},
-  {nom:'Baidi Abdelbasset',ville:'BSK',email:'Abdelbasstbaidi@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Morad Mourid',ville:'BSK',email:'m.morid1993@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Tarik Hamid',ville:'BSK',email:'hamidtarik995@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Islam Elmardi',ville:'TEM',email:'islamelmardi.1993@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Oussama El Atrach',ville:'TEM',email:'oussamaelat@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Zakariae Benali',ville:'SAL',email:'Zakariaebenaliwork@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Hassan Azgoune',ville:'SAL',email:'hassan.azgoune95@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Ayoub Abssi',ville:'RBT',email:'Ayoubabssi05@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Yahya Rhallab',ville:'RBT',email:'Yahyarhallab00@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Abdelaziz Salimi',ville:'CAS',email:'aziz36928@gmail.com',statut:'Actif'}
-  // ... Ajoutez les autres agents ici si nécessaire
+  {nom:'ADOZ AZIZ',ville:'AGD',embauche:'2026-05-06',email:'Azizadoz90@gmail.com',statut:'Actif'},
+  {nom:'YASSINE MAGHFOUR',ville:'AGD',embauche:'2026-05-06',email:'ymaghfour28@gmail.com',statut:'Actif'},
+  {nom:'Aymane Bouraoua',ville:'MAR',embauche:'2026-05-11',email:'Aymane1996bouraoia1@gmail.com',statut:'Actif'},
+  {nom:'Houssam En-neddam',ville:'MAR',embauche:'2026-05-11',email:'houssamenne@gmail.com',statut:'Actif'},
+  {nom:'Islam Elmardi',ville:'TEM',embauche:'2023-01-01',email:'islamelmardi.1993@gmail.com',statut:'Actif'},
+  {nom:'Zakariae Benali',ville:'SAL',embauche:'2023-01-01',email:'Zakariaebenaliwork@gmail.com',statut:'Actif'},
+  {nom:'AHMED HAJJAJ',ville:'CAS',embauche:'2026-04-27',email:'ahmedhajjaj1996@gmail.com',statut:'Actif'},
+  {nom:'Ibrahim ndiaye',ville:'CAS',embauche:'2026-04-27',email:'ibrahimnday0@gmail.com',statut:'Actif'},
+  {nom:'tiouali ismail',ville:'CAS',embauche:'2026-04-27',email:'ismail.tiouali@gmail.com',statut:'Actif'}
 ];
 
-// UTILS
-function ini(n){return n?n.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase():'?';}
-function getLundi(off){var t=new Date(),d=t.getDay();var df=d===1?0:d===0?-6:1-d;var l=new Date(t);l.setDate(t.getDate()+df+(off||0)*7);l.setHours(0,0,0,0);return l;}
-function numSem(dt){var s=new Date(dt.getFullYear(),0,1);return Math.ceil(((dt-s)/86400000+s.getDay()+1)/7);}
-function fmtD(d){return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();}
-function calcH(s){if(!s||['OFF','ABSENT','CONGE','MALADIE'].includes(s))return 0; var r=s.split('-'); if(r.length<2)return 0; var t=x=>{var p=x.split(':');return parseInt(p[0])*60+parseInt(p[1]);}; var d=t(r[1])-t(r[0]); if(d<0)d+=1440; return Math.round(d/6)/10;}
-function toast(msg){var el=document.createElement('div');el.className='toast';el.textContent='✅ '+msg;document.getElementById('toastWrap').appendChild(el);setTimeout(()=>el.remove(),3000);}
+var D={}; var weekOffset=0; var currentUser=null;
 
-// SESSION
+// INIT & SYNC
+function cloudSync(push){
+    if(!push){
+        fetch(`https://api.jsonbin.io/v3/b/${CLOUD.DATA}/latest`,{headers:{'X-Master-Key':CLOUD.KEY,'X-Bin-Meta':'false'}})
+        .then(r=>r.json()).then(d=>{if(d.agents) localStorage.setItem(SK.AGENTS, JSON.stringify(d.agents)); if(d.abs) localStorage.setItem(SK.ABSENCES, JSON.stringify(d.abs)); loadData(0);});
+    } else {
+        var payload={agents: getAgents(), abs: getAbsences()};
+        fetch(`https://api.jsonbin.io/v3/b/${CLOUD.DATA}`,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':CLOUD.KEY},body:JSON.stringify(payload)});
+    }
+}
+
 function initLogin(){
-  document.getElementById('loginUsers').innerHTML=Object.keys(USERS).map(k=>`<div class="login-user" onclick="selUser('${k}')" id="lu-${k}"><div class="u-av" style="background:${USERS[k].color}">${ini(USERS[k].nom)}</div><div class="u-nm">${USERS[k].nom.split(' ')[0]}</div></div>`).join('');
-  var s=sessionStorage.getItem('sentinel_user'); if(s && USERS[s]){ selUser(s); document.getElementById('loginPwd').value=USERS[s].pwd; doLogin(); }
+    document.getElementById('loginUsers').innerHTML=Object.keys(USERS).map(k=>`<div class="login-user" onclick="selUser('${k}')" id="lu-${k}"><div class="u-av" style="background:${USERS[k].color}">${ini(USERS[k].nom)}</div><div class="u-nm">${USERS[k].nom.split(' ')[0]}</div></div>`).join('');
+    var s=sessionStorage.getItem('sentinel_session'); if(s && USERS[s]){ selUser(s); document.getElementById('loginPwd').value=USERS[s].pwd; doLogin(); }
 }
 function selUser(k){document.querySelectorAll('.login-user').forEach(e=>e.classList.remove('sel'));document.getElementById('lu-'+k).classList.add('sel');document.getElementById('selUser').value=k;document.getElementById('loginPwd').focus();}
+
 function doLogin(){
-  var k=document.getElementById('selUser').value, p=document.getElementById('loginPwd').value;
-  if(!k||USERS[k].pwd!==p){document.getElementById('loginErr').textContent='Erreur mot de passe';return;}
-  currentUser={key:k,...USERS[k]}; sessionStorage.setItem('sentinel_user',k);
-  document.getElementById('loginScreen').style.display='none';document.getElementById('app').style.display='flex';
-  document.getElementById('userName').textContent=currentUser.nom;document.getElementById('userAv').textContent=ini(currentUser.nom);document.getElementById('userAv').style.background=currentUser.color;
-  buildNav();loadData(0);
+    var k=document.getElementById('selUser').value, p=document.getElementById('loginPwd').value;
+    if(!k||USERS[k].pwd!==p){document.getElementById('loginErr').textContent="Password Erreur";return;}
+    currentUser={key:k,...USERS[k]}; sessionStorage.setItem('sentinel_session',k);
+    document.getElementById('loginScreen').style.display='none';document.getElementById('app').style.display='flex';
+    document.getElementById('userName').textContent=currentUser.nom;document.getElementById('userAv').textContent=ini(currentUser.nom);document.getElementById('userAv').style.background=currentUser.color;
+    buildNav(); cloudSync(false);
 }
 function doLogout(){sessionStorage.clear();location.reload();}
 
 function buildNav(){
-  var l=[{id:'ov',ic:'📊',la:'Dash'},{id:'pl',ic:'📅',la:'Planning'},{id:'ag',ic:'👥',la:'Agents',ad:1},{id:'py',ic:'💰',la:'Paie'},{id:'ab',ic:'🚨',la:'Absences'}];
-  document.getElementById('navLinks').innerHTML=l.filter(x=>!x.ad||currentUser.role==='admin').map(x=>`<div class="ni" onclick="goPage('${x.id}',this)" id="ni-${x.id}"><span class="ni-ic">${x.ic}</span><span>${x.la}</span></div>`).join('');
-  document.getElementById('ni-ov').classList.add('active');
+    var l=[{id:'ov',ic:'📊',la:'Dash'},{id:'pl',ic:'📅',la:'Planning'},{id:'py',ic:'💰',la:'Paie HR'},{id:'ag',ic:'👥',la:'Agents'}];
+    document.getElementById('navLinks').innerHTML=l.map(x=>`<div class="ni" onclick="goPage('${x.id}',this)" id="ni-${x.id}"><span class="ni-ic">${x.ic}</span><span>${x.la}</span></div>`).join('');
 }
 function goPage(id,btn){document.querySelectorAll('.pg, .ni').forEach(e=>e.classList.remove('active'));document.getElementById('pg-'+id).classList.add('active');if(btn)btn.classList.add('active');}
 
-// DATA & PLANNING
-function getAgents(){var a=localStorage.getItem(SK.AGENTS);return a?JSON.parse(a):DEFAULT_AGENTS;}
-function getAbsences(){var a=localStorage.getItem(SK.ABSENCES);return a?JSON.parse(a):[];}
+// CORE LOGIC
 function loadData(off){
-  weekOffset=off; var agents=getAgents(), abs=getAbsences();
-  var lundi=getLundi(off+1); var pk=SK.PLAN+numSem(lundi)+'_'+lundi.getFullYear();
-  var pData=JSON.parse(localStorage.getItem(pk));
-  if(!pData){pData=genPlanning(agents,off);localStorage.setItem(pk,JSON.stringify(pData));}
-  
-  D={all:agents, actifs:agents.filter(a=>a.statut==='Actif'&&currentUser.villes.includes(a.ville)), abs:abs, plan:pData.planning.filter(p=>currentUser.villes.includes(p.ville)), meta:{dates:pData.dates,wn:pData.wn}, pk:pk};
-  
-  // Injecter Absences & Embauche
-  D.plan.forEach(p=>{
-    var agData=agents.find(a=>a.nom===p.nom);
-    for(var d=0;d<7;d++){
-      var dtStr=D.meta.dates[d].split('/').reverse().join('-');
-      if(agData && agData.embauche && dtStr < agData.embauche){ p.shifts[d]='—'; }
-      var a=abs.find(x=>x.nom===p.nom&&x.date===D.meta.dates[d]); if(a)p.shifts[d]=a.type;
-    }
-    p.totalH=p.shifts.reduce((acc,s)=>acc+calcH(s),0);
-  });
-  renderAll();
+    weekOffset=off; var agents=getAgents(), abs=getAbsences();
+    var lundi=getLundi(off+1); var pk=SK.PLAN+numSem(lundi)+'_'+lundi.getFullYear();
+    var pData=JSON.parse(localStorage.getItem(pk));
+    if(!pData){pData=genPlanning(agents,off);localStorage.setItem(pk,JSON.stringify(pData));}
+    
+    D={all:agents, actifs:agents.filter(a=>a.statut==='Actif' && currentUser.villes.includes(a.ville)), abs:abs, plan:pData.planning.filter(p=>currentUser.villes.includes(p.ville)), meta:{dates:pData.dates,wn:pData.wn}, pk:pk};
+    
+    // Inject Abs & Coverage
+    D.plan.forEach(p=>{
+        for(var d=0;d<7;d++){
+            var a=abs.find(x=>x.nom===p.nom&&x.date===D.meta.dates[d]); if(a)p.shifts[d]=a.type;
+        }
+        p.totalH=p.shifts.reduce((acc,s)=>acc+calcH(s),0);
+    });
+    renderAll();
 }
 
 function genPlanning(agents,off){
-  var lundi=getLundi(off+1), dates=[], wn=numSem(lundi);
-  for(var i=0;i<7;i++){var d=new Date(lundi);d.setDate(lundi.getDate()+i);dates.push(fmtD(d));}
-  var planning=agents.filter(a=>a.statut==='Actif').map((ag,idx)=>{
-    var offDay=[0,1,2,3][(idx+wn)%4], isMorning=((idx+wn)%2)===0;
-    var p7=isMorning?['09:00-16:00','10:00-17:00']:['17:00-00:00','18:00-01:00'], p8=isMorning?['09:00-17:00','10:00-18:00']:['17:00-01:00','18:00-02:00'];
-    var template=[7,7,7,7,8,8].sort(()=>0.5-Math.random());
-    var shifts=Array(7).fill(null), tIdx=0;
-    for(var d=0;d<7;d++){if(d===offDay){shifts[d]='OFF';continue;} shifts[d]=(template[tIdx++]==7?p7:p8)[(d+idx)%2];}
-    return {nom:ag.nom,ville:ag.ville,shifts:shifts};
-  });
-  return {planning:planning,dates:dates,wn:wn};
+    var lundi=getLundi(off+1), dates=[], wn=numSem(lundi);
+    for(var i=0;i<7;i++){var d=new Date(lundi);d.setDate(lundi.getDate()+i);dates.push(fmtD(d));}
+    var cityIndices={};
+    var planning=agents.filter(a=>a.statut==='Actif').map((ag)=>{
+        if(!cityIndices[ag.ville]) cityIndices[ag.ville]=0;
+        var c_idx = cityIndices[ag.ville]++;
+        var offDay=[0,1,2,3][(c_idx+wn)%4], isMorning=((c_idx+wn)%2)===0;
+        var p7=isMorning?['09:00-16:00','10:00-17:00']:['17:00-00:00','18:00-01:00'], p8=isMorning?['09:00-17:00','10:00-18:00']:['18:00-02:00','19:00-03:00'];
+        var template=[7,7,7,7,8,8].sort(()=>0.5-Math.random());
+        var shifts=Array(7).fill(null), tIdx=0;
+        for(var d=0;d<7;d++){if(d===offDay){shifts[d]='OFF';continue;} shifts[d]=(template[tIdx++]==7?p7:p8)[(d+c_idx)%2];}
+        return {nom:ag.nom,ville:ag.ville,shifts:shifts};
+    });
+    return {planning:planning,dates:dates,wn:wn};
 }
 
 function renderAll(){
-  // DASHBOARD
-  var ti=new Date().getDay(); ti=ti===0?6:ti-1;
-  document.getElementById('ov-kpi').innerHTML=`<div class="kpi y"><div class="kpi-top"></div><div class="kpi-lbl">Agents</div><div class="kpi-val">${D.actifs.length}</div></div><div class="kpi g"><div class="kpi-top"></div><div class="kpi-lbl">Présents</div><div class="kpi-val">${D.plan.filter(p=>!['OFF','ABSENT','—'].includes(p.shifts[ti])).length}</div></div><div class="kpi r"><div class="kpi-top"></div><div class="kpi-lbl">Absences</div><div class="kpi-val">${D.abs.length}</div></div>`;
-  
-  // PLANNING
-  document.getElementById('pl-ttl').textContent='Semaine W'+D.meta.wn;
-  var html=`<thead><tr><th>Agent</th><th>Ville</th>${JOURS.map((j,i)=>`<th>${j}<br><small>${D.meta.dates[i]}</small></th>`).join('')}<th>44H</th></tr></thead><tbody>`;
-  D.plan.forEach(p=>{
-    html+=`<tr><td>${p.nom}</td><td><span class="pill" style="background:${CC[p.ville]?.bg}">${p.ville}</span></td>${p.shifts.map(s=>`<td><span class="pill ${s==='OFF'?'so':s==='ABSENT'?'sa':'sm'}">${s}</span></td>`).join('')}<td><span class="${p.totalH==44?'h-ok':'h-er'}">${p.totalH}h</span></td></tr>`;
-  });
-  document.getElementById('pl-tbl').innerHTML=html+'</tbody>';
-
-  // PAIE (21 au 22)
-  renderPayroll();
-
-  // ABSENCES
-  document.getElementById('f-ag').innerHTML=D.actifs.map(a=>`<option value="${a.nom}">${a.nom}</option>`).join('');
-}
-
-// ── PAYROLL (21st to 22nd) ──
-function renderPayroll(){
-  var now=new Date(), y=now.getFullYear(), m=now.getMonth();
-  var start=new Date(y,m-1,21), end=new Date(y,m,22);
-  var html='', totNet=0, totDed=0;
-  var byCity={};
-  D.actifs.forEach(a=>{if(!byCity[a.ville])byCity[a.ville]=[]; byCity[a.ville].push(a);});
-
-  Object.keys(byCity).forEach(v=>{
-    html+=`<div class="card"><div class="chd" style="color:var(--b)">📍 Ville : ${CLA[v]||v}</div><div class="pay-grid">`;
-    byCity[v].forEach(a=>{
-      var myAbs=D.abs.filter(x=>x.nom===a.nom && x.type==='ABSENT').length;
-      var net=5000-(myAbs*192); totNet+=net; totDed+=(myAbs*192);
-      html+=`<div class="pc"><div style="font-weight:800">${a.nom}</div><div style="font-size:11px;color:var(--tx3)">Embauche: ${a.embauche||'Ancien'}</div><div style="margin-top:8px;display:flex;justify-content:space-between"><span>Jours Abs: <b style="color:var(--r)">${myAbs}</b></span><span style="font-weight:900;color:var(--g)">${mad(net)}</span></div></div>`;
+    // DASH
+    var ti=new Date().getDay(); ti=ti===0?6:ti-1;
+    document.getElementById('ov-date').textContent=new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
+    document.getElementById('ov-kpi').innerHTML=`<div class="kpi y"><div class="kpi-lbl">Agents Actifs</div><div class="kpi-val">${D.actifs.length}</div></div><div class="kpi g"><div class="kpi-lbl">En poste</div><div class="kpi-val">${D.plan.filter(p=>!['OFF','ABSENT','—'].includes(p.shifts[ti])).length}</div></div><div class="kpi r"><div class="kpi-lbl">Absences</div><div class="kpi-val">${D.abs.length}</div></div><div class="kpi p"><div class="kpi-lbl">Objectif 44H</div><div class="kpi-val">${Math.round((D.plan.filter(p=>p.totalH==44).length/D.plan.length)*100)||0}%</div></div>`;
+    
+    // PLANNING
+    document.getElementById('pl-ttl').textContent='Planning Semaine W'+D.meta.wn;
+    var html=`<thead><tr><th>Agent</th><th>Ville</th>${JOURS.map((j,i)=>`<th>${j}<br><small>${D.meta.dates[i]}</small></th>`).join('')}<th>TOTAL</th></tr></thead><tbody>`;
+    D.plan.forEach(p=>{
+        html+=`<tr><td>${p.nom}</td><td><span class="pill" style="background:${CC[p.ville]?.bg}">${p.ville}</span></td>${p.shifts.map(s=>`<td><span class="pill ${s==='OFF'?'so':s==='ABSENT'?'sa':'sm'}">${s}</span></td>`).join('')}<td><span class="${p.totalH==44?'h-ok':'h-er'}">${p.totalH}h</span></td></tr>`;
     });
-    html+=`</div></div>`;
-  });
-  document.getElementById('py-totals').innerHTML=`<div class="pk"><div class="pk-l">Déductions Total</div><div class="pk-v" style="color:var(--r)">-${mad(totDed)}</div></div><div class="pk"><div class="pk-l">Masse Nette</div><div class="pk-v" style="color:var(--g)">${mad(totNet)}</div></div>`;
-  document.getElementById('py-content').innerHTML=html;
+    document.getElementById('pl-tbl').innerHTML=html+'</tbody>';
+
+    // PAIE HR
+    renderPaie();
+    // AGENTS
+    renderAgents();
+    // ABSENCES
+    document.getElementById('f-ag').innerHTML=D.actifs.map(a=>`<option value="${a.nom}">${a.nom}</option>`).join('');
+    renderAbsList();
 }
 
-// ── MAILS PROFESSIONNELS (HTML) ──
+function renderPaie(){
+    var now=new Date(), y=now.getFullYear(), m=now.getMonth();
+    var start=new Date(y,m-1,21), end=new Date(y,m,22);
+    var html='', tN=0, tD=0;
+    var byCity={};
+    D.actifs.forEach(a=>{if(!byCity[a.ville])byCity[a.ville]=[]; byCity[a.ville].push(a);});
+    Object.keys(byCity).forEach(v=>{
+        html+=`<div class="card"><div class="chd" style="color:var(--b)">📍 ${CLA[v]||v}</div><div class="pay-grid">`;
+        byCity[v].forEach(a=>{
+            var na=D.abs.filter(x=>x.nom===a.nom && x.type==='ABSENT').length;
+            var net=5000-(na*192); tN+=net; tD+=(na*192);
+            html+=`<div class="pc"><div style="font-weight:800">${a.nom}</div><div style="font-size:11px;color:var(--tx3)">${a.embauche?'Embauché le '+a.embauche:'Ancien'}</div><div style="margin-top:10px;display:flex;justify-content:space-between"><span>Absences: <b style="color:var(--r)">${na}</b></span><span style="font-weight:900;color:var(--g)">${mad(net)}</span></div></div>`;
+        });
+        html+=`</div></div>`;
+    });
+    document.getElementById('py-totals').innerHTML=`<div class="pk"><div class="pk-l">Total Déductions</div><div class="pk-v" style="color:var(--r)">-${mad(tD)}</div></div><div class="pk"><div class="pk-l">Masse Nette Totale</div><div class="pk-v" style="color:var(--g)">${mad(tN)}</div></div>`;
+    document.getElementById('py-content').innerHTML=html;
+}
+
+function renderAgents(){
+    document.getElementById('ag-grid').innerHTML=D.all.map((a,i)=>`<div class="ag-card" onclick="openEditAgent(${i})"><div class="av" style="background:${CC[a.ville]?.bg}">${ini(a.nom)}</div><div><div style="font-weight:700">${a.nom}</div><div style="font-size:11px;color:var(--tx3)">${a.ville} · ${a.statut}</div></div></div>`).join('');
+}
+
+function renderAbsList(){
+    var v=D.abs.filter(x=>currentUser.villes.includes(x.nom)); // Filter by current agents
+    document.getElementById('abs-list').innerHTML=D.abs.slice(-10).reverse().map((a,idx)=>`<div class="abs-item"><div><b>${a.nom}</b></div><div style="flex:1;text-align:center">${a.date}</div><span class="pill sa">${a.type}</span></div>`).join('');
+}
+
+// EMAILS HTML DESIGN GLOVO
 function preparerEmails(){
-  var html='';
-  D.plan.forEach((p,idx)=>{
-    var ag=D.all.find(x=>x.nom===p.nom); if(!ag||!ag.email)return;
-    var mailBody=`<div id="m-${idx}" style="font-family:sans-serif;max-width:600px;border:1px solid #eee;padding:20px;background:#f9f9f9">
-      <h2 style="color:#00A082">Planning Sentinel - Glovo Maroc</h2>
-      <p>Bonjour <b>${p.nom.split(' ')[0]}</b>,<br>Voici votre planning pour la semaine <b>W${D.meta.wn}</b>. Merci de respecter vos horaires et de vous présenter ponctuellement.</p>
-      <table style="width:100%;border-collapse:collapse;background:#fff">
-        <tr style="background:#FFC244"><th>Jour</th><th>Horaire</th></tr>
-        ${JOURS.map((j,i)=>`<tr><td style="padding:10px;border-bottom:1px solid #eee">${j} (${D.meta.dates[i]})</td><td style="padding:10px;border-bottom:1px solid #eee;text-align:right"><b>${p.shifts[i]}</b></td></tr>`).join('')}
-      </table>
-      <p style="margin-top:15px;background:#E8F8F5;padding:10px;border-left:4px solid #00A082">Total: <b>${p.totalH}h</b> / 44h</p>
-      <div style="font-size:11px;color:#777;margin-top:20px">Note: Planning modifiable. Bonne semaine.<br><b>On Field Operations - Glovo Maroc</b></div>
-    </div>`;
-    html+=`<div class="card"><div style="display:flex;justify-content:space-between"><b>${p.nom}</b><button class="btn btn-g btn-sm" onclick="copyMail(${idx},'${ag.email}')">Copier & Gmail</button></div>${mailBody}</div>`;
-  });
-  document.getElementById('email-preview').innerHTML=html;
+    var html='';
+    D.plan.forEach((p,idx)=>{
+        var ag=D.all.find(x=>x.nom===p.nom); if(!ag||!ag.email)return;
+        var mailBody=`<div id="m-${idx}" style="font-family:sans-serif;max-width:600px;border:1.5px solid #E2E8F0;padding:25px;background:#F8FAFC;border-radius:12px">
+            <h2 style="color:#00A082;border-bottom:2px solid #00A082;padding-bottom:10px">Glovo Sentinel - Planning</h2>
+            <p style="font-size:14px;color:#1E293B">Bonjour <b>${p.nom.split(' ')[0]}</b>,<br>Voici votre planning pour la semaine <b>W${D.meta.wn}</b>. Merci de respecter vos horaires et de vous presenter ponctuellement sur votre hotspot assigne.</p>
+            <table style="width:100%;border-collapse:collapse;background:#fff;margin:20px 0;box-shadow:0 2px 4px rgba(0,0,0,0.05)">
+                <tr style="background:#FFC244;color:#000"><th style="padding:12px;text-align:left">Jour</th><th style="padding:12px;text-align:right">Horaire</th></tr>
+                ${JOURS.map((j,i)=>`<tr><td style="padding:10px;border-bottom:1px solid #f1f5f9">${j} (${D.meta.dates[i]})</td><td style="padding:10px;border-bottom:1px solid #f1f5f9;text-align:right;font-weight:bold;color:${p.shifts[i]=='OFF'?'#94A3B8':'#00A082'}">${p.shifts[i]}</td></tr>`).join('')}
+            </table>
+            <div style="background:#E8F8F5;padding:12px;border-left:4px solid #00A082;font-weight:bold;margin-bottom:20px">Total: ${p.totalH}h / 44h</div>
+            <div style="font-size:12px;color:#64748B;line-height:1.5;border-top:1px solid #E2E8F0;padding-top:15px">
+                Note: Ce planning peut etre modifie en cas de force majeure. Tout ajustement vous sera communique.<br>Bonne semaine a toute l'equipe.<br><b>On field Operations - Glovo Maroc</b>
+            </div>
+        </div>`;
+        html+=`<div class="card"><div style="display:flex;justify-content:space-between;margin-bottom:10px"><b>${p.nom}</b><button class="btn btn-g btn-sm" onclick="copyMail(${idx},'${ag.email}')">Copier & Gmail</button></div>${mailBody}</div>`;
+    });
+    document.getElementById('email-preview').innerHTML=html;
 }
 function copyMail(i,em){
-  var h=document.getElementById('m-'+i).innerHTML;
-  navigator.clipboard.write([new ClipboardItem({"text/html":new Blob([h],{type:"text/html"}),"text/plain":new Blob([h],{type:"text/plain"})})]).then(()=>{
-    toast('Design copié ! Collez dans Gmail (Ctrl+V)');
-    setTimeout(()=>window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${em}&su=Planning W${D.meta.wn}`,'_blank'),1000);
-  });
+    var h=document.getElementById('m-'+i).innerHTML;
+    navigator.clipboard.write([new ClipboardItem({"text/html":new Blob([h],{type:"text/html"}),"text/plain":new Blob([h],{type:"text/plain"})})]).then(()=>{
+        toast('Modèle copié ! Collez (Ctrl+V) dans Gmail.');
+        setTimeout(()=>window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${em}&su=Planning Semaine W${D.meta.wn}`,'_blank'),800);
+    });
 }
 
-function openEmailModal(){document.getElementById('emailOverlay').classList.add('show');}
-function closeModal(id){document.getElementById(id).classList.remove('show');}
-function regenererPlanning(){localStorage.removeItem(D.pk);loadData(weekOffset);toast('Planning réinitialisé');}
-function chgW(d){loadData(weekOffset+d);}
-function submitAbs(){
-  var n=document.getElementById('f-ag').value,t=document.getElementById('f-ty').value,s=document.getElementById('f-s').value,e=document.getElementById('f-e').value||s;
-  if(!s)return; var cur=new Date(s),end=new Date(e);
-  while(cur<=end){ D.abs.push({nom:n,date:fmtD(cur),type:t}); cur.setDate(cur.getDate()+1); }
-  localStorage.setItem(SK.ABSENCES,JSON.stringify(D.abs)); loadData(weekOffset); toast('Absence ajoutée');
-}
+// STORAGE ACTIONS
+function getAgents(){return JSON.parse(localStorage.getItem(SK.AGENTS)||JSON.stringify(DEFAULT_AGENTS));}
+function getAbsences(){return JSON.parse(localStorage.getItem(SK.ABSENCES)||'[]');}
+function openAddAgent(){agEditIdx=-1; document.getElementById('ag-nom').value=''; document.getElementById('agOverlay').classList.add('show');}
+function openEditAgent(i){agEditIdx=i; var a=D.all[i]; document.getElementById('ag-nom').value=a.nom; document.getElementById('ag-ville').value=a.ville; document.getElementById('ag-emb').value=a.embauche||''; document.getElementById('ag-email').value=a.email||''; document.getElementById('agOverlay').classList.add('show');}
 function saveAgent(){
-  var n=document.getElementById('ag-f-nom').value,v=document.getElementById('ag-f-ville').value,e=document.getElementById('ag-f-email').value,d=document.getElementById('ag-f-date').value;
-  D.all.push({nom:n,ville:v,email:e,embauche:d,statut:'Actif'});
-  localStorage.setItem(SK.AGENTS,JSON.stringify(D.all)); closeModal('agOverlay'); loadData(weekOffset); toast('Agent ajouté');
+    var a={nom:document.getElementById('ag-nom').value, ville:document.getElementById('ag-ville').value, email:document.getElementById('ag-email').value, embauche:document.getElementById('ag-emb').value, statut:document.getElementById('ag-statut').value};
+    if(agEditIdx==-1) D.all.push(a); else D.all[agEditIdx]=a;
+    localStorage.setItem(SK.AGENTS,JSON.stringify(D.all)); cloudSync(true); closeModal('agOverlay'); loadData(weekOffset); toast('Agent enregistré');
 }
-
+function submitAbs(){
+    var n=document.getElementById('f-ag').value, t=document.getElementById('f-ty').value, s=document.getElementById('f-s').value;
+    if(!s)return; D.abs.push({nom:n, date:fmtD(new Date(s)), type:t});
+    localStorage.setItem(SK.ABSENCES,JSON.stringify(D.abs)); cloudSync(true); loadData(weekOffset); toast('Absence ajoutée');
+}
+function regenererPlanning(){localStorage.removeItem(D.pk); loadData(weekOffset); cloudSync(true); toast('Planning recalculé');}
+function chgW(d){loadData(weekOffset+d);}
+function closeModal(id){document.getElementById(id).classList.remove('show');}
 setInterval(()=>{document.getElementById('clock').textContent=new Date().toLocaleTimeString('fr-FR');},1000);
 document.addEventListener('DOMContentLoaded',initLogin);
 </script>
