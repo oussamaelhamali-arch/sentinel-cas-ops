@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>SENTINEL — Corporate Control · Glovo</title>
+<title>SENTINEL — HR & OPS Control</title>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
     
@@ -15,7 +15,8 @@
         --b: #1565C0; --b-lt: #E3F0FF;
         --tx: #0F172A; --tx2: #475569; --tx3: #94A3B8;
         --bg: #F8FAFC; --card: #FFFFFF; --bd: #E2E8F0; --bd2: #CBD5E1;
-        --sh: 0 2px 5px rgba(0,0,0,0.05); --sh2: 0 15px 35px rgba(0,0,0,0.1);
+        --sh: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03); 
+        --sh2: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
     }
 
     body {
@@ -27,126 +28,128 @@
         flex-direction: column;
         overflow: hidden;
         font-size: 13px;
+        -webkit-font-smoothing: antialiased;
     }
 
-    /* SCROLLBARS */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
 
-    /* --- LOGIN --- */
-    #loginScreen { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #0F172A; z-index: 9999; }
-    .login-box { background: #fff; border-radius: 16px; padding: 40px; width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); text-align: center; }
-    .login-logo { width: 50px; height: 50px; background: var(--y); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 20px; }
-    .login-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; color: var(--tx); }
-    .login-sub { font-size: 12px; color: var(--tx3); margin-bottom: 24px; }
-    .login-users { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-    .login-user { padding: 12px; border: 1.5px solid var(--bd); border-radius: 10px; cursor: pointer; transition: 0.2s; }
+    /* --- LOGIN UI --- */
+    #loginScreen { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #0F172A; position: fixed; inset: 0; z-index: 9999; }
+    .login-box { background: #fff; border-radius: 16px; padding: 40px; width: 420px; box-shadow: var(--sh2); text-align: center; }
+    .login-logo { width: 56px; height: 56px; background: var(--y); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 20px; box-shadow: 0 8px 16px rgba(255,194,68,0.3); }
+    .login-title { font-size: 24px; font-weight: 800; margin-bottom: 8px; color: var(--tx); letter-spacing: -0.5px; }
+    .login-sub { font-size: 13px; color: var(--tx3); margin-bottom: 30px; }
+    .login-users { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+    .login-user { padding: 14px; border: 2px solid var(--bd); border-radius: 12px; cursor: pointer; transition: 0.2s; background: #fff; }
     .login-user.sel { border-color: var(--y); background: var(--y-lt); }
-    .login-user-av { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #fff; font-size: 11px; margin: 0 auto 8px; }
-    .login-user-nm { font-size: 12px; font-weight: 700; color: var(--tx); }
-    .login-input { width: 100%; padding: 12px; border: 1.5px solid var(--bd2); border-radius: 8px; font-size: 14px; outline: none; margin-bottom: 10px; }
-    .login-input:focus { border-color: var(--y); box-shadow: 0 0 0 3px rgba(255,194,68,0.2); }
-    .login-btn { width: 100%; padding: 12px; background: var(--y); border: none; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.2s; color: var(--tx); }
-    .login-btn:hover { background: var(--y-dk); }
-    .login-err { color: var(--r); font-size: 12px; font-weight: 600; min-height: 18px; margin-bottom: 10px; }
+    .login-user-av { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #fff; font-size: 12px; margin: 0 auto 10px; }
+    .login-user-nm { font-size: 13px; font-weight: 700; color: var(--tx); }
+    .login-input { width: 100%; padding: 14px 16px; border: 2px solid var(--bd); border-radius: 10px; font-size: 14px; outline: none; margin-bottom: 12px; font-family: inherit; transition: 0.2s; }
+    .login-input:focus { border-color: var(--y); box-shadow: 0 0 0 4px rgba(255,194,68,0.15); }
+    .login-btn { width: 100%; padding: 14px; background: var(--y); border: none; border-radius: 10px; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.2s; font-family: inherit; color: var(--tx); box-shadow: 0 4px 12px rgba(255,194,68,0.2); }
+    .login-btn:hover { background: var(--y-dk); transform: translateY(-1px); }
+    .login-err { color: var(--r); font-size: 13px; font-weight: 600; min-height: 18px; margin-bottom: 10px; }
 
     /* --- NAVBAR --- */
-    .navbar { background: #fff; border-bottom: 1px solid var(--bd); height: 60px; display: flex; align-items: center; padding: 0 20px; flex-shrink: 0; }
-    .nav-brand { display: flex; align-items: center; gap: 10px; border-right: 1px solid var(--bd); padding-right: 20px; }
-    .nav-logo { width: 32px; height: 32px; background: var(--y); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
-    .nav-links { display: flex; gap: 5px; flex: 1; margin-left: 20px; overflow-x: auto; }
-    .ni { padding: 8px 14px; border-radius: 6px; cursor: pointer; color: var(--tx2); font-weight: 600; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
+    .navbar { background: #fff; border-bottom: 1px solid var(--bd); height: 64px; display: flex; align-items: center; padding: 0 24px; flex-shrink: 0; z-index: 100; }
+    .nav-brand { display: flex; align-items: center; gap: 12px; border-right: 1px solid var(--bd); padding-right: 24px; }
+    .nav-logo { width: 36px; height: 36px; background: var(--y); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .nav-links { display: flex; gap: 6px; flex: 1; margin-left: 24px; overflow-x: auto; }
+    .ni { padding: 8px 16px; border-radius: 8px; cursor: pointer; color: var(--tx2); font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.2s; font-size: 14px; white-space: nowrap; }
     .ni:hover { background: var(--bg); color: var(--tx); }
     .ni.active { background: var(--tx); color: #fff; }
-    .nav-right { display: flex; align-items: center; gap: 15px; margin-left: auto; }
-    .clock { font-size: 12px; font-family: monospace; background: var(--bg); padding: 6px 12px; border-radius: 6px; font-weight: 600; border: 1px solid var(--bd); }
-    
-    .sync-badge { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--g); font-weight: 800; background: var(--g-lt); padding: 4px 10px; border-radius: 12px; border: 1px solid var(--g-md); }
-    .sync-dot { width: 6px; height: 6px; background: var(--g); border-radius: 50%; animation: pulse 1.5s infinite; }
-    @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
+    .nav-right { display: flex; align-items: center; gap: 16px; margin-left: auto; }
+    .clock { font-size: 13px; font-family: monospace; background: var(--bg); padding: 8px 14px; border-radius: 8px; font-weight: 700; border: 1px solid var(--bd); color: var(--tx2); }
+    .sync-badge { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--g); font-weight: 700; background: var(--g-lt); padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(0,160,130,0.2); }
+    .sync-dot { width: 8px; height: 8px; background: var(--g); border-radius: 50%; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.3); } 100% { opacity: 1; transform: scale(1); } }
 
-    /* --- MAIN CONTENT --- */
-    .content { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 24px; }
+    /* --- CONTENT AREA --- */
+    .content { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 30px; }
     .pg { display: none; animation: fadeIn 0.3s ease; max-width: 1400px; margin: 0 auto; }
     .pg.active { display: block; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: none; } }
 
-    /* --- COMPONENTS --- */
-    .card { background: #fff; border-radius: 12px; border: 1px solid var(--bd); padding: 20px; margin-bottom: 20px; box-shadow: var(--sh); }
-    .ph { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
-    .ph-t { font-size: 22px; font-weight: 800; color: var(--tx); }
-    .chd { font-size: 14px; font-weight: 700; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--bd); padding-bottom: 10px; }
-
-    /* --- DASHBOARD KPI --- */
-    .krow { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
-    .kpi { background: #fff; border: 1px solid var(--bd); border-radius: 12px; padding: 20px; position: relative; box-shadow: var(--sh); }
-    .kpi-top { height: 4px; position: absolute; top: 0; left: 0; right: 0; border-radius: 12px 12px 0 0; }
-    .kpi-lbl { font-size: 11px; font-weight: 800; color: var(--tx3); text-transform: uppercase; margin-bottom: 10px; }
-    .kpi-val { font-size: 32px; font-weight: 900; }
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-
-    /* --- TABLES --- */
-    .tbl-wr { background: #fff; border-radius: 12px; border: 1px solid var(--bd); overflow-x: auto; box-shadow: var(--sh); width: 100%; }
-    table { width: 100%; border-collapse: collapse; font-size: 12px; }
-    thead th { background: var(--bg); padding: 12px 10px; font-size: 10px; font-weight: 800; color: var(--tx2); text-transform: uppercase; border-bottom: 1px solid var(--bd); white-space: nowrap; }
-    tbody td { padding: 10px 8px; border-bottom: 1px solid var(--bd); text-align: center; color: var(--tx); }
-    tbody td:first-child { text-align: left; padding-left: 20px; font-weight: 700; }
-    thead th:first-child { text-align: left; padding-left: 20px; }
-    tbody tr:hover td { background: #f8fafc; }
-    
-    /* --- PILLS & BADGES --- */
-    .pill { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; display: inline-block; white-space: nowrap; }
-    .pill.sm { background: var(--g-lt); color: var(--g); border: 1px solid rgba(0,160,130,0.2); }
-    .pill.sa { background: var(--r-lt); color: var(--r); border: 1px solid rgba(229,57,53,0.2); }
-    .pill.so { background: var(--bg); color: var(--tx3); border: 1px solid var(--bd); }
-    
-    .ecell { cursor: pointer; transition: 0.2s; position: relative; }
-    .ecell:hover { background: var(--y-lt) !important; box-shadow: inset 0 0 0 1px var(--y); }
+    /* --- CARDS & UI --- */
+    .card { background: #fff; border-radius: 16px; border: 1px solid var(--bd); padding: 24px; margin-bottom: 24px; box-shadow: var(--sh); }
+    .ph { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 15px; }
+    .ph-t { font-size: 24px; font-weight: 800; color: var(--tx); letter-spacing: -0.5px; }
+    .chd { font-size: 16px; font-weight: 800; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--bd); padding-bottom: 12px; color: var(--tx); }
 
     /* --- BUTTONS --- */
-    .btn { padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; border: 1px solid transparent; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; font-family: inherit; }
-    .btn-y { background: var(--y); color: #000; border-color: var(--y-dk); }
-    .btn-y:hover { background: var(--y-dk); }
+    .btn { padding: 10px 18px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; border: 1px solid transparent; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; font-family: inherit; white-space: nowrap; }
+    .btn-y { background: var(--y); color: #000; border-color: var(--y-dk); box-shadow: 0 2px 4px rgba(255,194,68,0.2); }
+    .btn-y:hover { background: var(--y-dk); transform: translateY(-1px); }
     .btn-gh { background: #fff; border-color: var(--bd); color: var(--tx2); box-shadow: var(--sh); }
-    .btn-gh:hover { background: var(--bg); color: var(--tx); }
+    .btn-gh:hover { background: var(--bg); color: var(--tx); border-color: var(--bd2); }
     .btn-g { background: var(--g); color: #fff; }
     .btn-r { background: var(--r); color: #fff; }
+    .btn-sm { padding: 8px 14px; font-size: 12px; }
+
+    /* --- DASHBOARD KPI --- */
+    .krow { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
+    .kpi { background: #fff; border: 1px solid var(--bd); border-radius: 16px; padding: 24px; position: relative; box-shadow: var(--sh); }
+    .kpi-top { height: 4px; position: absolute; top: 0; left: 0; right: 0; border-radius: 16px 16px 0 0; }
+    .kpi-lbl { font-size: 12px; font-weight: 800; color: var(--tx3); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px; }
+    .kpi-val { font-size: 36px; font-weight: 900; color: var(--tx); }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+    /* --- TABLES (PLANNING) --- */
+    .tbl-wr { background: #fff; border-radius: 16px; border: 1px solid var(--bd); overflow-x: auto; box-shadow: var(--sh); width: 100%; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead th { background: var(--bg); padding: 16px 12px; font-size: 11px; font-weight: 800; color: var(--tx2); text-transform: uppercase; border-bottom: 2px solid var(--bd); text-align: center; white-space: nowrap; }
+    thead th:first-child { text-align: left; padding-left: 24px; }
+    tbody td { padding: 14px 10px; border-bottom: 1px solid var(--bd); text-align: center; color: var(--tx); font-weight: 500; }
+    tbody td:first-child { text-align: left; padding-left: 24px; font-weight: 700; }
+    tbody tr:hover td { background: #f8fafc; }
+    
+    .pill { padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 800; display: inline-block; white-space: nowrap; }
+    .pill.sm { background: var(--g-lt); color: var(--g); border: 1px solid rgba(0,160,130,0.2); }
+    .pill.sa { background: var(--r-lt); color: var(--r); border: 1px solid rgba(229,57,53,0.2); }
+    .pill.so { background: var(--bg); color: var(--tx2); border: 1px solid var(--bd); }
+    
+    .ecell { cursor: pointer; transition: 0.2s; position: relative; border-radius: 8px; }
+    .ecell:hover { background: var(--y-lt) !important; box-shadow: inset 0 0 0 2px var(--y); transform: scale(1.02); z-index: 10; }
+    .hs-badge { display: block; font-size: 10px; color: var(--g); font-weight: 800; margin-top: 4px; background: var(--g-lt); padding: 2px 6px; border-radius: 4px; display: inline-block; }
 
     /* --- FORMS --- */
-    .fgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
+    .fgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px; }
     .fgl { display: flex; flex-direction: column; }
-    .fgl label { font-size: 11px; font-weight: 700; color: var(--tx2); margin-bottom: 6px; text-transform: uppercase; }
-    .fc { width: 100%; padding: 10px 12px; border: 1px solid var(--bd2); border-radius: 8px; font-size: 13px; font-family: inherit; outline: none; transition: 0.2s; }
-    .fc:focus { border-color: var(--b); box-shadow: 0 0 0 2px var(--b-lt); }
+    .fgl label { font-size: 12px; font-weight: 800; color: var(--tx2); margin-bottom: 8px; text-transform: uppercase; }
+    .fc { width: 100%; padding: 12px 16px; border: 1.5px solid var(--bd2); border-radius: 10px; font-size: 14px; font-family: inherit; outline: none; transition: 0.2s; background: #fff; }
+    .fc:focus { border-color: var(--b); box-shadow: 0 0 0 3px var(--b-lt); }
 
-    /* --- PAIE RH SECTION --- */
-    .pay-city-header { background: var(--tx); color: #fff; padding: 12px 20px; border-radius: 8px 8px 0 0; font-weight: 700; margin-top: 24px; display: flex; justify-content: space-between; }
-    .pay-ban { background: #fff; border: 1px solid var(--bd); border-radius: 12px; padding: 20px; display: flex; justify-content: space-around; margin-bottom: 24px; box-shadow: var(--sh); }
+    /* --- PAIE HR --- */
+    .pay-city-header { background: var(--tx); color: #fff; padding: 16px 24px; border-radius: 12px 12px 0 0; font-weight: 800; margin-top: 30px; display: flex; justify-content: space-between; align-items: center; font-size: 15px; }
+    .hr-table th { font-size: 11px; }
+    .pay-ban { background: #fff; border: 1px solid var(--bd); border-radius: 16px; padding: 24px; display: flex; justify-content: space-around; margin-bottom: 30px; box-shadow: var(--sh); }
     .pk { text-align: center; }
 
     /* --- MODALS --- */
-    .overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.8); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.8); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
     .overlay.show { display: flex; }
-    .modal { background: #fff; border-radius: 16px; width: 500px; max-width: 95vw; box-shadow: 0 25px 50px rgba(0,0,0,0.25); max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column; }
-    .modal-lg { width: 800px; }
-    .modal-hd { padding: 20px; border-bottom: 1px solid var(--bd); display: flex; justify-content: space-between; align-items: center; background: var(--bg); border-radius: 16px 16px 0 0; }
-    .m-body { padding: 20px; flex: 1; }
-    .m-footer { padding: 16px 20px; border-top: 1px solid var(--bd); display: flex; justify-content: flex-end; gap: 10px; background: var(--bg); border-radius: 0 0 16px 16px; }
+    .modal { background: #fff; border-radius: 20px; width: 550px; max-width: 95vw; box-shadow: 0 25px 50px rgba(0,0,0,0.3); max-height: 90vh; display: flex; flex-direction: column; }
+    .modal-lg { width: 850px; }
+    .modal-hd { padding: 24px; border-bottom: 1px solid var(--bd); display: flex; justify-content: space-between; align-items: center; background: var(--bg); border-radius: 20px 20px 0 0; }
+    .modal-hd-t { font-size: 18px; font-weight: 900; color: var(--tx); }
+    .m-close { background: transparent; border: none; color: var(--tx2); font-size: 20px; cursor: pointer; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; transition: 0.2s; }
+    .m-close:hover { background: var(--bd); color: #000; }
+    .m-body { padding: 24px; flex: 1; overflow-y: auto; }
+    .m-footer { padding: 20px 24px; border-top: 1px solid var(--bd); display: flex; justify-content: flex-end; gap: 12px; background: var(--bg); border-radius: 0 0 20px 20px; }
 
-    .toast-wrap { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
-    .toast { padding: 14px 20px; background: #fff; border-radius: 8px; border-left: 4px solid var(--g); box-shadow: 0 10px 25px rgba(0,0,0,0.1); font-weight: 600; font-size: 13px; animation: slideIn 0.3s ease; }
+    /* --- TOAST --- */
+    .toast-wrap { position: fixed; bottom: 30px; right: 30px; z-index: 9999; display: flex; flex-direction: column; gap: 12px; }
+    .toast { padding: 16px 24px; background: #fff; border-radius: 12px; border-left: 5px solid var(--g); box-shadow: 0 15px 30px rgba(0,0,0,0.15); font-weight: 700; font-size: 14px; animation: slideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: var(--tx); display: flex; align-items: center; gap: 10px; }
     @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
     /* --- LISTS --- */
-    .ag-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; }
-    .ag-card { display: flex; align-items: center; gap: 15px; background: #fff; padding: 15px; border-radius: 12px; border: 1px solid var(--bd); cursor: pointer; transition: 0.2s; box-shadow: var(--sh); }
-    .ag-card:hover { border-color: var(--y); transform: translateY(-2px); box-shadow: var(--sh2); }
-    
-    .sr { display: flex; align-items: center; gap: 15px; padding: 12px 15px; background: #fff; border: 1px solid var(--bd); border-radius: 8px; margin-bottom: 8px; }
-    .av { display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 800; color: #fff; flex-shrink: 0; }
-    .av-sm { width: 28px; height: 28px; font-size: 10px; }
+    .ag-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+    .ag-card { display: flex; align-items: center; gap: 16px; background: #fff; padding: 20px; border-radius: 16px; border: 1px solid var(--bd); cursor: pointer; transition: 0.2s; box-shadow: var(--sh); }
+    .ag-card:hover { border-color: var(--y); transform: translateY(-4px); box-shadow: var(--sh2); }
+    .hs-item { display: flex; justify-content: space-between; align-items: center; padding: 18px 24px; background: #fff; border-radius: 12px; border: 1px solid var(--bd); margin-bottom: 12px; border-left: 5px solid var(--y); box-shadow: var(--sh); }
 </style>
 </head>
 <body>
@@ -155,37 +158,37 @@
   <div class="login-box">
     <div class="login-logo">🛵</div>
     <div class="login-title">SENTINEL OPS</div>
-    <div class="login-sub">Système de gestion RH & Planning</div>
+    <div class="login-sub">Système central de gestion RH & Planning</div>
     <div class="login-users" id="loginUsers"></div>
     <input type="hidden" id="selUser" value="">
     <div class="lf">
-        <label>Mot de passe d'accès</label>
-        <input type="password" id="loginPwd" class="login-input" placeholder="Saisissez le mot de passe" onkeydown="if(event.key==='Enter')doLogin()">
+        <label>Code d'accès Sécurisé</label>
+        <input type="password" id="loginPwd" class="login-input" placeholder="Saisissez votre mot de passe..." onkeydown="if(event.key==='Enter')doLogin()">
     </div>
     <div class="login-err" id="loginErr"></div>
-    <button class="login-btn" onclick="doLogin()">SE CONNECTER</button>
+    <button class="login-btn" onclick="doLogin()">DÉVERROUILLER LE SYSTÈME</button>
   </div>
 </div>
 
-<div id="app" style="display:none;height:100%;flex-direction:column">
+<div id="app">
 
   <nav class="navbar">
     <div class="nav-brand">
         <div class="nav-logo">🛵</div>
         <div>
-            <div style="font-weight:900;font-size:15px;line-height:1.2;color:var(--tx)">SENTINEL</div>
+            <div style="font-weight:900;font-size:16px;line-height:1.2;color:var(--tx);letter-spacing:-0.5px">SENTINEL</div>
             <div style="font-size:10px;font-weight:800;color:var(--g);letter-spacing:1px">GLOVO MAROC</div>
         </div>
     </div>
     <div class="nav-links" id="navLinks"></div>
     <div class="nav-right">
-        <div class="sync-badge"><div class="sync-dot"></div><span>Sync Auto (5s)</span></div>
+        <div class="sync-badge" id="syncStatus"><div class="sync-dot"></div><span>Sync Auto Activable</span></div>
         <div class="clock" id="clock">00:00:00</div>
-        <div style="display:flex;align-items:center;gap:8px;padding:4px 12px 4px 4px;border-radius:20px;border:1px solid var(--bd);background:var(--bg)">
-            <div id="userAv" style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:bold"></div>
-            <span id="userName" style="font-weight:600;font-size:12px"></span>
+        <div style="display:flex;align-items:center;gap:10px;padding:6px 16px 6px 6px;border-radius:30px;border:1px solid var(--bd);background:var(--bg)">
+            <div id="userAv" style="width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:800"></div>
+            <span id="userName" style="font-weight:700;font-size:13px"></span>
         </div>
-        <button class="btn btn-gh btn-sm" onclick="doLogout()">Déconnexion</button>
+        <button class="btn btn-gh" onclick="doLogout()">Déconnexion</button>
     </div>
   </nav>
 
@@ -193,33 +196,37 @@
 
     <div class="pg active" id="pg-ov">
         <div class="ph">
-            <div class="ph-t">Vue d'ensemble <span style="font-size:14px;color:var(--tx2);font-weight:600;margin-left:10px" id="ov-date"></span></div>
+            <div class="ph-t">Vue d'ensemble <span style="font-size:16px;color:var(--tx2);font-weight:600;margin-left:12px" id="ov-date"></span></div>
         </div>
         
-        <div class="krow" id="ov-kpi">
-            </div>
+        <div class="krow">
+            <div class="kpi"><div class="kpi-top" style="background:var(--y)"></div><div class="kpi-lbl">Agents Officiels</div><div class="kpi-val" id="k-tot" style="color:var(--tx)">—</div></div>
+            <div class="kpi"><div class="kpi-top" style="background:var(--g)"></div><div class="kpi-lbl">Sur le terrain (Aujourd'hui)</div><div class="kpi-val" id="k-act" style="color:var(--g)">—</div></div>
+            <div class="kpi"><div class="kpi-top" style="background:var(--r)"></div><div class="kpi-lbl">Absences / Maladie (Aujourd'hui)</div><div class="kpi-val" id="k-abs" style="color:var(--r)">—</div></div>
+            <div class="kpi"><div class="kpi-top" style="background:var(--b)"></div><div class="kpi-lbl">Couverture 44H</div><div class="kpi-val" id="k-44" style="color:var(--b)">—</div></div>
+        </div>
 
         <div class="grid-2">
-            <div class="card"><div class="chd">☀️ Présents de Jour</div><div id="ov-day" style="display:flex;flex-direction:column;gap:8px"></div></div>
-            <div class="card"><div class="chd">🌙 Présents de Nuit</div><div id="ov-ngt" style="display:flex;flex-direction:column;gap:8px"></div></div>
+            <div class="card"><div class="chd">☀️ Présents de Jour (Avant 16h)</div><div id="ov-day" style="display:flex;flex-direction:column;gap:12px"></div></div>
+            <div class="card"><div class="chd">🌙 Présents de Nuit (Après 16h)</div><div id="ov-ngt" style="display:flex;flex-direction:column;gap:12px"></div></div>
         </div>
     </div>
 
     <div class="pg" id="pg-pl">
         <div class="ph">
-            <div style="display:flex;align-items:center;gap:10px">
-                <button class="btn btn-gh" onclick="chgW(-1)">◀ Précédent</button>
-                <div id="pl-ttl" style="font-size:15px;font-weight:800;background:#fff;padding:8px 16px;border-radius:8px;border:1px solid var(--bd)">Planning</div>
-                <button class="btn btn-gh" onclick="chgW(1)">Suivant ▶</button>
+            <div style="display:flex;align-items:center;gap:12px">
+                <button class="btn btn-gh" onclick="chgW(-1)">◀ Sem. Précédente</button>
+                <div id="pl-ttl" style="font-size:16px;font-weight:900;background:#fff;padding:10px 20px;border-radius:10px;border:1px solid var(--bd);color:var(--tx)">Planning</div>
+                <button class="btn btn-gh" onclick="chgW(1)">Sem. Suivante ▶</button>
             </div>
-            <div style="display:flex;gap:10px">
-                <button class="btn btn-y" onclick="regenererPlanning()">⚙ Recalculer (Strict 44H)</button>
+            <div style="display:flex;gap:12px">
+                <button class="btn btn-y" onclick="regenererPlanning()">⚙ Recalculer (44H Strict)</button>
                 <button class="btn btn-g" onclick="openEmailModal()">📧 Générer Mails Glovo</button>
                 <button class="btn btn-gh" onclick="exportPlanningExcel()">📊 Export Excel</button>
             </div>
         </div>
         
-        <div style="display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap" id="plft">
+        <div style="display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap" id="plft">
             <button class="btn btn-gh active" onclick="fC('ALL',this)">Toutes Villes</button>
             <button class="btn btn-gh" onclick="fC('CAS',this)">Casablanca</button>
             <button class="btn btn-gh" onclick="fC('RBT',this)">Rabat</button>
@@ -239,14 +246,14 @@
     <div class="pg" id="pg-py">
         <div class="ph">
             <div class="ph-t">Rapport Financier RH</div>
-            <div style="display:flex;gap:10px">
-                <select class="fc" id="pay-mois-sel" style="width:200px" onchange="rPay()"></select>
+            <div style="display:flex;gap:12px">
+                <select class="fc" id="pay-mois-sel" style="width:220px;padding:10px 16px;font-weight:700" onchange="rPay()"></select>
                 <button class="btn btn-y" onclick="exportPaieExcel()">📊 Exporter Tableau RH</button>
             </div>
         </div>
         <div class="pay-ban">
-            <div class="pk"><div class="pk-l">Période Validée</div><div class="pk-v" style="font-size:16px;color:var(--tx2)">Du 21 au 22</div></div>
-            <div class="pk"><div class="pk-l">Agents Concernés</div><div class="pk-v" id="py-n">—</div></div>
+            <div class="pk"><div class="pk-l">Période Validée</div><div class="pk-v" style="font-size:18px;color:var(--tx2)">Du 21 au 22</div></div>
+            <div class="pk"><div class="pk-l">Agents Facturés</div><div class="pk-v" id="py-n">—</div></div>
             <div class="pk"><div class="pk-l">Total Déductions</div><div class="pk-v" style="color:var(--r)" id="py-d">—</div></div>
             <div class="pk"><div class="pk-l">Masse Nette Totale</div><div class="pk-v" style="color:var(--g)" id="py-t">—</div></div>
         </div>
@@ -256,12 +263,12 @@
     <div class="pg" id="pg-ag">
         <div class="ph">
             <div class="ph-t">Base de Données Agents</div>
-            <div style="display:flex;gap:10px">
+            <div style="display:flex;gap:12px">
                 <button class="btn btn-gh" onclick="exportAgentsExcel()">📊 Export Data</button>
                 <button class="btn btn-y" onclick="openAddAgent()">➕ Nouvel Agent</button>
             </div>
         </div>
-        <div style="display:flex;gap:10px;margin-bottom:20px;background:#fff;padding:12px;border-radius:12px;border:1px solid var(--bd)">
+        <div style="display:flex;gap:15px;margin-bottom:24px;background:#fff;padding:16px;border-radius:16px;border:1px solid var(--bd);box-shadow:var(--sh)">
             <input type="text" id="ag-q" class="fc" placeholder="Rechercher par nom..." oninput="rAgents()" style="flex:2;margin:0">
             <select id="ag-vf" class="fc" onchange="rAgents()" style="flex:1;margin:0">
                 <option value="ALL">Toutes les villes</option>
@@ -275,34 +282,49 @@
         <div class="ag-grid" id="ag-grid"></div>
     </div>
 
-    <div class="pg" id="pg-ab">
-        <div class="ph"><div class="ph-t">Gestion des Absences</div></div>
+    <div class="pg" id="pg-hs">
+        <div class="ph">
+            <div class="ph-t">Gestion des Hotspots</div>
+            <button class="btn btn-y" onclick="document.getElementById('hsOverlay').classList.add('show')">➕ Créer Hotspot</button>
+        </div>
         <div class="card">
-            <div class="chd" style="color:var(--r);border:none;margin-bottom:0">➕ Déclarer une Absence / Maladie</div>
-            <div class="fgrid" style="margin-top:10px">
+            <select class="fc" onchange="fHs(this.value)" style="width:300px;margin-bottom:20px">
+                <option value="ALL">Afficher toutes les villes</option>
+                <option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option>
+            </select>
+            <div id="hs-list" style="display:flex;flex-direction:column;gap:10px"></div>
+        </div>
+    </div>
+
+    <div class="pg" id="pg-ab">
+        <div class="ph"><div class="ph-t">Déclaration des Absences</div></div>
+        <div class="card" style="border-left:5px solid var(--r)">
+            <div class="chd" style="color:var(--r);border:none;margin-bottom:0">➕ Saisir une Absence / Maladie</div>
+            <div class="fgrid" style="margin-top:15px">
                 <div class="fgl"><label>Agent</label><select id="f-ag" class="fc"></select></div>
                 <div class="fgl"><label>Type</label><select id="f-ty" class="fc"><option value="ABSENT">ABSENCE INJUSTIFIÉE (-192 MAD)</option><option value="MALADIE">MALADIE (Justifié)</option><option value="CONGE">CONGÉ (Payé)</option></select></div>
                 <div class="fgl"><label>Date de début</label><input type="date" id="f-s" class="fc"></div>
                 <div class="fgl"><label>Date de fin (Optionnel)</label><input type="date" id="f-e" class="fc"></div>
             </div>
             <div class="fgl"><label>Motif (Optionnel)</label><input type="text" id="f-m" class="fc" placeholder="Ex: Certificat médical déposé..."></div>
-            <button class="btn btn-r" onclick="submitAbs()" style="width:100%;justify-content:center;margin-top:10px">💾 Enregistrer l'absence dans le Cloud</button>
+            <button class="btn btn-r" onclick="submitAbs()" style="width:100%;justify-content:center;margin-top:15px;padding:14px;font-size:15px">💾 Enregistrer l'absence en temps réel</button>
         </div>
-        <div class="card"><div class="chd">Historique des déclarations</div><div id="abs-list" style="display:flex;flex-direction:column;gap:8px"></div></div>
+        <div class="card"><div class="chd">Historique Récent</div><div id="abs-list" style="display:flex;flex-direction:column;gap:10px"></div></div>
     </div>
   </div>
 </div>
 
 <div class="overlay" id="editOverlay" onclick="if(event.target===this)closeModal('editOverlay')">
   <div class="modal">
-    <div class="modal-hd"><div class="modal-hd-t">✏️ Modifier le Shift</div><button class="m-close" onclick="closeModal('editOverlay')">✕</button></div>
+    <div class="modal-hd"><div class="modal-hd-t">✏️ Modification d'Horaire</div><button class="m-close" onclick="closeModal('editOverlay')">✕</button></div>
     <div class="m-body">
-      <div style="font-size:16px;font-weight:800;margin-bottom:20px;color:var(--tx)" id="em-agent"></div>
+      <div style="font-size:18px;font-weight:900;margin-bottom:24px;color:var(--tx)" id="em-agent"></div>
       <div class="fgl"><label>Nouvel Horaire</label><select class="fc" id="em-shift"></select></div>
+      <div class="fgl"><label>Hotspot assigné</label><select class="fc" id="em-hs"></select></div>
     </div>
     <div class="m-footer">
         <button class="btn btn-gh" onclick="closeModal('editOverlay')">Annuler</button>
-        <button class="btn btn-y" onclick="saveCell()">💾 Mettre à jour</button>
+        <button class="btn btn-y" onclick="saveCell()">💾 Valider la modification</button>
     </div>
   </div>
 </div>
@@ -311,23 +333,23 @@
   <div class="modal modal-lg">
     <div class="modal-hd"><div class="modal-hd-t">📧 Générateur Email Officiel Glovo</div><button class="m-close" onclick="closeModal('emailOverlay')">✕</button></div>
     <div class="m-body">
-      <div style="background:var(--y-lt);border:1px solid var(--y-md);padding:15px;border-radius:10px;margin-bottom:20px;display:flex;align-items:center;gap:15px">
-        <span style="font-size:24px">✨</span>
+      <div style="background:var(--y-lt);border:1px solid var(--y-md);padding:20px;border-radius:12px;margin-bottom:24px;display:flex;align-items:center;gap:20px">
+        <span style="font-size:32px">✨</span>
         <div>
-          <div style="font-weight:800;color:#92400E;margin-bottom:4px">Procédure d'envoi PRO</div>
-          <div style="font-size:12px;color:var(--tx2)">Sélectionnez la ville, cliquez sur générer. Ensuite, cliquez sur "Copier HTML & Ouvrir Gmail" pour un agent, puis faites <kbd>Ctrl + V</kbd> dans le corps du message Gmail.</div>
+          <div style="font-weight:900;font-size:15px;color:#92400E;margin-bottom:6px">Procédure d'envoi PRO</div>
+          <div style="font-size:13px;color:var(--tx2);line-height:1.5">Sélectionnez la ville, cliquez sur générer. Ensuite, cliquez sur <b style="color:var(--g)">Copier HTML & Ouvrir Gmail</b> pour un agent, puis faites <kbd>Ctrl + V</kbd> dans le corps du message Gmail.</div>
         </div>
       </div>
       <div class="fgrid">
         <div class="fgl"><label>Filtrer par ville :</label>
-            <select class="fc" id="email-ville-sel">
+            <select class="fc" id="email-ville-sel" style="padding:14px;font-size:14px">
                 <option value="ALL">Toutes les villes</option>
                 <option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option><option value="AGD">Agadir</option>
             </select>
         </div>
-        <div class="fgl" style="justify-content:flex-end"><button class="btn btn-y" onclick="preparerEmails()" style="padding:12px">⚡ Générer les Modèles</button></div>
+        <div class="fgl" style="justify-content:flex-end"><button class="btn btn-y" onclick="preparerEmails()" style="padding:14px;font-size:14px">⚡ Générer les Modèles</button></div>
       </div>
-      <div id="email-preview" style="margin-top:20px;max-height:400px;overflow-y:auto;padding-right:10px"></div>
+      <div id="email-preview" style="margin-top:24px;max-height:450px;overflow-y:auto;padding-right:15px;display:flex;flex-direction:column;gap:15px"></div>
     </div>
   </div>
 </div>
@@ -342,12 +364,24 @@
         <div class="fgl"><label>Date d'Embauche (Pour Paie)</label><input type="date" id="ag-emb" class="fc"></div>
       </div>
       <div class="fgl"><label>Email Gmail</label><input type="email" id="ag-email" class="fc"></div>
-      <div class="fgl"><label>Statut</label><select id="ag-stat" class="fc"><option value="Actif">Actif</option><option value="Inactif">Inactif</option></select></div>
+      <div class="fgl"><label>Statut (Inactif le masque des plannings)</label><select id="ag-stat" class="fc"><option value="Actif">Actif</option><option value="Inactif">Inactif</option></select></div>
     </div>
     <div class="m-footer">
         <button class="btn btn-gh" onclick="closeModal('agOverlay')">Annuler</button>
-        <button class="btn btn-y" onclick="saveAgent()">💾 Enregistrer</button>
+        <button class="btn btn-y" onclick="saveAgent()">💾 Enregistrer la Fiche</button>
     </div>
+  </div>
+</div>
+
+<div class="overlay" id="hsOverlay" onclick="if(event.target===this)closeModal('hsOverlay')">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-hd-t">Nouveau Hotspot</div><button class="m-close" onclick="closeModal('hsOverlay')">✕</button></div>
+    <div class="m-body">
+      <div class="fgl"><label>Ville</label><select id="hs-f-ville" class="fc"><option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option><option value="AGD">Agadir</option></select></div>
+      <div class="fgl"><label>Nom du Point (Ex: Macdo Maarif)</label><input type="text" id="hs-f-nom" class="fc"></div>
+      <div class="fgl"><label>Heure de pointe estimée</label><input type="time" id="hs-f-pk" class="fc" value="12:00"></div>
+    </div>
+    <div class="m-footer"><button class="btn btn-gh" onclick="closeModal('hsOverlay')">Annuler</button><button class="btn btn-y" onclick="saveHotspot()">💾 Ajouter au système</button></div>
   </div>
 </div>
 
@@ -355,10 +389,10 @@
 
 <script>
 // ═══════════════════════════════════════════════════════════
-//  SENTINEL v16.0 — AUTO-HEALING & EXACT HR DATA (53 AGENTS)
+//  SENTINEL v17.0 — FULL CORPORATE + SMART HOTSPOTS & FAILSFE
 // ═══════════════════════════════════════════════════════════
 
-var USERS = {
+const USERS = {
   admin: {pwd:'sentinel2029', nom:'Oussama E.', role:'admin', villes:['CAS','DRB','BSK','RBT','TEM','SAL','AGD','MAR','MOH','LYN'], color:'#E74C3C'},
   choaib: {pwd:'choaib2002', nom:'Choaib Knari', role:'leader', villes:['CAS','DRB','BSK'], color:'#F39C12'},
   agd: {pwd:'AGD2026', nom:'Leader Agadir', role:'leader', villes:['AGD'], color:'#3498DB'},
@@ -366,13 +400,13 @@ var USERS = {
   kech: {pwd:'KECH2020', nom:'Leader Marrakech', role:'leader', villes:['MAR'], color:'#E67E22'}
 };
 
-var CLOUD = {KEY:'$2a$10$2UAmdVsMhCVntgYL5F/RS.KvbKxaxpDTXSPzAyD/9nhcq4HK3Jyzq', BIN:'69e0bb5e856a6821893dbe64'};
-var SK = {AGENTS:'s_ag_v16', ABSENCES:'s_ab_v16', PLAN:'s_pl_v16_'};
+const CLOUD = {KEY:'$2a$10$2UAmdVsMhCVntgYL5F/RS.KvbKxaxpDTXSPzAyD/9nhcq4HK3Jyzq', BIN:'69e0bb5e856a6821893dbe64'};
+const SK = {AGENTS:'s_ag_v17', ABSENCES:'s_ab_v17', PLAN:'s_pl_v17_', HOTSPOTS:'s_hs_v17'};
 
-// LES 53 AGENTS EXACTS (Data sécurisée)
-var DEFAULT_AGENTS = [
-  {nom:'ADOZ AZIZ',ville:'AGD',email:'Azizadoz90@gmail.com',embauche:'2026-05-06',statut:'Actif'},
+// DONNÉES SÉCURISÉES : LES 53 AGENTS EXACTS
+const RAW_AGENTS = [
   {nom:'YASSINE MAGHFOUR',ville:'AGD',email:'ymaghfour28@gmail.com',embauche:'2026-05-06',statut:'Actif'},
+  {nom:'ADOZ AZIZ',ville:'AGD',email:'Azizadoz90@gmail.com',embauche:'2026-05-06',statut:'Actif'},
   {nom:'Baidi Abdelbasset',ville:'BSK',email:'Abdelbasstbaidi@gmail.com',embauche:'',statut:'Actif'},
   {nom:'Tarik Hamid',ville:'BSK',email:'hamidtarik995@gmail.com',embauche:'',statut:'Actif'},
   {nom:'Morad Mourid',ville:'BSK',email:'m.morid1993@gmail.com',embauche:'',statut:'Actif'},
@@ -426,22 +460,31 @@ var DEFAULT_AGENTS = [
   {nom:'Oussama El Atrach',ville:'TEM',email:'oussamaelat@gmail.com',embauche:'',statut:'Actif'}
 ];
 
+const RAW_HOTSPOTS = [
+    {ville:'CAS',nom:'Maarif (Macdo)',pk:'12:00'},{ville:'CAS',nom:'Sidi Maarouf',pk:'19:00'},
+    {ville:'MAR',nom:'Gueliz Centre',pk:'13:00'},{ville:'MAR',nom:'Medina',pk:'20:00'},
+    {ville:'RBT',nom:'Agdal Centre',pk:'13:00'}
+];
+
 var currentUser=null; var D={}; var weekOffset=0; var gFC='ALL'; var agEditIdx=-1; var emState={};
 var JOURS=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
-var clockInterval;
 
 // --- INTELLIGENCE DATA & AUTO-HEALING ---
 function getAgents(){
     var a = localStorage.getItem(SK.AGENTS);
-    if(a){
-        var arr = JSON.parse(a);
-        if(arr && arr.length >= 53) return arr;
-    }
-    // Auto-réparation si la base locale est corrompue (moins de 53 agents)
-    localStorage.setItem(SK.AGENTS, JSON.stringify(DEFAULT_AGENTS));
-    return DEFAULT_AGENTS;
+    if(a) { var arr = JSON.parse(a); if(arr && arr.length >= 50) return arr; }
+    // Failsafe: Écriture directe des 53 agents si data manquante
+    localStorage.setItem(SK.AGENTS, JSON.stringify(RAW_AGENTS));
+    return RAW_AGENTS;
 }
 function saveAgents(ag){localStorage.setItem(SK.AGENTS,JSON.stringify(ag)); cloudPushData(); }
+function getHotspots(){
+    var a=localStorage.getItem(SK.HOTSPOTS);
+    if(a) { var arr = JSON.parse(a); if(arr && arr.length > 0) return arr; }
+    localStorage.setItem(SK.HOTSPOTS, JSON.stringify(RAW_HOTSPOTS));
+    return RAW_HOTSPOTS;
+}
+function saveHotspots(hs){localStorage.setItem(SK.HOTSPOTS,JSON.stringify(hs)); cloudPushData();}
 function getAbsences(){var a=localStorage.getItem(SK.ABSENCES);return a?JSON.parse(a):[];}
 function saveAbsences(ab){localStorage.setItem(SK.ABSENCES,JSON.stringify(ab)); cloudPushData(); }
 
@@ -453,32 +496,35 @@ function getLundi(off){var t=new Date(),d=t.getDay();var df=d===1?0:d===0?-6:1-d
 function numSem(dt){var s=new Date(dt.getFullYear(),0,1);return Math.ceil(((dt-s)/86400000+s.getDay()+1)/7);}
 function calcH(s){if(!s||['OFF','ABSENT','CONGE','MALADIE','—'].includes(s.toUpperCase()))return 0;var r=s.split('-');if(r.length<2)return 0;var t=x=>{var p=x.split(':');return parseInt(p[0])*60+parseInt(p[1]);};var d=t(r[1])-t(r[0]);if(d<0)d+=1440;return Math.round(d/6)/10;}
 function sClass(s){if(!s||s==='OFF'||s==='—')return 'so';if(['ABSENT','CONGE','MALADIE'].includes(s))return 'sa';return 'sm';}
-function toast(m){var e=document.createElement('div');e.className='toast';e.textContent='✅ '+m;document.getElementById('toastWrap').appendChild(e);setTimeout(()=>{e.style.animation='slideIn 0.3s ease reverse forwards';setTimeout(()=>e.remove(),300);},3000);}
+function toast(m, err){var e=document.createElement('div');e.className=err?'toast er':'toast';e.innerHTML=(err?'❌ ':'✅ ')+m;document.getElementById('toastWrap').appendChild(e);setTimeout(()=>{e.style.animation='slideIn 0.3s ease reverse forwards';setTimeout(()=>e.remove(),300);},3000);}
 
-// CLOUD SYNC (Rapide: 5 Secondes)
-function cloudPull(isInitial){
+// CLOUD SYNC (5s RAPID)
+function cloudPull(){
   fetch(`https://api.jsonbin.io/v3/b/${CLOUD.BIN}/latest`,{headers:{'X-Master-Key':CLOUD.KEY,'X-Bin-Meta':'false'}})
   .then(r=>r.json()).then(d=>{
-      if(d.agents && d.agents.length >= 53) {
+      var updateNeeded = false;
+      if(d.agents && d.agents.length >= 50) {
           localStorage.setItem(SK.AGENTS, JSON.stringify(d.agents));
-      } else if (d.agents && d.agents.length < 53) {
-          // Auto-Healing Cloud: Le cloud est corrompu (ex: effacé). On renvoie la base locale saine.
-          cloudPushData(); 
+      } else {
+          updateNeeded = true; // Auto-Healing si Cloud corrompu
       }
       if(d.abs) localStorage.setItem(SK.ABSENCES, JSON.stringify(d.abs));
+      if(d.hs) localStorage.setItem(SK.HOTSPOTS, JSON.stringify(d.hs));
       if(d.pk && d.pd) localStorage.setItem(d.pk, JSON.stringify(d.pd));
-      if(isInitial) loadData(0); else loadData(weekOffset);
-  }).catch(()=>{ if(isInitial) loadData(0); });
+      
+      if(updateNeeded) cloudPushData();
+      else loadData(weekOffset);
+  }).catch(()=>{});
 }
 function cloudPushData(){
   var pk = SK.PLAN+numSem(getLundi(weekOffset+1))+'_'+getLundi(weekOffset+1).getFullYear();
-  var payload = { agents: getAgents(), abs: getAbsences(), pk: pk, pd: JSON.parse(localStorage.getItem(pk)||'null') };
+  var payload = { agents: getAgents(), abs: getAbsences(), hs: getHotspots(), pk: pk, pd: JSON.parse(localStorage.getItem(pk)||'null') };
   fetch(`https://api.jsonbin.io/v3/b/${CLOUD.BIN}`,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':CLOUD.KEY},body:JSON.stringify(payload)}).catch(()=>{});
 }
 
 // SESSION
 document.addEventListener('DOMContentLoaded', function(){
-  document.getElementById('loginUsers').innerHTML=Object.keys(USERS).map(k=>`<div class="login-user" onclick="selUser('${k}')" id="lu-${k}"><div class="login-user-av" style="background:${USERS[k].color}">${ini(USERS[k].nom)}</div><div class="login-user-nm">${USERS[k].nom.split(' ')[0]}</div><div style="font-size:9px;color:var(--tx3)">${USERS[k].role==='admin'?'Admin':'Leader'}</div></div>`).join('');
+  document.getElementById('loginUsers').innerHTML=Object.keys(USERS).map(k=>`<div class="login-user" onclick="selUser('${k}')" id="lu-${k}"><div class="login-user-av" style="background:${USERS[k].color}">${ini(USERS[k].nom)}</div><div class="login-user-nm">${USERS[k].nom.split(' ')[0]}</div><div style="font-size:10px;color:var(--tx3)">${USERS[k].role==='admin'?'Admin':'Leader'}</div></div>`).join('');
   var s=sessionStorage.getItem('sentinel_session'); if(s && USERS[s]){ selUser(s); document.getElementById('loginPwd').value=USERS[s].pwd; doLogin(); }
 });
 function selUser(k){document.querySelectorAll('.login-user').forEach(e=>e.classList.remove('sel'));document.getElementById('lu-'+k).classList.add('sel');document.getElementById('selUser').value=k;document.getElementById('loginPwd').focus();}
@@ -490,32 +536,30 @@ function doLogin(){
   document.getElementById('loginScreen').style.display='none';document.getElementById('app').style.display='flex';
   document.getElementById('userName').textContent=currentUser.nom;document.getElementById('userAv').textContent=ini(currentUser.nom);document.getElementById('userAv').style.background=currentUser.color;
   
-  if(clockInterval) clearInterval(clockInterval);
-  clockInterval = setInterval(()=>{document.getElementById('clock').textContent=new Date().toLocaleTimeString('fr-FR');},1000);
-  document.getElementById('clock').textContent=new Date().toLocaleTimeString('fr-FR');
-
-  buildNav(); cloudPull(true); setInterval(()=>cloudPull(false), 5000); // SYNC TOUTES LES 5 SECONDES
+  buildNav(); 
+  cloudPull(); 
+  setInterval(()=>cloudPull(), 5000); // SYNC TOUTES LES 5 SECONDES
 }
 function doLogout(){sessionStorage.removeItem('sentinel_session');location.reload();}
 
 function buildNav(){
-  var l=[{id:'ov',la:'Dashboard'},{id:'pl',la:'Planning'},{id:'py',la:'Paie HR',ad:1},{id:'ag',la:'Agents',ad:1},{id:'ab',la:'Absences'}];
+  var l=[{id:'ov',la:'Dashboard'},{id:'pl',la:'Planning'},{id:'py',la:'Paie HR',ad:1},{id:'ag',la:'Agents',ad:1},{id:'ab',la:'Absences'},{id:'hs',la:'Hotspots',ad:1}];
   document.getElementById('navLinks').innerHTML=l.filter(x=>!x.ad||currentUser.role==='admin').map(x=>`<div class="ni" onclick="goPage('${x.id}',this)" id="ni-${x.id}">${x.la}</div>`).join('');
   document.getElementById('ni-ov').classList.add('active');
 }
 function goPage(id,btn){document.querySelectorAll('.pg, .ni').forEach(e=>e.classList.remove('active'));document.getElementById('pg-'+id).classList.add('active');if(btn)btn.classList.add('active');}
 
-// CORE DATA & ALGORITHM 44H
+// CORE DATA & ALGORITHM 44H + SMART HOTSPOTS
 function loadData(off){
   weekOffset=off; 
-  var agents=getAgents(), abs=getAbsences();
+  var agents=getAgents(), abs=getAbsences(), hs=getHotspots();
   var lundi=getLundi(off+1); var pk=SK.PLAN+numSem(lundi)+'_'+lundi.getFullYear();
   var pData=JSON.parse(localStorage.getItem(pk));
   
   var allActifs=agents.filter(a=>a.statut==='Actif');
-  if(!pData || pData.planning.length !== allActifs.length){ pData=genPlanning(agents,off); localStorage.setItem(pk,JSON.stringify(pData)); cloudPushData(); }
+  if(!pData || pData.planning.length !== allActifs.length){ pData=genPlanning(agents, hs, off); localStorage.setItem(pk,JSON.stringify(pData)); cloudPushData(); }
   
-  D={all:agents, actifs:allActifs.filter(a=>currentUser.villes.includes(a.ville)), abs:abs, plan:pData.planning.filter(p=>currentUser.villes.includes(p.ville)), meta:{dates:pData.dates,wn:pData.wn}, pk:pk};
+  D={all:agents, actifs:allActifs.filter(a=>currentUser.villes.includes(a.ville)), abs:abs, hs:hs, plan:pData.planning.filter(p=>currentUser.villes.includes(p.ville)), meta:{dates:pData.dates,wn:pData.wn}, pk:pk};
   
   D.plan.forEach(p=>{
       var agD=agents.find(a=>a.nom===p.nom);
@@ -529,18 +573,33 @@ function loadData(off){
   renderUI();
 }
 
-function genPlanning(agents,off){
+function genPlanning(agents, hotspots, off){
   var lundi=getLundi(off+1), dates=[], wn=numSem(lundi);
   for(var i=0;i<7;i++){var d=new Date(lundi);d.setDate(lundi.getDate()+i);dates.push(fmtD(d));}
+  
+  // Organiser hotspots par ville
+  var hsByCity={};
+  hotspots.forEach(h=>{ if(!hsByCity[h.ville]) hsByCity[h.ville]=[]; hsByCity[h.ville].push(h.nom); });
+
   var cityIdx={};
   var planning=agents.filter(a=>a.statut==='Actif').map((ag)=>{
       if(cityIdx[ag.ville]===undefined) cityIdx[ag.ville]=0; var c=cityIdx[ag.ville]++;
       var offDay=[0,1,2,3][(c+wn)%4], isMorning=((c+wn)%2)===0;
-      var p7=isMorning?['09:00-16:00','10:00-17:00']:['17:00-00:00','18:00-01:00'], p8=isMorning?['09:00-17:00','10:00-18:00']:['18:00-02:00','19:00-03:00'];
+      
+      // SHIFTS ADAPTÉS JUSQU'À 02H30 MAX
+      var p7=isMorning?['09:00-16:00','10:00-17:00','11:00-18:00']:['17:00-00:00','18:00-01:00','19:30-02:30'];
+      var p8=isMorning?['09:00-17:00','10:00-18:00']:['17:00-01:00','18:30-02:30'];
       var template=[7,7,7,7,8,8].sort(()=>0.5-Math.random());
-      var shifts=Array(7).fill(null), tIdx=0;
-      for(var d=0;d<7;d++){if(d===offDay){shifts[d]='OFF';continue;} shifts[d]=(template[tIdx++]==7?p7:p8)[(d+c)%2];}
-      return {nom:ag.nom,ville:ag.ville,shifts:shifts};
+      
+      var shifts=Array(7).fill(null), hsAssignments=Array(7).fill(''), tIdx=0;
+      var cHS = hsByCity[ag.ville] || []; // Hotspots de la ville
+
+      for(var d=0;d<7;d++){
+          if(d===offDay){shifts[d]='OFF';continue;} 
+          shifts[d]=(template[tIdx++]==7?p7:p8)[(d+c)%2];
+          if(cHS.length > 0){ hsAssignments[d] = cHS[(c + d) % cHS.length]; } // Distribution intelligente
+      }
+      return {nom:ag.nom, ville:ag.ville, shifts:shifts, hotspots:hsAssignments};
   });
   return {planning:planning,dates:dates,wn:wn};
 }
@@ -551,29 +610,31 @@ function renderUI(){
   document.getElementById('ov-date').textContent=new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
   
   document.getElementById('ov-kpi').innerHTML=`
-    <div class="kpi"><div class="kpi-top" style="background:var(--tx)"></div><div class="kpi-lbl">Agents Actifs</div><div class="kpi-val" style="color:var(--tx)">${D.actifs.length}</div></div>
+    <div class="kpi"><div class="kpi-top" style="background:var(--tx)"></div><div class="kpi-lbl">Agents Actifs Gérés</div><div class="kpi-val" style="color:var(--tx)">${D.actifs.length}</div></div>
     <div class="kpi"><div class="kpi-top" style="background:var(--g)"></div><div class="kpi-lbl">Présents Aujourd'hui</div><div class="kpi-val" style="color:var(--g)">${D.plan.filter(p=>!['OFF','ABSENT','—'].includes(p.shifts[ti])).length}</div></div>
     <div class="kpi"><div class="kpi-top" style="background:var(--r)"></div><div class="kpi-lbl">Absences Globales</div><div class="kpi-val" style="color:var(--r)">${D.abs.length}</div></div>
-    <div class="kpi"><div class="kpi-top" style="background:var(--b)"></div><div class="kpi-lbl">Objectif 44H</div><div class="kpi-val" style="color:var(--b)">${D.plan.length?Math.round((D.plan.filter(p=>p.totalH==44).length/D.plan.length)*100):0}%</div></div>
+    <div class="kpi"><div class="kpi-top" style="background:var(--b)"></div><div class="kpi-lbl">Couverture 44H</div><div class="kpi-val" style="color:var(--b)">${D.plan.length?Math.round((D.plan.filter(p=>p.totalH==44).length/D.plan.length)*100):0}%</div></div>
   `;
   
-  document.getElementById('ov-day').innerHTML=D.plan.filter(p=>parseInt(p.shifts[ti].split(':')[0])<16).map(p=>`<div class="sr"><div class="av av-sm" style="background:var(--bg);color:var(--tx);border:1px solid var(--bd)">${ini(p.nom)}</div><div class="sr-info"><div class="sr-nm">${p.nom}</div></div><span class="pill sm">${p.shifts[ti]}</span></div>`).join('') || '<div style="color:var(--tx3);font-size:12px;padding:10px">Aucun shift de jour</div>';
-  document.getElementById('ov-ngt').innerHTML=D.plan.filter(p=>parseInt(p.shifts[ti].split(':')[0])>=16).map(p=>`<div class="sr"><div class="av av-sm" style="background:var(--bg);color:var(--tx);border:1px solid var(--bd)">${ini(p.nom)}</div><div class="sr-info"><div class="sr-nm">${p.nom}</div></div><span class="pill" style="background:var(--tx);color:#fff">${p.shifts[ti]}</span></div>`).join('') || '<div style="color:var(--tx3);font-size:12px;padding:10px">Aucun shift de nuit</div>';
+  document.getElementById('ov-day').innerHTML=D.plan.filter(p=>parseInt(p.shifts[ti].split(':')[0])<16).map(p=>`<div class="sr"><div class="av av-sm" style="background:var(--bg);color:var(--tx);border:1px solid var(--bd)">${ini(p.nom)}</div><div class="sr-info"><div class="sr-nm">${p.nom}</div></div><span class="pill sm">${p.shifts[ti]}</span></div>`).join('') || '<div style="color:var(--tx3);font-size:12px;padding:10px;text-align:center">Aucun shift de jour</div>';
+  document.getElementById('ov-ngt').innerHTML=D.plan.filter(p=>parseInt(p.shifts[ti].split(':')[0])>=16).map(p=>`<div class="sr"><div class="av av-sm" style="background:var(--tx);color:#fff">${ini(p.nom)}</div><div class="sr-info"><div class="sr-nm">${p.nom}</div></div><span class="pill" style="background:var(--tx);color:#fff">${p.shifts[ti]}</span></div>`).join('') || '<div style="color:var(--tx3);font-size:12px;padding:10px;text-align:center">Aucun shift de nuit</div>';
   
   document.getElementById('pl-ttl').textContent='Semaine W'+D.meta.wn;
-  var plHtml=`<thead><tr><th>Agent</th><th>Ville</th>${JOURS.map((j,i)=>`<th>${j}<br><span style="font-size:9px;color:var(--tx3);font-weight:normal">${D.meta.dates[i]}</span></th>`).join('')}<th>H/SEM</th></tr></thead><tbody>`;
+  var plHtml=`<thead><tr><th>Agent</th><th>Ville</th>${JOURS.map((j,i)=>`<th>${j}<br><span style="font-size:9px;color:var(--tx3);font-weight:normal">${D.meta.dates[i]}</span></th>`).join('')}<th>TOTAL</th></tr></thead><tbody>`;
   var curPlan = gFC==='ALL'?D.plan:D.plan.filter(p=>p.ville===gFC);
   curPlan.forEach(p=>{
       plHtml+=`<tr><td>${p.nom}</td><td><span class="pill so">${p.ville}</span></td>${p.shifts.map((s,i)=>{
-          return `<td class="ecell" onclick="openModal('${p.nom}',${i},'${s}')"><span class="pill ${s==='OFF'||s==='—'?'so':s==='ABSENT'?'sa':'sm'}">${s}</span></td>`;
+          var hs=(p.hotspots&&p.hotspots[i])?p.hotspots[i]:''; var isOff=['OFF','ABSENT','CONGE','MALADIE','—'].includes(s);
+          return `<td class="ecell" onclick="openModal('${p.nom}',${i},'${s}','${hs}')"><span class="pill ${s==='OFF'||s==='—'?'so':s==='ABSENT'?'sa':'sm'}">${s}</span>${!isOff && hs?`<span class="hs-badge">📍 ${hs}</span>`:''}</td>`;
       }).join('')}<td><span class="pill ${p.totalH==44?'sm':'sa'}">${p.totalH}h</span></td></tr>`;
   });
   document.getElementById('pl-tbl').innerHTML=plHtml+'</tbody>';
 
   renderPaie();
   rAgents();
+  rHs();
   document.getElementById('f-ag').innerHTML=D.actifs.map(a=>`<option value="${a.nom}">${a.nom}</option>`).join('');
-  document.getElementById('abs-list').innerHTML=D.abs.slice(-10).reverse().map(a=>`<div class="sr" style="background:#fff;padding:12px;border:1px solid var(--bd);border-radius:8px;margin-bottom:8px"><div style="flex:1"><b>${a.nom}</b><br><small style="color:var(--tx3)">${a.date}</small></div><span class="pill sa">${a.type}</span><button class="btn btn-gh btn-sm" onclick="delAbs(${D.abs.indexOf(a)})" style="margin-left:15px">✕</button></div>`).join('');
+  document.getElementById('abs-list').innerHTML=D.abs.slice(-10).reverse().map(a=>`<div class="sr" style="background:#fff;padding:12px 16px;border:1px solid var(--bd);border-radius:12px;margin-bottom:10px"><div style="flex:1"><b style="font-size:14px">${a.nom}</b><br><span style="color:var(--tx3);font-size:12px">${a.date}</span></div><span class="pill sa">${a.type}</span><button class="btn btn-gh btn-sm" onclick="delAbs(${D.abs.indexOf(a)})" style="margin-left:15px">✕</button></div>`).join('');
   initPaieMois();
 }
 
@@ -581,15 +642,19 @@ function chgW(d){loadData(weekOffset+d);}
 function fC(v,btn){gFC=v;document.querySelectorAll('#plft .btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderUI();}
 function regenererPlanning(){localStorage.removeItem(D.pk);loadData(weekOffset);toast('Planning Recalculé (44H Strict)');}
 
-function openModal(nom,idx,shift){
+function openModal(nom,idx,shift,hs){
   emState={nom:nom,idx:idx};
-  var pool=['OFF','ABSENT','CONGE','MALADIE','09:00-16:00','09:00-17:00','10:00-17:00','10:00-18:00','11:00-18:00','11:00-19:00','15:00-23:00','16:00-23:00','16:00-00:00','17:00-00:00','17:00-01:00','18:00-01:00','18:00-02:00','19:00-02:00','19:00-03:00','20:00-03:00'];
+  var pool=['OFF','ABSENT','CONGE','MALADIE','09:00-16:00','09:00-17:00','10:00-17:00','10:00-18:00','11:00-18:00','11:00-19:00','15:00-23:00','16:00-23:00','17:00-00:00','17:00-01:00','18:00-01:00','18:30-02:30','19:30-02:30'];
   document.getElementById('em-shift').innerHTML=pool.map(s=>`<option value="${s}" ${s===shift?'selected':''}>${s}</option>`).join('');
+  var ag=D.all.find(a=>a.nom===nom); var hsPool=D.hs.filter(h=>h.ville===ag.ville);
+  document.getElementById('em-hs').innerHTML=`<option value="">— Sans Hotspot —</option>`+hsPool.map(h=>`<option value="${h.nom}" ${h.nom===hs?'selected':''}>${h.nom}</option>`).join('');
   document.getElementById('editOverlay').classList.add('show');
 }
 function saveCell(){
   var pd=JSON.parse(localStorage.getItem(D.pk)); var target=pd.planning.find(p=>p.nom===emState.nom);
   target.shifts[emState.idx]=document.getElementById('em-shift').value;
+  if(!target.hotspots) target.hotspots=Array(7).fill('');
+  target.hotspots[emState.idx]=document.getElementById('em-hs').value;
   localStorage.setItem(D.pk,JSON.stringify(pd)); cloudPushData(); closeModal('editOverlay'); loadData(weekOffset); toast('Shift Modifié');
 }
 
@@ -599,12 +664,13 @@ function initPaieMois(){
   var now=new Date(), opts='';
   for(var m=0;m<12;m++){var d=new Date(now.getFullYear(),now.getMonth()-m,1); opts+=`<option value="${d.getFullYear()}-${d.getMonth()+1}">${m===0?'Mois Actuel':d.toLocaleDateString('fr-FR',{month:'long',year:'numeric'})}</option>`;}
   sel.innerHTML=opts;
-  rPay();
 }
 function rPay(){
   var val = document.getElementById('pay-mois-sel').value.split('-');
-  var y=parseInt(val[0]), m=parseInt(val[1])-1;
-  var start=new Date(y, m-1, 21), end=new Date(y, m, 22);
+  var y=parseInt(val[0]), m=parseInt(val[1])-1; // Mois cible (m=4 pour Mai)
+  
+  var start=new Date(y, m-1, 21); // 21 Avril
+  var end=new Date(y, m, 22);     // 22 Mai
   var totalDays = Math.floor((end - start)/(1000*60*60*24)) + 1; 
   
   var html='', tN=0, tD=0;
@@ -612,19 +678,22 @@ function rPay(){
 
   Object.keys(byCity).forEach(v=>{
       html+=`<div class="pay-city-header"><span>📍 VILLE : ${v}</span><span style="font-size:12px;opacity:0.8">${byCity[v].length} Agents</span></div>
-      <table class="tbl-wr" style="margin-bottom:20px;width:100%">
-      <thead><tr><th>Agent</th><th>Embauche</th><th>Jours Période</th><th>Absences</th><th>Retenue</th><th>Salaire Net</th></tr></thead><tbody>`;
+      <table class="tbl-wr hr-table" style="margin-bottom:30px;width:100%">
+      <thead><tr><th>Agent</th><th>Date d'Embauche</th><th>Jours Prestés</th><th>Absences</th><th>Retenue</th><th>Salaire Net</th></tr></thead><tbody>`;
       byCity[v].forEach(a=>{
           var nAbs=D.abs.filter(ab=>{if(ab.nom!==a.nom||ab.type!=='ABSENT')return false; var d=new Date(ab.date.split('/').reverse().join('-')); return d>=start&&d<=end;}).length;
           var base=5000, jP=totalDays;
+          
           if(a.embauche){
               var emb=new Date(a.embauche);
-              if(emb>start && emb<=end){ 
+              if(emb > start && emb <= end){ 
                   jP = Math.floor((end - emb)/(1000*60*60*24)) + 1; 
                   base = Math.round((jP/totalDays)*5000); 
+              } else if(emb > end) {
+                  jP = 0; base = 0;
               }
           }
-          var ded=nAbs*192, net=base-ded; tN+=net; tD+=ded;
+          var ded=nAbs*192, net=base-ded; if(net<0) net=0; tN+=net; tD+=ded;
           html+=`<tr><td>${a.nom}</td><td>${a.embauche?new Date(a.embauche).toLocaleDateString('fr-FR'):'Ancien'}</td><td>${jP} j</td><td><span style="color:var(--r);font-weight:bold">${nAbs} j</span></td><td><span style="color:var(--r)">-${ded} MAD</span></td><td><span style="color:var(--g);font-weight:900">${net} MAD</span></td></tr>`;
       });
       html+=`</tbody></table>`;
@@ -636,9 +705,9 @@ function rPay(){
 // ── AGENTS & ABS ──
 function submitAbs(){
     var n=document.getElementById('f-ag').value, t=document.getElementById('f-ty').value, s=document.getElementById('f-s').value, e=document.getElementById('f-e').value||s;
-    if(!s)return; var cur=new Date(s), end=new Date(e);
+    if(!s){toast('Sélectionnez une date','er');return;} var cur=new Date(s), end=new Date(e);
     while(cur<=end){ D.abs.push({nom:n, date:fmtD(cur), type:t}); cur.setDate(cur.getDate()+1); }
-    localStorage.setItem(SK.ABSENCES,JSON.stringify(D.abs)); cloudPushData(); loadData(weekOffset); toast('Absence enregistrée');
+    localStorage.setItem(SK.ABSENCES,JSON.stringify(D.abs)); cloudPushData(); loadData(weekOffset); toast('Absence enregistrée dans le Cloud');
 }
 function delAbs(i){if(confirm("Supprimer ?")){D.abs.splice(i,1);localStorage.setItem(SK.ABSENCES,JSON.stringify(D.abs));cloudPushData();loadData(weekOffset);toast('Supprimé');}}
 
@@ -652,8 +721,14 @@ function saveAgent(){
 function rAgents(){
     var q=(document.getElementById('ag-q').value||'').toLowerCase(), vf=document.getElementById('ag-vf').value, sf=document.getElementById('ag-sf').value;
     var list=D.all.filter(a=>(vf==='ALL'||a.ville===vf) && (sf==='ALL'||a.statut===sf) && a.nom.toLowerCase().includes(q));
-    document.getElementById('ag-grid').innerHTML=list.map((a,i)=>`<div class="ag-card" onclick="editAgentIdx(${D.all.indexOf(a)})"><div class="av av-lg" style="background:var(--bg);color:var(--tx);border:1px solid var(--bd)">${ini(a.nom)}</div><div style="flex:1"><div style="font-weight:700;font-size:13px;margin-bottom:4px">${a.nom}</div><div><span class="pill so">${a.ville}</span> ${a.statut==='Inactif'?'<span class="pill sa" style="margin-left:4px">Inactif</span>':''}</div></div></div>`).join('') || '<div class="em" style="grid-column:1/-1">Aucun agent trouvé</div>';
+    document.getElementById('ag-grid').innerHTML=list.map((a,i)=>`<div class="ag-card" onclick="editAgentIdx(${D.all.indexOf(a)})"><div class="av av-lg" style="background:var(--bg);color:var(--tx);border:1px solid var(--bd)">${ini(a.nom)}</div><div style="flex:1"><div style="font-weight:800;font-size:14px;margin-bottom:6px">${a.nom}</div><div><span class="pill so">${a.ville}</span> ${a.statut==='Inactif'?'<span class="pill sa" style="margin-left:4px">Inactif</span>':''}</div></div></div>`).join('') || '<div class="em" style="grid-column:1/-1">Aucun agent trouvé</div>';
 }
+
+function rHs(){
+    document.getElementById('hs-list').innerHTML=D.hs.filter(h=>currentUser.villes.includes(h.ville)).map((h,i)=>`<div class="hs-item"><div style="font-weight:800;font-size:15px;flex:1">${h.nom}</div><span class="pill so">${h.ville}</span><span class="pill sm" style="margin:0 15px">Rush: ${h.pk}</span><button class="btn btn-gh btn-sm" onclick="delHs(${i})">Supprimer</button></div>`).join('');
+}
+function saveHotspot(){var n=document.getElementById('hs-f-nom').value;if(!n)return;D.hs.push({ville:document.getElementById('hs-f-ville').value,nom:n,pk:document.getElementById('hs-f-pk').value});localStorage.setItem(SK.HOTSPOTS,JSON.stringify(D.hs));cloudPushData();closeModal('hsOverlay');loadData(weekOffset);toast('Hotspot ajouté');}
+function delHs(i){if(confirm("Supprimer ce hotspot ?")){D.hs.splice(i,1);localStorage.setItem(SK.HOTSPOTS,JSON.stringify(D.hs));cloudPushData();loadData(weekOffset);toast('Supprimé');}}
 
 // ── MAILS GLOVO DESIGN ──
 function openEmailModal(){document.getElementById('email-preview').innerHTML=''; document.getElementById('emailOverlay').classList.add('show');}
@@ -666,25 +741,26 @@ function preparerEmails(){
     agents.forEach((ag, idx) => {
         var p = D.plan.find(x=>x.nom===ag.nom); if(!p) return;
         var mailBody = `
-        <div id="m-${idx}" style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;border:1px solid #E2E8F0;border-radius:12px;overflow:hidden;background:#fff">
-            <div style="background:#FFC244;padding:20px;text-align:center"><h2 style="margin:0;font-size:18px;color:#000;letter-spacing:1px">PLANNING SEMAINE W${D.meta.wn}</h2></div>
-            <div style="padding:25px">
-                <p style="font-size:14px;color:#0F172A">Bonjour <b>${p.nom.split(' ')[0]}</b>,</p>
-                <p style="font-size:13px;color:#475569">Voici votre planning de la semaine. Merci de respecter vos horaires et de vous présenter ponctuellement.</p>
-                <table style="width:100%;border-collapse:collapse;margin:20px 0;background:#f8fafc;border-radius:8px;overflow:hidden;border:1px solid #e2e8f0">
-                    <tr style="background:#00A082;color:#fff"><th style="padding:12px;text-align:left">Jour</th><th style="padding:12px;text-align:right">Horaire Assigné</th></tr>
+        <div id="m-${idx}" style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;border:1.5px solid #E2E8F0;border-radius:12px;overflow:hidden;background:#fff">
+            <div style="background:#FFC244;padding:24px;text-align:center"><h2 style="margin:0;font-size:20px;color:#0F172A;letter-spacing:1px;font-weight:900">PLANNING GLOVO MAROC - W${D.meta.wn}</h2></div>
+            <div style="padding:30px">
+                <p style="font-size:15px;color:#0F172A">Bonjour <b>${p.nom.split(' ')[0]}</b>,</p>
+                <p style="font-size:14px;color:#475569;line-height:1.5">Voici votre planning de la semaine. Merci de respecter vos horaires et de vous présenter ponctuellement sur votre point de connexion.</p>
+                <table style="width:100%;border-collapse:collapse;margin:25px 0;background:#f8fafc;border-radius:10px;overflow:hidden;border:1px solid #e2e8f0">
+                    <tr style="background:#00A082;color:#fff"><th style="padding:14px;text-align:left;font-size:13px">Jour</th><th style="padding:14px;text-align:right;font-size:13px">Horaire & Hotspot</th></tr>
                     ${JOURS.map((j,i)=>{
                         var s=p.shifts[i], isOff=['OFF','ABSENT','CONGE','MALADIE','—'].includes(s);
-                        return `<tr><td style="padding:12px;border-bottom:1px solid #e2e8f0;color:#0f172a"><b>${j}</b> <span style="font-size:11px;color:#94a3b8">(${D.meta.dates[i]})</span></td><td style="padding:12px;text-align:right;border-bottom:1px solid #e2e8f0;font-weight:${isOff?'normal':'bold'};color:${isOff?'#94a3b8':'#00A082'}">${s==='OFF'?'Repos':s}</td></tr>`;
+                        var hs=(p.hotspots&&p.hotspots[i])?`<br><span style="font-size:11px;color:#00A082">📍 ${p.hotspots[i]}</span>`:'';
+                        return `<tr><td style="padding:14px;border-bottom:1px solid #e2e8f0;color:#0f172a;font-size:14px"><b>${j}</b> <span style="font-size:12px;color:#94a3b8">(${D.meta.dates[i]})</span></td><td style="padding:14px;text-align:right;border-bottom:1px solid #e2e8f0;font-size:14px;font-weight:${isOff?'normal':'900'};color:${isOff?'#94a3b8':'#00A082'}">${s==='OFF'?'Repos':s}${isOff?'':hs}</td></tr>`;
                     }).join('')}
                 </table>
-                <div style="background:#E8F8F5;padding:15px;border-left:4px solid #00A082;font-size:14px;font-weight:bold;color:#00A082">Total des heures : ${p.totalH}h / 44h</div>
-                <div style="margin-top:20px;font-size:11px;color:#64748B;border-top:1px solid #e2e8f0;padding-top:15px">
-                    Note : Ce planning peut etre modifie en cas de force majeure ou ajustement operationnel. Vous en serez informe au prealable.<br><br><b style="color:#0f172a">On field Operations - Glovo Maroc</b>
+                <div style="background:#E8F8F5;padding:16px;border-left:5px solid #00A082;font-size:15px;font-weight:900;color:#00A082">Total des heures : ${p.totalH}h / 44h</div>
+                <div style="margin-top:30px;font-size:12px;color:#64748B;border-top:1px solid #e2e8f0;padding-top:20px;line-height:1.6">
+                    Note : Ce planning peut etre modifie en cas de force majeure ou ajustement operationnel. Vous en serez informe au prealable.<br><br><b style="color:#0f172a;font-size:13px">On field Operations - Glovo Maroc</b>
                 </div>
             </div>
         </div>`;
-        html+=`<div class="card" style="margin-bottom:15px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px"><b style="font-size:14px">${ag.nom}</b><button class="btn btn-g" onclick="copyMail(${idx},'${ag.email}')">📋 Copier HTML & Ouvrir Gmail</button></div><div style="transform:scale(0.85);transform-origin:top left">${mailBody}</div></div>`;
+        html+=`<div class="card" style="margin-bottom:20px;background:#f8fafc"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><b style="font-size:15px;color:var(--tx)">${ag.nom}</b><button class="btn btn-g" onclick="copyMail(${idx},'${ag.email}')">📋 Copier HTML & Ouvrir Gmail</button></div><div style="transform:scale(0.85);transform-origin:top left">${mailBody}</div></div>`;
     });
     document.getElementById('email-preview').innerHTML=html; toast('Modèles générés');
 }
