@@ -23,30 +23,18 @@
         font-family: 'Inter', sans-serif;
         background: var(--bg);
         color: var(--tx);
-        height: 100vh;
         display: flex;
         flex-direction: column;
-        overflow: hidden;
         font-size: 13px;
         -webkit-font-smoothing: antialiased;
+        margin: 0;
     }
 
-    /* CORRECTION 6 : APP FLEX */
     #app {
         display: none;
         flex-direction: column;
         height: 100vh;
-    }
-
-    /* CORRECTION 12 : MOBILE SCROLL */
-    .tbl-wr {
-        overflow: auto;
-        -webkit-overflow-scrolling: touch;
-        background: #fff; 
-        border-radius: 12px; 
-        border: 1px solid var(--bd); 
-        box-shadow: var(--sh); 
-        width: 100%;
+        overflow: hidden;
     }
 
     ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -115,7 +103,8 @@
     .kpi-val { font-size: 36px; font-weight: 900; color: var(--tx); }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 
-    /* --- TABLES (PLANNING) --- */
+    /* --- TABLES --- */
+    .tbl-wr { background: #fff; border-radius: 16px; border: 1px solid var(--bd); overflow: auto; box-shadow: var(--sh); width: 100%; -webkit-overflow-scrolling: touch; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     thead th { background: var(--bg); padding: 16px 12px; font-size: 11px; font-weight: 800; color: var(--tx2); text-transform: uppercase; border-bottom: 2px solid var(--bd); text-align: center; white-space: nowrap; }
     thead th:first-child { text-align: left; padding-left: 24px; }
@@ -123,6 +112,7 @@
     tbody td:first-child { text-align: left; padding-left: 24px; font-weight: 700; }
     tbody tr:hover td { background: #f8fafc; }
     
+    /* --- PILLS & BADGES --- */
     .pill { padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 800; display: inline-block; white-space: nowrap; }
     .pill.sm { background: var(--g-lt); color: var(--g); border: 1px solid rgba(0,160,130,0.2); }
     .pill.sa { background: var(--r-lt); color: var(--r); border: 1px solid rgba(229,57,53,0.2); }
@@ -159,7 +149,7 @@
 
     /* --- TOAST --- */
     .toast-wrap { position: fixed; bottom: 30px; right: 30px; z-index: 9999; display: flex; flex-direction: column; gap: 12px; }
-    .toast { padding: 16px 24px; background: #fff; border-radius: 12px; box-shadow: 0 15px 30px rgba(0,0,0,0.15); font-weight: 700; font-size: 14px; animation: slideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: var(--tx); display: flex; align-items: center; gap: 10px; }
+    .toast { padding: 16px 24px; background: #fff; border-radius: 12px; border-left: 5px solid var(--g); box-shadow: 0 15px 30px rgba(0,0,0,0.15); font-weight: 700; font-size: 14px; animation: slideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: var(--tx); display: flex; align-items: center; gap: 10px; }
     @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
     /* --- LISTS --- */
@@ -235,6 +225,8 @@
             <div style="display:flex;gap:12px">
                 <button class="btn btn-y" onclick="regenererPlanning()">⚙ Recalculer (44H Strict)</button>
                 <button class="btn btn-g" onclick="openEmailModal()">📧 Générer Mails Glovo</button>
+                <button class="btn btn-gh" onclick="exportPlanningExcel()">⬇ Excel Planning</button>
+                <button class="btn btn-gh" onclick="exportPlanningCSV()">⬇ CSV</button>
             </div>
         </div>
         
@@ -260,10 +252,11 @@
             <div class="ph-t">Rapport Financier RH</div>
             <div style="display:flex;gap:12px">
                 <select class="fc" id="pay-mois-sel" style="width:220px;padding:10px 16px;font-weight:700" onchange="rPay()"></select>
+                <button class="btn btn-y" onclick="exportPaieExcel()">📊 Exporter Tableau RH</button>
             </div>
         </div>
         <div class="pay-ban">
-            <div class="pk"><div class="pk-l">Période Validée</div><div class="pk-v" style="font-size:18px;color:var(--tx2)">Du 21 au 22</div></div>
+            <div class="pk"><div class="pk-l">Période Validée</div><div class="pk-v" style="font-size:18px;color:var(--tx2)">Du 22 au 22</div></div>
             <div class="pk"><div class="pk-l">Agents Facturés</div><div class="pk-v" id="py-n">—</div></div>
             <div class="pk"><div class="pk-l">Total Déductions</div><div class="pk-v" style="color:var(--r)" id="py-d">—</div></div>
             <div class="pk"><div class="pk-l">Masse Nette Totale</div><div class="pk-v" style="color:var(--g)" id="py-t">—</div></div>
@@ -275,6 +268,7 @@
         <div class="ph">
             <div class="ph-t">Base de Données Agents</div>
             <div style="display:flex;gap:12px">
+                <button class="btn btn-gh" onclick="exportAgentsExcel()">📊 Export Data</button>
                 <button class="btn btn-y" onclick="openAddAgent()">➕ Nouvel Agent</button>
             </div>
         </div>
@@ -284,6 +278,7 @@
                 <option value="ALL">Toutes les villes</option>
                 <option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option><option value="AGD">Agadir</option>
                 <option value="TEM">Temara</option><option value="SAL">Salé</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option>
+                <option value="MOH">Mohammadia</option><option value="LYN">Laayoune</option>
             </select>
             <select id="ag-sf" class="fc" onchange="rAgents()" style="flex:1;margin:0">
                 <option value="ALL">Tous les statuts</option><option value="Actif">Actifs uniquement</option><option value="Inactif">Inactifs</option>
@@ -298,9 +293,12 @@
             <button class="btn btn-y" onclick="document.getElementById('hsOverlay').classList.add('show')">➕ Créer Hotspot</button>
         </div>
         <div class="card">
-            <select class="fc" onchange="fHs(this.value)" style="width:300px;margin-bottom:20px">
+            <select class="fc" onchange="rHs()" style="width:300px;margin-bottom:20px" id="hs-view-filter">
                 <option value="ALL">Afficher toutes les villes</option>
                 <option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option>
+                <option value="AGD">Agadir</option><option value="TEM">Temara</option><option value="SAL">Salé</option>
+                <option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option><option value="MOH">Mohammadia</option>
+                <option value="LYN">Laayoune</option>
             </select>
             <div id="hs-list" style="display:flex;flex-direction:column;gap:10px"></div>
         </div>
@@ -316,7 +314,6 @@
                 <div class="fgl"><label>Date de début</label><input type="date" id="f-s" class="fc"></div>
                 <div class="fgl"><label>Date de fin (Optionnel)</label><input type="date" id="f-e" class="fc"></div>
             </div>
-            <div class="fgl"><label>Motif (Optionnel)</label><input type="text" id="f-m" class="fc" placeholder="Ex: Certificat médical déposé..."></div>
             <button class="btn btn-r" onclick="submitAbs()" style="width:100%;justify-content:center;margin-top:15px;padding:14px;font-size:15px">💾 Enregistrer l'absence en temps réel</button>
         </div>
         <div class="card"><div class="chd">Historique Récent</div><div id="abs-list" style="display:flex;flex-direction:column;gap:10px"></div></div>
@@ -355,6 +352,8 @@
             <select class="fc" id="email-ville-sel" style="padding:14px;font-size:14px">
                 <option value="ALL">Toutes les villes</option>
                 <option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option><option value="AGD">Agadir</option>
+                <option value="TEM">Temara</option><option value="SAL">Salé</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option>
+                <option value="MOH">Mohammadia</option><option value="LYN">Laayoune</option>
             </select>
         </div>
         <div class="fgl" style="justify-content:flex-end"><button class="btn btn-y" onclick="preparerEmails()" style="padding:14px;font-size:14px">⚡ Générer les Modèles</button></div>
@@ -387,7 +386,18 @@
   <div class="modal">
     <div class="modal-hd"><div class="modal-hd-t">📍 Créer un Hotspot</div><button class="m-close" onclick="closeModal('hsOverlay')">✕</button></div>
     <div class="m-body">
-      <div class="fgl"><label>Ville</label><select id="hs-f-ville" class="fc"><option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option><option value="AGD">Agadir</option></select></div>
+      <div class="fgl"><label>Ville</label><select id="hs-f-ville" class="fc">
+        <option value="CAS">Casablanca</option>
+        <option value="RBT">Rabat</option>
+        <option value="MAR">Marrakech</option>
+        <option value="AGD">Agadir</option>
+        <option value="TEM">Temara</option>
+        <option value="SAL">Salé</option>
+        <option value="DRB">Dar Bouazza</option>
+        <option value="BSK">Bouskoura</option>
+        <option value="MOH">Mohammadia</option>
+        <option value="LYN">Laayoune</option>
+      </select></div>
       <div class="fgl"><label>Nom du Point (Ex: Macdo Maarif)</label><input type="text" id="hs-f-nom" class="fc"></div>
       <div class="fgl"><label>Heure de pointe estimée</label><input type="time" id="hs-f-pk" class="fc" value="12:00"></div>
     </div>
@@ -399,7 +409,7 @@
 
 <script>
 // ═══════════════════════════════════════════════════════════
-//  SENTINEL v18.0 — STABLE CORPORATE RELEASE
+//  SENTINEL v19.0 — FULL CORPORATE + SMART FIXES
 // ═══════════════════════════════════════════════════════════
 
 const USERS = {
@@ -411,7 +421,7 @@ const USERS = {
 };
 
 const CLOUD = {KEY:'$2a$10$2UAmdVsMhCVntgYL5F/RS.KvbKxaxpDTXSPzAyD/9nhcq4HK3Jyzq', BIN:'69e0bb5e856a6821893dbe64'};
-const SK = {AGENTS:'s_ag_v18', ABSENCES:'s_ab_v18', PLAN:'s_pl_v18_', HOTSPOTS:'s_hs_v18'};
+const SK = {AGENTS:'s_ag_v19', ABSENCES:'s_ab_v19', PLAN:'s_pl_v19_', HOTSPOTS:'s_hs_v19'};
 
 // DONNÉES SÉCURISÉES : 53 AGENTS
 const RAW_AGENTS = [
@@ -475,6 +485,8 @@ const RAW_HOTSPOTS = [
     {ville:'MAR',nom:'Gueliz Centre',pk:'13:00'},{ville:'MAR',nom:'Medina',pk:'20:00'},
     {ville:'RBT',nom:'Agdal Centre',pk:'13:00'}
 ];
+
+var CLA={CAS:'Casablanca',DRB:'Dar Bouazza',BSK:'Bouskoura',RBT:'Rabat',TEM:'Temara',SAL:'Salé',AGD:'Agadir',MOH:'Mohammadia',LYN:'Laayoune',MAR:'Marrakech'};
 
 var currentUser=null; var D={}; var weekOffset=0; var gFC='ALL'; var agEditIdx=-1; var emState={};
 var JOURS=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
@@ -556,6 +568,14 @@ window.addEventListener('beforeunload',()=>{
     cloudPushData();
 });
 
+// BONUS FIX: Window focus update
+window.addEventListener('focus', () => {
+    if (currentUser) {
+        D.abs = getAbsences();
+        D.all = getAgents();
+    }
+});
+
 // SESSION & CORRECTION 4: CLOCK
 document.addEventListener('DOMContentLoaded', function(){
   document.getElementById('loginUsers').innerHTML=Object.keys(USERS).map(k=>`<div class="login-user" onclick="selUser('${k}')" id="lu-${k}"><div class="login-user-av" style="background:${USERS[k].color}">${ini(USERS[k].nom)}</div><div class="login-user-nm">${USERS[k].nom.split(' ')[0]}</div><div style="font-size:9px;color:var(--tx3)">${USERS[k].role==='admin'?'Admin':'Leader'}</div></div>`).join('');
@@ -567,7 +587,8 @@ function doLogin(){
   var k=document.getElementById('selUser').value, p=document.getElementById('loginPwd').value;
   if(!k||USERS[k].pwd!==p){document.getElementById('loginErr').textContent="Mot de passe incorrect.";return;}
   currentUser={key:k,...USERS[k]}; sessionStorage.setItem('sentinel_session',k);
-  document.getElementById('loginScreen').style.display='none';document.getElementById('app').style.display='flex';
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('app').style.display='flex';
   document.getElementById('userName').textContent=currentUser.nom;document.getElementById('userAv').textContent=ini(currentUser.nom);document.getElementById('userAv').style.background=currentUser.color;
   
   // CORRECTION 4
@@ -581,7 +602,7 @@ function doLogin(){
 
   buildNav(); 
   cloudPull(); 
-  // CORRECTION 11: SYNC LIMIT
+  // CORRECTION 11: SYNC LIMIT TO 15s (better performance)
   setInterval(()=>cloudPull(), 15000); 
 }
 function doLogout(){sessionStorage.removeItem('sentinel_session');location.reload();}
@@ -714,6 +735,7 @@ function saveCell(){
   localStorage.setItem(D.pk,JSON.stringify(pd)); cloudPushData(); closeModal('editOverlay'); loadData(weekOffset); toast('Shift Modifié');
 }
 
+// CORRECTION 2: PAIE HR PRECISION (22 AU 22 + PRORATA)
 function initPaieMois(){
   var sel=document.getElementById('pay-mois-sel');if(sel.options.length>0)return;
   var now=new Date(), opts='';
@@ -722,30 +744,34 @@ function initPaieMois(){
 }
 function rPay(){
   var val = document.getElementById('pay-mois-sel').value.split('-');
-  var y=parseInt(val[0]), m=parseInt(val[1])-1;
-  var start=new Date(y, m-1, 21), end=new Date(y, m, 22);
+  var y=parseInt(val[0]), m=parseInt(val[1])-1; // Mois cible (m=4 pour Mai)
+  
+  // CORRECTION 2 : Du 22 au 22
+  var start = new Date(y, m - 1, 22);
+  var end   = new Date(y, m, 22);
   var totalDays = Math.floor((end - start)/(1000*60*60*24)) + 1; 
   
   var html='', tN=0, tD=0;
   var byCity={}; D.actifs.forEach(a=>{if(!byCity[a.ville])byCity[a.ville]=[]; byCity[a.ville].push(a);});
 
   Object.keys(byCity).forEach(v=>{
-      html+=`<div class="pay-city-header"><span>📍 VILLE : ${v}</span><span style="font-size:12px;opacity:0.8">${byCity[v].length} Agents</span></div>
+      html+=`<div class="pay-city-header"><span>📍 VILLE : ${CLA[v]||v}</span><span style="font-size:12px;opacity:0.8">${byCity[v].length} Agents</span></div>
       <table class="tbl-wr hr-table" style="margin-bottom:30px;width:100%">
       <thead><tr><th>Agent</th><th>Date d'Embauche</th><th>Jours Prestés</th><th>Absences</th><th>Retenue</th><th>Salaire Net</th></tr></thead><tbody>`;
       byCity[v].forEach(a=>{
           var nAbs=D.abs.filter(ab=>{if(ab.nom!==a.nom||ab.type!=='ABSENT')return false; var d=new Date(ab.date.split('/').reverse().join('-')); return d>=start&&d<=end;}).length;
-          var base=5000, jP=totalDays;
           
+          // CORRECTION 2 : Logique Embauche Pro
+          var baseSalary = 5000;
+          var startWork = start;
           if(a.embauche){
-              var emb=new Date(a.embauche);
-              if(emb > start && emb <= end){ 
-                  jP = Math.floor((end - emb)/(1000*60*60*24)) + 1; 
-                  base = Math.round((jP/totalDays)*5000); 
-              } else if(emb > end) {
-                  jP = 0; base = 0;
-              }
+              var emb = new Date(a.embauche);
+              if(emb > start){ startWork = emb; }
           }
+          var jP = Math.max(0, Math.floor((end - startWork) / (1000*60*60*24)) + 1);
+          var base = Math.round((jP / totalDays) * baseSalary);
+          if(a.embauche && new Date(a.embauche) > end) { base = 0; jP = 0; } // Sécurité
+          
           var ded=nAbs*192, net=base-ded; if(net<0) net=0; tN+=net; tD+=ded;
           html+=`<tr><td>${a.nom}</td><td>${a.embauche?new Date(a.embauche).toLocaleDateString('fr-FR'):'Ancien'}</td><td>${jP} j</td><td><span style="color:var(--r);font-weight:bold">${nAbs} j</span></td><td><span style="color:var(--r)">-${ded} MAD</span></td><td><span style="color:var(--g);font-weight:900">${net} MAD</span></td></tr>`;
       });
@@ -755,20 +781,36 @@ function rPay(){
   document.getElementById('py-n').textContent=D.actifs.length; document.getElementById('py-d').textContent='-'+mad(tD); document.getElementById('py-t').textContent=mad(tN);
 }
 
+// CORRECTION 1: ABSENCES FIX
 function submitAbs(){
-    var n=document.getElementById('f-ag').value, t=document.getElementById('f-ty').value, s=document.getElementById('f-s').value, e=document.getElementById('f-e').value||s;
-    if(!s){toast('Sélectionnez une date',true);return;} var cur=new Date(s), end=new Date(e);
-    while(cur<=end){ D.abs.push({nom:n, date:fmtD(cur), type:t}); cur.setDate(cur.getDate()+1); }
-    localStorage.setItem(SK.ABSENCES,JSON.stringify(D.abs)); cloudPushData(); loadData(weekOffset); toast('Absence enregistrée dans le Cloud');
+    var n = document.getElementById('f-ag').value;
+    var t = document.getElementById('f-ty').value;
+    var s = document.getElementById('f-s').value;
+    var e = document.getElementById('f-e').value || s;
+    if(!s){ toast('Date obligatoire', true); return; }
+    
+    var abs = getAbsences();
+    var cur = new Date(s);
+    var end = new Date(e);
+    
+    while(cur <= end){
+        abs.push({ nom: n, date: fmtD(cur), type: t });
+        cur.setDate(cur.getDate() + 1);
+    }
+    
+    saveAbsences(abs);
+    D.abs = abs; // update live state
+    loadData(weekOffset);
+    toast('Absence enregistrée');
 }
-function delAbs(i){if(confirm("Supprimer ?")){D.abs.splice(i,1);localStorage.setItem(SK.ABSENCES,JSON.stringify(D.abs));cloudPushData();loadData(weekOffset);toast('Supprimé');}}
+function delAbs(i){if(confirm("Supprimer ?")){D.abs.splice(i,1);saveAbsences(D.abs);loadData(weekOffset);toast('Supprimé');}}
 
 function openAddAgent(){agEditIdx=-1; document.getElementById('ag-nom').value=''; document.getElementById('ag-emb').value=''; document.getElementById('ag-email').value=''; document.getElementById('agOverlay').classList.add('show');}
 function editAgentIdx(i){agEditIdx=i; var a=D.all[i]; document.getElementById('ag-nom').value=a.nom; document.getElementById('ag-ville').value=a.ville; document.getElementById('ag-emb').value=a.embauche||''; document.getElementById('ag-email').value=a.email||''; document.getElementById('ag-stat').value=a.statut; document.getElementById('agOverlay').classList.add('show');}
 function saveAgent(){
     var a={nom:document.getElementById('ag-nom').value, ville:document.getElementById('ag-ville').value, email:document.getElementById('ag-email').value, embauche:document.getElementById('ag-emb').value, statut:document.getElementById('ag-stat').value};
     if(agEditIdx>=0) D.all[agEditIdx]=a; else D.all.push(a);
-    localStorage.setItem(SK.AGENTS,JSON.stringify(D.all)); cloudPushData(); closeModal('agOverlay'); loadData(weekOffset); toast('Agent sauvegardé');
+    saveAgents(D.all); closeModal('agOverlay'); loadData(weekOffset); toast('Agent sauvegardé');
 }
 function rAgents(){
     var q=(document.getElementById('ag-q').value||'').toLowerCase(), vf=document.getElementById('ag-vf').value, sf=document.getElementById('ag-sf').value;
@@ -776,9 +818,10 @@ function rAgents(){
     document.getElementById('ag-grid').innerHTML=list.map((a,i)=>`<div class="ag-card" onclick="editAgentIdx(${D.all.indexOf(a)})"><div class="av av-lg" style="background:var(--bg);color:var(--tx);border:1px solid var(--bd)">${ini(a.nom)}</div><div style="flex:1"><div style="font-weight:800;font-size:14px;margin-bottom:6px">${a.nom}</div><div><span class="pill so">${a.ville}</span> ${a.statut==='Inactif'?'<span class="pill sa" style="margin-left:4px">Inactif</span>':''}</div></div></div>`).join('') || '<div class="em" style="grid-column:1/-1">Aucun agent trouvé</div>';
 }
 
-// CORRECTION 3: fHs function
+// CORRECTION 3 & 4: HOTSPOTS FIX
 function rHs(){
-    fHs(document.querySelector('#pg-hs .sel').value);
+    var v = document.getElementById('hs-view-filter').value;
+    fHs(v);
 }
 function fHs(v){
     var list = v === 'ALL' ? D.hs : D.hs.filter(h => h.ville === v);
@@ -789,15 +832,16 @@ function fHs(v){
             <span class="pill sm" style="margin:0 15px">Rush: ${h.pk}</span>
             <button class="btn btn-gh btn-sm" onclick="delHs(${i})">Supprimer</button>
         </div>
-    `).join('') || '<div class="em">Aucun hotspot trouvé</div>';
+    `).join('') || '<div style="color:var(--tx2);padding:20px;text-align:center">Aucun hotspot trouvé</div>';
 }
-function saveHotspot(){var n=document.getElementById('hs-f-nom').value;if(!n)return;D.hs.push({ville:document.getElementById('hs-f-ville').value,nom:n,pk:document.getElementById('hs-f-pk').value});localStorage.setItem(SK.HOTSPOTS,JSON.stringify(D.hs));cloudPushData();closeModal('hsOverlay');loadData(weekOffset);toast('Hotspot ajouté');}
-function delHs(i){if(confirm("Supprimer ce hotspot ?")){D.hs.splice(i,1);localStorage.setItem(SK.HOTSPOTS,JSON.stringify(D.hs));cloudPushData();loadData(weekOffset);toast('Supprimé');}}
+function saveHotspot(){var n=document.getElementById('hs-f-nom').value;if(!n)return;D.hs.push({ville:document.getElementById('hs-f-ville').value,nom:n,pk:document.getElementById('hs-f-pk').value});saveHotspots(D.hs);closeModal('hsOverlay');loadData(weekOffset);toast('Hotspot ajouté');}
+function delHs(i){if(confirm("Supprimer ce hotspot ?")){D.hs.splice(i,1);saveHotspots(D.hs);loadData(weekOffset);toast('Supprimé');}}
 
-// CORRECTION 2: preparerEmails (D.all)
+// CORRECTION 5: MAILS GLOVO DESIGN AVEC FALLBACK
 function openEmailModal(){document.getElementById('email-preview').innerHTML=''; document.getElementById('emailOverlay').classList.add('show');}
 function preparerEmails(){
     var ville = document.getElementById('email-ville-sel').value;
+    // CORRECTION 2: D.all au lieu de D.agents
     var agents = D.all.filter(a => a.email && (ville==='ALL'||a.ville===ville));
     if(!agents.length){toast('Aucun email trouvé.', true);return;}
     
@@ -806,32 +850,64 @@ function preparerEmails(){
         var p = D.plan.find(x=>x.nom===ag.nom); if(!p) return;
         var mailBody = `
         <div id="m-${idx}" style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;border:1.5px solid #E2E8F0;border-radius:12px;overflow:hidden;background:#fff">
-            <div style="background:#FFC244;padding:24px;text-align:center"><h2 style="margin:0;font-size:20px;color:#0F172A;font-weight:900">PLANNING GLOVO MAROC - W${D.meta.wn}</h2></div>
+            <div style="background:#FFC244;padding:24px;text-align:center"><h2 style="margin:0;font-size:20px;color:#0F172A;letter-spacing:1px;font-weight:900">PLANNING GLOVO MAROC - W${D.meta.wn}</h2></div>
             <div style="padding:30px">
                 <p style="font-size:15px;color:#0F172A">Bonjour <b>${p.nom.split(' ')[0]}</b>,</p>
-                <table style="width:100%;border-collapse:collapse;margin-top:20px">
+                <p style="font-size:14px;color:#475569;line-height:1.5">Voici votre planning de la semaine. Merci de respecter vos horaires et de vous présenter ponctuellement sur votre point de connexion.</p>
+                <table style="width:100%;border-collapse:collapse;margin:25px 0;background:#f8fafc;border-radius:10px;overflow:hidden;border:1px solid #e2e8f0">
+                    <tr style="background:#00A082;color:#fff"><th style="padding:14px;text-align:left;font-size:13px">Jour</th><th style="padding:14px;text-align:right;font-size:13px">Horaire & Hotspot</th></tr>
                     ${JOURS.map((j,i)=>{
-                        var s=p.shifts[i];
-                        var hs=(p.hotspots && p.hotspots[i]) ? `<br><span style="font-size:11px;color:#00A082">📍 ${p.hotspots[i]}</span>` : '';
-                        return `<tr><td style="padding:12px;border:1px solid #ddd"><b>${j}</b></td><td style="padding:12px;border:1px solid #ddd;text-align:right">${s}${hs}</td></tr>`;
+                        var s=p.shifts[i], isOff=['OFF','ABSENT','CONGE','MALADIE','—'].includes(s);
+                        var hs=(p.hotspots&&p.hotspots[i])?`<br><span style="font-size:11px;color:#00A082">📍 ${p.hotspots[i]}</span>`:'';
+                        return `<tr><td style="padding:14px;border-bottom:1px solid #e2e8f0;color:#0f172a;font-size:14px"><b>${j}</b> <span style="font-size:12px;color:#94a3b8">(${D.meta.dates[i]})</span></td><td style="padding:14px;text-align:right;border-bottom:1px solid #e2e8f0;font-size:14px;font-weight:${isOff?'normal':'900'};color:${isOff?'#94a3b8':'#00A082'}">${s==='OFF'?'Repos':s}${isOff?'':hs}</td></tr>`;
                     }).join('')}
                 </table>
-                <div style="margin-top:20px;background:#E8F8F5;padding:15px;border-left:4px solid #00A082;font-weight:900">Total : ${p.totalH}h</div>
+                <div style="background:#E8F8F5;padding:16px;border-left:5px solid #00A082;font-size:15px;font-weight:900;color:#00A082">Total des heures : ${p.totalH}h / 44h</div>
+                <div style="margin-top:30px;font-size:12px;color:#64748B;border-top:1px solid #e2e8f0;padding-top:20px;line-height:1.6">
+                    Note : Ce planning peut etre modifie en cas de force majeure ou ajustement operationnel. Vous en serez informe au prealable.<br><br><b style="color:#0f172a;font-size:13px">On field Operations - Glovo Maroc</b>
+                </div>
             </div>
         </div>`;
-        html+=`<div class="card" style="margin-bottom:20px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px"><b>${ag.nom}</b><button class="btn btn-g" onclick="copyMail(${idx},'${ag.email}')">📋 Copier HTML</button></div><div style="transform:scale(0.85);transform-origin:top left">${mailBody}</div></div>`;
+        html+=`<div class="card" style="margin-bottom:20px;background:#f8fafc"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><b style="font-size:15px;color:var(--tx)">${ag.nom}</b><button class="btn btn-g" onclick="copyMail(${idx},'${ag.email}')">📋 Copier HTML & Ouvrir Gmail</button></div><div style="transform:scale(0.85);transform-origin:top left">${mailBody}</div></div>`;
     });
-    document.getElementById('email-preview').innerHTML=html; toast('Emails générés');
-}
-function copyMail(idx,email){
-    var h=document.getElementById('m-'+idx).innerHTML;
-    var blob=new Blob([h],{type:"text/html"});
-    navigator.clipboard.write([new ClipboardItem({"text/html":blob,"text/plain":new Blob([h],{type:"text/plain"})})]).then(()=>{
-        toast("Design copié !");
-        setTimeout(()=>window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${encodeURIComponent('Planning Semaine W'+D.meta.wn)}`,'_blank'),800);
-    });
+    document.getElementById('email-preview').innerHTML=html; toast('Modèles générés');
 }
 
+// CORRECTION 5: COPY MAIL FALLBACK
+function copyMail(idx, email){
+    var el = document.getElementById('m-'+idx);
+    var html = el.innerHTML;
+
+    function openMail(){
+        window.open(
+            `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${encodeURIComponent('Planning Semaine W'+D.meta.wn)}&body=${encodeURIComponent('Bonjour, veuillez trouver votre planning ci-dessous (CTRL+V).')}`,
+            '_blank'
+        );
+    }
+
+    try {
+        if(navigator.clipboard && window.ClipboardItem){
+            var blobHTML = new Blob([html], {type: "text/html"});
+            var blobText = new Blob(["Planning Glovo W"+D.meta.wn], {type: "text/plain"});
+
+            navigator.clipboard.write([
+                new ClipboardItem({
+                    "text/html": blobHTML,
+                    "text/plain": blobText
+                })
+            ]).then(()=>{
+                toast("Planning copié");
+                setTimeout(openMail, 600);
+            }).catch(()=>{ openMail(); });
+        } else {
+            openMail();
+        }
+    } catch(e){
+        openMail();
+    }
+}
+
+// ── EXPORTS CSV / EXCEL ──
 function dlXls(html, fn){var blob=new Blob(['\ufeff'+html],{type:'application/vnd.ms-excel;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fn;a.click();}
 function dlCSV(csv, fn){var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fn;a.click();}
 function exportPlanningCSV(){var csv='Agent,Ville,'+JOURS.map((j,i)=>j+' '+D.meta.dates[i]).join(',')+',Total\n'+D.plan.map(p=>p.nom+','+p.ville+','+p.shifts.join(',')+','+p.totalH).join('\n');dlCSV(csv, 'Planning_W'+D.meta.wn+'.csv');}
@@ -840,15 +916,27 @@ function exportPlanningExcel(){
     D.plan.forEach(p=>{ html+=`<tr><td><b>${p.nom}</b></td><td>${p.ville}</td>`+p.shifts.map(s=>`<td>${s}</td>`).join('')+`<td><b>${p.totalH}h</b></td></tr>`; });
     html+='</table></body></html>'; dlXls(html, 'Planning_W'+D.meta.wn+'.xls');
 }
+
+// CORRECTION 2: PAIE 22 AU 22
 function exportPaieExcel(){
     var val = document.getElementById('pay-mois-sel').value.split('-'); var y=parseInt(val[0]), m=parseInt(val[1])-1;
-    var start=new Date(y, m-1, 21), end=new Date(y, m, 22), totalDays = Math.floor((end - start)/(1000*60*60*24)) + 1;
-    var html='<html xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"><style>td,th{border:1px solid #000}</style></head><body><table><tr><th colspan="6" style="background:#0F172A;color:#fff">Rapport Paie (Du 21 au 22)</th></tr><tr><th>Agent</th><th>Ville</th><th>Embauche</th><th>Absences (Jours)</th><th>Deduction (MAD)</th><th>NET (MAD)</th></tr>';
+    var start = new Date(y, m - 1, 22);
+    var end   = new Date(y, m, 22);
+    var totalDays = Math.floor((end - start)/(1000*60*60*24)) + 1;
+    
+    var html='<html xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"><style>td,th{border:1px solid #000}</style></head><body><table><tr><th colspan="6" style="background:#0F172A;color:#fff">Rapport Paie (Du 22 au 22)</th></tr><tr><th>Agent</th><th>Ville</th><th>Embauche</th><th>Absences (Jours)</th><th>Deduction (MAD)</th><th>NET (MAD)</th></tr>';
     D.actifs.forEach(a=>{
         var nAbs=D.abs.filter(ab=>{if(ab.nom!==a.nom||ab.type!=='ABSENT')return false; var d=new Date(ab.date.split('/').reverse().join('-')); return d>=start&&d<=end;}).length;
-        var base=5000, jP=totalDays;
-        if(a.embauche){ var emb=new Date(a.embauche); if(emb>start && emb<=end){ jP = Math.floor((end-emb)/(1000*60*60*24))+1; base = Math.round((jP/totalDays)*5000); } }
-        var ded=nAbs*192, net=base-ded;
+        var baseSalary = 5000;
+        var startWork = start;
+        if(a.embauche){
+            var emb = new Date(a.embauche);
+            if(emb > start){ startWork = emb; }
+        }
+        var jP = Math.max(0, Math.floor((end - startWork) / (1000*60*60*24)) + 1);
+        var base = Math.round((jP / totalDays) * baseSalary);
+        if(a.embauche && new Date(a.embauche) > end) { base = 0; jP = 0; }
+        var ded=nAbs*192, net=base-ded; if(net<0) net=0;
         html+=`<tr><td>${a.nom}</td><td>${a.ville}</td><td>${a.embauche||'Ancien'}</td><td>${nAbs}</td><td>-${ded}</td><td><b>${net}</b></td></tr>`;
     });
     dlXls(html+'</table></body></html>', 'Paie_HR.xls');
