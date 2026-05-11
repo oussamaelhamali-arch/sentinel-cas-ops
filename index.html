@@ -3,180 +3,137 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>SENTINEL — CAS OPS · Glovo</title>
+<title>SENTINEL — OPS Control · Glovo</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --y:#FFC244;--y-dk:#E5A820;--y-lt:#FFF8E8;--y-md:rgba(255,194,68,.18);
-  --g:#00A082;--g-lt:#E8F8F5;--g-md:rgba(0,160,130,.15);
-  --r:#E53935;--r-lt:#FEECEC;--r-md:rgba(229,57,53,.12);
-  --b:#1565C0;--b-lt:#E3F0FF;--b-md:rgba(21,101,192,.12);
-  --pu:#7B1FA2;--pu-lt:#F5EAF8;--pu-md:rgba(123,31,162,.12);
-  --bg:#F8FAFC;--bg2:#FFFFFF;--bg3:#F1F5F9;
-  --tx:#0F172A;--tx2:#475569;--tx3:#94A3B8;
-  --bd:#E2E8F0;--bd2:#CBD5E1;
-  --cas-bg:#FEF3C7;--cas-tx:#92400E;--cas-bd:#F59E0B;
-  --drb-bg:#DBEAFE;--drb-tx:#1E40AF;--drb-bd:#3B82F6;
-  --bsk-bg:#F3E8FF;--bsk-tx:#6B21A8;--bsk-bd:#8B5CF6;
-  --rbt-bg:#DCFCE7;--rbt-tx:#166534;--rbt-bd:#10B981;
-  --tem-bg:#E0F2FE;--tem-tx:#0369A1;--tem-bd:#38BDF8;
-  --sal-bg:#FCE7F3;--sal-tx:#BE185D;--sal-bd:#F472B6;
-  --agd-bg:#FFE4E6;--agd-tx:#BE123C;--agd-bd:#F43F5E;
-  --moh-bg:#E0E7FF;--moh-tx:#3730A3;--moh-bd:#6366F1;
-  --lyn-bg:#FEF08A;--lyn-tx:#854D0E;--lyn-bd:#EAB308;
-  --mar-bg:#FFEDD5;--mar-tx:#9A3412;--mar-bd:#F97316;
-  --r:12px;--r2:8px;--r3:6px;--sh:0 1px 3px rgba(0,0,0,0.1);--sh2:0 15px 35px rgba(0,0,0,0.1);
-}
-html,body{height:100%;overflow:hidden}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--tx);display:flex;flex-direction:column;font-size:13px}
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    :root {
+        --y: #FFC244; --y-dk: #E5A820; --y-lt: #FFF8E8;
+        --g: #00A082; --g-lt: #E8F8F5; --r: #E53935; --r-lt: #FEECEC;
+        --b: #1565C0; --b-lt: #E3F0FF;
+        --tx: #0F172A; --tx2: #475569; --tx3: #94A3B8;
+        --bg: #F8FAFC; --card: #FFFFFF; --bd: #E2E8F0; --bd2: #CBD5E1;
+        --sh: 0 1px 3px rgba(0,0,0,0.1); --sh2: 0 15px 35px rgba(0,0,0,0.1);
+    }
 
-/* ── LOGIN ── */
-#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#0B1628 0%,#1a2840 100%)}
-.login-box{background:#fff;border-radius:20px;padding:40px;width:440px;box-shadow:var(--sh2)}
-.login-logo{width:64px;height:64px;background:var(--y);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 16px;box-shadow:0 8px 20px rgba(255,194,68,.3)}
-.login-title{font-size:24px;font-weight:800;text-align:center;margin-bottom:4px}
-.login-sub{font-size:12px;color:var(--tx3);text-align:center;margin-bottom:28px}
-.login-users{display:grid;grid-template-columns:repeat(3, 1fr);gap:10px;margin-bottom:20px}
-.login-user{padding:12px 8px;border:2px solid var(--bd);border-radius:12px;text-align:center;cursor:pointer;transition:all .15s}
-.login-user:hover,.login-user.sel{border-color:var(--y);background:var(--y-lt)}
-.login-user .u-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:12px;margin:0 auto 6px}
-.login-user .u-nm{font-size:11px;font-weight:700}
-.login-user .u-role{font-size:9px;color:var(--tx3)}
-.lf{margin-bottom:20px}
-.lf label{display:block;font-size:10px;font-weight:800;color:var(--tx2);margin-bottom:8px;text-transform:uppercase}
-.lf input{width:100%;padding:14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;outline:none;font-family:inherit;transition:0.2s}
-.lf input:focus{border-color:var(--y);box-shadow:0 0 0 3px rgba(255,194,68,.15)}
-.login-err{color:var(--r);font-size:12px;text-align:center;margin-bottom:12px;min-height:16px;font-weight:700}
-.login-btn{width:100%;padding:14px;background:var(--y);border:none;border-radius:10px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;box-shadow:0 4px 12px rgba(255,194,68,.2);transition:0.2s}
-.login-btn:hover{background:var(--y-dk)}
+    body {
+        font-family: 'Inter', sans-serif;
+        background: var(--bg);
+        color: var(--tx);
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        font-size: 13px;
+    }
 
-/* ── NAV ── */
-.navbar{background:var(--bg2);border-bottom:1px solid var(--bd);height:60px;display:flex;align-items:center;padding:0 24px;flex-shrink:0;z-index:100}
-.nav-brand{display:flex;align-items:center;gap:12px;margin-right:24px;flex-shrink:0;border-right:1px solid var(--bd);padding-right:24px}
-.nav-logo{width:36px;height:36px;background:var(--y);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
-.nb-name{font-size:15px;font-weight:800;color:var(--tx)}
-.nb-sub{font-size:10px;color:var(--g);text-transform:uppercase;font-weight:700}
-.nav-links{display:flex;align-items:center;gap:4px;flex:1;overflow-x:auto}
-.ni{display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:8px;cursor:pointer;color:var(--tx2);font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap}
-.ni:hover{background:var(--bg3);color:var(--tx)}
-.ni.active{background:var(--tx);color:#fff}
-.ni-ic{font-size:15px}
-.nav-right{display:flex;align-items:center;gap:12px;margin-left:auto;flex-shrink:0}
-.clock{font-size:12px;color:var(--tx2);font-family:monospace;background:var(--bg);padding:6px 12px;border-radius:8px;border:1px solid var(--bd)}
-.user-badge{display:flex;align-items:center;gap:8px;padding:4px 12px;border-radius:20px;background:var(--bg);border:1px solid var(--bd);font-size:12px;font-weight:700;color:var(--tx)}
-.user-av{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#fff}
+    /* --- LOGIN --- */
+    #loginScreen { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #0F172A; }
+    .login-box { background: #fff; border-radius: 16px; padding: 40px; width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); text-align: center; }
+    .login-logo { width: 50px; height: 50px; background: var(--y); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 20px; }
+    .login-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+    .login-users { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    .login-user { padding: 12px; border: 1.5px solid var(--bd); border-radius: 10px; cursor: pointer; transition: 0.2s; }
+    .login-user.sel { border-color: var(--y); background: var(--y-lt); }
+    .login-user-av { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #fff; font-size: 11px; margin: 0 auto 8px; }
+    .login-user-nm { font-size: 12px; font-weight: 700; }
+    .login-input { width: 100%; padding: 12px; border: 1.5px solid var(--bd2); border-radius: 8px; font-size: 14px; outline: none; margin-bottom: 10px; }
+    .login-input:focus { border-color: var(--y); box-shadow: 0 0 0 3px rgba(255,194,68,0.2); }
+    .login-btn { width: 100%; padding: 12px; background: var(--y); border: none; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.2s; }
+    .login-btn:hover { background: var(--y-dk); }
+    .login-err { color: var(--r); font-size: 12px; font-weight: 600; min-height: 18px; margin-bottom: 10px; }
 
-/* ── CONTENT ── */
-.content{flex:1;overflow-y:auto;padding:24px;scrollbar-width:thin}
-.content::-webkit-scrollbar{width:6px}.content::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:3px}
-.pg{display:none;animation:fi .3s ease;max-width:1400px;margin:0 auto}
-.pg.active{display:block}
-@keyframes fi{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+    /* --- NAVBAR --- */
+    .navbar { background: #fff; border-bottom: 1px solid var(--bd); height: 60px; display: flex; align-items: center; padding: 0 20px; flex-shrink: 0; }
+    .nav-brand { display: flex; align-items: center; gap: 10px; border-right: 1px solid var(--bd); padding-right: 20px; }
+    .nav-logo { width: 32px; height: 32px; background: var(--y); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .nav-links { display: flex; gap: 5px; flex: 1; margin-left: 20px; overflow-x: auto; }
+    .ni { padding: 8px 14px; border-radius: 6px; cursor: pointer; color: var(--tx2); font-weight: 600; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
+    .ni:hover { background: var(--bg); }
+    .ni.active { background: var(--tx); color: #fff; }
+    .nav-right { display: flex; align-items: center; gap: 15px; margin-left: auto; }
+    .clock { font-size: 12px; font-family: monospace; background: var(--bg); padding: 6px 12px; border-radius: 6px; font-weight: 600; }
+    
+    /* --- MAIN CONTENT --- */
+    .content { flex: 1; overflow-y: auto; padding: 24px; }
+    .pg { display: none; animation: fadeIn 0.3s ease; max-width: 1400px; margin: 0 auto; }
+    .pg.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 
-/* ── CARDS ── */
-.card{background:var(--bg2);border:1px solid var(--bd);border-radius:16px;padding:24px;margin-bottom:20px;box-shadow:var(--sh)}
-.chd{font-size:15px;font-weight:800;color:var(--tx);margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bd);padding-bottom:12px}
-.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
-.ph-t{font-size:24px;font-weight:900;color:var(--tx)}
+    /* --- COMPONENTS --- */
+    .card { background: #fff; border-radius: 12px; border: 1px solid var(--bd); padding: 20px; margin-bottom: 20px; box-shadow: var(--sh); }
+    .ph { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
+    .ph-t { font-size: 22px; font-weight: 800; color: var(--tx); }
+    .chd { font-size: 14px; font-weight: 700; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--bd); padding-bottom: 10px; }
 
-/* ── KPI ── */
-.krow{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:24px}
-.kpi{background:var(--bg2);border:1px solid var(--bd);border-radius:16px;padding:20px;position:relative;overflow:hidden;box-shadow:var(--sh)}
-.kpi-top{height:4px;position:absolute;top:0;left:0;right:0}
-.kpi.y .kpi-top{background:var(--y)}.kpi.g .kpi-top{background:var(--g)}.kpi.r .kpi-top{background:var(--r)}.kpi.b .kpi-top{background:var(--b)}.kpi.p .kpi-top{background:var(--pu)}
-.kpi-lbl{font-size:11px;color:var(--tx3);text-transform:uppercase;font-weight:800;margin-bottom:10px}
-.kpi-val{font-size:36px;font-weight:900;line-height:1;margin-bottom:4px}
-.kpi.y .kpi-val{color:#92400E}.kpi.g .kpi-val{color:#065F46}.kpi.r .kpi-val{color:var(--r)}.kpi.b .kpi-val{color:var(--b)}.kpi.p .kpi-val{color:var(--pu)}
+    /* --- DASHBOARD KPI --- */
+    .krow { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .kpi { background: #fff; border: 1px solid var(--bd); border-radius: 12px; padding: 20px; position: relative; box-shadow: var(--sh); }
+    .kpi-top { height: 4px; position: absolute; top: 0; left: 0; right: 0; }
+    .kpi-lbl { font-size: 11px; font-weight: 800; color: var(--tx3); text-transform: uppercase; margin-bottom: 10px; }
+    .kpi-val { font-size: 32px; font-weight: 900; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
-.sr{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f1f5f9}
-.sr:last-child{border:none}
-.av{display:flex;align-items:center;justify-content:center;border-radius:50%;font-weight:800;color:#fff;flex-shrink:0}
-.av-lg{width:40px;height:40px;font-size:14px}.av-md{width:32px;height:32px;font-size:11px}.av-sm{width:28px;height:28px;font-size:10px}
-.sr-info{flex:1;min-width:0}
-.sr-nm{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pill{display:inline-block;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:800;white-space:nowrap}
-.pill.sm{background:var(--g-lt);color:var(--g)}.pill.se{background:var(--y-lt);color:#92400E}.pill.sn{background:var(--pu-lt);color:var(--pu)}.pill.so{background:var(--bg3);color:var(--tx3)}.pill.sa{background:var(--r-lt);color:var(--r)}.pill.sc{background:var(--b-lt);color:var(--b)}
-.zones{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}
-.zc{padding:18px 14px;border-radius:12px;text-align:center;border:1px solid var(--bd);background:#fff;box-shadow:var(--sh)}
+    /* --- TABLES --- */
+    .tbl-wr { background: #fff; border-radius: 12px; border: 1px solid var(--bd); overflow-x: auto; box-shadow: var(--sh); }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    thead th { background: var(--bg); padding: 12px 10px; font-size: 10px; font-weight: 800; color: var(--tx2); text-transform: uppercase; border-bottom: 1px solid var(--bd); }
+    tbody td { padding: 10px 8px; border-bottom: 1px solid var(--bd); text-align: center; }
+    tbody td:first-child { text-align: left; padding-left: 20px; font-weight: 600; color: var(--tx); }
+    tbody tr:hover td { background: #f8fafc; }
+    
+    /* --- PILLS & BADGES --- */
+    .pill { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; display: inline-block; white-space: nowrap; }
+    .pill.sm { background: var(--g-lt); color: var(--g); }
+    .pill.sa { background: var(--r-lt); color: var(--r); }
+    .pill.so { background: var(--bg); color: var(--tx3); }
+    
+    .ecell { cursor: pointer; transition: 0.2s; position: relative; }
+    .ecell:hover { background: var(--y-lt) !important; transform: scale(1.05); }
 
-/* ── PLANNING ── */
-.plan-top{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-.plan-ttl{font-size:16px;font-weight:800;flex:1}
-.ftabs{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
-.ft{padding:8px 16px;border-radius:20px;cursor:pointer;font-size:13px;font-weight:700;border:1px solid var(--bd2);background:var(--bg2);color:var(--tx2);transition:all .15s}
-.ft:hover{border-color:var(--y);color:#92400E;background:var(--y-lt)}
-.ft.active{background:var(--tx);color:#fff;border-color:var(--tx)}
-.tbl-wr{overflow-x:auto;border-radius:12px;border:1px solid var(--bd);box-shadow:var(--sh);background:var(--bg2)}
-table{width:100%;border-collapse:collapse;font-size:12px}
-thead th{background:var(--bg);color:var(--tx2);padding:14px 10px;text-align:center;font-size:10px;font-weight:800;text-transform:uppercase;border-bottom:2px solid var(--bd);white-space:nowrap}
-thead th:first-child{text-align:left;padding-left:20px}
-tbody td{padding:10px 8px;border-bottom:1px solid rgba(0,0,0,.04);text-align:center;vertical-align:middle}
-tbody td:first-child{text-align:left;padding-left:20px;font-weight:700}
-tbody tr:hover td{background:rgba(255,194,68,.05)}
-.h-ok{background:var(--g-lt);color:#065F46;font-weight:800;border-radius:6px;padding:4px 10px;border:1px solid var(--g-md)}
-.h-er{background:var(--r-lt);color:var(--r);font-weight:800;border-radius:6px;padding:4px 10px;border:1px solid var(--r-md)}
-.ecell{cursor:pointer;border-radius:6px;transition:0.2s;position:relative}
-.ecell:hover{background:var(--y-lt)!important;transform:scale(1.05);box-shadow:0 4px 10px rgba(255,194,68,0.2)}
-.e-ic{font-size:10px;color:var(--y-dk);opacity:0;display:block;margin-top:2px}
-.ecell:hover .e-ic{opacity:1}
-.hs-b{font-size:9px;color:var(--g);font-weight:700;display:block;margin-top:2px}
+    /* --- BUTTONS --- */
+    .btn { padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; border: 1px solid transparent; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; font-family: inherit; }
+    .btn-y { background: var(--y); color: #000; border-color: var(--y-dk); }
+    .btn-y:hover { background: var(--y-dk); }
+    .btn-gh { background: #fff; border-color: var(--bd); color: var(--tx2); }
+    .btn-gh:hover { background: var(--bg); }
+    .btn-g { background: var(--g); color: #fff; }
+    .btn-r { background: var(--r); color: #fff; }
+    .btn-sm { padding: 6px 12px; font-size: 11px; }
 
-/* ── MODALS ── */
-.overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.7);z-index:2000;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
-.overlay.show{display:flex}
-.modal{background:#fff;border-radius:16px;width:500px;max-width:95vw;overflow:hidden;box-shadow:var(--sh2);max-height:90vh;overflow-y:auto}
-.modal-lg{width:750px}
-.modal-hd{background:var(--bg);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:1}
-.modal-hd-t{font-size:16px;font-weight:800;color:var(--tx)}
-.m-close{background:transparent;border:none;color:var(--tx2);font-size:18px;cursor:pointer;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:6px}
-.m-close:hover{background:var(--bd);color:#000}
-.m-body{padding:24px}
-.fgrid{display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:16px;margin-bottom:16px}
-.fgl{display:flex;flex-direction:column;margin-bottom:16px}
-.fgl label{font-size:11px;font-weight:800;color:var(--tx2);margin-bottom:8px;text-transform:uppercase}
-.fc{width:100%;padding:12px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;outline:none;background:#fff;font-family:inherit;transition:0.2s}
-.fc:focus{border-color:var(--b);box-shadow:0 0 0 3px rgba(21,101,192,.1)}
-.fc-ta{resize:vertical;min-height:90px}
-.m-footer{display:flex;gap:12px;padding:20px 24px;background:var(--bg);border-top:1px solid var(--bd);justify-content:flex-end}
+    /* --- FORMS --- */
+    .fgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
+    .fgl { display: flex; flex-direction: column; }
+    .fgl label { font-size: 11px; font-weight: 700; color: var(--tx2); margin-bottom: 6px; }
+    .fc { width: 100%; padding: 10px 12px; border: 1px solid var(--bd2); border-radius: 8px; font-size: 13px; font-family: inherit; outline: none; }
+    .fc:focus { border-color: var(--b); box-shadow: 0 0 0 2px var(--b-lt); }
 
-/* ── BTNS ── */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:700;border:1px solid transparent;font-family:inherit;transition:0.2s;white-space:nowrap}
-.btn-y{background:#FFC244;color:#000;border-color:#F59E0B}.btn-y:hover{background:#F59E0B}
-.btn-g{background:#00A082;color:#fff;border-color:#008A70}.btn-g:hover{background:#008A70}
-.btn-r{background:#EF4444;color:#fff;border-color:#DC2626}.btn-r:hover{background:#DC2626}
-.btn-gh{background:#fff;color:#334155;border-color:var(--bd);box-shadow:var(--sh)}.btn-gh:hover{background:var(--bg);border-color:var(--tx3)}
-.btn-sm{padding:8px 12px;font-size:12px}
-.btn-ico{width:36px;height:36px;padding:0}
+    /* --- PAIE RH SECTION --- */
+    .pay-city-header { background: var(--tx); color: #fff; padding: 12px 20px; border-radius: 8px; font-weight: 700; margin: 24px 0 12px 0; display: flex; justify-content: space-between; }
+    .pc-card { background: #fff; border: 1px solid var(--bd); border-radius: 8px; padding: 16px; margin-bottom: 8px; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; align-items: center; }
+    .pay-ban { background: #fff; border: 1px solid var(--bd); border-radius: 12px; padding: 20px; display: flex; justify-content: space-around; margin-bottom: 24px; box-shadow: var(--sh); }
+    .pk { text-align: center; }
 
-/* ── AGENTS & HOTSPOTS ── */
-.ag-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
-.ag-card{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:16px;cursor:pointer;box-shadow:var(--sh);display:flex;align-items:center;gap:16px;transition:0.2s}
-.ag-card:hover{border-color:var(--y);transform:translateY(-3px);box-shadow:0 10px 25px rgba(255,194,68,.2)}
-.hs-item{display:flex;align-items:center;gap:16px;padding:16px;background:#fff;border:1px solid var(--bd);border-radius:12px;margin-bottom:10px;border-left-width:4px;box-shadow:var(--sh)}
-.abs-item{display:flex;align-items:center;gap:16px;padding:14px 16px;background:#fff;border:1px solid var(--bd);border-radius:12px;margin-bottom:10px;box-shadow:var(--sh)}
+    /* --- MODALS --- */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.8); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+    .overlay.show { display: flex; }
+    .modal { background: #fff; border-radius: 16px; width: 500px; max-width: 95vw; box-shadow: 0 25px 50px rgba(0,0,0,0.25); max-height: 90vh; overflow-y: auto; }
+    .modal-lg { width: 800px; }
+    .modal-hd { padding: 20px; border-bottom: 1px solid var(--bd); display: flex; justify-content: space-between; align-items: center; background: var(--bg); }
+    .m-body { padding: 20px; }
+    .m-footer { padding: 16px 20px; border-top: 1px solid var(--bd); display: flex; justify-content: flex-end; gap: 10px; background: var(--bg); }
 
-/* ── PAIE ── */
-.pay-city-header{background:var(--tx);color:#fff;padding:14px 24px;border-radius:12px;margin:24px 0 16px;display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:15px;box-shadow:var(--sh)}
-.pc-card{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:20px;margin-bottom:12px;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;align-items:center;box-shadow:var(--sh);transition:0.2s}
-.pc-card:hover{border-color:var(--y)}
-.pay-ban{background:#fff;border:1px solid var(--bd);border-radius:16px;padding:24px;margin-bottom:24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;box-shadow:var(--sh)}
-.pk{text-align:center;flex:1;min-width:100px}
-.pk-l{font-size:11px;color:var(--tx3);text-transform:uppercase;font-weight:800;margin-bottom:6px}
-.pk-v{font-size:24px;font-weight:900;color:var(--tx)}
-.pdiv{width:1px;height:40px;background:var(--bd);flex-shrink:0}
+    .toast-wrap { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+    .toast { padding: 14px 20px; background: #fff; border-radius: 8px; border-left: 4px solid var(--g); box-shadow: 0 10px 25px rgba(0,0,0,0.1); font-weight: 600; font-size: 13px; animation: slideIn 0.3s ease; }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-/* ── AUTRES ── */
-.srch{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;background:#fff;padding:16px;border-radius:12px;box-shadow:var(--sh);border:1px solid var(--bd)}
-.si{flex:1;min-width:200px;padding:12px 16px;border:1px solid var(--bd2);border-radius:8px;font-size:14px;outline:none}
-select.sel{padding:12px 16px;border:1px solid var(--bd2);border-radius:8px;font-size:14px;outline:none;background:#fff;cursor:pointer}
-.em{text-align:center;padding:50px 20px;color:var(--tx3);background:#fff;border-radius:16px;border:2px dashed var(--bd)}.em-ic{font-size:48px;margin-bottom:16px;opacity:.5}.em-tx{font-size:16px;font-weight:700}
-
-.toast-wrap{position:fixed;bottom:30px;right:30px;z-index:9999;display:flex;flex-direction:column;gap:12px}
-.toast{display:flex;align-items:center;gap:12px;padding:16px 24px;border-radius:12px;background:#fff;border-left:5px solid var(--g);box-shadow:0 10px 40px rgba(0,0,0,.15);font-size:14px;font-weight:700;color:var(--tx);animation:tin .4s cubic-bezier(0.175, 0.885, 0.32, 1.275)}
-.toast.er{border-left-color:var(--r)}
-@keyframes tin{from{opacity:0;transform:translateX(50px)}to{opacity:1;transform:none}}
+    /* --- LISTS --- */
+    .ag-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; }
+    .ag-card { display: flex; align-items: center; gap: 15px; background: #fff; padding: 15px; border-radius: 12px; border: 1px solid var(--bd); cursor: pointer; transition: 0.2s; box-shadow: var(--sh); }
+    .ag-card:hover { border-color: var(--y); transform: translateY(-2px); }
+    .hs-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #fff; border-radius: 12px; border: 1px solid var(--bd); margin-bottom: 10px; border-left: 4px solid var(--y); }
 </style>
 </head>
 <body>
@@ -190,7 +147,7 @@ select.sel{padding:12px 16px;border:1px solid var(--bd2);border-radius:8px;font-
     <input type="hidden" id="selUser" value="">
     <div class="lf">
         <label>Mot de passe d'accès</label>
-        <input type="password" id="loginPwd" placeholder="Tapez le mot de passe" onkeydown="if(event.key==='Enter')doLogin()">
+        <input type="password" id="loginPwd" class="login-input" placeholder="Saisissez le mot de passe" onkeydown="if(event.key==='Enter')doLogin()">
     </div>
     <div class="login-err" id="loginErr"></div>
     <button class="login-btn" onclick="doLogin()">SE CONNECTER</button>
@@ -199,706 +156,595 @@ select.sel{padding:12px 16px;border:1px solid var(--bd2);border-radius:8px;font-
 
 <div id="app" style="display:none;height:100%;flex-direction:column">
 
-<nav class="navbar">
-  <div class="nav-brand"><div class="nav-logo">🛵</div><div><div class="nb-name">SENTINEL</div><div class="nb-sub">GLOVO MAROC</div></div></div>
-  <div class="nav-links" id="navLinks"></div>
-  <div class="nav-right">
-    <span id="syncStatus" style="font-size:11px;color:var(--g);font-weight:800;padding:6px 12px;background:var(--g-lt);border-radius:12px;border:1px solid var(--g-md)">☁️ Sync Active</span>
-    <div class="clock" id="clock"></div>
-    <div class="user-badge"><div class="user-av" id="userAv">?</div><span id="userName">—</span></div>
-    <button class="btn btn-gh btn-ico" onclick="doLogout()" title="Déconnexion">🚪</button>
+  <nav class="navbar">
+    <div class="nav-brand">
+        <div class="nav-logo">🛵</div>
+        <div>
+            <div style="font-weight:900;font-size:15px;line-height:1.2">SENTINEL</div>
+            <div style="font-size:10px;font-weight:700;color:var(--g)">GLOVO MAROC</div>
+        </div>
+    </div>
+    <div class="nav-links" id="navLinks"></div>
+    <div class="nav-right">
+        <span id="syncStatus" style="font-size:11px;color:var(--g);font-weight:700;padding:4px 10px;background:var(--g-lt);border-radius:12px">☁️ Sync Active</span>
+        <div class="clock" id="clock">00:00:00</div>
+        <div style="display:flex;align-items:center;gap:8px;padding:4px 12px;border-radius:20px;border:1px solid var(--bd);background:var(--bg)">
+            <div id="userAv" style="width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:bold"></div>
+            <span id="userName" style="font-weight:600;font-size:12px"></span>
+        </div>
+        <button class="btn btn-gh btn-sm" onclick="doLogout()">Déconnexion</button>
+    </div>
+  </nav>
+
+  <div class="content">
+
+    <div class="pg active" id="pg-ov">
+        <div class="ph">
+            <div class="ph-t">Tableau de bord <span style="font-size:14px;color:var(--tx2);font-weight:600;margin-left:10px" id="ov-date"></span></div>
+        </div>
+        <div class="krow">
+            <div class="kpi"><div class="kpi-top" style="background:var(--y)"></div><div class="kpi-lbl">Total Agents</div><div class="kpi-val" id="k-tot" style="color:var(--y-dk)">—</div></div>
+            <div class="kpi"><div class="kpi-top" style="background:var(--g)"></div><div class="kpi-lbl">Présents Aujourd'hui</div><div class="kpi-val" id="k-act" style="color:var(--g)">—</div></div>
+            <div class="kpi"><div class="kpi-top" style="background:var(--r)"></div><div class="kpi-lbl">Absences / Maladies</div><div class="kpi-val" id="k-abs" style="color:var(--r)">—</div></div>
+            <div class="kpi"><div class="kpi-top" style="background:var(--pu)"></div><div class="kpi-lbl">Objectif 44H</div><div class="kpi-val" id="k-44" style="color:var(--pu)">—</div></div>
+        </div>
+        <div class="grid-2">
+            <div class="card"><div class="chd">☀️ Équipe de Jour</div><div id="ov-day"></div></div>
+            <div class="card"><div class="chd">🌙 Équipe de Nuit</div><div id="ov-ngt"></div></div>
+        </div>
+        <div class="card" id="cloud-config-card" style="display:none; border-left: 4px solid var(--r)">
+            <div class="chd" style="color:var(--r); border:none; margin-bottom:0">⚠️ Administration & Secours</div>
+            <p style="font-size:13px; color:var(--tx2); margin-bottom:15px">Si la base de données semble corrompue (agents manquants), utilisez ce bouton pour forcer la restauration depuis le fichier initial.</p>
+            <button class="btn btn-r" onclick="hardResetDatabase()">⚙️ Rétablir Base de Données Initiale</button>
+        </div>
+    </div>
+
+    <div class="pg" id="pg-pl">
+        <div class="ph">
+            <div style="display:flex;align-items:center;gap:10px">
+                <button class="btn btn-gh" onclick="chgW(-1)">◀ Précédent</button>
+                <div id="pl-ttl" style="font-size:16px;font-weight:800;background:#fff;padding:8px 16px;border-radius:8px;border:1px solid var(--bd)">Planning</div>
+                <button class="btn btn-gh" onclick="chgW(1)">Suivant ▶</button>
+            </div>
+            <div style="display:flex;gap:10px">
+                <button class="btn btn-y" onclick="regenererPlanning()">⚙ Recalculer (Strict 44H)</button>
+                <button class="btn btn-g" onclick="openEmailModal()">📧 Générer Mails (Glovo Design)</button>
+                <button class="btn btn-gh" onclick="exportPlanningExcel()">📊 Export Excel</button>
+                <button class="btn btn-gh" onclick="exportPlanningCSV()">📥 Export CSV</button>
+            </div>
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap" id="plft">
+            <button class="btn btn-gh active" onclick="fC('ALL',this)">Toutes</button>
+            <button class="btn btn-gh" onclick="fC('CAS',this)">🏙 Casablanca</button>
+            <button class="btn btn-gh" onclick="fC('RBT',this)">🏛 Rabat</button>
+            <button class="btn btn-gh" onclick="fC('MAR',this)">🐪 Marrakech</button>
+            <button class="btn btn-gh" onclick="fC('AGD',this)">🌊 Agadir</button>
+            <button class="btn btn-gh" onclick="fC('TEM',this)">🏖 Temara</button>
+            <button class="btn btn-gh" onclick="fC('SAL',this)">🏰 Salé</button>
+            <button class="btn btn-gh" onclick="fC('DRB',this)">🌴 Dar Bouazza</button>
+            <button class="btn btn-gh" onclick="fC('BSK',this)">🌿 Bouskoura</button>
+            <button class="btn btn-gh" onclick="fC('MOH',this)">🌸 Mohammadia</button>
+            <button class="btn btn-gh" onclick="fC('LYN',this)">🐪 Laayoune</button>
+        </div>
+        <div class="tbl-wr"><table id="pl-tbl"></table></div>
+    </div>
+
+    <div class="pg" id="pg-py">
+        <div class="ph">
+            <div class="ph-t">Rapport de Paie HR</div>
+            <div style="display:flex;gap:10px">
+                <select class="fc" id="pay-mois-sel" style="width:auto;padding:8px 12px" onchange="rPay()"></select>
+                <button class="btn btn-gh" onclick="exportPaieExcel()">📊 Exporter pour les RH</button>
+            </div>
+        </div>
+        <div class="pay-ban">
+            <div class="pk"><div class="pk-l">Période Validée</div><div class="pk-v" style="font-size:16px;color:var(--tx2)">Du 21 au 22</div></div>
+            <div class="pk"><div class="pk-l">Agents Concernés</div><div class="pk-v" id="py-n">—</div></div>
+            <div class="pk"><div class="pk-l">Total Déductions</div><div class="pk-v" style="color:var(--r)" id="py-d">—</div></div>
+            <div class="pk"><div class="pk-l">Masse Nette Totale</div><div class="pk-v" style="color:var(--g)" id="py-t">—</div></div>
+        </div>
+        <div id="py-content"></div>
+    </div>
+
+    <div class="pg" id="pg-ag">
+        <div class="ph">
+            <div class="ph-t">Base de Données Agents</div>
+            <div style="display:flex;gap:10px">
+                <button class="btn btn-gh" onclick="exportAgentsExcel()">📊 Export Excel</button>
+                <button class="btn btn-y" onclick="openAddAgent()">➕ Nouvel Agent</button>
+            </div>
+        </div>
+        <div style="display:flex;gap:10px;margin-bottom:20px;background:#fff;padding:12px;border-radius:12px;border:1px solid var(--bd)">
+            <input type="text" id="ag-q" class="fc" placeholder="Rechercher par nom..." oninput="rAgents()" style="flex:1">
+            <select id="ag-vf" class="fc" onchange="rAgents()" style="width:200px">
+                <option value="ALL">Toutes les villes</option>
+                <option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option><option value="AGD">Agadir</option>
+                <option value="TEM">Temara</option><option value="SAL">Salé</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option>
+            </select>
+        </div>
+        <div class="ag-grid" id="ag-grid"></div>
+    </div>
+
+    <div class="pg" id="pg-hs">
+        <div class="ph"><div class="ph-t">Gestion des Hotspots</div><button class="btn btn-y" onclick="document.getElementById('hsOverlay').classList.add('show')">➕ Créer Hotspot</button></div>
+        <div id="hs-list"></div>
+    </div>
+
+    <div class="pg" id="pg-ab">
+        <div class="ph"><div class="ph-t">Déclarer une Absence</div></div>
+        <div class="card">
+            <div class="fgrid">
+                <div class="fgl"><label>Sélectionner l'Agent</label><select id="f-ag" class="fc"></select></div>
+                <div class="fgl"><label>Type de justification</label><select id="f-ty" class="fc"><option value="ABSENT">ABSENCE INJUSTIFIÉE (-192 MAD)</option><option value="MALADIE">MALADIE (Justifié)</option><option value="CONGE">CONGÉ (Payé)</option></select></div>
+                <div class="fgl"><label>Date de début</label><input type="date" id="f-s" class="fc"></div>
+                <div class="fgl"><label>Date de fin (Optionnel)</label><input type="date" id="f-e" class="fc"></div>
+            </div>
+            <div class="fgl"><label>Motif (Optionnel)</label><input type="text" id="f-m" class="fc" placeholder="Ex: Certificat médical..."></div>
+            <button class="btn btn-r" onclick="submitAbs()" style="width:100%;padding:12px;font-size:14px">💾 VALIDATION DÉFINITIVE</button>
+        </div>
+        <div class="card"><div class="chd">Historique des déclarations</div><div id="abs-list"></div></div>
+    </div>
+
+    <div class="pg" id="pg-rp">
+        <div class="ph"><div class="ph-t">Rapports de Fin de Shift</div><button class="btn btn-y" onclick="openRapportForm()">➕ Rédiger</button></div>
+        <div id="rp-list"></div>
+    </div>
+
   </div>
-</nav>
+</div>
 
-<div class="content" id="appContent">
+<div class="overlay" id="editOverlay" onclick="if(event.target===this)closeModal('editOverlay')">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-hd-t">✏️ Modifier le Shift</div><button class="m-close" onclick="closeModal('editOverlay')">✕</button></div>
+    <div class="m-body">
+      <div style="font-size:16px;font-weight:800;margin-bottom:20px;color:var(--g)" id="em-agent"></div>
+      <div class="fgl"><label>Nouvel Horaire</label><select class="fc" id="em-shift"></select></div>
+      <div class="fgl"><label>Hotspot assigné</label><select class="fc" id="em-hs"></select></div>
+    </div>
+    <div class="m-footer">
+        <button class="btn btn-gh" onclick="closeModal('editOverlay')">Annuler</button>
+        <button class="btn btn-y" onclick="saveCell()">💾 Mettre à jour</button>
+    </div>
+  </div>
+</div>
 
-  <div class="pg active" id="pg-ov">
-    <div class="ph"><div class="ph-t">Tableau de bord Global</div><div style="font-size:14px;color:var(--tx2);font-weight:700" id="ov-date"></div></div>
-    
-    <div class="krow">
-      <div class="kpi y"><div class="kpi-top"></div><div class="kpi-lbl">Total Agents</div><div class="kpi-val" id="k-tot">—</div></div>
-      <div class="kpi g"><div class="kpi-top"></div><div class="kpi-lbl">Présents Aujourd'hui</div><div class="kpi-val" id="k-act">—</div></div>
-      <div class="kpi r"><div class="kpi-top"></div><div class="kpi-lbl">Absences / Maladie</div><div class="kpi-val" id="k-abs">—</div></div>
-      <div class="kpi p"><div class="kpi-top"></div><div class="kpi-lbl">Respect 44H</div><div class="kpi-val" id="k-44">—</div></div>
-    </div>
-    <div class="g2">
-      <div class="card"><div class="chd">☀️ Équipe de Jour (Avant 16h)</div><div id="ov-day"></div></div>
-      <div class="card"><div class="chd">🌙 Équipe de Nuit (Après 16h)</div><div id="ov-ngt"></div></div>
-    </div>
-    <div class="card"><div class="chd">🗺 Effectif par Zones</div><div class="zones" id="ov-zones"></div></div>
-    
-    <div class="card" id="cloud-config-card" style="display:none;border-left:5px solid var(--r);background:#fff5f5">
-      <div class="chd" style="color:var(--r)">⚠️ Administration Système (Secours Data)</div>
-      <div style="font-size:13px;color:var(--tx2);margin-bottom:15px;line-height:1.6">
-        En cas de bug ou si les données ne s'affichent pas, utilisez ce bouton pour forcer la réparation complète de la base de données. Cela rechargera instantanément les 51 agents.
+<div class="overlay" id="emailOverlay" onclick="if(event.target===this)closeModal('emailOverlay')">
+  <div class="modal modal-lg">
+    <div class="modal-hd"><div class="modal-hd-t">📧 Générateur Email Officiel</div><button class="m-close" onclick="closeModal('emailOverlay')">✕</button></div>
+    <div class="m-body">
+      <div style="background:var(--y-lt);border:1px solid var(--y-md);padding:15px;border-radius:10px;margin-bottom:20px;display:flex;align-items:center;gap:15px">
+        <span style="font-size:30px">✨</span>
+        <div>
+          <div style="font-weight:800;color:#92400E;margin-bottom:4px">Génération Pro pour Gmail</div>
+          <div style="font-size:12px;color:var(--tx2)">Choisissez une ville. Cliquez sur le bouton vert d'un agent. Gmail s'ouvre, faites <kbd>Ctrl + V</kbd> dans le message. Le design sera parfait.</div>
+        </div>
       </div>
-      <button class="btn btn-r" onclick="hardResetDatabase()">⚙️ Rétablir la Base de Données (Force Reset)</button>
-    </div>
-  </div>
-
-  <div class="pg" id="pg-pl">
-    <div class="ph">
-        <div class="plan-top">
-            <button class="btn btn-gh btn-ico" onclick="chgW(-1)">◀</button>
-            <div class="plan-ttl" id="pl-ttl" style="font-size:18px;font-weight:900;color:var(--y-dk);background:#fff;padding:10px 24px;border-radius:12px;border:1px solid var(--bd)">Planning</div>
-            <button class="btn btn-gh btn-ico" onclick="chgW(1)">▶</button>
-            <button class="btn btn-y" onclick="regenererPlanning()">⚙ Recalculer 44H</button>
-            <button class="btn btn-g" onclick="openEmailModal()">📧 Générer Mails</button>
-            <button class="btn btn-gh" onclick="exportPlanningExcel()">📊 Export Excel</button>
-            <button class="btn btn-gh" onclick="exportPlanningCSV()">📥 Export CSV</button>
-          </div>
-    </div>
-    <div class="ftabs" id="plft">
-      <button class="ft active" onclick="fC('ALL',this)">Toutes</button>
-      <button class="ft" onclick="fC('CAS',this)">🏙 Casablanca</button>
-      <button class="ft" onclick="fC('DRB',this)">🌴 Dar Bouazza</button>
-      <button class="ft" onclick="fC('BSK',this)">🌿 Bouskoura</button>
-      <button class="ft" onclick="fC('RBT',this)">🏛 Rabat</button>
-      <button class="ft" onclick="fC('TEM',this)">🏖 Temara</button>
-      <button class="ft" onclick="fC('SAL',this)">🏰 Salé</button>
-      <button class="ft" onclick="fC('MAR',this)">🐪 Marrakech</button>
-      <button class="ft" onclick="fC('AGD',this)">🌊 Agadir</button>
-      <button class="ft" onclick="fC('MOH',this)">🌸 Mohammadia</button>
-      <button class="ft" onclick="fC('LYN',this)">🐪 Laayoune</button>
-      <div style="margin-left:auto;display:flex;gap:8px">
-        <button class="ft active" onclick="fV('s',this)" id="vs">Shifts</button>
-        <button class="ft" onclick="fV('h',this)" id="vh">+ Hotspots</button>
-      </div>
-    </div>
-    <div class="tbl-wr"><table id="pl-tbl"></table></div>
-  </div>
-
-  <div class="pg" id="pg-ag">
-    <div class="ph"><div class="ph-t">Ressources Humaines (Agents)</div>
-    <div style="display:flex;gap:10px">
-        <button class="btn btn-gh" onclick="exportAgentsExcel()">📊 Export Data</button>
-        <button class="btn btn-y" onclick="openAddAgent()">➕ Ajouter Agent</button>
-    </div></div>
-    <div class="srch">
-      <input class="si" type="text" id="ag-q" placeholder="Rechercher par nom..." oninput="rAgents()">
-      <select class="sel" id="ag-vf" onchange="rAgents()">
-        <option value="ALL">Toutes les villes</option>
-        <option value="CAS">Casablanca</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option>
-        <option value="RBT">Rabat</option><option value="TEM">Temara</option><option value="SAL">Salé</option>
-        <option value="MAR">Marrakech</option><option value="AGD">Agadir</option><option value="MOH">Mohammadia</option><option value="LYN">Laayoune</option>
-      </select>
-    </div>
-    <div class="ag-grid" id="ag-grid"></div>
-  </div>
-
-  <div class="pg" id="pg-hs">
-    <div class="ph"><div class="ph-t">Gestion des Hotspots</div><button class="btn btn-y" onclick="document.getElementById('hsOverlay').classList.add('show')">➕ Ajouter Hotspot</button></div>
-    <div class="srch">
-        <select class="sel" onchange="fHs(this.value)">
-          <option value="ALL">Toutes les villes</option>
-          <option value="CAS">Casablanca</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option>
-          <option value="RBT">Rabat</option><option value="TEM">Temara</option><option value="SAL">Salé</option>
-          <option value="MAR">Marrakech</option><option value="AGD">Agadir</option><option value="MOH">Mohammadia</option><option value="LYN">Laayoune</option>
+      <div class="fgl" style="margin-bottom:20px">
+        <label>Sélectionner la ville à envoyer :</label>
+        <select class="fc" id="email-ville-sel" style="font-size:14px;padding:12px">
+            <option value="ALL">Toutes les villes</option>
+            <option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option><option value="AGD">Agadir</option>
+            <option value="TEM">Temara</option><option value="SAL">Salé</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option>
         </select>
       </div>
-    <div id="hs-list"></div>
-  </div>
-
-  <div class="pg" id="pg-ab">
-    <div class="ph"><div class="ph-t">Déclaration des Absences</div></div>
-    <div class="card">
-      <div class="fgrid">
-        <div class="fgl"><label>Agent concerné</label><select class="fc" id="f-ag"></select></div>
-        <div class="fgl"><label>Type d'absence</label><select class="fc" id="f-ty"><option value="ABSENT">ABSENT (-192 MAD)</option><option value="CONGE">CONGÉ (Payé)</option><option value="MALADIE">MALADIE (Justifié)</option></select></div>
-        <div class="fgl"><label>Date de début</label><input type="date" class="fc" id="f-s"></div>
-        <div class="fgl"><label>Date de fin (Optionnel)</label><input type="date" class="fc" id="f-e"></div>
-        <div class="fgl" style="grid-column: 1 / -1;"><label>Motif / Justification</label><input type="text" class="fc" id="f-m" placeholder="Certificat médical, problème personnel..."></div>
-      </div>
-      <button class="btn btn-r" onclick="submitAbs()" style="width:100%;font-size:15px;padding:14px">💾 CONFIRMER L'ABSENCE</button>
+      <button class="btn btn-y" onclick="preparerEmails()" style="width:100%;padding:12px;font-size:14px">⚡ Générer les Tableaux</button>
+      <div id="email-preview" style="margin-top:20px;max-height:400px;overflow-y:auto;padding-right:10px"></div>
     </div>
-    <div class="card"><div class="chd">📋 Historique des absences</div><div id="abs-list"></div></div>
   </div>
-
-  <div class="pg" id="pg-py">
-    <div class="ph">
-      <div class="ph-t">Suivi de Paie HR (Du 21 au 22)</div>
-      <div style="display:flex;gap:12px">
-          <select class="sel" id="pay-mois-sel" onchange="rPay()"></select>
-          <button class="btn btn-gh" onclick="exportPaieExcel()">📊 Export RH Excel</button>
-      </div>
-    </div>
-    <div class="pay-ban">
-        <div class="pk"><div class="pk-l">Total Déductions</div><div class="pk-v" style="color:var(--r)" id="py-d">—</div></div>
-        <div class="pdiv"></div>
-        <div class="pk"><div class="pk-l">Masse Nette Totale</div><div class="pk-v" style="color:var(--g)" id="py-t">—</div></div>
-    </div>
-    <div id="py-content"></div>
-  </div>
-
-  <div class="pg" id="pg-rp">
-    <div class="ph"><div class="ph-t">Rapports de Fin de Shift</div><button class="btn btn-y" onclick="openRapportForm()">➕ Rédiger un Rapport</button></div>
-    <div id="rp-list"></div>
-  </div>
-
 </div>
+
+<div class="overlay" id="agOverlay" onclick="if(event.target===this)closeModal('agOverlay')">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-hd-t">Fiche Employé</div><button class="m-close" onclick="closeModal('agOverlay')">✕</button></div>
+    <div class="m-body">
+      <div class="fgl"><label>Nom Complet *</label><input type="text" class="fc" id="ag-nom"></div>
+      <div class="fgrid">
+        <div class="fgl"><label>Ville *</label><select class="fc" id="ag-ville"><option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option><option value="AGD">Agadir</option><option value="TEM">Temara</option><option value="SAL">Salé</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option><option value="MOH">Mohammadia</option><option value="LYN">Laayoune</option></select></div>
+        <div class="fgl"><label>Date d'Embauche</label><input type="date" class="fc" id="ag-emb"></div>
+      </div>
+      <div class="fgl"><label>Email de contact (Gmail)</label><input type="email" class="fc" id="ag-email"></div>
+      <div class="fgl"><label>Statut</label><select class="fc" id="ag-stat"><option value="Actif">Actif (Planifié)</option><option value="Inactif">Inactif (Masqué)</option></select></div>
+      <div style="font-size:11px;color:var(--tx3);margin-bottom:15px">Note : Si la date d'embauche est renseignée, la paie sera calculée au prorata pour le premier mois.</div>
+    </div>
+    <div class="m-footer">
+        <button class="btn btn-gh" onclick="closeModal('agOverlay')">Annuler</button>
+        <button class="btn btn-y" onclick="saveAgent()">💾 Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="hsOverlay" onclick="if(event.target===this)closeModal('hsOverlay')">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-hd-t">Nouveau Hotspot</div><button class="m-close" onclick="closeModal('hsOverlay')">✕</button></div>
+    <div class="m-body">
+      <div class="fgl"><label>Ville</label><select class="fc" id="hs-f-ville"><option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option><option value="AGD">Agadir</option></select></div>
+      <div class="fgl"><label>Nom du Point (Ex: Macdo Maarif)</label><input type="text" class="fc" id="hs-f-nom"></div>
+      <div class="fgl"><label>Heure de pointe estimée</label><input type="time" class="fc" id="hs-f-pk" value="12:00"></div>
+    </div>
+    <div class="m-footer"><button class="btn btn-y" onclick="saveHotspot()">💾 Créer</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="rpOverlay" onclick="if(event.target===this)closeModal('rpOverlay')">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-hd-t">Rapport de Fin de Shift</div><button class="m-close" onclick="closeModal('rpOverlay')">✕</button></div>
+    <div class="m-body">
+      <div class="fgl"><label>Date</label><input type="date" class="fc" id="rp-date"></div>
+      <div class="fgl"><label>Résumé de la journée</label><textarea class="fc fc-ta" id="rp-resume" placeholder="Décrivez le déroulement global..."></textarea></div>
+      <div class="fgl"><label>Anomalies / Absences rencontrées</label><textarea class="fc fc-ta" id="rp-anomalies" placeholder="Laisser vide si RAS"></textarea></div>
+    </div>
+    <div class="m-footer"><button class="btn btn-y" onclick="saveRapport()">💾 Transmettre</button></div>
+  </div>
 </div>
 
 <div class="toast-wrap" id="toastWrap"></div>
 
-<div class="overlay" id="editOverlay" onclick="overlayClose(event,'editOverlay')">
-  <div class="modal">
-    <div class="modal-hd"><div class="modal-hd-t">✏️ Modification du Shift</div><button class="m-close" onclick="closeModal('editOverlay')">✕</button></div>
-    <div class="m-body">
-      <div style="font-size:18px;font-weight:900;margin-bottom:20px;color:var(--g)" id="em-agent"></div>
-      <div class="fgl"><label>Nouvel Horaire</label><select class="fc" id="em-shift"></select></div>
-      <div class="fgl" id="hs-div-edit" style="display:none"><label>Hotspot assigné</label><select class="fc" id="em-hs"></select></div>
-    </div>
-    <div class="m-footer"><button class="btn btn-gh" onclick="closeModal('editOverlay')">Annuler</button><button class="btn btn-y" onclick="saveCell()">💾 Valider le changement</button></div>
-  </div>
-</div>
-
-<div class="overlay" id="emailOverlay" onclick="overlayClose(event,'emailOverlay')">
-  <div class="modal modal-lg">
-    <div class="modal-hd"><div class="modal-hd-t">📧 Envoi Plannings (Format Glovo)</div><button class="m-close" onclick="closeModal('emailOverlay')">✕</button></div>
-    <div class="m-body">
-      <div style="background:var(--y-lt);border:1px solid var(--y-md);border-radius:12px;padding:20px;margin-bottom:24px;display:flex;gap:15px;align-items:center">
-        <span style="font-size:32px">✨</span>
-        <div>
-          <div style="font-size:15px;font-weight:800;color:#92400E;margin-bottom:4px">Générateur Magique pour Gmail</div>
-          <div style="font-size:13px;color:var(--tx2)">Sélectionnez la ville. Cliquez sur le bouton vert d'un agent. Gmail s'ouvrira tout seul. Faites <kbd>Ctrl + V</kbd> dans le mail : le tableau parfait apparaîtra !</div>
-        </div>
-      </div>
-      <div class="fgl" style="margin-bottom:24px"><label>Choisir la ville à exporter :</label>
-        <select class="fc" id="email-ville-sel" style="font-size:15px;padding:14px">
-            <option value="ALL">Toutes les villes</option>
-            <option value="CAS">Casablanca</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option>
-            <option value="RBT">Rabat</option><option value="TEM">Temara</option><option value="SAL">Salé</option>
-            <option value="MAR">Marrakech</option><option value="AGD">Agadir</option><option value="MOH">Mohammadia</option><option value="LYN">Laayoune</option>
-        </select>
-      </div>
-      <button class="btn btn-y" onclick="preparerEmails()" style="width:100%;font-size:15px;padding:14px">⚡ Générer les Modèles Visuels</button>
-      <div id="email-preview" style="margin-top:24px; max-height:400px; overflow-y:auto; padding-right:10px;"></div>
-    </div>
-  </div>
-</div>
-
-<div class="overlay" id="agOverlay" onclick="overlayClose(event,'agOverlay')">
-  <div class="modal">
-    <div class="modal-hd"><div class="modal-hd-t" id="ag-modal-title">➕ Fiche Agent</div><button class="m-close" onclick="closeModal('agOverlay')">✕</button></div>
-    <div class="m-body">
-      <div class="fgl"><label>Nom Complet *</label><input type="text" class="fc" id="ag-nom"></div>
-      <div class="fgrid">
-        <div class="fgl"><label>Ville *</label><select class="fc" id="ag-ville"><option value="CAS">Casablanca</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option><option value="RBT">Rabat</option><option value="TEM">Temara</option><option value="SAL">Salé</option><option value="MAR">Marrakech</option><option value="AGD">Agadir</option><option value="MOH">Mohammadia</option><option value="LYN">Laayoune</option></select></div>
-        <div class="fgl"><label>Zone</label><input type="text" class="fc" id="ag-zone"></div>
-        <div class="fgl"><label>Email (Pour l'envoi du planning)</label><input type="email" class="fc" id="ag-email"></div>
-        <div class="fgl"><label>Date d'Embauche</label><input type="date" class="fc" id="ag-emb"></div>
-        <div class="fgl"><label>Statut</label><select class="fc" id="ag-statut"><option value="Actif">Actif</option><option value="Inactif">Inactif (Invisible partout)</option></select></div>
-      </div>
-    </div>
-    <div class="m-footer"><button class="btn btn-gh" onclick="closeModal('agOverlay')">Annuler</button><button class="btn btn-y" onclick="saveAgent()">💾 Enregistrer la Fiche</button></div>
-  </div>
-</div>
-
-<div class="overlay" id="hsOverlay" onclick="overlayClose(event,'hsOverlay')">
-  <div class="modal">
-    <div class="modal-hd"><div class="modal-hd-t">📍 Créer un Hotspot</div><button class="m-close" onclick="closeModal('hsOverlay')">✕</button></div>
-    <div class="m-body">
-      <div class="fgl"><label>Ville *</label><select class="fc" id="hs-f-ville"><option value="CAS">Casablanca</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option><option value="RBT">Rabat</option><option value="TEM">Temara</option><option value="SAL">Salé</option><option value="MAR">Marrakech</option><option value="AGD">Agadir</option><option value="MOH">Mohammadia</option><option value="LYN">Laayoune</option></select></div>
-      <div class="fgl"><label>Nom (Ex: Macdo Maarif) *</label><input type="text" class="fc" id="hs-f-nom"></div>
-      <div class="fgl"><label>Heure de pointe (Rush) *</label><input type="time" class="fc" id="hs-f-pk" value="12:00"></div>
-    </div>
-    <div class="m-footer"><button class="btn btn-gh" onclick="closeModal('hsOverlay')">Annuler</button><button class="btn btn-y" onclick="saveHotspot()">💾 Ajouter au système</button></div>
-  </div>
-</div>
-
-<div class="overlay" id="rpOverlay" onclick="overlayClose(event,'rpOverlay')">
-  <div class="modal">
-    <div class="modal-hd"><div class="modal-hd-t">📋 Rédiger un Rapport</div><button class="m-close" onclick="closeModal('rpOverlay')">✕</button></div>
-    <div class="m-body">
-      <div class="fgl"><label>Date du Shift</label><input type="date" class="fc" id="rp-date"></div>
-      <div class="fgl"><label>Résumé global de la journée</label><textarea class="fc fc-ta" id="rp-resume" placeholder="Décrivez le déroulement du shift..."></textarea></div>
-      <div class="fgl"><label>Incidents / Retards</label><textarea class="fc fc-ta" id="rp-anomalies" placeholder="Laisser vide si aucun problème"></textarea></div>
-    </div>
-    <div class="m-footer"><button class="btn btn-gh" onclick="closeModal('rpOverlay')">Annuler</button><button class="btn btn-y" onclick="saveRapport()">💾 Transmettre le Rapport</button></div>
-  </div>
-</div>
-
 <script>
 // ═══════════════════════════════════════════════════════════
-//  SENTINEL v13.0 — ULTIMATE EDITION (PAIE RH, MAIL PRO)
+//  SENTINEL v14.0 — CORPORATE CORE & HR PAYROLL
 // ═══════════════════════════════════════════════════════════
 
-var USERS={
-  admin:{pwd:'sentinel2029',nom:'Oussama E.',role:'admin',villes:['CAS','DRB','BSK','RBT','TEM','SAL','AGD','MOH','LYN','MAR'],color:'#E74C3C'},
-  choaib:{pwd:'choaib2002',nom:'Choaib Knari',role:'leader',villes:['CAS','DRB','BSK'],color:'#F39C12'},
-  agd:{pwd:'AGD2026',nom:'Leader Agadir',role:'leader',villes:['AGD'],color:'#3498DB'},
-  rbt:{pwd:'RBT2030',nom:'Leader Rabat',role:'leader',villes:['RBT','TEM','SAL'],color:'#2ECC71'},
-  kech:{pwd:'KECH2020',nom:'Leader Marrakech',role:'leader',villes:['MAR'],color:'#E67E22'}
+var USERS = {
+  admin: {pwd:'sentinel2029', nom:'Oussama E.', role:'admin', villes:['CAS','DRB','BSK','RBT','TEM','SAL','AGD','MAR','MOH','LYN'], color:'#E74C3C'},
+  choaib: {pwd:'choaib2002', nom:'Choaib Knari', role:'leader', villes:['CAS','DRB','BSK'], color:'#F39C12'},
+  agd: {pwd:'AGD2026', nom:'Leader Agadir', role:'leader', villes:['AGD'], color:'#3498DB'},
+  rbt: {pwd:'RBT2030', nom:'Leader Rabat', role:'leader', villes:['RBT','TEM','SAL'], color:'#2ECC71'},
+  kech: {pwd:'KECH2020', nom:'Leader Marrakech', role:'leader', villes:['MAR'], color:'#E67E22'}
 };
-var CC={CAS:{bg:'#FEF3C7',tx:'#92400E',bd:'#F59E0B'},DRB:{bg:'#DBEAFE',tx:'#1E40AF',bd:'#3B82F6'},BSK:{bg:'#F3E8FF',tx:'#6B21A8',bd:'#8B5CF6'},RBT:{bg:'#DCFCE7',tx:'#166534',bd:'#10B981'},TEM:{bg:'#E0F2FE',tx:'#0369A1',bd:'#38BDF8'},SAL:{bg:'#FCE7F3',tx:'#BE185D',bd:'#F472B6'},AGD:{bg:'#FFE4E6',tx:'#BE123C',bd:'#F43F5E'},MOH:{bg:'#E0E7FF',tx:'#3730A3',bd:'#6366F1'},LYN:{bg:'#FEF08A',tx:'#854D0E',bd:'#EAB308'},MAR:{bg:'#FFEDD5',tx:'#9A3412',bd:'#F97316'}};
-var CLA={CAS:'🏙 Casablanca',DRB:'🌴 Dar Bouazza',BSK:'🌿 Bouskoura',RBT:'🏛 Rabat',TEM:'🏖 Temara',SAL:'🏰 Salé',AGD:'🌊 Agadir',MOH:'🌸 Mohammadia',LYN:'🐪 Laayoune',MAR:'🐪 Marrakech'};
+
+// CLES V14
+var SK = {AGENTS:'s_ag_v14', ABSENCES:'s_ab_v14', HOTSPOTS:'s_hs_v14', RAPPORTS:'s_rp_v14', PLAN:'s_pl_v14_'};
+var CLOUD = {KEY:'$2a$10$2UAmdVsMhCVntgYL5F/RS.KvbKxaxpDTXSPzAyD/9nhcq4HK3Jyzq', BIN:'69e0bb5e856a6821893dbe64'};
+
+// LA LISTE COMPLÈTE ET EXACTE DES 47 AGENTS FOURNIE PAR VOTRE EXCEL
+var DEFAULT_AGENTS = [
+  {nom:'YASSINE MAGHFOUR',ville:'AGD',email:'ymaghfour28@gmail.com',embauche:'2026-05-06',statut:'Actif'},
+  {nom:'ADOZ AZIZ',ville:'AGD',email:'Azizadoz90@gmail.com',embauche:'2026-05-06',statut:'Actif'},
+  {nom:'Aymane Bouraoua',ville:'MAR',email:'Aymane1996bouraoia1@gmail.com',embauche:'2026-05-11',statut:'Actif'},
+  {nom:'Houssam En-neddam',ville:'MAR',email:'houssamenne@gmail.com',embauche:'2026-05-11',statut:'Actif'},
+  {nom:'Abdelmoughit El Bitar',ville:'MAR',email:'elbitarabdelmoughit@gmail.com',embauche:'2026-05-11',statut:'Actif'},
+  {nom:'Jaouad Elkhabzi',ville:'MAR',email:'jelkhabzi@gmail.com',embauche:'2026-05-11',statut:'Actif'},
+  {nom:'Noureddine Belioute',ville:'MAR',email:'noureddinebelioute6@gmail.com',embauche:'2026-05-11',statut:'Actif'},
+  {nom:'Achraf ElBouzidi',ville:'MAR',email:'achraflbzd@gmail.com',embauche:'2026-05-11',statut:'Actif'},
+  {nom:'Islam Elmardi',ville:'TEM',email:'islamelmardi.1993@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Oussama El Atrach',ville:'TEM',email:'oussamaelat@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Zakariae Benali',ville:'SAL',email:'Zakariaebenaliwork@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Hassan Azgoune',ville:'SAL',email:'hassan.azgoune95@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Charaf Loummihi',ville:'SAL',email:'loummihic@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Ayoub Ben Malek',ville:'SAL',email:'jadalaeayoub@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Ayoub Abssi',ville:'RBT',email:'Ayoubabssi05@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Yahya Rhallab',ville:'RBT',email:'Yahyarhallab00@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Achraf Akhlij',ville:'RBT',email:'Achraf.akhlij2005@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Mourad Cherradi',ville:'RBT',email:'raxmou96@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Aymane Chlifane',ville:'RBT',email:'aymanechlihfane639@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Youssef Derkaoui',ville:'RBT',email:'Altuslabcom@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Abdelaziz Salimi',ville:'CAS',email:'aziz36928@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Ismail Baha',ville:'CAS',email:'ismailbahi68@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Lahcen Elkhodry',ville:'CAS',email:'lhssankhoudri@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Mohamed Albouhaji',ville:'CAS',email:'simobouhaji.123@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Hamza Achoubi',ville:'CAS',email:'hamza.10achoubi@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Ayeman Belgara',ville:'CAS',email:'Aymanbelgara43@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Rajid Annas',ville:'CAS',email:'anoussrajid37@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Hamza Karim',ville:'CAS',email:'fzislamkarim@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Ahmed Habib Eddine',ville:'CAS',email:'Habibeddine.ahmed.1993@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Brahim Lachguer',ville:'CAS',email:'Brahimlachguer28@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Abdelkhalek Nainia',ville:'CAS',email:'Abdou.nainia87@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Reda Lkouhel',ville:'CAS',email:'Redakouhel123@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Oussama Mkiriz',ville:'CAS',email:'oussamamkiriz04@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Kamal Jaghar',ville:'CAS',email:'kamaljaghar0707@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'El Mehdi El Barnoussi',ville:'CAS',email:'elbarnossi.elmehdi93@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Salah Eddine Jalil',ville:'CAS',email:'salahvenom19@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Zakaria Raji',ville:'CAS',email:'zakariaraji2002@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Ayoub Mensour',ville:'CAS',email:'ayoubmans378@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Zakaria Elaissi',ville:'CAS',email:'elaissizakaria72@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Yassine Baddi',ville:'CAS',email:'baddiy700@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Abdelali Toubi',ville:'CAS',email:'Toubiabdelali@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'tiouali ismail',ville:'CAS',email:'ismail.tiouali@gmail.com',embauche:'2026-04-27',statut:'Actif'},
+  {nom:'AHMED HAJJAJ',ville:'CAS',email:'ahmedhajjaj1996@gmail.com',embauche:'2026-04-27',statut:'Actif'},
+  {nom:'Ibrahim ndiaye',ville:'CAS',email:'ibrahimnday0@gmail.com',embauche:'2026-04-27',statut:'Actif'},
+  {nom:'Morad Mourid',ville:'BSK',email:'m.morid1993@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Baidi Abdelbasset',ville:'BSK',email:'Abdelbasstbaidi@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Tarik Hamid',ville:'BSK',email:'hamidtarik995@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Oussama Ouakil',ville:'DRB',email:'oussamaouakil21@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Abdelkrim Sabbane',ville:'DRB',email:'Abdelkrimsabbane@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'El Mahfoud Sabir',ville:'LYN',email:'elmahfoudsabir97@gmail.com',embauche:'',statut:'Actif'},
+  {nom:'Amine HASSANE',ville:'MOH',email:'hassaneamineamine@gmail.com',embauche:'',statut:'Actif'}
+];
+var DEFAULT_HOTSPOTS = [{ville:'CAS',nom:'Maarif (Macdo)',pk:'12:00'},{ville:'MAR',nom:'Gueliz Centre',pk:'13:00'}];
+
+var currentUser=null; var D={}; var weekOffset=0; var gFC='ALL'; var agEditIdx=-1; var emState={};
 var JOURS=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
 
-var SK={AGENTS:'s_ag_v13',HOTSPOTS:'s_hs_v13',ABSENCES:'s_ab_v13',PLAN:'s_pl_v13_',RAPPORTS:'s_rp_v13'};
-
-var currentUser=null; var D={}; var weekOffset=0; var gFC='ALL'; var gFP='ALL'; var gFV='s'; var agEditIdx=-1; var emState={};
-
-// ══ DATA: LES 51 AGENTS OFFICIELS + NOUVEAUX MARRAKECH ══
-var DEFAULT_AGENTS=[
-  {nom:'YASSINE MAGHFOUR',ville:'AGD',zone:'Agadir',email:'ymaghfour28@gmail.com',embauche:'2026-05-06',statut:'Actif'},
-  {nom:'ADOZ AZIZ',ville:'AGD',zone:'Agadir',email:'Azizadoz90@gmail.com',embauche:'2026-05-06',statut:'Actif'},
-  {nom:'Aymane Bouraoua',ville:'MAR',zone:'Marrakech',email:'Aymane1996bouraoia1@gmail.com',embauche:'2026-05-11',statut:'Actif'},
-  {nom:'Houssam En-neddam',ville:'MAR',zone:'Marrakech',email:'houssamenne@gmail.com',embauche:'2026-05-11',statut:'Actif'},
-  {nom:'Abdelmoughit El Bitar',ville:'MAR',zone:'Marrakech',email:'elbitarabdelmoughit@gmail.com',embauche:'2026-05-11',statut:'Actif'},
-  {nom:'Jaouad Elkhabzi',ville:'MAR',zone:'Marrakech',email:'jelkhabzi@gmail.com',embauche:'2026-05-11',statut:'Actif'},
-  {nom:'Noureddine Belioute',ville:'MAR',zone:'Marrakech',email:'noureddinebelioute6@gmail.com',embauche:'2026-05-11',statut:'Actif'},
-  {nom:'Achraf ElBouzidi',ville:'MAR',zone:'Marrakech',email:'achraflbzd@gmail.com',embauche:'2026-05-11',statut:'Actif'},
-  {nom:'Morad Mourid',ville:'BSK',zone:'Bouskoura',email:'m.morid1993@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Baidi Abdelbasset',ville:'BSK',zone:'Bouskoura',email:'Abdelbasstbaidi@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Tarik Hamid',ville:'BSK',zone:'Bouskoura',email:'hamidtarik995@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Islam Elmardi',ville:'TEM',zone:'Temara',email:'islamelmardi.1993@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Oussama El Atrach',ville:'TEM',zone:'Temara',email:'oussamaelat@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Zakariae Benali',ville:'SAL',zone:'Salé',email:'Zakariaebenaliwork@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Hassan Azgoune',ville:'SAL',zone:'Salé',email:'hassan.azgoune95@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Charaf Loummihi',ville:'SAL',zone:'Salé',email:'loummihic@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Ayoub Ben Malek',ville:'SAL',zone:'Salé',email:'jadalaeayoub@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Ayoub Abssi',ville:'RBT',zone:'Rabat',email:'Ayoubabssi05@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Yahya Rhallab',ville:'RBT',zone:'Rabat',email:'Yahyarhallab00@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Achraf Akhlij',ville:'RBT',zone:'Rabat',email:'Achraf.akhlij2005@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Mourad Cherradi',ville:'RBT',zone:'Rabat',email:'raxmou96@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Aymane Chlifane',ville:'RBT',zone:'Rabat',email:'aymanechlihfane639@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Youssef Derkaoui',ville:'RBT',zone:'Rabat',email:'Altuslabcom@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Abdelaziz Salimi',ville:'CAS',zone:'Casablanca',email:'aziz36928@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Ismail Baha',ville:'CAS',zone:'Casablanca',email:'ismailbahi68@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Lahcen Elkhodry',ville:'CAS',zone:'Casablanca',email:'lhssankhoudri@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Mohamed Albouhaji',ville:'CAS',zone:'Casablanca',email:'simobouhaji.123@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Hamza Achoubi',ville:'CAS',zone:'Casablanca',email:'hamza.10achoubi@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Ayeman Belgara',ville:'CAS',zone:'Casablanca',email:'Aymanbelgara43@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Rajid Annas',ville:'CAS',zone:'Casablanca',email:'anoussrajid37@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Hamza Karim',ville:'CAS',zone:'Casablanca',email:'fzislamkarim@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Ahmed Habib Eddine',ville:'CAS',zone:'Casablanca',email:'Habibeddine.ahmed.1993@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Brahim Lachguer',ville:'CAS',zone:'Casablanca',email:'Brahimlachguer28@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Abdelkhalek Nainia',ville:'CAS',zone:'Casablanca',email:'Abdou.nainia87@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Reda Lkouhel',ville:'CAS',zone:'Casablanca',email:'Redakouhel123@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Oussama Mkiriz',ville:'CAS',zone:'Casablanca',email:'oussamamkiriz04@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Kamal Jaghar',ville:'CAS',zone:'Casablanca',email:'kamaljaghar0707@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'El Mehdi El Barnoussi',ville:'CAS',zone:'Casablanca',email:'elbarnossi.elmehdi93@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Salah Eddine Jalil',ville:'CAS',zone:'Casablanca',email:'salahvenom19@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Zakaria Raji',ville:'CAS',zone:'Casablanca',email:'zakariaraji2002@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Ayoub Mensour',ville:'CAS',zone:'Casablanca',email:'ayoubmans378@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Zakaria Elaissi',ville:'CAS',zone:'Casablanca',email:'elaissizakaria72@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Yassine Baddi',ville:'CAS',zone:'Casablanca',email:'baddiy700@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Abdelali Toubi',ville:'CAS',zone:'Casablanca',email:'Toubiabdelali@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'tiouali ismail',ville:'CAS',zone:'Casablanca',email:'ismail.tiouali@gmail.com',embauche:'2026-04-27',statut:'Actif'},
-  {nom:'AHMED HAJJAJ',ville:'CAS',zone:'Casablanca',email:'ahmedhajjaj1996@gmail.com',embauche:'2026-04-27',statut:'Actif'},
-  {nom:'Ibrahim ndiaye',ville:'CAS',zone:'Casablanca',email:'ibrahimnday0@gmail.com',embauche:'2026-04-27',statut:'Actif'},
-  {nom:'Oussama Ouakil',ville:'DRB',zone:'Dar bouazza',email:'oussamaouakil21@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Abdelkrim Sabbane',ville:'DRB',zone:'Dar bouazza',email:'Abdelkrimsabbane@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'El Mahfoud Sabir',ville:'LYN',zone:'Laayoun',email:'elmahfoudsabir97@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Abdeladim rokki',ville:'MOH',zone:'Mohammadia',email:'rokkiabdeladim7@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Mohammed Naenai',ville:'MOH',zone:'Mohammadia',email:'simonaenai435@gmail.com',embauche:'',statut:'Actif'},
-  {nom:'Amine HASSANE',ville:'MOH',zone:'Mohammadia',email:'hassaneamineamine@gmail.com',embauche:'',statut:'Actif'}
-];
-var DEFAULT_HOTSPOTS=[{ville:'CAS',nom:'Maarif (Macdo)',pk:'12:00'},{ville:'RBT',nom:'Agdal Centre',pk:'13:00'},{ville:'MAR',nom:'Gueliz Centre',pk:'13:00'}];
-
-// ══ CLOUD SYNC INVISIBLE ══
-var CLOUD={ ENABLED:true, KEY:'$2a$10$2UAmdVsMhCVntgYL5F/RS.KvbKxaxpDTXSPzAyD/9nhcq4HK3Jyzq', BIN_DATA:'69e0bb5e856a6821893dbe64', BIN_LOGS:'69e0bb8eaaba88219705fa6c', BASE_URL:'https://api.jsonbin.io/v3/b'};
-
-function cloudPull(cb){
-  Promise.all([
-    fetch(CLOUD.BASE_URL+'/'+CLOUD.BIN_DATA+'/latest',{headers:{'X-Master-Key':CLOUD.KEY,'X-Bin-Meta':'false'}}).then(r=>r.json()).catch(()=>({})),
-    fetch(CLOUD.BASE_URL+'/'+CLOUD.BIN_LOGS+'/latest',{headers:{'X-Master-Key':CLOUD.KEY,'X-Bin-Meta':'false'}}).then(r=>r.json()).catch(()=>({}))
-  ]).then(res=>{
-    var d=res[0], l=res[1];
-    if(d.agents && d.agents.length>0) localStorage.setItem(SK.AGENTS, JSON.stringify(d.agents));
-    if(d.hotspots) localStorage.setItem(SK.HOTSPOTS, JSON.stringify(d.hotspots));
-    if(d.absences) localStorage.setItem(SK.ABSENCES, JSON.stringify(d.absences));
-    if(d.planKey && d.planData) localStorage.setItem(d.planKey, JSON.stringify(d.planData));
-    if(l.rapports) localStorage.setItem(SK.RAPPORTS, JSON.stringify(l.rapports));
-    if(cb) cb();
-  }).catch(()=>{if(cb)cb();});
-}
-
-function cloudPushData(){
-  var lundi=getLundi(weekOffset+1); var pk = SK.PLAN+numSem(lundi)+'_'+lundi.getFullYear();
-  var payload = {agents: getAgents(), hotspots: getHotspots(), absences: getAbsences(), planKey: pk, planData: JSON.parse(localStorage.getItem(pk)||'null')};
-  fetch(CLOUD.BASE_URL+'/'+CLOUD.BIN_DATA,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':CLOUD.KEY},body:JSON.stringify(payload)}).catch(()=>{});
-}
-function cloudPushLogs(){
-  fetch(CLOUD.BASE_URL+'/'+CLOUD.BIN_LOGS,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':CLOUD.KEY},body:JSON.stringify({rapports: getRapports()})}).catch(()=>{});
-}
-
-function hardResetDatabase(){
-  if(confirm("⚠️ ATTENTION: Ceci va écraser le cloud et recharger les 51 agents de base. Continuer ?")){
-    localStorage.clear(); 
-    saveAgents(DEFAULT_AGENTS); saveHotspots(DEFAULT_HOTSPOTS); saveAbsences([]); 
-    cloudPushLogs(); cloudPushData();
-    toast('Base de données réparée !','ok'); setTimeout(()=>location.reload(), 1500);
-  }
-}
-
-// UTILS
+// UTILITIES
 function ini(n){return n?n.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase():'?';}
 function mad(n){return Number(n).toLocaleString('fr-MA')+' MAD';}
-function calcH(s){if(!s||['OFF','ABSENT','CONGE','MALADIE','—'].includes(s.toUpperCase()))return 0;var r=s.split('-');if(r.length<2)return 0;var t=x=>{var p=x.split(':');return parseInt(p[0])*60+parseInt(p[1]);};var d=t(r[1])-t(r[0]);if(d<0)d+=1440;return Math.round(d/6)/10;}
-function sClass(s){if(!s||s==='OFF'||s==='—')return 'so';if(['ABSENT','CONGE','MALADIE'].includes(s))return 'sa';return 'sm';}
+function fmtD(d){return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();}
 function getLundi(off){var t=new Date(),d=t.getDay();var df=d===1?0:d===0?-6:1-d;var l=new Date(t);l.setDate(t.getDate()+df+(off||0)*7);l.setHours(0,0,0,0);return l;}
 function numSem(dt){var s=new Date(dt.getFullYear(),0,1);return Math.ceil(((dt-s)/86400000+s.getDay()+1)/7);}
-function fmtD(d){return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();}
+function calcH(s){if(!s||['OFF','ABSENT','CONGE','MALADIE','—'].includes(s.toUpperCase()))return 0;var r=s.split('-');if(r.length<2)return 0;var t=x=>{var p=x.split(':');return parseInt(p[0])*60+parseInt(p[1]);};var d=t(r[1])-t(r[0]);if(d<0)d+=1440;return Math.round(d/6)/10;}
+function sClass(s){if(!s||s==='OFF'||s==='—')return 'so';if(['ABSENT','CONGE','MALADIE'].includes(s))return 'sa';return 'sm';}
+function toast(m){var e=document.createElement('div');e.className='toast';e.textContent='✅ '+m;document.getElementById('toastWrap').appendChild(e);setTimeout(()=>e.remove(),3000);}
 
-function toast(msg,type){
-  var el=document.createElement('div');el.className='toast '+(type||'ok');el.innerHTML=(type==='ok'?'✅ ':'❌ ')+msg;
-  document.getElementById('toastWrap').appendChild(el);
-  setTimeout(()=>{el.style.animation='tout .3s ease forwards';setTimeout(()=>el.remove(),300);},3000);
-}
-
-// STORAGE GETTERS
-function getAgents(){var a=localStorage.getItem(SK.AGENTS);return a?JSON.parse(a):DEFAULT_AGENTS;}
-function saveAgents(ag){localStorage.setItem(SK.AGENTS,JSON.stringify(ag)); cloudPushData(); }
-function getHotspots(){var a=localStorage.getItem(SK.HOTSPOTS);return a?JSON.parse(a):DEFAULT_HOTSPOTS;}
-function saveHotspots(hs){localStorage.setItem(SK.HOTSPOTS,JSON.stringify(hs)); cloudPushData();}
-function getAbsences(){var a=localStorage.getItem(SK.ABSENCES);return a?JSON.parse(a):[];}
-function saveAbsences(ab){localStorage.setItem(SK.ABSENCES,JSON.stringify(ab)); cloudPushData(); }
-function getRapports(){var a=localStorage.getItem(SK.RAPPORTS);return a?JSON.parse(a):[];}
-
-// ── ALGORITHME 44H STRICT ──
-function genPlanning(agents, wOff){
-  var lundi=getLundi((wOff||0)+1); var wn=numSem(lundi);
-  var dates=[]; for(var i=0;i<7;i++){var d=new Date(lundi);d.setDate(lundi.getDate()+i);dates.push(fmtD(d));}
-  
-  var actifs=agents.filter(a=>a.statut==='Actif');
-  var cityCounts = {};
-  
-  var planning=actifs.map((ag)=>{
-    if(cityCounts[ag.ville] === undefined) cityCounts[ag.ville] = 0;
-    var c_idx = cityCounts[ag.ville]++;
-    
-    var offDay = [0,1,2,3][(c_idx + wn) % 4];
-    var isMorning = ((c_idx + wn) % 2) === 0;
-
-    var p7, p8;
-    if(isMorning) {
-        p7 = ['09:00-16:00', '10:00-17:00', '11:00-18:00']; p8 = ['09:00-17:00', '10:00-18:00'];
+// CLOUD SYNC
+function cloudSync(push){
+    if(!push){
+        fetch(`https://api.jsonbin.io/v3/b/${CLOUD.BIN}/latest`,{headers:{'X-Master-Key':CLOUD.KEY,'X-Bin-Meta':'false'}})
+        .then(r=>r.json()).then(d=>{
+            if(d.agents && d.agents.length>0) localStorage.setItem(SK.AGENTS, JSON.stringify(d.agents));
+            if(d.abs) localStorage.setItem(SK.ABSENCES, JSON.stringify(d.abs));
+            if(d.hs) localStorage.setItem(SK.HOTSPOTS, JSON.stringify(d.hs));
+            if(d.rap) localStorage.setItem(SK.RAPPORTS, JSON.stringify(d.rap));
+            if(d.pk && d.pd) localStorage.setItem(d.pk, JSON.stringify(d.pd));
+            loadData(weekOffset);
+        }).catch(()=>{});
     } else {
-        p7 = ['17:00-00:00', '18:00-01:00', '19:00-02:00']; p8 = ['17:00-01:00', '18:00-02:00'];
+        var pk = SK.PLAN+numSem(getLundi(weekOffset+1))+'_'+getLundi(weekOffset+1).getFullYear();
+        var payload = { agents: JSON.parse(localStorage.getItem(SK.AGENTS)||'[]'), abs: JSON.parse(localStorage.getItem(SK.ABSENCES)||'[]'), hs: JSON.parse(localStorage.getItem(SK.HOTSPOTS)||'[]'), rap: JSON.parse(localStorage.getItem(SK.RAPPORTS)||'[]'), pk: pk, pd: JSON.parse(localStorage.getItem(pk)||'null') };
+        fetch(`https://api.jsonbin.io/v3/b/${CLOUD.BIN}`,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':CLOUD.KEY},body:JSON.stringify(payload)}).catch(()=>{});
     }
-
-    var template = [7, 7, 7, 7, 8, 8].sort(()=> 0.5 - Math.random());
-    var shifts = Array(7).fill(null); var tIdx = 0;
-    for(var d=0;d<7;d++){
-        if(d===offDay){ shifts[d]='OFF'; continue; }
-        shifts[d] = (template[tIdx++] === 7) ? p7[(d + c_idx) % p7.length] : p8[(d + c_idx) % p8.length];
+}
+function hardResetDatabase(){
+    if(confirm("ATTENTION: Vider la mémoire et forcer le rechargement de vos 47 agents de base ?")){
+        localStorage.clear();
+        localStorage.setItem(SK.AGENTS, JSON.stringify(DEFAULT_AGENTS));
+        localStorage.setItem(SK.HOTSPOTS, JSON.stringify(DEFAULT_HOTSPOTS));
+        cloudSync(true);
+        toast('Base restaurée avec succès'); setTimeout(()=>location.reload(),1000);
     }
-    return {nom:ag.nom, ville:ag.ville, zone:ag.zone, shifts:shifts, hotspots:Array(7).fill(''), totalH:shifts.reduce((acc,s)=>acc+calcH(s),0)};
-  });
-  return {planning:planning, dates:dates, wn:wn};
 }
 
-// ── SESSION MANAGEMENT ──
+// SESSION & LOGIN
 document.addEventListener('DOMContentLoaded', function(){
-    initLogin();
-    var sessionKey = sessionStorage.getItem('sentinel_session');
-    if(sessionKey && USERS[sessionKey]) {
-        document.getElementById('selUser').value = sessionKey;
-        document.getElementById('loginPwd').value = USERS[sessionKey].pwd;
-        doLogin(true);
-    }
+    document.getElementById('loginUsers').innerHTML=Object.keys(USERS).map(k=>`<div class="login-user" onclick="selUser('${k}')" id="lu-${k}"><div class="login-user-av" style="background:${USERS[k].color}">${ini(USERS[k].nom)}</div><div class="login-user-nm">${USERS[k].nom.split(' ')[0]}</div><div style="font-size:9px;color:var(--tx3)">${USERS[k].role==='admin'?'Admin':'Leader'}</div></div>`).join('');
+    var s=sessionStorage.getItem('sentinel_session'); if(s && USERS[s]){ selUser(s); document.getElementById('loginPwd').value=USERS[s].pwd; doLogin(); }
 });
-
-function initLogin(){
-  document.getElementById('loginUsers').innerHTML=Object.keys(USERS).map(k=>`<div class="login-user" onclick="selUser('${k}')" id="lu-${k}"><div class="u-av" style="background:${USERS[k].color}">${ini(USERS[k].nom)}</div><div class="u-nm">${USERS[k].nom.split(' ')[0]}</div><div class="u-role">${USERS[k].role==='admin'?'Admin':'Leader'}</div></div>`).join('');
-}
-function selUser(k){document.querySelectorAll('.login-user').forEach(el=>el.classList.remove('sel'));document.getElementById('lu-'+k).classList.add('sel');document.getElementById('selUser').value=k;document.getElementById('loginPwd').focus();}
-
-function doLogin(isAuto){
-  var k=document.getElementById('selUser').value, p=document.getElementById('loginPwd').value;
-  if(!k||USERS[k].pwd!==p){document.getElementById('loginErr').textContent='Accès refusé. Mot de passe invalide.';return;}
-  currentUser={key:k, ...USERS[k]};
-  sessionStorage.setItem('sentinel_session', k); 
-  
-  document.getElementById('loginScreen').style.display='none'; document.getElementById('app').style.display='flex';
-  document.getElementById('userAv').style.background=currentUser.color; document.getElementById('userAv').textContent=ini(currentUser.nom); document.getElementById('userName').textContent=currentUser.nom;
-  
-  buildNav();
-  cloudPull(()=>{ loadData(0); setInterval(()=>{cloudPull(()=>{loadData(weekOffset, true);});}, 15000); }); 
+function selUser(k){document.querySelectorAll('.login-user').forEach(e=>e.classList.remove('sel'));document.getElementById('lu-'+k).classList.add('sel');document.getElementById('selUser').value=k;document.getElementById('loginPwd').focus();}
+function doLogin(){
+    var k=document.getElementById('selUser').value, p=document.getElementById('loginPwd').value;
+    if(!k||USERS[k].pwd!==p){document.getElementById('loginErr').textContent="Mot de passe incorrect.";return;}
+    currentUser={key:k,...USERS[k]}; sessionStorage.setItem('sentinel_session',k);
+    document.getElementById('loginScreen').style.display='none';document.getElementById('app').style.display='flex';
+    document.getElementById('userName').textContent=currentUser.nom;document.getElementById('userAv').textContent=ini(currentUser.nom);document.getElementById('userAv').style.background=currentUser.color;
+    buildNav(); cloudSync(false); setInterval(()=>cloudSync(false), 20000); // Auto pull 20s
 }
 function doLogout(){sessionStorage.removeItem('sentinel_session');location.reload();}
 
 function buildNav(){
-  var links=[{id:'ov',ic:'📊',label:'Dashboard',all:true},{id:'pl',ic:'📅',label:'Planning',all:true},{id:'ag',ic:'👥',label:'Agents',admin:true},{id:'hs',ic:'📍',label:'Hotspots',admin:true},{id:'ab',ic:'🚨',label:'Absences',all:true},{id:'py',ic:'💰',label:'Paie RH',admin:true},{id:'rp',ic:'📋',label:'Rapports',all:true}];
-  document.getElementById('navLinks').innerHTML=links.filter(l=>l.all||(l.admin&&currentUser.role==='admin')).map(l=>`<div class="ni" onclick="goPage('${l.id}',this)" id="ni-${l.id}"><span class="ni-ic">${l.ic}</span><span>${l.label}</span></div>`).join('');
-  document.getElementById('ni-ov').classList.add('active');
-  
-  if(currentUser.role==='admin'){
-    document.getElementById('cloud-config-card').style.display='block';
-  }
+    var l=[{id:'ov',ic:'📊',la:'Dashboard'},{id:'pl',ic:'📅',la:'Planning'},{id:'py',ic:'💰',la:'Paie RH',ad:1},{id:'ag',ic:'👥',la:'Agents'},{id:'ab',ic:'🚨',la:'Absences'},{id:'hs',ic:'📍',la:'Hotspots'},{id:'rp',ic:'📋',la:'Rapports'}];
+    document.getElementById('navLinks').innerHTML=l.filter(x=>!x.ad||currentUser.role==='admin').map(x=>`<div class="ni" onclick="goPage('${x.id}',this)" id="ni-${x.id}"><span class="ni-ic">${x.ic}</span><span>${x.la}</span></div>`).join('');
+    document.getElementById('ni-ov').classList.add('active');
+    if(currentUser.role==='admin') document.getElementById('cloud-config-card').style.display='block';
 }
 function goPage(id,btn){document.querySelectorAll('.pg, .ni').forEach(e=>e.classList.remove('active'));document.getElementById('pg-'+id).classList.add('active');if(btn)btn.classList.add('active');}
 
-function loadData(off, silent){
-  if(off!==undefined) weekOffset=off;
-  var agents=getAgents() || []; var absences=getAbsences() || []; var hotspots=getHotspots() || [];
-  
-  var lundi=getLundi(weekOffset+1); var pk=SK.PLAN+numSem(lundi)+'_'+lundi.getFullYear();
-  var pData = JSON.parse(localStorage.getItem(pk));
-  
-  var allActifs = agents.filter(a => a.statut === 'Actif');
-  if(!pData || pData.planning.length !== allActifs.length) { 
-      pData=genPlanning(agents, weekOffset); 
-      localStorage.setItem(pk,JSON.stringify(pData)); 
-      if(!silent)cloudPushData();
-  }
-  
-  D.allAgents=agents; 
-  D.agents=allActifs.filter(a=>currentUser.villes.includes(a.ville));
-  D.planning=pData.planning.filter(p=>currentUser.villes.includes(p.ville));
-  D.absences=absences; D.hotspots=hotspots; D.meta={dates:pData.dates, weekNum:pData.wn}; D.planKey=pk;
-  
-  // Injection Absences & Date Embauche Logic
-  D.planning.forEach(p=>{
-    var agData = agents.find(a=>a.nom===p.nom);
-    for(var d=0;d<7;d++){ 
-        var dtStr = D.meta.dates[d].split('/').reverse().join('-');
-        if(agData && agData.embauche && dtStr < agData.embauche) { p.shifts[d] = '—'; } // Agent pas encore embauché ce jour-là
-        
-        var ab=absences.find(a=>a.nom===p.nom&&a.date===D.meta.dates[d]); 
-        if(ab) p.shifts[d]=ab.type; 
-    }
-    p.totalH=p.shifts.reduce((acc,s)=>acc+calcH(s),0);
-  });
-  
-  var sag=document.getElementById('f-ag'); if(sag)sag.innerHTML=D.agents.map(a=>`<option value="${a.nom}">${a.nom}</option>`).join('');
-  rOv(); rPlanning(); rAgents(); rHs(); rAbs(); rPay();
-}
-function regenererPlanning(){localStorage.removeItem(D.planKey); loadData(weekOffset); toast('Planning regénéré (44H Strict)','ok');}
-
-// ── RENDER ──
-function rOv(){
-  var ti=new Date().getDay(); ti=ti===0?6:ti-1;
-  document.getElementById('ov-date').textContent=new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
-  document.getElementById('k-tot').textContent=D.agents.length; document.getElementById('k-abs').textContent=D.absences.length;
-  var act=D.planning.filter(p=>!['OFF','ABSENT','CONGE','MALADIE','—'].includes(p.shifts[ti]));
-  document.getElementById('k-act').textContent=act.length;
-  var h44 = D.planning.filter(p=>p.totalH===44).length;
-  document.getElementById('k-44').textContent=D.planning.length ? Math.round((h44/D.planning.length)*100)+'%' : '—';
-  
-  document.getElementById('ov-day').innerHTML=act.filter(p=>parseInt(p.shifts[ti].split(':')[0])<16).map(p=>`<div class="sr"><div class="av av-sm" style="background:${CC[p.ville]?.bg||'#eee'};color:${CC[p.ville]?.tx||'#000'}">${ini(p.nom)}</div><div class="sr-info"><div class="sr-nm">${p.nom}</div></div><span class="pill sm">${p.shifts[ti]}</span></div>`).join('');
-  document.getElementById('ov-ngt').innerHTML=act.filter(p=>parseInt(p.shifts[ti].split(':')[0])>=16).map(p=>`<div class="sr"><div class="av av-sm" style="background:${CC[p.ville]?.bg||'#eee'};color:${CC[p.ville]?.tx||'#000'}">${ini(p.nom)}</div><div class="sr-info"><div class="sr-nm">${p.nom}</div></div><span class="pill sn">${p.shifts[ti]}</span></div>`).join('');
-  document.getElementById('ov-zones').innerHTML = currentUser.villes.map(v=>`<div class="zc"><div style="font-size:12px;font-weight:700;color: ${CC[v]?.tx||'#000'}">${CLA[v]||v}</div><div style="font-size:28px;font-weight:900;color:${CC[v]?.tx||'#000'}">${D.agents.filter(a=>a.ville===v).length}</div></div>`).join('');
+// CORE DATA
+function loadData(off){
+    weekOffset=off; 
+    var agents=JSON.parse(localStorage.getItem(SK.AGENTS)||JSON.stringify(DEFAULT_AGENTS));
+    var abs=JSON.parse(localStorage.getItem(SK.ABSENCES)||'[]');
+    var hs=JSON.parse(localStorage.getItem(SK.HOTSPOTS)||JSON.stringify(DEFAULT_HOTSPOTS));
+    
+    var lundi=getLundi(off+1); var pk=SK.PLAN+numSem(lundi)+'_'+lundi.getFullYear();
+    var pData=JSON.parse(localStorage.getItem(pk));
+    
+    var allActifs=agents.filter(a=>a.statut==='Actif');
+    if(!pData || pData.planning.length !== allActifs.length){ pData=genPlanning(agents,off); localStorage.setItem(pk,JSON.stringify(pData)); cloudSync(true); }
+    
+    D={all:agents, actifs:allActifs.filter(a=>currentUser.villes.includes(a.ville)), abs:abs, hs:hs, plan:pData.planning.filter(p=>currentUser.villes.includes(p.ville)), meta:{dates:pData.dates,wn:pData.wn}, pk:pk};
+    
+    D.plan.forEach(p=>{
+        var agD=agents.find(a=>a.nom===p.nom);
+        for(var d=0;d<7;d++){
+            var dtStr=D.meta.dates[d].split('/').reverse().join('-');
+            if(agD && agD.embauche && dtStr < agD.embauche) p.shifts[d]='—'; // Date embauche respectée
+            var a=abs.find(x=>x.nom===p.nom&&x.date===D.meta.dates[d]); if(a)p.shifts[d]=a.type;
+        }
+        p.totalH=p.shifts.reduce((acc,s)=>acc+calcH(s),0);
+    });
+    renderUI();
 }
 
-function chgW(dir){weekOffset+=dir; loadData(weekOffset);}
-function fC(v,btn){gFC=v; document.querySelectorAll('#plft .ft').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); rPlanning();}
-function fV(v,btn){gFV=v; ['vs','vh'].forEach(id=>document.getElementById(id).classList.remove('active')); btn.classList.add('active'); rPlanning();}
-
-function rPlanning(){
-  var plan=gFC==='ALL'?D.planning:D.planning.filter(p=>p.ville===gFC);
-  document.getElementById('pl-ttl').textContent='Planning Semaine W'+D.meta.weekNum;
-  var html=`<thead><tr><th>Agent</th><th>Ville</th>${JOURS.map((j,i)=>`<th>${j}<br><span style="font-size:9px;color:#94A3B8;font-weight:normal">${D.meta.dates[i]}</span></th>`).join('')}<th>TOTAL</th></tr></thead><tbody>`;
-  plan.forEach(p=>{
-    var is44 = p.totalH===44;
-    var bg = CC[p.ville]?.bg || '#eee', tx = CC[p.ville]?.tx || '#000';
-    html+=`<tr><td><div style="display:flex;align-items:center;gap:10px"><div class="av av-sm" style="background:${bg};color:${tx}">${ini(p.nom)}</div><div style="font-weight:700">${p.nom}</div></div></td>
-    <td><span class="pill" style="background:${bg};color:${tx}">${p.ville}</span></td>
-    ${p.shifts.map((s,i)=>{
-        var hs = (p.hotspots && p.hotspots[i])||''; var showHs = gFV==='h' && hs;
-        return `<td class="ecell" onclick="openModal('${p.nom}',${i},'${s}','${hs}')"><span class="pill ${sClass(s)}">${s}</span>${showHs?`<span class="hs-b">📍 ${hs}</span>`:''}<span class="e-ic">✏</span></td>`;
-    }).join('')}
-    <td style="background:${is44?'transparent':'#fee2e2'}"><span class="${is44?'h-ok':'h-er'}">${p.totalH}h</span></td></tr>`;
-  });
-  document.getElementById('pl-tbl').innerHTML=html+'</tbody>';
+// 44H ALGORITHM
+function genPlanning(agents,off){
+    var lundi=getLundi(off+1), dates=[], wn=numSem(lundi);
+    for(var i=0;i<7;i++){var d=new Date(lundi);d.setDate(lundi.getDate()+i);dates.push(fmtD(d));}
+    var cityIdx={};
+    var planning=agents.filter(a=>a.statut==='Actif').map((ag)=>{
+        if(cityIdx[ag.ville]===undefined) cityIdx[ag.ville]=0; var c=cityIdx[ag.ville]++;
+        var offDay=[0,1,2,3][(c+wn)%4], isMorning=((c+wn)%2)===0;
+        var p7=isMorning?['09:00-16:00','10:00-17:00']:['17:00-00:00','18:00-01:00'], p8=isMorning?['09:00-17:00','10:00-18:00']:['18:00-02:00','19:00-03:00'];
+        var template=[7,7,7,7,8,8].sort(()=>0.5-Math.random());
+        var shifts=Array(7).fill(null), tIdx=0;
+        for(var d=0;d<7;d++){if(d===offDay){shifts[d]='OFF';continue;} shifts[d]=(template[tIdx++]==7?p7:p8)[(d+c)%2];}
+        return {nom:ag.nom,ville:ag.ville,shifts:shifts};
+    });
+    return {planning:planning,dates:dates,wn:wn};
 }
+
+// RENDER ALL
+function renderUI(){
+    var ti=new Date().getDay(); ti=ti===0?6:ti-1;
+    document.getElementById('ov-date').textContent=new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
+    document.getElementById('ov-kpi').innerHTML=`<div class="kpi"><div class="kpi-top" style="background:var(--y)"></div><div class="kpi-lbl">Agents Actifs</div><div class="kpi-val" style="color:var(--y-dk)">${D.actifs.length}</div></div><div class="kpi"><div class="kpi-top" style="background:var(--g)"></div><div class="kpi-lbl">Présents Aujourd'hui</div><div class="kpi-val" style="color:var(--g)">${D.plan.filter(p=>!['OFF','ABSENT','—'].includes(p.shifts[ti])).length}</div></div><div class="kpi"><div class="kpi-top" style="background:var(--r)"></div><div class="kpi-lbl">Absences</div><div class="kpi-val" style="color:var(--r)">${D.abs.length}</div></div>`;
+    
+    document.getElementById('pl-ttl').textContent='Semaine W'+D.meta.wn;
+    var plHtml=`<thead><tr><th>Agent</th><th>Ville</th>${JOURS.map((j,i)=>`<th>${j}<br><small style="color:var(--tx3);font-weight:normal">${D.meta.dates[i]}</small></th>`).join('')}<th>TOTAL</th></tr></thead><tbody>`;
+    var curPlan = gFC==='ALL'?D.plan:D.plan.filter(p=>p.ville===gFC);
+    curPlan.forEach(p=>{
+        plHtml+=`<tr><td>${p.nom}</td><td><span class="pill" style="background:var(--bg);border:1px solid var(--bd)">${p.ville}</span></td>${p.shifts.map((s,i)=>{
+            var hs=(p.hotspots&&p.hotspots[i])||''; var isOff=['OFF','ABSENT','CONGE','MALADIE','—'].includes(s);
+            return `<td class="ecell" onclick="openModal('${p.nom}',${i},'${s}','${hs}')"><span class="pill ${sClass(s)}">${s}</span>${hs&&!isOff?`<span class="hs-b">📍 ${hs}</span>`:''}</td>`;
+        }).join('')}<td><span class="${p.totalH==44?'pill sm':'pill sa'}">${p.totalH}h</span></td></tr>`;
+    });
+    document.getElementById('pl-tbl').innerHTML=plHtml+'</tbody>';
+
+    renderPaie();
+    renderAgents();
+    document.getElementById('f-ag').innerHTML=D.actifs.map(a=>`<option value="${a.nom}">${a.nom}</option>`).join('');
+    document.getElementById('abs-list').innerHTML=D.abs.slice(-10).reverse().map(a=>`<div class="pay-row"><div style="font-weight:700">${a.nom}</div><div>${a.date}</div><div><span class="pill sa">${a.type}</span></div><div style="grid-column: span 2; color:var(--tx3)">${a.motif||'-'}</div></div>`).join('');
+    document.getElementById('hs-list').innerHTML=D.hs.filter(h=>currentUser.villes.includes(h.ville)).map((h,i)=>`<div class="pay-row"><div style="font-weight:700">${h.nom}</div><div><span class="pill">${h.ville}</span></div><div>⏱ ${h.pk}</div><div style="grid-column: span 2; text-align:right"><button class="btn btn-gh btn-sm" onclick="delHs(${i})">Supprimer</button></div></div>`).join('');
+    initPaieMois();
+}
+
+function chgW(d){loadData(weekOffset+d);}
+function fC(v,btn){gFC=v;document.querySelectorAll('#plft .btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');rPlanning();}
+function regenererPlanning(){localStorage.removeItem(D.pk);loadData(weekOffset);toast('Planning recalculé (Strict 44H)');}
 
 function openModal(nom,idx,shift,hs){
-  emState={nom:nom,idx:idx}; document.getElementById('em-agent').textContent=nom + ' - ' + JOURS[idx];
-  var pool=['OFF','ABSENT','CONGE','MALADIE','09:00-16:00','09:00-17:00','10:00-17:00','10:00-18:00','11:00-18:00','11:00-19:00','15:00-23:00','16:00-23:00','16:00-00:00','17:00-00:00','17:00-01:00','18:00-01:00','18:00-02:00','19:00-02:00','19:00-03:00','20:00-03:00'];
-  document.getElementById('em-shift').innerHTML=pool.map(s=>`<option value="${s}" ${s===shift?'selected':''}>${s}</option>`).join('');
-  
-  var agentData = D.agents.find(a=>a.nom===nom);
-  var hsPool = D.hotspots.filter(h=>h.ville===(agentData?agentData.ville:'CAS'));
-  var hsSelect = document.getElementById('em-hs');
-  if(hsSelect && document.getElementById('hs-div-edit')){
-      document.getElementById('hs-div-edit').style.display='flex';
-      hsSelect.innerHTML=`<option value="">— Sans Hotspot —</option>` + hsPool.map(h=>`<option value="${h.nom}" ${h.nom===hs?'selected':''}>${h.nom}</option>`).join('');
-  }
-  document.getElementById('editOverlay').classList.add('show');
+    emState={nom:nom,idx:idx};
+    var pool=['OFF','ABSENT','CONGE','MALADIE','09:00-16:00','09:00-17:00','10:00-17:00','10:00-18:00','11:00-18:00','11:00-19:00','15:00-23:00','16:00-23:00','16:00-00:00','17:00-00:00','17:00-01:00','18:00-01:00','18:00-02:00','19:00-02:00','19:00-03:00','20:00-03:00'];
+    document.getElementById('em-shift').innerHTML=pool.map(s=>`<option value="${s}" ${s===shift?'selected':''}>${s}</option>`).join('');
+    var ag=D.all.find(a=>a.nom===nom); var hsPool=D.hs.filter(h=>h.ville===ag.ville);
+    document.getElementById('em-hs').innerHTML=`<option value="">— Sans Hotspot —</option>`+hsPool.map(h=>`<option value="${h.nom}" ${h.nom===hs?'selected':''}>${h.nom}</option>`).join('');
+    document.getElementById('editOverlay').classList.add('show');
 }
 function saveCell(){
-  var shift=document.getElementById('em-shift').value; 
-  var hsSelect = document.getElementById('em-hs'); var hs = hsSelect ? hsSelect.value : '';
-  var pd=JSON.parse(localStorage.getItem(D.planKey));
-  var target = pd.planning.find(p=>p.nom===emState.nom);
-  target.shifts[emState.idx]=shift;
-  if(!target.hotspots) target.hotspots = Array(7).fill('');
-  target.hotspots[emState.idx] = hs;
-  localStorage.setItem(D.planKey,JSON.stringify(pd)); cloudPushData(); closeModal('editOverlay'); loadData(weekOffset); toast('Modifié avec succès','ok');
+    var pd=JSON.parse(localStorage.getItem(D.pk)); var target=pd.planning.find(p=>p.nom===emState.nom);
+    target.shifts[emState.idx]=document.getElementById('em-shift').value;
+    if(!target.hotspots) target.hotspots=Array(7).fill('');
+    target.hotspots[emState.idx]=document.getElementById('em-hs').value;
+    localStorage.setItem(D.pk,JSON.stringify(pd)); cloudSync(true); closeModal('editOverlay'); loadData(weekOffset); toast('Shift modifié');
 }
 
-function rAbs(){
-  var v=D.absences.filter(a=>currentUser.villes.includes(a.ville));
-  document.getElementById('abs-list').innerHTML=v.length?v.map((a,i)=>`<div class="abs-item"><div class="av av-sm" style="background:${CC[a.ville]?.bg||'#eee'};color:${CC[a.ville]?.tx||'#000'}">${ini(a.nom)}</div><div style="flex:1"><div style="font-weight:700;font-size:13px">${a.nom}</div><div style="font-size:11px;color:#94A3B8">${a.date}</div></div><span class="pill ${a.type==='ABSENT'?'sa':'sc'}">${a.type}</span><button class="btn btn-gh btn-ico btn-sm" onclick="delAbs(${D.absences.indexOf(a)})">✕</button></div>`).join(''):'<div class="em">Aucune absence enregistrée</div>';
-}
-function submitAbs(){
-  var n=document.getElementById('f-ag').value, t=document.getElementById('f-ty').value, ds=document.getElementById('f-s').value, de=document.getElementById('f-e').value||ds;
-  if(!n||!ds){toast('Veuillez remplir la date','er');return;} 
-  var cur=new Date(ds), end=new Date(de), ag=D.agents.find(a=>a.nom===n), c=0;
-  if(!D.absences) D.absences = [];
-  while(cur<=end){
-    var d=fmtD(cur);
-    if(!D.absences.find(a=>a.nom===n&&a.date===d)){ D.absences.push({nom:n,ville:ag.ville,date:d,type:t,motif:document.getElementById('f-m').value}); c++; }
-    cur.setDate(cur.getDate()+1);
-  }
-  saveAbsences(D.absences); loadData(weekOffset); toast(c+' jour(s) ajouté(s)','ok');
-  document.getElementById('f-m').value = '';
-}
-function delAbs(idx){if(confirm("Supprimer cette absence ?")){D.absences.splice(idx,1);saveAbsences(D.absences);loadData(weekOffset);toast('Supprimé','ok');}}
-
-function rAgents(){
-  var q=(document.getElementById('ag-q').value||'').toLowerCase(), vf=document.getElementById('ag-vf').value;
-  var list=D.allAgents.filter(a=>(vf==='ALL'||a.ville===vf)&&a.nom.toLowerCase().includes(q));
-  document.getElementById('ag-grid').innerHTML=list.length?list.map(a=>`<div class="ag-card" onclick="editAgentIdx(${D.allAgents.indexOf(a)})"><div class="av av-lg" style="background:${CC[a.ville]?.bg||'#eee'};color:${CC[a.ville]?.tx||'#000'}">${ini(a.nom)}</div><div style="flex:1"><div style="font-weight:700;font-size:13px;margin-bottom:4px">${a.nom}</div><div><span class="pill">${a.ville}</span> ${a.statut==='Inactif'?'<span class="pill sa" style="margin-left:4px">🔴 Inactif</span>':''}</div></div></div>`).join(''):'<div class="em">Aucun agent trouvé</div>';
-}
-function openAddAgent(){
-    agEditIdx=-1; document.getElementById('ag-nom').value=''; document.getElementById('ag-email').value=''; document.getElementById('ag-emb').value=''; document.getElementById('ag-statut').value='Actif'; document.getElementById('agOverlay').classList.add('show');
-}
-function editAgentIdx(idx){
-    agEditIdx=idx; var a=D.allAgents[idx]; 
-    document.getElementById('ag-nom').value=a.nom; document.getElementById('ag-ville').value=a.ville; document.getElementById('ag-zone').value=a.zone; document.getElementById('ag-email').value=a.email||''; document.getElementById('ag-emb').value=a.embauche||''; document.getElementById('ag-statut').value=a.statut; 
-    document.getElementById('agOverlay').classList.add('show');
-}
-function saveAgent(){
-  var nom=document.getElementById('ag-nom').value; if(!nom)return;
-  if(!D.allAgents) D.allAgents = [];
-  var na = {nom:nom, ville:document.getElementById('ag-ville').value, zone:document.getElementById('ag-zone').value||document.getElementById('ag-ville').value, email:document.getElementById('ag-email').value, embauche:document.getElementById('ag-emb').value, statut:document.getElementById('ag-statut').value};
-  if(agEditIdx>=0) D.allAgents[agEditIdx]=na; else D.allAgents.push(na);
-  saveAgents(D.allAgents); closeModal('agOverlay'); localStorage.removeItem(D.planKey); loadData(weekOffset); toast('Agent sauvegardé','ok');
-}
-
-function rHs(){
-    var v=document.querySelector('#pg-hs .sel').value;
-    var list=D.hotspots.filter(h=>currentUser.villes.includes(h.ville) && (v==='ALL'||h.ville===v));
-    document.getElementById('hs-list').innerHTML=list.map(h=>`<div class="hs-item"><div style="font-weight:700;font-size:14px;flex:1">${h.nom}</div><span class="pill">${h.ville}</span><span class="pill se">⏱ ${h.pk}</span><button class="btn btn-gh btn-sm" onclick="delHs(${D.hotspots.indexOf(h)})">✕</button></div>`).join('') || '<div class="em">Aucun hotspot configuré</div>';
-}
-function fHs(v){ rHs(); }
-function saveHotspot(){
-    var n=document.getElementById('hs-f-nom').value;if(!n)return;
-    if(!D.hotspots) D.hotspots = [];
-    D.hotspots.push({ville:document.getElementById('hs-f-ville').value,nom:n,pk:document.getElementById('hs-f-pk').value});
-    saveHotspots(D.hotspots);closeModal('hsOverlay');loadData(weekOffset);toast('Hotspot ajouté','ok');
-}
-function delHs(i){if(confirm("Supprimer ce hotspot ?")){D.hotspots.splice(i,1);saveHotspots(D.hotspots);loadData(weekOffset);toast('Supprimé','ok');}}
-
-// ── PAIE HR EXACTE 21 AU 22 ──
+// ── PAIE HR PRECISION (21 to 22 + Prorata) ──
 function initPaieMois(){
-  var sel=document.getElementById('pay-mois-sel');if(!sel)return;
-  var now=new Date();var opts='';
-  for(var m=0;m<12;m++){var d=new Date(now.getFullYear(),now.getMonth()-m,1);var val=d.getFullYear()+'-'+(d.getMonth()+1);var lbl=m===0?'Mois Actuel':d.toLocaleDateString('fr-FR',{month:'long',year:'numeric'});opts+=`<option value="${val}">${lbl}</option>`;}
+  var sel=document.getElementById('pay-mois-sel');if(sel.options.length>0)return;
+  var now=new Date(), opts='';
+  for(var m=0;m<12;m++){var d=new Date(now.getFullYear(),now.getMonth()-m,1); opts+=`<option value="${d.getFullYear()}-${d.getMonth()+1}">${m===0?'Mois Actuel':d.toLocaleDateString('fr-FR',{month:'long',year:'numeric'})}</option>`;}
   sel.innerHTML=opts;
 }
-function fPay(v){gFP=v; rPay();}
 function rPay(){
-  var selVal = document.getElementById('pay-mois-sel').value.split('-');
-  var y=parseInt(selVal[0]), m=parseInt(selVal[1])-1; // Mois cible
-  // Periode = 21 du mois précedent au 22 du mois cible
-  var startDate = new Date(y, m-1, 21);
-  var endDate = new Date(y, m, 22);
-
-  var agents = D.agents.filter(a => gFP === 'ALL' || a.ville === gFP);
-  var tN = 0, tD = 0; var html='';
-  var byCity={}; agents.forEach(a=>{if(!byCity[a.ville])byCity[a.ville]=[]; byCity[a.ville].push(a);});
+  var val = document.getElementById('pay-mois-sel').value.split('-');
+  var y=parseInt(val[0]), m=parseInt(val[1])-1;
+  var start=new Date(y, m-1, 21), end=new Date(y, m, 22);
+  var totalDays = Math.ceil((end - start) / (1000*60*60*24)) + 1; // Jours ouvrables totaux théoriques
+  
+  var html='', tN=0, tD=0;
+  var byCity={}; D.actifs.forEach(a=>{if(!byCity[a.ville])byCity[a.ville]=[]; byCity[a.ville].push(a);});
 
   Object.keys(byCity).forEach(v=>{
-      html+=`<div class="pay-city-header"><span>📍 VILLE : ${CLA[v]||v}</span> <span>${byCity[v].length} Agents</span></div>`;
+      html+=`<div class="pay-city-section"><div class="pay-city-header"><span>📍 VILLE : ${v}</span><span style="font-size:12px;opacity:0.8">${byCity[v].length} Agents</span></div>`;
       byCity[v].forEach(a=>{
-          // Compter les absences UNIQUEMENT dans la periode
-          var myAbs = D.absences.filter(ab => {
-              if(ab.nom !== a.nom || ab.type !== 'ABSENT') return false;
-              var parts = ab.date.split('/'); var dAbs = new Date(parts[2], parts[1]-1, parts[0]);
-              return dAbs >= startDate && dAbs <= endDate;
-          }).length;
+          var nAbs=D.abs.filter(ab=>{if(ab.nom!==a.nom||ab.type!=='ABSENT')return false; var d=new Date(ab.date.split('/').reverse().join('-')); return d>=start&&d<=end;}).length;
           
-          var ded = myAbs * 192, net = 5000 - ded;
-          tN += net; tD += ded;
-          html+=`<div class="pc-card">
-              <div><b style="font-size:14px">${a.nom}</b><br><small style="color:var(--tx3)">${a.embauche?'Embauche: '+a.embauche:'Ancien'}</small></div>
-              <div style="font-size:12px">Absences: <b style="color:var(--r);font-size:14px">${myAbs}</b></div>
-              <div style="font-size:12px;color:var(--r)">-${ded} MAD</div>
-              <div style="text-align:right;font-size:18px;font-weight:900;color:var(--g)">${mad(net)}</div>
+          var base = 5000;
+          if(a.embauche){
+              var emb=new Date(a.embauche);
+              if(emb>start && emb<=end){
+                  var prDays = Math.ceil((end - emb) / (1000*60*60*24)) + 1;
+                  base = Math.round((prDays/totalDays)*5000);
+              }
+          }
+          var ded=nAbs*192, net=base-ded; tN+=net; tD+=ded;
+          
+          html+=`<div class="pay-row">
+            <div><b style="font-size:14px">${a.nom}</b><br><span style="font-size:11px;color:var(--tx3)">${a.embauche?'Entrée: '+a.embauche:'Ancien (Mois Complet)'}</span></div>
+            <div>Base: <b>${base} MAD</b></div>
+            <div>Absences: <b style="color:var(--r)">${nAbs}</b></div>
+            <div style="color:var(--r)">Déduction: -${ded} MAD</div>
+            <div style="text-align:right;font-size:18px;font-weight:900;color:var(--g)">${mad(net)}</div>
           </div>`;
       });
+      html+=`</div>`;
   });
-  
-  document.getElementById('py-d').textContent = mad(tD);
-  document.getElementById('py-t').textContent = mad(tN);
-  document.getElementById('py-content').innerHTML = html || '<div class="em">Aucun agent trouvé</div>';
+  document.getElementById('py-content').innerHTML=html || '<div class="em">Aucune donnée pour cette période</div>';
+  document.getElementById('py-n').textContent=D.actifs.length; document.getElementById('py-d').textContent='-'+mad(tD); document.getElementById('py-t').textContent=mad(tN);
+}
+
+// ── AGENTS ──
+function rAgents(){
+    var q=(document.getElementById('ag-q').value||'').toLowerCase(), vf=document.getElementById('ag-vf').value;
+    var list=D.all.filter(a=>(vf==='ALL'||a.ville===vf)&&a.nom.toLowerCase().includes(q));
+    document.getElementById('ag-grid').innerHTML=list.map((a,i)=>`<div class="ag-card" onclick="openEditAgent(${i})"><div class="av av-lg" style="background:var(--y);color:#000">${ini(a.nom)}</div><div style="flex:1"><div style="font-weight:800;font-size:14px;margin-bottom:6px">${a.nom}</div><div><span class="pill so" style="border:1px solid var(--bd)">${a.ville}</span> ${a.statut==='Inactif'?'<span class="pill sa">Inactif</span>':''}</div></div></div>`).join('');
+}
+function openAddAgent(){agEditIdx=-1; document.getElementById('ag-nom').value=''; document.getElementById('ag-email').value=''; document.getElementById('ag-emb').value=''; document.getElementById('agOverlay').classList.add('show');}
+function openEditAgent(i){agEditIdx=i; var a=D.all[i]; document.getElementById('ag-nom').value=a.nom; document.getElementById('ag-ville').value=a.ville; document.getElementById('ag-emb').value=a.embauche||''; document.getElementById('ag-email').value=a.email||''; document.getElementById('ag-statut').value=a.statut; document.getElementById('agOverlay').classList.add('show');}
+function saveAgent(){
+    var n=document.getElementById('ag-nom').value; if(!n)return;
+    var a={nom:n, ville:document.getElementById('ag-ville').value, email:document.getElementById('ag-email').value, embauche:document.getElementById('ag-emb').value, statut:document.getElementById('ag-statut').value};
+    if(agEditIdx>=0) D.all[agEditIdx]=a; else D.all.push(a);
+    localStorage.setItem(SK.AGENTS,JSON.stringify(D.all)); cloudSync(true); closeModal('agOverlay'); loadData(weekOffset); toast('Profil sauvegardé');
+}
+
+// ── GLOVO HTML EMAILS ──
+function openEmailModal(){document.getElementById('email-preview').innerHTML=''; document.getElementById('emailOverlay').classList.add('show');}
+function preparerEmails(){
+    var ville = document.getElementById('email-ville-sel').value;
+    var agents = D.agents.filter(a=>a.email && (ville==='ALL'||a.ville===ville));
+    if(!agents.length){toast('Aucun agent avec email configuré.','er');return;}
+    
+    var html='';
+    agents.forEach((ag, idx) => {
+        var p = D.plan.find(x=>x.nom===ag.nom); if(!p) return;
+        var mailBody = `
+        <div id="m-${idx}" style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;border:1px solid #E2E8F0;border-radius:12px;padding:25px;background:#fff">
+            <h2 style="color:#00A082;margin-bottom:15px;border-bottom: 2px solid #00A082; padding-bottom: 10px;">Planning Sentinel - Glovo Maroc</h2>
+            <p style="font-size:14px;color:#0F172A;line-height:1.6;margin-bottom:20px">Bonjour <b>${ag.nom.split(' ')[0]}</b>,<br>Voici votre planning pour la semaine <b>W${D.meta.wn}</b>. Merci de respecter vos horaires et de vous presenter ponctuellement sur votre hotspot assigne.</p>
+            <table style="width:100%;border-collapse:collapse;margin-bottom:20px">
+                <thead><tr style="background:#FFC244;color:#000;"><th style="padding:12px;text-align:left">Jour</th><th style="padding:12px;text-align:right">Horaire</th></tr></thead>
+                <tbody>
+                ${JOURS.map((j, i) => {
+                    var s=p.shifts[i], hs=(p.hotspots&&p.hotspots[i])?`<br><span style="font-size:11px;color:#00A082">📍 ${p.hotspots[i]}</span>`:'';
+                    var isOff=['OFF','ABSENT','CONGE','MALADIE','—'].includes(s);
+                    return `<tr style="border-bottom:1px solid #F1F5F9;background:${isOff?'#F8FAFC':'#fff'}"><td style="padding:12px"><b>${j}</b> <span style="font-size:11px;color:#94A3B8">(${D.meta.dates[i]})</span></td><td style="padding:12px;text-align:right;color:${isOff?'#94A3B8':'#00A082'};font-weight:${isOff?'normal':'bold'}">${s==='OFF'?'Repos':s}${!isOff?hs:''}</td></tr>`;
+                }).join('')}
+                </tbody>
+            </table>
+            <div style="background:#E8F8F5;padding:12px;border-left:4px solid #00A082;font-size:14px;margin-bottom:25px;font-weight:bold;color:#00A082">Total des heures : ${p.totalH}h / 44h</div>
+            <div style="font-size:12px;color:#64748B;line-height:1.5;padding-top:15px;border-top: 1px solid #E2E8F0;"><p style="margin-bottom:10px;"><b>Note :</b> Ce planning peut etre modifie en cas de force majeure ou changement operationnel. Tout ajustement vous sera communique dans les meilleurs delais.</p><p style="margin-bottom:10px;">Bonne semaine a toute l'equipe.</p><p style="color:#0F172A;font-weight:bold;">On field Operations - Glovo Maroc</p></div>
+        </div>`;
+        html+=`<div class="card" style="margin-bottom:15px"><div style="display:flex;justify-content:space-between;margin-bottom:15px"><b style="font-size:14px">${ag.nom}</b><button class="btn btn-g" onclick="copyMail(${idx},'${ag.email}')">Copier HTML & Gmail</button></div><div style="transform:scale(0.85);transform-origin:top left;border:1px dashed #ccc;border-radius:12px">${mailBody}</div></div>`;
+    });
+    document.getElementById('email-preview').innerHTML=html; toast('Mails générés');
+}
+function copyMail(idx,email){
+    var h=document.getElementById('m-'+idx).innerHTML;
+    navigator.clipboard.write([new ClipboardItem({"text/html":new Blob([h],{type:"text/html"}),"text/plain":new Blob([h],{type:"text/plain"})})]).then(()=>{
+        toast('Modèle copié !'); setTimeout(()=>window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=Planning Semaine W${D.meta.wn}`,'_blank'), 800);
+    });
+}
+
+function saveHotspot(){var n=document.getElementById('hs-f-nom').value;if(!n)return;D.hs.push({ville:document.getElementById('hs-f-ville').value,nom:n,pk:document.getElementById('hs-f-pk').value});localStorage.setItem(SK.HOTSPOTS,JSON.stringify(D.hs));cloudSync(true);closeModal('hsOverlay');loadData(weekOffset);toast('Hotspot ajouté');}
+function delHs(i){if(confirm("Supprimer ?")){D.hs.splice(i,1);localStorage.setItem(SK.HOTSPOTS,JSON.stringify(D.hs));cloudSync(true);loadData(weekOffset);toast('Supprimé');}}
+
+// ── EXPORTS CSV / EXCEL ──
+function dlXls(html, fn){var blob=new Blob(['\ufeff'+html],{type:'application/vnd.ms-excel;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fn;a.click();}
+function exportPlanningExcel(){
+    var html='<html xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"><style>td,th{border:1px solid #000;padding:5px}</style></head><body><table><tr><th colspan="10" style="background:#FFC244">Planning W'+D.meta.wn+'</th></tr><tr><th>Agent</th><th>Ville</th>'+JOURS.map((j,i)=>`<th>${j} ${D.meta.dates[i]}</th>`).join('')+'<th>Total</th></tr>';
+    D.plan.forEach(p=>{ html+=`<tr><td><b>${p.nom}</b></td><td>${p.ville}</td>`+p.shifts.map(s=>`<td>${s}</td>`).join('')+`<td><b>${p.totalH}h</b></td></tr>`; });
+    html+='</table></body></html>'; dlXls(html, 'Planning_W'+D.meta.wn+'.xls');
+}
+function exportPaieExcel(){
+    var selVal = document.getElementById('pay-mois-sel').value.split('-');
+    var y=parseInt(selVal[0]), m=parseInt(selVal[1])-1; var start=new Date(y, m-1, 21), end=new Date(y, m, 22);
+    var totalDays = Math.ceil((end - start)/(1000*60*60*24))+1;
+    var html='<html xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"><style>td,th{border:1px solid #000}</style></head><body><table><tr><th colspan="6" style="background:#0F172A;color:#fff">Rapport Paie (21 au 22)</th></tr><tr><th>Agent</th><th>Ville</th><th>Embauche</th><th>Absences</th><th>Deduction</th><th>NET (MAD)</th></tr>';
+    D.agents.forEach(a=>{
+        var nAbs=D.abs.filter(ab=>{if(ab.nom!==a.nom||ab.type!=='ABSENT')return false; var d=new Date(ab.date.split('/').reverse().join('-')); return d>=start&&d<=end;}).length;
+        var base=5000;
+        if(a.embauche){
+            var emb=new Date(a.embauche);
+            if(emb>start && emb<=end){ base=Math.round(((Math.ceil((end-emb)/(1000*60*60*24))+1)/totalDays)*5000); }
+        }
+        var ded=nAbs*192, net=base-ded;
+        html+=`<tr><td>${a.nom}</td><td>${a.ville}</td><td>${a.embauche||'Ancien'}</td><td>${nAbs}</td><td>-${ded}</td><td><b>${net}</b></td></tr>`;
+    });
+    dlXls(html+'</table></body></html>', 'Paie_HR.xls');
+}
+function exportAgentsExcel(){
+    var html='<html xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"><style>td,th{border:1px solid #000}</style></head><body><table><tr><th>Nom</th><th>Ville</th><th>Email</th><th>Embauche</th><th>Statut</th></tr>'+D.all.map(a=>`<tr><td>${a.nom}</td><td>${a.ville}</td><td>${a.email||''}</td><td>${a.embauche||'Ancien'}</td><td>${a.statut}</td></tr>`).join('')+'</table></body></html>';
+    dlXls(html, 'Agents.xls');
 }
 
 function openRapportForm(){document.getElementById('rp-date').value=new Date().toISOString().split('T')[0]; document.getElementById('rpOverlay').classList.add('show');}
 function saveRapport(){
-  var r=getRapports() || [];
-  r.push({auteur:currentUser.nom, zone:currentUser.villes.join(', '), date:document.getElementById('rp-date').value, resume:document.getElementById('rp-resume').value, anomalies:document.getElementById('rp-anomalies').value, type:'info'});
-  localStorage.setItem(SK.RAPPORTS,JSON.stringify(r)); cloudPushLogs(); closeModal('rpOverlay'); rRapports(); toast('Rapport transmis','ok');
-}
-function rRapports(){
-  var r=getRapports().sort((a,b)=>b.date.localeCompare(a.date));
-  document.getElementById('rp-list').innerHTML=r.length ? r.map(x=>`<div class="rp-simple"><div style="font-weight:800;font-size:14px;color:#0F172A">${x.auteur} <span style="font-weight:normal;font-size:11px;color:#94A3B8">(${x.date})</span></div><div style="font-size:13px;color:#475569;margin-top:6px">${x.resume}</div></div>`).join('') : '<div class="em">Aucun rapport</div>';
-}
-
-// ── EMAIL HTML (GLOVO DESIGN & EXACT TEXTS) ──
-function openEmailModal(){document.getElementById('email-preview').innerHTML=''; document.getElementById('emailOverlay').classList.add('show');}
-function preparerEmails(){
-  var ville = document.getElementById('email-ville-sel').value;
-  var agents = D.agents.filter(a=>a.email && (ville==='ALL'||a.ville===ville));
-  if(!agents.length){toast('Aucun email configuré pour ces agents.','er');return;}
-  
-  var html = '';
-  agents.forEach((ag, idx) => {
-    var p = D.planning.find(x=>x.nom===ag.nom); if(!p) return;
-    
-    var mailBody = `
-      <div id="email-html-${idx}" style="font-family:Arial,sans-serif;color:#0F172A;max-width:600px;margin:0 auto;padding:25px;background:#F8FAFC;border-radius:12px;border:1.5px solid #E2E8F0">
-        <h2 style="color:#00A082;margin-bottom:15px;border-bottom: 2px solid #00A082; padding-bottom: 10px;">Planning Sentinel - Glovo Maroc</h2>
-        <p style="font-size:14px;color:#0F172A;line-height:1.6;margin-bottom:20px">Bonjour <b>${ag.nom.split(' ')[0]}</b>,<br>Voici votre planning pour la semaine <b>W${D.meta.weekNum}</b>. Merci de respecter vos horaires et de vous presenter ponctuellement sur votre hotspot assigne.</p>
-        <table style="width:100%;border-collapse:collapse;background:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 4px 6px rgba(0,0,0,0.05);margin-bottom: 20px;">
-          <thead><tr style="background:#FFC244;color:#000;"><th style="padding:12px;text-align:left;border-bottom:2px solid #E5A820">Jour</th><th style="padding:12px;text-align:right;border-bottom:2px solid #E5A820">Horaire</th></tr></thead>
-          <tbody>
-            ${JOURS.map((j, i) => {
-              var s = p.shifts[i]; var isOff = ['OFF','ABSENT','CONGE','MALADIE','—'].includes(s);
-              var hs = (p.hotspots && p.hotspots[i]) ? ` <br><span style="font-size:11px;color:#00A082">📍 ${p.hotspots[i]}</span>` : '';
-              return `<tr style="background:${isOff?'#F1F5F9':'#FFFFFF'};border-bottom:1px solid #F1F5F9"><td style="padding:12px;color:#1E293B"><b>${j}</b> <span style="font-size:11px;color:#64748B">(${D.meta.dates[i]})</span></td><td style="padding:12px;text-align:right;color:${isOff?'#94A3B8':'#00A082'};font-weight:${isOff?'normal':'bold'}">${s==='OFF'?'Repos':s}${!isOff?hs:''}</td></tr>`;
-            }).join('')}
-          </tbody>
-        </table>
-        <div style="margin-top:15px;padding:12px;background:#E8F8F5;border-left:4px solid #00A082;border-radius:6px;font-size:14px;margin-bottom: 25px;"><b>Total des heures :</b> ${p.totalH}h / 44h</div>
-        <div style="font-size:13px;color:#475569;line-height:1.5;padding-top:15px;border-top: 1px solid #E2E8F0;"><p style="margin-bottom:10px;"><b>Note :</b> Ce planning peut etre modifie en cas de force majeure ou changement operationnel. Tout ajustement vous sera communique dans les meilleurs delais.</p><p style="margin-bottom:10px;">Bonne semaine a toute l'equipe.</p><p style="color:#0F172A;font-weight:bold;">On field Operations - Glovo Maroc</p></div>
-      </div>`;
-      
-    html += `<div style="background:#fff;border:1px solid var(--bd);padding:14px;border-radius:var(--r);margin-bottom:12px;box-shadow:var(--sh)"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><div><b>${ag.nom}</b></div><button class="btn btn-g" onclick="copierEtOuvrirGmail(${idx}, '${ag.email}')">📋 Copier HTML & Ouvrir Gmail</button></div><div style="transform:scale(0.85);transform-origin:top left;border:1px dashed #cbd5e1;padding:10px;border-radius:12px">${mailBody}</div></div>`;
-  });
-  document.getElementById('email-preview').innerHTML = html; toast(agents.length + ' emails prêts !', 'ok');
-}
-function copierEtOuvrirGmail(idx, email) {
-  var htmlContent = document.getElementById('email-html-' + idx).innerHTML;
-  navigator.clipboard.write([new ClipboardItem({"text/html": new Blob([htmlContent], {type: "text/html"}),"text/plain": new Blob(["Collez dans Gmail (CTRL+V)"], {type: "text/plain"})})]).then(()=>{
-    toast('Design copié !', 'ok');
-    setTimeout(()=>window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${encodeURIComponent("Planning Semaine W"+D.meta.weekNum)}`, '_blank'), 1000);
-  });
-}
-
-// ── EXPORTS CSV / EXCEL ──
-function dlXls(html, filename){var blob=new Blob(['\ufeff'+html],{type:'application/vnd.ms-excel;charset=utf-8'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download=filename;a.click();}
-function dlCSV(csv, filename){var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download=filename;a.click();}
-function exportPlanningCSV(){var csv='Agent,Ville,'+JOURS.map((j,i)=>j+' '+D.meta.dates[i]).join(',')+',Total\n'+D.planning.map(p=>p.nom+','+p.ville+','+p.shifts.join(',')+','+p.totalH).join('\n');dlCSV(csv, 'Planning_W'+D.meta.weekNum+'.csv');}
-function exportPlanningExcel(){var html='<html xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"><style>td,th{border:1px solid #000}</style></head><body><table><tr><th colspan="10" style="background:#FFC244">Planning W'+D.meta.weekNum+'</th></tr><tr><th>Agent</th><th>Ville</th>'+JOURS.map((j,i)=>`<th>${j} ${D.meta.dates[i]}</th>`).join('')+'<th>Total</th></tr>';D.planning.forEach(p=>{ html+=`<tr><td><b>${p.nom}</b></td><td>${p.ville}</td>`+p.shifts.map(s=>`<td>${s}</td>`).join('')+`<td><b>${p.totalH}h</b></td></tr>`; });html+='</table></body></html>';dlXls(html, 'Planning_W'+D.meta.weekNum+'.xls');}
-function exportAgentsExcel(){var html='<html xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"><style>td,th{border:1px solid #000}</style></head><body><table><tr><th>Nom</th><th>Ville</th><th>Email</th><th>Embauche</th><th>Statut</th></tr>'+D.allAgents.map(a=>`<tr><td>${a.nom}</td><td>${a.ville}</td><td>${a.email||''}</td><td>${a.embauche||'Ancien'}</td><td>${a.statut}</td></tr>`).join('')+'</table></body></html>';dlXls(html, 'Agents.xls');}
-function exportPaieExcel(){
-  var selVal = document.getElementById('pay-mois-sel').value.split('-');
-  var y=parseInt(selVal[0]), m=parseInt(selVal[1])-1; var startDate = new Date(y, m-1, 21), endDate = new Date(y, m, 22);
-  var html='<html xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"><style>td,th{border:1px solid #000}</style></head><body><table><tr><th colspan="6" style="background:#0F172A;color:#fff">Rapport de Paie - Période 21 au 22</th></tr><tr><th>Agent</th><th>Ville</th><th>Embauche</th><th>Absences</th><th>Deduction</th><th>NET (MAD)</th></tr>';
-  D.agents.forEach(a=>{
-    var na=D.absences.filter(ab=>{if(ab.nom!==a.nom||ab.type!=='ABSENT')return false; var p=ab.date.split('/'); var dAbs=new Date(p[2], p[1]-1, p[0]); return dAbs>=startDate && dAbs<=endDate;}).length;
-    html+=`<tr><td>${a.nom}</td><td>${a.ville}</td><td>${a.embauche||'Ancien'}</td><td>${na}</td><td>-${na*192}</td><td><b>${5000-(na*192)}</b></td></tr>`;
-  });
-  dlXls(html+'</table></body></html>', 'Paie_HR.xls');
+  var r=getRapports() || []; r.push({auteur:currentUser.nom, date:document.getElementById('rp-date').value, resume:document.getElementById('rp-resume').value, type:'info'});
+  localStorage.setItem(SK.RAPPORTS,JSON.stringify(r)); cloudPushLogs(); closeModal('rpOverlay'); toast('Rapport transmis');
 }
 
 function closeModal(id){document.getElementById(id).classList.remove('show');}
-function overlayClose(e,id){if(e.target.classList.contains('overlay'))closeModal(id);}
+setInterval(()=>{document.getElementById('clock').textContent=new Date().toLocaleTimeString('fr-FR');},1000);
+document.addEventListener('DOMContentLoaded',initLogin);
 </script>
 </body>
 </html>
