@@ -3,146 +3,122 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>SENTINEL — HR & OPS Control</title>
+<title>SENTINEL — Corporate Control · Glovo</title>
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-    
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    :root {
-        --y: #FFC244; --y-dk: #E5A820; --y-lt: #FFF8E8;
-        --g: #00A082; --g-lt: #E8F8F5; --r: #E53935; --r-lt: #FEECEC;
-        --b: #1565C0; --b-lt: #E3F0FF;
-        --tx: #0F172A; --tx2: #475569; --tx3: #94A3B8;
-        --bg: #F8FAFC; --card: #FFFFFF; --bd: #E2E8F0; --bd2: #CBD5E1;
-        --sh: 0 2px 4px rgba(0,0,0,0.05); --sh2: 0 15px 35px rgba(0,0,0,0.1);
-    }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+:root{
+  --y:#FFC244;--y-dk:#E5A820;--y-lt:#FFF8E8;
+  --g:#00A082;--g-lt:#E8F8F5;--r:#E53935;--r-lt:#FEECEC;
+  --b:#1565C0;--b-lt:#E3F0FF;--tx:#0F172A;--tx2:#475569;--tx3:#94A3B8;
+  --bg:#F8FAFC;--bd:#E2E8F0;--bd2:#CBD5E1;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--tx);height:100vh;display:flex;flex-direction:column;overflow:hidden;font-size:13px}
 
-    body {
-        font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tx);
-        height: 100vh; display: flex; flex-direction: column; overflow: hidden; /* Supprime le double scroll */
-        font-size: 13px;
-    }
+/* SCROLLBARS PRO */
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:#94A3B8}
 
-    /* SCROLLBARS PRO */
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+/* LOGIN SLEEK */
+#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0F172A}
+.login-box{background:#fff;border-radius:16px;padding:40px;width:400px;box-shadow:0 20px 50px rgba(0,0,0,0.3);text-align:center}
+.login-logo{width:50px;height:50px;background:var(--y);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 20px}
+.login-title{font-size:22px;font-weight:800;margin-bottom:8px}
+.login-sub{font-size:12px;color:var(--tx3);margin-bottom:24px}
+.login-users{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.login-user{padding:12px;border:1.5px solid var(--bd);border-radius:10px;cursor:pointer;transition:0.2s}
+.login-user.sel{border-color:var(--y);background:var(--y-lt)}
+.login-user-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:11px;margin:0 auto 8px}
+.login-user-nm{font-size:12px;font-weight:700}
+.login-input{width:100%;padding:12px;border:1.5px solid var(--bd2);border-radius:8px;font-size:14px;outline:none;margin-bottom:10px;transition:0.2s}
+.login-input:focus{border-color:var(--y);box-shadow:0 0 0 3px rgba(255,194,68,0.2)}
+.login-btn{width:100%;padding:12px;background:var(--y);border:none;border-radius:8px;font-weight:800;cursor:pointer;margin-top:10px;transition:0.2s}
+.login-btn:hover{background:var(--y-dk)}
+.login-err{color:var(--r);font-size:12px;font-weight:600;min-height:18px;margin-bottom:10px}
 
-    /* --- LOGIN --- */
-    #loginScreen { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #0F172A; }
-    .login-box { background: #fff; border-radius: 16px; padding: 40px; width: 420px; box-shadow: var(--sh2); text-align: center; }
-    .login-logo { width: 50px; height: 50px; background: var(--y); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 20px; }
-    .login-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; color: var(--tx); }
-    .login-sub { font-size: 12px; color: var(--tx3); margin-bottom: 30px; }
-    .login-users { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-    .login-user { padding: 12px; border: 1.5px solid var(--bd); border-radius: 10px; cursor: pointer; transition: 0.2s; }
-    .login-user.sel { border-color: var(--y); background: var(--y-lt); }
-    .login-user-av { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #fff; font-size: 11px; margin: 0 auto 8px; }
-    .login-user-nm { font-size: 12px; font-weight: 700; color: var(--tx); }
-    .login-input { width: 100%; padding: 12px 16px; border: 1.5px solid var(--bd2); border-radius: 8px; font-size: 14px; outline: none; margin-bottom: 10px; font-family: inherit; }
-    .login-input:focus { border-color: var(--y); box-shadow: 0 0 0 3px rgba(255,194,68,0.2); }
-    .login-btn { width: 100%; padding: 14px; background: var(--y); border: none; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.2s; font-family: inherit; font-size: 14px; }
-    .login-btn:hover { background: var(--y-dk); }
-    .login-err { color: var(--r); font-size: 12px; font-weight: 600; min-height: 18px; margin-bottom: 10px; }
+/* NAVIGATION COMPACTE */
+.navbar{background:#fff;border-bottom:1px solid var(--bd);height:56px;display:flex;align-items:center;padding:0 20px;flex-shrink:0}
+.nav-brand{display:flex;align-items:center;gap:10px;border-right:1px solid var(--bd);padding-right:20px}
+.nav-logo{width:32px;height:32px;background:var(--y);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.nav-links{display:flex;gap:4px;flex:1;margin-left:20px;overflow-x:auto}
+.ni{padding:8px 14px;border-radius:6px;cursor:pointer;color:var(--tx2);font-weight:600;display:flex;align-items:center;gap:6px;transition:0.2s;white-space:nowrap}
+.ni:hover{background:var(--bg)}
+.ni.active{background:var(--tx);color:#fff}
+.nav-right{display:flex;align-items:center;gap:12px;margin-left:auto}
+.clock{font-size:12px;color:var(--tx2);font-family:monospace;background:var(--bg);padding:6px 12px;border-radius:6px;font-weight:600;border:1px solid var(--bd)}
 
-    /* --- NAVBAR --- */
-    .navbar { background: #fff; border-bottom: 1px solid var(--bd); height: 60px; display: flex; align-items: center; padding: 0 24px; flex-shrink: 0; z-index: 100; }
-    .nav-brand { display: flex; align-items: center; gap: 12px; border-right: 1px solid var(--bd); padding-right: 24px; }
-    .nav-logo { width: 32px; height: 32px; background: var(--y); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
-    .nav-links { display: flex; gap: 6px; flex: 1; margin-left: 24px; overflow-x: auto; }
-    .ni { padding: 8px 14px; border-radius: 6px; cursor: pointer; color: var(--tx2); font-weight: 600; display: flex; align-items: center; gap: 6px; transition: 0.2s; white-space: nowrap; }
-    .ni:hover { background: var(--bg); color: var(--tx); }
-    .ni.active { background: var(--tx); color: #fff; }
-    .nav-right { display: flex; align-items: center; gap: 15px; margin-left: auto; }
-    .clock { font-size: 12px; font-family: monospace; background: var(--bg); padding: 6px 12px; border-radius: 6px; font-weight: 600; border: 1px solid var(--bd); }
-    .user-badge { display: flex; align-items: center; gap: 8px; background: var(--bg); padding: 4px 12px 4px 4px; border-radius: 20px; border: 1px solid var(--bd); font-weight: 600; }
-    
-    /* --- MAIN CONTENT --- */
-    .content { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 24px; }
-    .pg { display: none; animation: fadeIn 0.3s ease; max-width: 1400px; margin: 0 auto; }
-    .pg.active { display: block; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.content{flex:1;overflow-y:auto;padding:24px}
+.pg{display:none;animation:fadeIn 0.3s ease;max-width:1400px;margin:0 auto}
+.pg.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
-    /* --- COMPONENTS --- */
-    .card { background: #fff; border-radius: 12px; border: 1px solid var(--bd); padding: 20px; margin-bottom: 20px; box-shadow: var(--sh); }
-    .ph { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
-    .ph-t { font-size: 20px; font-weight: 800; color: var(--tx); }
-    .chd { font-size: 14px; font-weight: 700; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--bd); padding-bottom: 10px; color: var(--tx); }
+/* BOUTONS PROFESSIONNELS */
+.btn{padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:1px solid transparent;display:inline-flex;align-items:center;gap:6px;transition:0.15s;font-family:inherit}
+.btn-y{background:var(--y);color:#000;border-color:var(--y-dk)}.btn-y:hover{background:var(--y-dk)}
+.btn-gh{background:#fff;border-color:var(--bd);color:var(--tx2)}.btn-gh:hover{background:var(--bg);border-color:var(--tx3)}
+.btn-g{background:var(--g);color:#fff}.btn-r{background:var(--r);color:#fff}
+.btn-sm{padding:6px 12px;font-size:11px}
 
-    /* --- DASHBOARD KPI --- */
-    .krow { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
-    .kpi { background: #fff; border: 1px solid var(--bd); border-radius: 12px; padding: 20px; position: relative; box-shadow: var(--sh); }
-    .kpi-top { height: 4px; position: absolute; top: 0; left: 0; right: 0; }
-    .kpi-lbl { font-size: 11px; font-weight: 800; color: var(--tx3); text-transform: uppercase; margin-bottom: 10px; }
-    .kpi-val { font-size: 32px; font-weight: 900; color: var(--tx); }
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+/* COMPONENTS */
+.card{background:#fff;border-radius:12px;border:1px solid var(--bd);padding:20px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:15px}
+.ph-t{font-size:22px;font-weight:800;color:var(--tx)}
+.chd{font-size:14px;font-weight:700;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--bd);padding-bottom:10px}
 
-    /* --- TABLES (PLANNING & HR) --- */
-    .tbl-wr { background: #fff; border-radius: 12px; border: 1px solid var(--bd); overflow-x: auto; box-shadow: var(--sh); width: 100%; }
-    table { width: 100%; border-collapse: collapse; font-size: 12px; }
-    thead th { background: var(--bg); padding: 12px 10px; font-size: 11px; font-weight: 700; color: var(--tx2); text-transform: uppercase; border-bottom: 1px solid var(--bd); white-space: nowrap; text-align: center; }
-    tbody td { padding: 12px 8px; border-bottom: 1px solid var(--bd); text-align: center; color: var(--tx); }
-    tbody td:first-child { text-align: left; padding-left: 20px; font-weight: 600; }
-    thead th:first-child { text-align: left; padding-left: 20px; }
-    tbody tr:hover td { background: #f8fafc; }
-    .hr-table th { font-size: 10px; letter-spacing: 0.5px; }
-    
-    /* --- PILLS & BADGES --- */
-    .pill { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; display: inline-block; white-space: nowrap; }
-    .pill.sm { background: var(--g-lt); color: var(--g); }
-    .pill.sa { background: var(--r-lt); color: var(--r); }
-    .pill.so { background: var(--bg); color: var(--tx3); border: 1px solid var(--bd); }
-    
-    .ecell { cursor: pointer; transition: 0.2s; position: relative; }
-    .ecell:hover { background: var(--y-lt) !important; box-shadow: inset 0 0 0 1px var(--y); }
+/* DASHBOARD KPI */
+.krow{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+.kpi{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:20px;position:relative;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+.kpi-top{height:4px;position:absolute;top:0;left:0;right:0}
+.kpi-lbl{font-size:11px;font-weight:800;color:var(--tx3);text-transform:uppercase;margin-bottom:10px}
+.kpi-val{font-size:32px;font-weight:900}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 
-    /* --- BUTTONS --- */
-    .btn { padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid transparent; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; font-family: inherit; }
-    .btn-y { background: var(--y); color: #000; border-color: var(--y-dk); }
-    .btn-y:hover { background: var(--y-dk); }
-    .btn-gh { background: #fff; border-color: var(--bd); color: var(--tx2); box-shadow: var(--sh); }
-    .btn-gh:hover { background: var(--bg); color: var(--tx); }
-    .btn-g { background: var(--g); color: #fff; }
-    .btn-r { background: var(--r); color: #fff; }
-    .btn-sm { padding: 6px 12px; font-size: 11px; }
+/* TABLES & LISTS */
+.tbl-wr{background:#fff;border-radius:12px;border:1px solid var(--bd);overflow-x:auto;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead th{background:var(--bg);padding:12px 10px;font-size:10px;font-weight:800;color:var(--tx2);text-transform:uppercase;border-bottom:1px solid var(--bd)}
+tbody td{padding:10px 8px;border-bottom:1px solid var(--bd);text-align:center}
+tbody td:first-child{text-align:left;padding-left:20px;font-weight:600;color:var(--tx)}
+tbody tr:hover td{background:#f8fafc}
 
-    /* --- FORMS --- */
-    .fgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
-    .fgl { display: flex; flex-direction: column; }
-    .fgl label { font-size: 11px; font-weight: 700; color: var(--tx2); margin-bottom: 6px; }
-    .fc { width: 100%; padding: 10px 12px; border: 1px solid var(--bd2); border-radius: 8px; font-size: 13px; font-family: inherit; outline: none; transition: 0.2s; background: #fff; }
-    .fc:focus { border-color: var(--b); box-shadow: 0 0 0 2px var(--b-lt); }
+.ag-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:15px}
+.ag-card{display:flex;align-items:center;gap:15px;background:#fff;padding:15px;border-radius:12px;border:1px solid var(--bd);cursor:pointer;transition:0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+.ag-card:hover{border-color:var(--y);transform:translateY(-2px);box-shadow:0 10px 20px rgba(0,0,0,0.05)}
+.hs-item{display:flex;justify-content:space-between;align-items:center;padding:15px;background:#fff;border-radius:12px;border:1px solid var(--bd);margin-bottom:10px;border-left:4px solid var(--y)}
+.abs-item{display:flex;align-items:center;gap:15px;background:#fff;padding:12px 16px;border:1px solid var(--bd);border-radius:12px;margin-bottom:10px}
 
-    /* --- PAIE RH SECTION --- */
-    .hr-header { background: var(--tx); color: #fff; padding: 16px 20px; border-radius: 12px 12px 0 0; display: flex; justify-content: space-between; align-items: center; }
-    .hr-stats { display: flex; gap: 20px; background: #fff; padding: 16px 20px; border-left: 1px solid var(--bd); border-right: 1px solid var(--bd); border-bottom: 1px solid var(--bd); margin-bottom: 20px; border-radius: 0 0 12px 12px; }
-    .hr-stat-item { flex: 1; }
-    .hr-stat-lbl { font-size: 10px; color: var(--tx3); text-transform: uppercase; font-weight: 800; margin-bottom: 4px; }
-    .hr-stat-val { font-size: 20px; font-weight: 900; color: var(--tx); }
+.pill{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;display:inline-block;white-space:nowrap}
+.pill.sm{background:var(--g-lt);color:var(--g)}.pill.sa{background:var(--r-lt);color:var(--r)}.pill.so{background:var(--bg);color:var(--tx3)}
+.ecell{cursor:pointer;transition:0.2s;position:relative}
+.ecell:hover{background:var(--y-lt)!important;box-shadow:inset 0 0 0 1px var(--y)}
 
-    /* --- MODALS --- */
-    .overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.8); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
-    .overlay.show { display: flex; }
-    .modal { background: #fff; border-radius: 16px; width: 500px; max-width: 95vw; box-shadow: 0 25px 50px rgba(0,0,0,0.25); max-height: 90vh; display: flex; flex-direction: column; }
-    .modal-lg { width: 800px; }
-    .modal-hd { padding: 20px 24px; border-bottom: 1px solid var(--bd); display: flex; justify-content: space-between; align-items: center; background: var(--bg); border-radius: 16px 16px 0 0; flex-shrink: 0; }
-    .m-body { padding: 24px; overflow-y: auto; flex: 1; }
-    .m-footer { padding: 16px 24px; border-top: 1px solid var(--bd); display: flex; justify-content: flex-end; gap: 10px; background: var(--bg); border-radius: 0 0 16px 16px; flex-shrink: 0; }
+/* FORMS */
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:15px}
+.fgl{display:flex;flex-direction:column}
+.fgl label{font-size:11px;font-weight:700;color:var(--tx2);margin-bottom:6px;text-transform:uppercase}
+.fc{width:100%;padding:10px 12px;border:1px solid var(--bd2);border-radius:8px;font-size:13px;font-family:inherit;outline:none}
+.fc:focus{border-color:var(--b);box-shadow:0 0 0 2px var(--b-lt)}
 
-    .toast-wrap { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
-    .toast { padding: 14px 20px; background: #fff; border-radius: 8px; border-left: 4px solid var(--g); box-shadow: 0 10px 25px rgba(0,0,0,0.1); font-weight: 600; font-size: 13px; animation: slideIn 0.3s ease; }
-    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+/* PAIE RH SECTION */
+.pay-city-header{background:var(--tx);color:#fff;padding:12px 20px;border-radius:8px;font-weight:700;margin:24px 0 12px 0;display:flex;justify-content:space-between}
+.pc-card{background:#fff;border:1px solid var(--bd);border-radius:8px;padding:16px;margin-bottom:8px;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1fr;align-items:center}
+.pay-ban{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:20px;display:flex;justify-content:space-around;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+.pk{text-align:center}
 
-    /* --- LISTS --- */
-    .ag-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; }
-    .ag-card { display: flex; align-items: center; gap: 15px; background: #fff; padding: 15px; border-radius: 12px; border: 1px solid var(--bd); cursor: pointer; transition: 0.2s; box-shadow: var(--sh); }
-    .ag-card:hover { border-color: var(--y); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-    
-    .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
-    .dot-g { background: var(--g); }
-    .dot-r { background: var(--r); }
+/* MODALS */
+.overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,0.8);z-index:2000;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.overlay.show{display:flex}
+.modal{background:#fff;border-radius:16px;width:500px;max-width:95vw;box-shadow:0 25px 50px rgba(0,0,0,0.25);max-height:90vh;overflow-y:auto;display:flex;flex-direction:column}
+.modal-lg{width:800px}
+.modal-hd{padding:20px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center;background:var(--bg);border-radius:16px 16px 0 0}
+.m-body{padding:24px;flex:1}
+.m-footer{padding:16px 20px;border-top:1px solid var(--bd);display:flex;justify-content:flex-end;gap:10px;background:var(--bg);border-radius:0 0 16px 16px}
+
+.toast-wrap{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:10px}
+.toast{padding:14px 20px;background:#fff;border-radius:8px;border-left:4px solid var(--g);box-shadow:0 10px 25px rgba(0,0,0,0.1);font-weight:600;font-size:13px;animation:slideIn 0.3s ease}
+@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
 </style>
 </head>
 <body>
@@ -151,12 +127,12 @@
   <div class="login-box">
     <div class="login-logo">🛵</div>
     <div class="login-title">SENTINEL OPS</div>
-    <div class="login-sub">Système de gestion RH & Planning</div>
+    <div style="font-size:12px;color:var(--tx3);margin-bottom:24px">Connexion Sécurisée</div>
     <div class="login-users" id="loginUsers"></div>
     <input type="hidden" id="selUser" value="">
-    <div class="lf">
-        <label>Mot de passe d'accès</label>
-        <input type="password" id="loginPwd" class="login-input" placeholder="Saisissez le mot de passe" onkeydown="if(event.key==='Enter')doLogin()">
+    <div style="text-align:left;margin-bottom:20px">
+        <label style="display:block;font-size:10px;font-weight:700;color:var(--tx2);margin-bottom:6px">MOT DE PASSE</label>
+        <input type="password" id="loginPwd" class="login-input" onkeydown="if(event.key==='Enter')doLogin()">
     </div>
     <div class="login-err" id="loginErr"></div>
     <button class="login-btn" onclick="doLogin()">SE CONNECTER</button>
@@ -169,8 +145,8 @@
     <div class="nav-brand">
         <div class="nav-logo">🛵</div>
         <div>
-            <div style="font-weight:900;font-size:15px;line-height:1.2;color:var(--tx)">SENTINEL</div>
-            <div style="font-size:10px;font-weight:800;color:var(--g);letter-spacing:1px">GLOVO MAROC</div>
+            <div style="font-weight:900;font-size:15px;line-height:1.2">SENTINEL</div>
+            <div style="font-size:10px;font-weight:700;color:var(--g)">GLOVO MAROC</div>
         </div>
     </div>
     <div class="nav-links" id="navLinks"></div>
@@ -178,10 +154,10 @@
         <span style="font-size:11px;color:var(--g);font-weight:700;padding:4px 10px;background:var(--g-lt);border-radius:12px;border:1px solid var(--g)">☁️ Cloud Sync</span>
         <div class="clock" id="clock">00:00:00</div>
         <div style="display:flex;align-items:center;gap:8px;padding:4px 12px 4px 4px;border-radius:20px;border:1px solid var(--bd);background:var(--bg)">
-            <div id="userAv" style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:bold"></div>
+            <div id="userAv" style="width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--y);color:#000;font-size:9px;font-weight:bold"></div>
             <span id="userName" style="font-weight:600;font-size:12px"></span>
         </div>
-        <button class="btn btn-gh btn-sm" onclick="doLogout()">Déconnexion</button>
+        <button class="btn btn-gh btn-sm" onclick="doLogout()">Quitter</button>
     </div>
   </nav>
 
@@ -190,21 +166,9 @@
     <div class="pg active" id="pg-ov">
         <div class="ph">
             <div class="ph-t">Vue d'ensemble <span style="font-size:14px;color:var(--tx2);font-weight:600;margin-left:10px" id="ov-date"></span></div>
+            <button class="btn btn-r btn-sm" onclick="hardResetDatabase()">⚠️ Restauration Système (Cloud Reset)</button>
         </div>
-        
-        <div class="card" id="cloud-config-card" style="display:none; border-left: 4px solid var(--r); background: #FEF2F2;">
-            <div class="chd" style="color:var(--r); border:none; margin-bottom:0">⚠️ Contrôle Système (Anti-Vide)</div>
-            <p style="font-size:13px; color:var(--r); margin-bottom:15px">Si la liste des agents est vide suite à une erreur de synchronisation, cliquez ici pour forcer le rechargement des données officielles.</p>
-            <button class="btn btn-r" onclick="hardResetDatabase()">⚙️ Restaurer la Base de Données (51 Agents)</button>
-        </div>
-
-        <div class="krow">
-            <div class="kpi"><div class="kpi-top" style="background:var(--y)"></div><div class="kpi-lbl">Total Agents</div><div class="kpi-val" id="k-tot" style="color:var(--tx)">—</div></div>
-            <div class="kpi"><div class="kpi-top" style="background:var(--g)"></div><div class="kpi-lbl">Présents Aujourd'hui</div><div class="kpi-val" id="k-act" style="color:var(--g)">—</div></div>
-            <div class="kpi"><div class="kpi-top" style="background:var(--r)"></div><div class="kpi-lbl">Absences / Maladies</div><div class="kpi-val" id="k-abs" style="color:var(--r)">—</div></div>
-            <div class="kpi"><div class="kpi-top" style="background:var(--b)"></div><div class="kpi-lbl">Respect 44H</div><div class="kpi-val" id="k-44" style="color:var(--b)">—</div></div>
-        </div>
-        
+        <div class="krow" id="ov-kpi"></div>
         <div class="grid-2">
             <div class="card"><div class="chd">☀️ Présents de Jour</div><div id="ov-day" style="display:flex;flex-direction:column;gap:10px"></div></div>
             <div class="card"><div class="chd">🌙 Présents de Nuit</div><div id="ov-ngt" style="display:flex;flex-direction:column;gap:10px"></div></div>
@@ -219,13 +183,12 @@
                 <button class="btn btn-gh" onclick="chgW(1)">Sem. Suivante ▶</button>
             </div>
             <div style="display:flex;gap:10px">
-                <button class="btn btn-y" onclick="regenererPlanning()">⚙ Recalculer (44H Strict)</button>
+                <button class="btn btn-y" onclick="regenererPlanning()">⚙ Recalculer 44H</button>
                 <button class="btn btn-g" onclick="openEmailModal()">📧 Générer Mails Glovo</button>
                 <button class="btn btn-gh" onclick="exportPlanningExcel()">📊 Export Excel</button>
             </div>
         </div>
-        
-        <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap" id="plft">
+        <div style="display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap" id="plft">
             <button class="btn btn-gh active" onclick="fC('ALL',this)">Toutes Villes</button>
             <button class="btn btn-gh" onclick="fC('CAS',this)">Casablanca</button>
             <button class="btn btn-gh" onclick="fC('RBT',this)">Rabat</button>
@@ -238,18 +201,18 @@
             <button class="btn btn-gh" onclick="fC('MOH',this)">Mohammadia</button>
             <button class="btn btn-gh" onclick="fC('LYN',this)">Laayoune</button>
         </div>
-        
         <div class="tbl-wr"><table id="pl-tbl"></table></div>
     </div>
 
     <div class="pg" id="pg-py">
         <div class="ph">
-            <div class="ph-t">Rapport Financier RH</div>
+            <div class="ph-t">Rapport Financier RH (Période 21-22)</div>
             <div style="display:flex;gap:10px">
-                <select class="fc" id="pay-mois-sel" style="width:200px" onchange="rPay()"></select>
-                <button class="btn btn-y" onclick="exportPaieExcel()">📊 Exporter Tableau RH</button>
+                <select class="fc" id="pay-mois-sel" style="width:auto;padding:8px 12px" onchange="rPay()"></select>
+                <button class="btn btn-y" onclick="exportPaieExcel()">📊 Exporter pour les RH</button>
             </div>
         </div>
+        <div class="pay-ban" id="py-totals"></div>
         <div id="py-content"></div>
     </div>
 
@@ -261,105 +224,121 @@
                 <button class="btn btn-y" onclick="openAddAgent()">➕ Nouvel Agent</button>
             </div>
         </div>
-        
-        <div class="card" style="display:flex;gap:15px;align-items:center;padding:15px">
+        <div style="display:flex;gap:10px;margin-bottom:20px;background:#fff;padding:12px;border-radius:12px;border:1px solid var(--bd)">
             <input type="text" id="ag-q" class="fc" placeholder="Rechercher par nom..." oninput="rAgents()" style="flex:2;margin:0">
             <select id="ag-vf" class="fc" onchange="rAgents()" style="flex:1;margin:0">
                 <option value="ALL">Toutes les villes</option>
-                <option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option>
-                <option value="AGD">Agadir</option><option value="TEM">Temara</option><option value="SAL">Salé</option>
-                <option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option>
+                <option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option><option value="AGD">Agadir</option>
+                <option value="TEM">Temara</option><option value="SAL">Salé</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option>
             </select>
             <select id="ag-sf" class="fc" onchange="rAgents()" style="flex:1;margin:0">
-                <option value="ALL">Tous les statuts</option><option value="Actif">Uniquement Actifs</option><option value="Inactif">Inactifs</option>
+                <option value="ALL">Tous les statuts</option><option value="Actif">Actifs uniquement</option><option value="Inactif">Inactifs</option>
             </select>
         </div>
-        
         <div class="ag-grid" id="ag-grid"></div>
     </div>
 
+    <div class="pg" id="pg-hs">
+        <div class="ph"><div class="ph-t">Gestion des Hotspots</div><button class="btn btn-y" onclick="document.getElementById('hsOverlay').classList.add('show')">➕ Créer Hotspot</button></div>
+        <div id="hs-list"></div>
+    </div>
+
     <div class="pg" id="pg-ab">
-        <div class="ph"><div class="ph-t">Gestion des Absences</div></div>
+        <div class="ph"><div class="ph-t">Déclaration des Absences</div></div>
         <div class="card">
-            <div class="chd" style="color:var(--r);border:none">➕ Déclarer une Absence / Maladie</div>
-            <div class="fgrid">
-                <div class="fgl"><label>Sélectionner l'Agent</label><select id="f-ag" class="fc"></select></div>
+            <div class="chd" style="color:var(--r);border:none;margin-bottom:0">➕ Saisir une Absence / Maladie</div>
+            <div class="fgrid" style="margin-top:10px">
+                <div class="fgl"><label>Agent</label><select id="f-ag" class="fc"></select></div>
                 <div class="fgl"><label>Type</label><select id="f-ty" class="fc"><option value="ABSENT">ABSENCE INJUSTIFIÉE (-192 MAD)</option><option value="MALADIE">MALADIE (Justifié)</option><option value="CONGE">CONGÉ (Payé)</option></select></div>
                 <div class="fgl"><label>Date de début</label><input type="date" id="f-s" class="fc"></div>
                 <div class="fgl"><label>Date de fin (Optionnel)</label><input type="date" id="f-e" class="fc"></div>
             </div>
-            <div class="fgl" style="margin-top:10px"><label>Motif (Optionnel)</label><input type="text" id="f-m" class="fc" placeholder="Ex: Certificat médical déposé..."></div>
-            <button class="btn btn-r" onclick="submitAbs()" style="margin-top:15px;width:100%;justify-content:center">💾 Confirmer et Sauvegarder</button>
+            <div class="fgl"><label>Motif (Optionnel)</label><input type="text" id="f-m" class="fc" placeholder="Ex: Certificat médical déposé..."></div>
+            <button class="btn btn-r" onclick="submitAbs()" style="width:100%;justify-content:center;margin-top:10px">💾 Enregistrer l'absence</button>
         </div>
-        <div class="card"><div class="chd">Historique Récent</div><div id="abs-list" style="display:flex;flex-direction:column;gap:10px"></div></div>
+        <div class="card"><div class="chd">Historique des déclarations</div><div id="abs-list" style="display:flex;flex-direction:column;gap:10px"></div></div>
     </div>
+
+    <div class="pg" id="pg-rp">
+        <div class="ph"><div class="ph-t">Rapports de Fin de Shift</div><button class="btn btn-y" onclick="openRapportForm()">➕ Rédiger</button></div>
+        <div id="rp-list"></div>
+    </div>
+
   </div>
 </div>
 
 <div class="overlay" id="editOverlay" onclick="if(event.target===this)closeModal('editOverlay')">
   <div class="modal">
-    <div class="modal-hd"><div class="modal-hd-t">✏️ Modification d'Horaire</div><button class="m-close" onclick="closeModal('editOverlay')">✕</button></div>
+    <div class="modal-hd"><div style="font-weight:800;font-size:16px">✏️ Modifier le Shift</div><button class="m-close" onclick="closeModal('editOverlay')">✕</button></div>
     <div class="m-body">
       <div style="font-size:16px;font-weight:800;margin-bottom:20px;color:var(--tx)" id="em-agent"></div>
       <div class="fgl"><label>Nouvel Horaire</label><select class="fc" id="em-shift"></select></div>
       <div class="fgl"><label>Hotspot assigné</label><select class="fc" id="em-hs"></select></div>
     </div>
-    <div class="m-footer">
-        <button class="btn btn-gh" onclick="closeModal('editOverlay')">Annuler</button>
-        <button class="btn btn-y" onclick="saveCell()">💾 Mettre à jour</button>
-    </div>
+    <div class="m-footer"><button class="btn btn-gh" onclick="closeModal('editOverlay')">Annuler</button><button class="btn btn-y" onclick="saveCell()">💾 Mettre à jour</button></div>
   </div>
 </div>
 
 <div class="overlay" id="emailOverlay" onclick="if(event.target===this)closeModal('emailOverlay')">
   <div class="modal modal-lg">
-    <div class="modal-hd"><div class="modal-hd-t">📧 Générateur Email Officiel Glovo</div><button class="m-close" onclick="closeModal('emailOverlay')">✕</button></div>
+    <div class="modal-hd"><div style="font-weight:800;font-size:16px">📧 Générateur Email Glovo</div><button class="m-close" onclick="closeModal('emailOverlay')">✕</button></div>
     <div class="m-body">
       <div style="background:var(--y-lt);border:1px solid var(--y-md);padding:15px;border-radius:10px;margin-bottom:20px;display:flex;align-items:center;gap:15px">
         <span style="font-size:24px">✨</span>
-        <div>
-          <div style="font-weight:800;color:#92400E;margin-bottom:4px">Procédure d'envoi</div>
-          <div style="font-size:12px;color:var(--tx2)">Sélectionnez la ville, cliquez sur générer. Ensuite, cliquez sur "Copier & Gmail" pour un agent, puis faites <kbd>Ctrl + V</kbd> dans le corps du message Gmail.</div>
-        </div>
+        <div><div style="font-weight:800;color:#92400E;margin-bottom:4px">Génération Pro pour Gmail</div><div style="font-size:12px;color:var(--tx2)">Sélectionnez la ville, cliquez sur générer. Cliquez sur le bouton vert d'un agent. Gmail s'ouvre, faites <kbd>Ctrl + V</kbd> dans le message.</div></div>
       </div>
       <div class="fgrid">
-        <div class="fgl"><label>Filtrer par ville :</label>
-            <select class="fc" id="email-ville-sel">
-                <option value="ALL">Toutes les villes</option>
-                <option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option><option value="AGD">Agadir</option>
-            </select>
-        </div>
-        <div class="fgl" style="justify-content:flex-end"><button class="btn btn-y" onclick="preparerEmails()" style="padding:12px">⚡ Générer les Modèles</button></div>
+        <div class="fgl"><label>Filtrer par ville :</label><select class="fc" id="email-ville-sel"><option value="ALL">Toutes les villes</option><option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option><option value="AGD">Agadir</option></select></div>
+        <div class="fgl" style="justify-content:flex-end"><button class="btn btn-y" onclick="preparerEmails()" style="padding:12px">⚡ Générer les Tableaux HTML</button></div>
       </div>
-      <div id="email-preview" style="margin-top:20px;max-height:400px;overflow-y:auto"></div>
+      <div id="email-preview" style="margin-top:20px;max-height:400px;overflow-y:auto;padding-right:10px"></div>
     </div>
   </div>
 </div>
 
 <div class="overlay" id="agOverlay" onclick="if(event.target===this)closeModal('agOverlay')">
   <div class="modal">
-    <div class="modal-hd"><div class="modal-hd-t">Fiche Employé</div><button class="m-close" onclick="closeModal('agOverlay')">✕</button></div>
+    <div class="modal-hd"><div style="font-weight:800;font-size:16px">Fiche Agent</div><button class="m-close" onclick="closeModal('agOverlay')">✕</button></div>
     <div class="m-body">
-      <div class="fgl"><label>Nom Complet *</label><input type="text" class="fc" id="ag-nom"></div>
+      <div class="fgl"><label>Nom Complet *</label><input type="text" id="ag-nom" class="fc"></div>
       <div class="fgrid">
-        <div class="fgl"><label>Ville *</label><select class="fc" id="ag-ville"><option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option><option value="AGD">Agadir</option><option value="TEM">Temara</option><option value="SAL">Salé</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option><option value="MOH">Mohammadia</option><option value="LYN">Laayoune</option></select></div>
-        <div class="fgl"><label>Date d'Embauche (Pour Paie)</label><input type="date" class="fc" id="ag-emb"></div>
+        <div class="fgl"><label>Ville *</label><select id="ag-ville" class="fc"><option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option><option value="AGD">Agadir</option><option value="TEM">Temara</option><option value="SAL">Salé</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option><option value="MOH">Mohammadia</option><option value="LYN">Laayoune</option></select></div>
+        <div class="fgl"><label>Date d'Embauche</label><input type="date" id="ag-emb" class="fc"></div>
       </div>
-      <div class="fgl"><label>Email Gmail</label><input type="email" class="fc" id="ag-email"></div>
-      <div class="fgl"><label>Statut (Si inactif, il disparaît des plannings)</label><select class="fc" id="ag-stat"><option value="Actif">Actif</option><option value="Inactif">Inactif</option></select></div>
+      <div class="fgl"><label>Email</label><input type="email" id="ag-email" class="fc"></div>
+      <div class="fgl"><label>Statut</label><select id="ag-stat" class="fc"><option value="Actif">Actif</option><option value="Inactif">Inactif (Désactivé)</option></select></div>
     </div>
-    <div class="m-footer">
-        <button class="btn btn-gh" onclick="closeModal('agOverlay')">Annuler</button>
-        <button class="btn btn-y" onclick="saveAgent()">💾 Enregistrer</button>
-    </div>
+    <div class="m-footer"><button class="btn btn-gh" onclick="closeModal('agOverlay')">Annuler</button><button class="btn btn-y" onclick="saveAgent()">💾 Enregistrer</button></div>
   </div>
 </div>
 
-<div class="toast-wrap" id="toastWrap"></div>
+<div class="overlay" id="hsOverlay" onclick="if(event.target===this)closeModal('hsOverlay')">
+  <div class="modal">
+    <div class="modal-hd"><div style="font-weight:800;font-size:16px">Nouveau Hotspot</div><button class="m-close" onclick="closeModal('hsOverlay')">✕</button></div>
+    <div class="m-body">
+      <div class="fgl"><label>Ville</label><select id="hs-f-ville" class="fc"><option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option><option value="AGD">Agadir</option></select></div>
+      <div class="fgl"><label>Nom du Point (Ex: Macdo Maarif)</label><input type="text" id="hs-f-nom" class="fc"></div>
+      <div class="fgl"><label>Heure de pointe estimée</label><input type="time" id="hs-f-pk" class="fc" value="12:00"></div>
+    </div>
+    <div class="m-footer"><button class="btn btn-gh" onclick="closeModal('hsOverlay')">Annuler</button><button class="btn btn-y" onclick="saveHotspot()">💾 Ajouter</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="rpOverlay" onclick="if(event.target===this)closeModal('rpOverlay')">
+  <div class="modal">
+    <div class="modal-hd"><div style="font-weight:800;font-size:16px">Rapport de Fin de Shift</div><button class="m-close" onclick="closeModal('rpOverlay')">✕</button></div>
+    <div class="m-body">
+      <div class="fgl"><label>Date du Shift</label><input type="date" id="rp-date" class="fc"></div>
+      <div class="fgl"><label>Résumé global</label><textarea id="rp-resume" class="fc fc-ta" placeholder="Déroulement global..."></textarea></div>
+      <div class="fgl"><label>Incidents / Retards</label><textarea id="rp-anomalies" class="fc fc-ta" placeholder="Laisser vide si RAS..."></textarea></div>
+    </div>
+    <div class="m-footer"><button class="btn btn-gh" onclick="closeModal('rpOverlay')">Annuler</button><button class="btn btn-y" onclick="saveRapport()">💾 Transmettre</button></div>
+  </div>
+</div>
 
 <script>
 // ═══════════════════════════════════════════════════════════
-//  SENTINEL v14.0 — HR CORPORATE LOGIC & FULL DATA
+//  SENTINEL v14.0 — ULTIMATE EDITION (FULL CODE RESTORED)
 // ═══════════════════════════════════════════════════════════
 
 var USERS = {
@@ -370,10 +349,14 @@ var USERS = {
   kech: {pwd:'KECH2020', nom:'Leader Marrakech', role:'leader', villes:['MAR'], color:'#E67E22'}
 };
 
-var CLOUD = {KEY:'$2a$10$2UAmdVsMhCVntgYL5F/RS.KvbKxaxpDTXSPzAyD/9nhcq4HK3Jyzq', BIN:'69e0bb5e856a6821893dbe64'};
-var SK = {AGENTS:'s_ag_v14', ABSENCES:'s_ab_v14', PLAN:'s_pl_v14_', HOTSPOTS:'s_hs_v14'};
+var CC={CAS:{bg:'#FEF3C7',tx:'#92400E'},DRB:{bg:'#DBEAFE',tx:'#1E40AF'},BSK:{bg:'#F3E8FF',tx:'#6B21A8'},RBT:{bg:'#DCFCE7',tx:'#166534'},TEM:{bg:'#E0F2FE',tx:'#0369A1'},SAL:{bg:'#FCE7F3',tx:'#BE185D'},AGD:{bg:'#FFE4E6',tx:'#BE123C'},MOH:{bg:'#E0E7FF',tx:'#3730A3'},LYN:{bg:'#FEF08A',tx:'#854D0E'},MAR:{bg:'#FFEDD5',tx:'#9A3412'}};
+var CLA={CAS:'Casablanca',DRB:'Dar Bouazza',BSK:'Bouskoura',RBT:'Rabat',TEM:'Temara',SAL:'Salé',AGD:'Agadir',MOH:'Mohammadia',LYN:'Laayoune',MAR:'Marrakech'};
+var JOURS=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
 
-// EXACT 51 AGENTS FROM EXCEL
+var SK={AGENTS:'s_ag_v14',ABSENCES:'s_ab_v14',PLAN:'s_pl_v14_',HOTSPOTS:'s_hs_v14',RAPPORTS:'s_rp_v14'};
+var CLOUD={KEY:'$2a$10$2UAmdVsMhCVntgYL5F/RS.KvbKxaxpDTXSPzAyD/9nhcq4HK3Jyzq', BIN:'69e0bb5e856a6821893dbe64'};
+
+// LA LISTE COMPLÈTE (AUCUN AGENT COUPÉ)
 var DEFAULT_AGENTS = [
   {nom:'YASSINE MAGHFOUR',ville:'AGD',email:'ymaghfour28@gmail.com',embauche:'2026-05-06',statut:'Actif'},
   {nom:'ADOZ AZIZ',ville:'AGD',email:'Azizadoz90@gmail.com',embauche:'2026-05-06',statut:'Actif'},
@@ -428,51 +411,55 @@ var DEFAULT_AGENTS = [
   {nom:'Amine HASSANE',ville:'MOH',email:'hassaneamineamine@gmail.com',embauche:'',statut:'Actif'}
 ];
 var DEFAULT_HOTSPOTS = [{ville:'CAS',nom:'Maarif (Macdo)',pk:'12:00'},{ville:'MAR',nom:'Gueliz Centre',pk:'13:00'}];
-var JOURS = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
 
 var currentUser=null; var D={}; var weekOffset=0; var gFC='ALL'; var agEditIdx=-1; var emState={};
 
-// HELPERS
+// --- HELPERS ---
 function ini(n){return n?n.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase():'?';}
 function mad(n){return Number(n).toLocaleString('fr-MA')+' MAD';}
-function calcH(s){if(!s||['OFF','ABSENT','CONGE','MALADIE','—'].includes(s.toUpperCase()))return 0;var r=s.split('-');if(r.length<2)return 0;var t=x=>{var p=x.split(':');return parseInt(p[0])*60+parseInt(p[1]);};var d=t(r[1])-t(r[0]);if(d<0)d+=1440;return Math.round(d/6)/10;}
+function fmtD(d){return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();}
 function getLundi(off){var t=new Date(),d=t.getDay();var df=d===1?0:d===0?-6:1-d;var l=new Date(t);l.setDate(t.getDate()+df+(off||0)*7);l.setHours(0,0,0,0);return l;}
 function numSem(dt){var s=new Date(dt.getFullYear(),0,1);return Math.ceil(((dt-s)/86400000+s.getDay()+1)/7);}
-function fmtD(d){return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();}
+function calcH(s){if(!s||['OFF','ABSENT','CONGE','MALADIE','—'].includes(s))return 0;var r=s.split('-');if(r.length<2)return 0;var t=x=>{var p=x.split(':');return parseInt(p[0])*60+parseInt(p[1]);};var d=t(r[1])-t(r[0]);if(d<0)d+=1440;return Math.round(d/6)/10;}
+function sClass(s){if(!s||s==='OFF'||s==='—')return 'so';if(['ABSENT','CONGE','MALADIE'].includes(s))return 'sa';return 'sm';}
+function toast(m){var e=document.createElement('div');e.className='toast';e.textContent='✅ '+m;document.getElementById('toastWrap').appendChild(e);setTimeout(()=>{e.style.animation='slideIn 0.3s ease reverse forwards';setTimeout(()=>e.remove(),300);},3000);}
 
-function toast(msg,type){
-  var el=document.createElement('div');el.className='toast '+(type||'ok');el.innerHTML=(type==='ok'?'✅ ':'❌ ')+msg;
-  document.getElementById('toastWrap').appendChild(el);
-  setTimeout(()=>{el.style.animation='slideIn 0.3s ease reverse forwards';setTimeout(()=>el.remove(),300);},3000);
-}
+// --- STORAGE & CLOUD ---
+function getAgents(){var a=localStorage.getItem(SK.AGENTS);return a?JSON.parse(a):DEFAULT_AGENTS;}
+function saveAgents(ag){localStorage.setItem(SK.AGENTS,JSON.stringify(ag)); cloudPushData();}
+function getHotspots(){var a=localStorage.getItem(SK.HOTSPOTS);return a?JSON.parse(a):DEFAULT_HOTSPOTS;}
+function saveHotspots(hs){localStorage.setItem(SK.HOTSPOTS,JSON.stringify(hs)); cloudPushData();}
+function getAbsences(){var a=localStorage.getItem(SK.ABSENCES);return a?JSON.parse(a):[];}
+function saveAbsences(ab){localStorage.setItem(SK.ABSENCES,JSON.stringify(ab)); cloudPushData();}
+function getRapports(){var a=localStorage.getItem(SK.RAPPORTS);return a?JSON.parse(a):[];}
 
-// DATA SYNC
-function cloudSync(push){
-  if(!push){
-    fetch(`https://api.jsonbin.io/v3/b/${CLOUD.BIN}/latest`,{headers:{'X-Master-Key':CLOUD.KEY,'X-Bin-Meta':'false'}})
-    .then(r=>r.json()).then(d=>{
+function cloudPull(cb){
+  fetch(`https://api.jsonbin.io/v3/b/${CLOUD.BIN}/latest`,{headers:{'X-Master-Key':CLOUD.KEY,'X-Bin-Meta':'false'}})
+  .then(r=>r.json()).then(d=>{
       if(d.agents && d.agents.length>0) localStorage.setItem(SK.AGENTS, JSON.stringify(d.agents));
       if(d.abs) localStorage.setItem(SK.ABSENCES, JSON.stringify(d.abs));
       if(d.hs) localStorage.setItem(SK.HOTSPOTS, JSON.stringify(d.hs));
       if(d.pk && d.pd) localStorage.setItem(d.pk, JSON.stringify(d.pd));
-      loadData(weekOffset);
-    }).catch(()=>{});
-  } else {
-    var pk = SK.PLAN+numSem(getLundi(weekOffset+1))+'_'+getLundi(weekOffset+1).getFullYear();
-    var payload = {agents: JSON.parse(localStorage.getItem(SK.AGENTS)||'[]'), abs: JSON.parse(localStorage.getItem(SK.ABSENCES)||'[]'), hs: JSON.parse(localStorage.getItem(SK.HOTSPOTS)||'[]'), pk: pk, pd: JSON.parse(localStorage.getItem(pk)||'null')};
-    fetch(`https://api.jsonbin.io/v3/b/${CLOUD.BIN}`,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':CLOUD.KEY},body:JSON.stringify(payload)}).catch(()=>{});
-  }
+      if(cb) cb();
+  }).catch(()=>{if(cb)cb();});
+}
+function cloudPushData(){
+  var pk=SK.PLAN+numSem(getLundi(weekOffset+1))+'_'+getLundi(weekOffset+1).getFullYear();
+  var payload={agents: getAgents(), abs: getAbsences(), hs: getHotspots(), pk: pk, pd: JSON.parse(localStorage.getItem(pk)||'null')};
+  fetch(`https://api.jsonbin.io/v3/b/${CLOUD.BIN}`,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':CLOUD.KEY},body:JSON.stringify(payload)}).catch(()=>{});
 }
 function hardResetDatabase(){
-  if(confirm("ATTENTION: Ceci effacera toutes les modifications et rechargera les 51 agents de base depuis le code. Continuer ?")){
-    localStorage.clear(); localStorage.setItem(SK.AGENTS, JSON.stringify(DEFAULT_AGENTS)); localStorage.setItem(SK.HOTSPOTS, JSON.stringify(DEFAULT_HOTSPOTS)); cloudSync(true);
-    toast('Base restaurée !', 'ok'); setTimeout(()=>location.reload(), 1000);
+  if(confirm("ATTENTION: Vider la mémoire et forcer le rechargement de vos 51 agents de base ?")){
+      localStorage.clear();
+      localStorage.setItem(SK.AGENTS, JSON.stringify(DEFAULT_AGENTS));
+      localStorage.setItem(SK.HOTSPOTS, JSON.stringify(DEFAULT_HOTSPOTS));
+      cloudPushData(); toast('Base restaurée !'); setTimeout(()=>location.reload(),1000);
   }
 }
 
-// SESSION
+// --- LOGIN ---
 document.addEventListener('DOMContentLoaded', function(){
-  document.getElementById('loginUsers').innerHTML=Object.keys(USERS).map(k=>`<div class="login-user" onclick="selUser('${k}')" id="lu-${k}"><div class="login-user-av" style="background:${USERS[k].color}">${ini(USERS[k].nom)}</div><div class="login-user-nm">${USERS[k].nom.split(' ')[0]}</div><div style="font-size:10px;color:var(--tx3)">${USERS[k].role==='admin'?'Admin':'Leader'}</div></div>`).join('');
+  document.getElementById('loginUsers').innerHTML=Object.keys(USERS).map(k=>`<div class="login-user" onclick="selUser('${k}')" id="lu-${k}"><div class="login-user-av" style="background:${USERS[k].color}">${ini(USERS[k].nom)}</div><div class="login-user-nm">${USERS[k].nom.split(' ')[0]}</div><div style="font-size:9px;color:var(--tx3)">${USERS[k].role==='admin'?'Admin':'Leader'}</div></div>`).join('');
   var s=sessionStorage.getItem('sentinel_session'); if(s && USERS[s]){ selUser(s); document.getElementById('loginPwd').value=USERS[s].pwd; doLogin(); }
 });
 function selUser(k){document.querySelectorAll('.login-user').forEach(e=>e.classList.remove('sel'));document.getElementById('lu-'+k).classList.add('sel');document.getElementById('selUser').value=k;document.getElementById('loginPwd').focus();}
@@ -481,31 +468,28 @@ function doLogin(){
   if(!k||USERS[k].pwd!==p){document.getElementById('loginErr').textContent="Mot de passe incorrect.";return;}
   currentUser={key:k,...USERS[k]}; sessionStorage.setItem('sentinel_session',k);
   document.getElementById('loginScreen').style.display='none';document.getElementById('app').style.display='flex';
-  document.getElementById('userName').textContent=currentUser.nom;document.getElementById('userAv').textContent=ini(currentUser.nom);document.getElementById('userAv').style.background=currentUser.color;
-  buildNav(); cloudSync(false); setInterval(()=>cloudSync(false), 20000);
+  document.getElementById('userName').textContent=currentUser.nom;
+  buildNav(); cloudPull(()=>{ loadData(0); setInterval(()=>cloudPull(()=>{loadData(weekOffset, true);}), 15000); });
 }
 function doLogout(){sessionStorage.removeItem('sentinel_session');location.reload();}
 
 function buildNav(){
-  var l=[{id:'ov',ic:'📊',la:'Dashboard'},{id:'pl',ic:'📅',la:'Planning'},{id:'py',ic:'💰',la:'Paie RH',ad:1},{id:'ag',ic:'👥',la:'Agents'},{id:'ab',ic:'🚨',la:'Absences'}];
-  document.getElementById('navLinks').innerHTML=l.filter(x=>!x.ad||currentUser.role==='admin').map(x=>`<div class="ni" onclick="goPage('${x.id}',this)" id="ni-${x.id}"><span class="ni-ic">${x.ic}</span><span>${x.la}</span></div>`).join('');
+  var l=[{id:'ov',la:'Dashboard'},{id:'pl',la:'Planning'},{id:'py',la:'Paie HR',ad:1},{id:'ag',la:'Agents',ad:1},{id:'ab',la:'Absences'},{id:'hs',la:'Hotspots',ad:1},{id:'rp',la:'Rapports'}];
+  document.getElementById('navLinks').innerHTML=l.filter(x=>!x.ad||currentUser.role==='admin').map(x=>`<div class="ni" onclick="goPage('${x.id}',this)" id="ni-${x.id}">${x.la}</div>`).join('');
   document.getElementById('ni-ov').classList.add('active');
   if(currentUser.role==='admin') document.getElementById('cloud-config-card').style.display='block';
 }
 function goPage(id,btn){document.querySelectorAll('.pg, .ni').forEach(e=>e.classList.remove('active'));document.getElementById('pg-'+id).classList.add('active');if(btn)btn.classList.add('active');}
 
-// LOGIC DATA & PLANNING
-function loadData(off){
+// --- DATA & PLANNING ---
+function loadData(off, silent){
   weekOffset=off; 
-  var agents=JSON.parse(localStorage.getItem(SK.AGENTS)); if(!agents||agents.length===0) agents=DEFAULT_AGENTS;
-  var abs=JSON.parse(localStorage.getItem(SK.ABSENCES)||'[]');
-  var hs=JSON.parse(localStorage.getItem(SK.HOTSPOTS)||JSON.stringify(DEFAULT_HOTSPOTS));
-  
+  var agents=getAgents(), abs=getAbsences(), hs=getHotspots();
   var lundi=getLundi(off+1); var pk=SK.PLAN+numSem(lundi)+'_'+lundi.getFullYear();
   var pData=JSON.parse(localStorage.getItem(pk));
   
   var allActifs=agents.filter(a=>a.statut==='Actif');
-  if(!pData || pData.planning.length !== allActifs.length){ pData=genPlanning(agents,off); localStorage.setItem(pk,JSON.stringify(pData)); cloudSync(true); }
+  if(!pData || pData.planning.length !== allActifs.length){ pData=genPlanning(agents,off); localStorage.setItem(pk,JSON.stringify(pData)); if(!silent)cloudPushData(); }
   
   D={all:agents, actifs:allActifs.filter(a=>currentUser.villes.includes(a.ville)), abs:abs, hs:hs, plan:pData.planning.filter(p=>currentUser.villes.includes(p.ville)), meta:{dates:pData.dates,wn:pData.wn}, pk:pk};
   
@@ -537,18 +521,22 @@ function genPlanning(agents,off){
   return {planning:planning,dates:dates,wn:wn};
 }
 
-// UI RENDERING
+// --- RENDER ---
 function renderUI(){
   var ti=new Date().getDay(); ti=ti===0?6:ti-1;
   document.getElementById('ov-date').textContent=new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
   
-  document.getElementById('ov-kpi').innerHTML=`<div class="kpi"><div class="kpi-top" style="background:var(--tx)"></div><div class="kpi-lbl">Effectif Géré</div><div class="kpi-val" style="color:var(--tx)">${D.actifs.length}</div></div><div class="kpi"><div class="kpi-top" style="background:var(--g)"></div><div class="kpi-lbl">Présents Aujourd'hui</div><div class="kpi-val" style="color:var(--g)">${D.plan.filter(p=>!['OFF','ABSENT','—'].includes(p.shifts[ti])).length}</div></div><div class="kpi"><div class="kpi-top" style="background:var(--r)"></div><div class="kpi-lbl">Absences Globales</div><div class="kpi-val" style="color:var(--r)">${D.abs.length}</div></div>`;
+  document.getElementById('ov-kpi').innerHTML=`
+    <div class="kpi"><div class="kpi-top" style="background:var(--tx)"></div><div class="kpi-lbl">Agents Actifs</div><div class="kpi-val" style="color:var(--tx)">${D.actifs.length}</div></div>
+    <div class="kpi"><div class="kpi-top" style="background:var(--g)"></div><div class="kpi-lbl">Présents Aujourd'hui</div><div class="kpi-val" style="color:var(--g)">${D.plan.filter(p=>!['OFF','ABSENT','—'].includes(p.shifts[ti])).length}</div></div>
+    <div class="kpi"><div class="kpi-top" style="background:var(--r)"></div><div class="kpi-lbl">Absences Globales</div><div class="kpi-val" style="color:var(--r)">${D.abs.length}</div></div>
+  `;
   
-  document.getElementById('ov-day').innerHTML=D.plan.filter(p=>parseInt(p.shifts[ti].split(':')[0])<16).map(p=>`<div class="sr"><div class="av av-sm" style="background:var(--bg);color:var(--tx);border:1px solid var(--bd)">${ini(p.nom)}</div><div class="sr-info"><div class="sr-nm">${p.nom}</div></div><span class="pill sm">${p.shifts[ti]}</span></div>`).join('') || '<div style="color:var(--tx3);font-size:12px;padding:10px">Aucun shift de jour</div>';
-  document.getElementById('ov-ngt').innerHTML=D.plan.filter(p=>parseInt(p.shifts[ti].split(':')[0])>=16).map(p=>`<div class="sr"><div class="av av-sm" style="background:var(--bg);color:var(--tx);border:1px solid var(--bd)">${ini(p.nom)}</div><div class="sr-info"><div class="sr-nm">${p.nom}</div></div><span class="pill" style="background:var(--tx);color:#fff">${p.shifts[ti]}</span></div>`).join('') || '<div style="color:var(--tx3);font-size:12px;padding:10px">Aucun shift de nuit</div>';
+  document.getElementById('ov-day').innerHTML=D.plan.filter(p=>parseInt(p.shifts[ti].split(':')[0])<16).map(p=>`<div class="sr"><div class="av av-sm" style="background:var(--bg);color:var(--tx);border:1px solid var(--bd)">${ini(p.nom)}</div><div class="sr-info"><div class="sr-nm">${p.nom}</div></div><span class="pill sm">${p.shifts[ti]}</span></div>`).join('') || '<div style="color:var(--tx3);font-size:12px;padding:10px">Aucun shift</div>';
+  document.getElementById('ov-ngt').innerHTML=D.plan.filter(p=>parseInt(p.shifts[ti].split(':')[0])>=16).map(p=>`<div class="sr"><div class="av av-sm" style="background:var(--bg);color:var(--tx);border:1px solid var(--bd)">${ini(p.nom)}</div><div class="sr-info"><div class="sr-nm">${p.nom}</div></div><span class="pill" style="background:var(--tx);color:#fff">${p.shifts[ti]}</span></div>`).join('') || '<div style="color:var(--tx3);font-size:12px;padding:10px">Aucun shift</div>';
   
   document.getElementById('pl-ttl').textContent='Semaine W'+D.meta.wn;
-  var plHtml=`<table class="hr-table"><thead><tr><th>Agent</th><th>Ville</th>${JOURS.map((j,i)=>`<th>${j}<br><span style="font-size:9px;color:var(--tx3);font-weight:normal">${D.meta.dates[i]}</span></th>`).join('')}<th>H/SEM</th></tr></thead><tbody>`;
+  var plHtml=`<thead><tr><th>Agent</th><th>Ville</th>${JOURS.map((j,i)=>`<th>${j}<br><span style="font-size:9px;color:var(--tx3);font-weight:normal">${D.meta.dates[i]}</span></th>`).join('')}<th>H/SEM</th></tr></thead><tbody>`;
   var curPlan = gFC==='ALL'?D.plan:D.plan.filter(p=>p.ville===gFC);
   curPlan.forEach(p=>{
       plHtml+=`<tr><td>${p.nom}</td><td><span class="pill so">${p.ville}</span></td>${p.shifts.map((s,i)=>{
@@ -556,14 +544,13 @@ function renderUI(){
           return `<td class="ecell" onclick="openModal('${p.nom}',${i},'${s}')"><span class="pill ${s==='OFF'||s==='—'?'so':s==='ABSENT'?'sa':'sm'}">${s}</span>${['OFF','ABSENT','CONGE','MALADIE','—'].includes(s)?'':hs}</td>`;
       }).join('')}<td><span class="pill ${p.totalH==44?'sm':'sa'}">${p.totalH}h</span></td></tr>`;
   });
-  document.getElementById('pl-tbl').innerHTML=plHtml+'</tbody></table>';
+  document.getElementById('pl-tbl').innerHTML=plHtml+'</tbody>';
 
   renderPaie();
-  
-  document.getElementById('ag-tbl').innerHTML=`<thead><tr><th>Nom Complet</th><th>Ville</th><th>Email</th><th>Embauche</th><th>Statut</th><th>Action</th></tr></thead><tbody>${D.all.map((a,i)=>`<tr><td>${a.nom}</td><td>${a.ville}</td><td>${a.email||'—'}</td><td>${a.embauche?new Date(a.embauche).toLocaleDateString('fr-FR'):'Ancien'}</td><td><span class="status-dot ${a.statut==='Actif'?'dot-g':'dot-r'}"></span>${a.statut}</td><td><button class="btn btn-gh btn-sm" onclick="editAgentIdx(${i})">Modifier</button></td></tr>`).join('')}</tbody>`;
-  
+  rAgents();
   document.getElementById('f-ag').innerHTML=D.actifs.map(a=>`<option value="${a.nom}">${a.nom}</option>`).join('');
-  document.getElementById('abs-list').innerHTML=D.abs.slice(-10).reverse().map(a=>`<div class="sr" style="background:#fff;padding:12px;border:1px solid var(--bd);border-radius:8px;margin-bottom:8px"><div style="flex:1"><b>${a.nom}</b><br><small style="color:var(--tx3)">${a.date}</small></div><span class="pill sa">${a.type}</span><button class="btn btn-gh btn-sm" onclick="delAbs(${D.abs.indexOf(a)})" style="margin-left:15px">✕</button></div>`).join('');
+  document.getElementById('abs-list').innerHTML=D.abs.slice(-10).reverse().map(a=>`<div class="abs-item"><div style="flex:1"><b>${a.nom}</b><br><small style="color:var(--tx3)">${a.date}</small></div><span class="pill sa">${a.type}</span><button class="btn btn-gh btn-sm" onclick="delAbs(${D.abs.indexOf(a)})">✕</button></div>`).join('');
+  document.getElementById('hs-list').innerHTML=D.hs.filter(h=>currentUser.villes.includes(h.ville)).map((h,i)=>`<div class="hs-item"><div style="font-weight:700;font-size:14px;flex:1">${h.nom}</div><span class="pill so">${h.ville}</span><span class="pill se" style="margin:0 10px">⏱ ${h.pk}</span><button class="btn btn-gh btn-sm" onclick="delHs(${i})">✕</button></div>`).join('');
   initPaieMois();
 }
 
@@ -584,7 +571,7 @@ function saveCell(){
   target.shifts[emState.idx]=document.getElementById('em-shift').value;
   if(!target.hotspots) target.hotspots=Array(7).fill('');
   target.hotspots[emState.idx]=document.getElementById('em-hs').value;
-  localStorage.setItem(D.pk,JSON.stringify(pd)); cloudSync(true); closeModal('editOverlay'); loadData(weekOffset); toast('Shift Modifié');
+  localStorage.setItem(D.pk,JSON.stringify(pd)); cloudPushData(); closeModal('editOverlay'); loadData(weekOffset); toast('Shift Modifié');
 }
 
 // ── PAIE HR PRECISION (21 AU 22 + PRORATA) ──
@@ -598,13 +585,13 @@ function rPay(){
   var val = document.getElementById('pay-mois-sel').value.split('-');
   var y=parseInt(val[0]), m=parseInt(val[1])-1;
   var start=new Date(y, m-1, 21), end=new Date(y, m, 22);
-  var totalDays = Math.floor((end - start)/(1000*60*60*24)) + 1; // Période totale
+  var totalDays = Math.floor((end - start)/(1000*60*60*24)) + 1; 
   
   var html='', tN=0, tD=0;
   var byCity={}; D.actifs.forEach(a=>{if(!byCity[a.ville])byCity[a.ville]=[]; byCity[a.ville].push(a);});
 
   Object.keys(byCity).forEach(v=>{
-      html+=`<div class="pay-city-section"><div class="pay-city-header"><span>${v}</span><span style="font-size:12px;opacity:0.8">${byCity[v].length} Agents</span></div>
+      html+=`<div class="pay-city-section"><div class="pay-city-header"><span>📍 VILLE : ${CLA[v]||v}</span><span style="font-size:12px;opacity:0.8">${byCity[v].length} Agents</span></div>
       <table class="tbl-wr hr-table" style="margin-bottom:20px;width:100%">
       <thead><tr><th>Agent</th><th>Embauche</th><th>Jours Période</th><th>Absences</th><th>Retenue</th><th>Salaire Net</th></tr></thead><tbody>`;
       byCity[v].forEach(a=>{
@@ -631,21 +618,25 @@ function submitAbs(){
     var n=document.getElementById('f-ag').value, t=document.getElementById('f-ty').value, s=document.getElementById('f-s').value, e=document.getElementById('f-e').value||s;
     if(!s)return; var cur=new Date(s), end=new Date(e);
     while(cur<=end){ D.abs.push({nom:n, date:fmtD(cur), type:t, motif:document.getElementById('f-m').value}); cur.setDate(cur.getDate()+1); }
-    localStorage.setItem(SK.ABSENCES,JSON.stringify(D.abs)); cloudSync(true); loadData(weekOffset); toast('Absence enregistrée');
+    localStorage.setItem(SK.ABSENCES,JSON.stringify(D.abs)); cloudPushData(); loadData(weekOffset); toast('Absence enregistrée');
 }
-function delAbs(i){if(confirm("Supprimer ?")){D.abs.splice(i,1);localStorage.setItem(SK.ABSENCES,JSON.stringify(D.abs));cloudSync(true);loadData(weekOffset);toast('Supprimé');}}
+function delAbs(i){if(confirm("Supprimer ?")){D.abs.splice(i,1);localStorage.setItem(SK.ABSENCES,JSON.stringify(D.abs));cloudPushData();loadData(weekOffset);toast('Supprimé');}}
 
 function openAddAgent(){agEditIdx=-1; document.getElementById('ag-nom').value=''; document.getElementById('ag-emb').value=''; document.getElementById('ag-email').value=''; document.getElementById('agOverlay').classList.add('show');}
-function editAgentIdx(i){agEditIdx=i; var a=D.all[i]; document.getElementById('ag-nom').value=a.nom; document.getElementById('ag-ville').value=a.ville; document.getElementById('ag-emb').value=a.embauche||''; document.getElementById('ag-email').value=a.email||''; document.getElementById('ag-statut').value=a.statut; document.getElementById('agOverlay').classList.add('show');}
+function editAgentIdx(i){agEditIdx=i; var a=D.all[i]; document.getElementById('ag-nom').value=a.nom; document.getElementById('ag-ville').value=a.ville; document.getElementById('ag-emb').value=a.embauche||''; document.getElementById('ag-email').value=a.email||''; document.getElementById('ag-stat').value=a.statut; document.getElementById('agOverlay').classList.add('show');}
 function saveAgent(){
-    var a={nom:document.getElementById('ag-nom').value, ville:document.getElementById('ag-ville').value, email:document.getElementById('ag-email').value, embauche:document.getElementById('ag-emb').value, statut:document.getElementById('ag-statut').value};
+    var a={nom:document.getElementById('ag-nom').value, ville:document.getElementById('ag-ville').value, email:document.getElementById('ag-email').value, embauche:document.getElementById('ag-emb').value, statut:document.getElementById('ag-stat').value};
     if(agEditIdx>=0) D.all[agEditIdx]=a; else D.all.push(a);
-    localStorage.setItem(SK.AGENTS,JSON.stringify(D.all)); cloudSync(true); closeModal('agOverlay'); loadData(weekOffset); toast('Agent sauvegardé');
+    localStorage.setItem(SK.AGENTS,JSON.stringify(D.all)); cloudPushData(); closeModal('agOverlay'); loadData(weekOffset); toast('Agent sauvegardé');
 }
 function rAgents(){
-    var q=document.getElementById('ag-q').value.toLowerCase(), v=document.getElementById('ag-vf').value;
-    document.querySelectorAll('#ag-tbl tbody tr').forEach(tr=>{ var t=tr.innerText.toLowerCase(); tr.style.display=(t.includes(q)&&(v==='ALL'||t.includes(v.toLowerCase())))?'':'none'; });
+    var q=(document.getElementById('ag-q').value||'').toLowerCase(), vf=document.getElementById('ag-vf').value;
+    var list=D.all.filter(a=>(vf==='ALL'||a.ville===vf)&&a.nom.toLowerCase().includes(q));
+    document.getElementById('ag-grid').innerHTML=list.map((a,i)=>`<div class="ag-card" onclick="editAgentIdx(${D.all.indexOf(a)})"><div class="av av-md" style="background:var(--bg);color:var(--tx);border:1px solid var(--bd)">${ini(a.nom)}</div><div style="flex:1"><div style="font-weight:700;font-size:13px;margin-bottom:4px">${a.nom}</div><div><span class="pill so">${a.ville}</span> ${a.statut==='Inactif'?'<span class="pill sa" style="margin-left:4px">Inactif</span>':''}</div></div></div>`).join('');
 }
+
+function saveHotspot(){var n=document.getElementById('hs-f-nom').value;if(!n)return;D.hs.push({ville:document.getElementById('hs-f-ville').value,nom:n,pk:document.getElementById('hs-f-pk').value});localStorage.setItem(SK.HOTSPOTS,JSON.stringify(D.hs));cloudPushData();closeModal('hsOverlay');loadData(weekOffset);toast('Hotspot ajouté');}
+function delHs(i){if(confirm("Supprimer ce hotspot ?")){D.hs.splice(i,1);localStorage.setItem(SK.HOTSPOTS,JSON.stringify(D.hs));cloudPushData();loadData(weekOffset);toast('Supprimé');}}
 
 // ── MAILS GLOVO DESIGN ──
 function openEmailModal(){document.getElementById('email-preview').innerHTML=''; document.getElementById('emailOverlay').classList.add('show');}
@@ -692,8 +683,10 @@ function copyMail(idx,email){
 
 // ── EXPORTS CSV / EXCEL ──
 function dlXls(html, fn){var blob=new Blob(['\ufeff'+html],{type:'application/vnd.ms-excel;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fn;a.click();}
+function dlCSV(csv, fn){var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fn;a.click();}
+function exportPlanningCSV(){var csv='Agent,Ville,'+JOURS.map((j,i)=>j+' '+D.meta.dates[i]).join(',')+',Total\n'+D.plan.map(p=>p.nom+','+p.ville+','+p.shifts.join(',')+','+p.totalH).join('\n');dlCSV(csv, 'Planning_W'+D.meta.wn+'.csv');}
 function exportPlanningExcel(){
-    var html='<html xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"><style>td,th{border:1px solid #000}</style></head><body><table><tr><th colspan="10" style="background:#FFC244;font-size:16px">Planning W'+D.meta.wn+'</th></tr><tr><th>Agent</th><th>Ville</th>'+JOURS.map((j,i)=>`<th>${j} ${D.meta.dates[i]}</th>`).join('')+'<th>Total</th></tr>';
+    var html='<html xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"><style>td,th{border:1px solid #000;padding:5px}</style></head><body><table><tr><th colspan="10" style="background:#FFC244;font-size:16px">Planning W'+D.meta.wn+'</th></tr><tr><th>Agent</th><th>Ville</th>'+JOURS.map((j,i)=>`<th>${j} ${D.meta.dates[i]}</th>`).join('')+'<th>Total</th></tr>';
     D.plan.forEach(p=>{ html+=`<tr><td><b>${p.nom}</b></td><td>${p.ville}</td>`+p.shifts.map(s=>`<td>${s}</td>`).join('')+`<td><b>${p.totalH}h</b></td></tr>`; });
     html+='</table></body></html>'; dlXls(html, 'Planning_W'+D.meta.wn+'.xls');
 }
@@ -703,8 +696,8 @@ function exportPaieExcel(){
     var html='<html xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"><style>td,th{border:1px solid #000}</style></head><body><table><tr><th colspan="6" style="background:#0F172A;color:#fff">Rapport Paie (Du 21 au 22)</th></tr><tr><th>Agent</th><th>Ville</th><th>Embauche</th><th>Absences (Jours)</th><th>Deduction (MAD)</th><th>NET (MAD)</th></tr>';
     D.actifs.forEach(a=>{
         var nAbs=D.abs.filter(ab=>{if(ab.nom!==a.nom||ab.type!=='ABSENT')return false; var d=new Date(ab.date.split('/').reverse().join('-')); return d>=start&&d<=end;}).length;
-        var base=5000, jP=totalDays;
-        if(a.embauche){ var emb=new Date(a.embauche); if(emb>start && emb<=end){ jP = Math.floor((end-emb)/(1000*60*60*24))+1; base = Math.round((jP/totalDays)*5000); } }
+        var base=5000;
+        if(a.embauche){ var emb=new Date(a.embauche); if(emb>start && emb<=end){ base = Math.round(((Math.floor((end-emb)/(1000*60*60*24))+1)/totalDays)*5000); } }
         var ded=nAbs*192, net=base-ded;
         html+=`<tr><td>${a.nom}</td><td>${a.ville}</td><td>${a.embauche||'Ancien'}</td><td>${nAbs}</td><td>-${ded}</td><td><b>${net}</b></td></tr>`;
     });
@@ -714,6 +707,10 @@ function exportAgentsExcel(){
     var html='<html xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"><style>td,th{border:1px solid #000}</style></head><body><table><tr><th>Nom</th><th>Ville</th><th>Email</th><th>Embauche</th><th>Statut</th></tr>'+D.all.map(a=>`<tr><td>${a.nom}</td><td>${a.ville}</td><td>${a.email||''}</td><td>${a.embauche||'Ancien'}</td><td>${a.statut}</td></tr>`).join('')+'</table></body></html>';
     dlXls(html, 'Agents.xls');
 }
+
+function openRapportForm(){document.getElementById('rp-date').value=new Date().toISOString().split('T')[0]; document.getElementById('rpOverlay').classList.add('show');}
+function saveRapport(){var r=getRapports() || []; r.push({auteur:currentUser.nom, date:document.getElementById('rp-date').value, resume:document.getElementById('rp-resume').value, anomalies:document.getElementById('rp-anomalies').value}); localStorage.setItem(SK.RAPPORTS,JSON.stringify(r)); cloudPushLogs(); closeModal('rpOverlay'); rRapports(); toast('Transmis');}
+function rRapports(){var r=getRapports().sort((a,b)=>b.date.localeCompare(a.date)); document.getElementById('rp-list').innerHTML=r.length ? r.map(x=>`<div class="card"><div style="font-weight:800;font-size:14px;margin-bottom:8px">${x.auteur} <span style="font-weight:normal;color:var(--tx3)">(${x.date})</span></div><div style="font-size:13px;color:var(--tx2)">${x.resume}</div>${x.anomalies?`<div style="margin-top:10px;padding:10px;background:var(--r-lt);color:var(--r);border-radius:8px;font-size:12px"><b>Incidents:</b> ${x.anomalies}</div>`:''}</div>`).join('') : '<div class="em">Aucun rapport</div>';}
 
 function closeModal(id){document.getElementById(id).classList.remove('show');}
 setInterval(()=>{document.getElementById('clock').textContent=new Date().toLocaleTimeString('fr-FR');},1000);
