@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>SENTINEL — HR & OPS Control</title>
+<title>SENTINEL — Corporate Control · Glovo</title>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
     
@@ -29,6 +29,24 @@
         overflow: hidden;
         font-size: 13px;
         -webkit-font-smoothing: antialiased;
+    }
+
+    /* CORRECTION 6 : APP FLEX */
+    #app {
+        display: none;
+        flex-direction: column;
+        height: 100vh;
+    }
+
+    /* CORRECTION 12 : MOBILE SCROLL */
+    .tbl-wr {
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+        background: #fff; 
+        border-radius: 12px; 
+        border: 1px solid var(--bd); 
+        box-shadow: var(--sh); 
+        width: 100%;
     }
 
     ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -98,7 +116,6 @@
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 
     /* --- TABLES (PLANNING) --- */
-    .tbl-wr { background: #fff; border-radius: 16px; border: 1px solid var(--bd); overflow-x: auto; box-shadow: var(--sh); width: 100%; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     thead th { background: var(--bg); padding: 16px 12px; font-size: 11px; font-weight: 800; color: var(--tx2); text-transform: uppercase; border-bottom: 2px solid var(--bd); text-align: center; white-space: nowrap; }
     thead th:first-child { text-align: left; padding-left: 24px; }
@@ -142,7 +159,7 @@
 
     /* --- TOAST --- */
     .toast-wrap { position: fixed; bottom: 30px; right: 30px; z-index: 9999; display: flex; flex-direction: column; gap: 12px; }
-    .toast { padding: 16px 24px; background: #fff; border-radius: 12px; border-left: 5px solid var(--g); box-shadow: 0 15px 30px rgba(0,0,0,0.15); font-weight: 700; font-size: 14px; animation: slideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: var(--tx); display: flex; align-items: center; gap: 10px; }
+    .toast { padding: 16px 24px; background: #fff; border-radius: 12px; box-shadow: 0 15px 30px rgba(0,0,0,0.15); font-weight: 700; font-size: 14px; animation: slideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: var(--tx); display: flex; align-items: center; gap: 10px; }
     @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
     /* --- LISTS --- */
@@ -150,6 +167,7 @@
     .ag-card { display: flex; align-items: center; gap: 16px; background: #fff; padding: 20px; border-radius: 16px; border: 1px solid var(--bd); cursor: pointer; transition: 0.2s; box-shadow: var(--sh); }
     .ag-card:hover { border-color: var(--y); transform: translateY(-4px); box-shadow: var(--sh2); }
     .hs-item { display: flex; justify-content: space-between; align-items: center; padding: 18px 24px; background: #fff; border-radius: 12px; border: 1px solid var(--bd); margin-bottom: 12px; border-left: 5px solid var(--y); box-shadow: var(--sh); }
+    .sr { display: flex; align-items: center; gap: 15px; padding: 12px 15px; background: #fff; border: 1px solid var(--bd); border-radius: 8px; margin-bottom: 8px; }
 </style>
 </head>
 <body>
@@ -182,7 +200,7 @@
     </div>
     <div class="nav-links" id="navLinks"></div>
     <div class="nav-right">
-        <div class="sync-badge" id="syncStatus"><div class="sync-dot"></div><span>Sync Auto Activable</span></div>
+        <div class="sync-badge" id="syncStatus"><div class="sync-dot"></div><span>Sync Auto</span></div>
         <div class="clock" id="clock">00:00:00</div>
         <div style="display:flex;align-items:center;gap:10px;padding:6px 16px 6px 6px;border-radius:30px;border:1px solid var(--bd);background:var(--bg)">
             <div id="userAv" style="width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:800"></div>
@@ -199,12 +217,7 @@
             <div class="ph-t">Vue d'ensemble <span style="font-size:16px;color:var(--tx2);font-weight:600;margin-left:12px" id="ov-date"></span></div>
         </div>
         
-        <div class="krow">
-            <div class="kpi"><div class="kpi-top" style="background:var(--y)"></div><div class="kpi-lbl">Agents Officiels</div><div class="kpi-val" id="k-tot" style="color:var(--tx)">—</div></div>
-            <div class="kpi"><div class="kpi-top" style="background:var(--g)"></div><div class="kpi-lbl">Sur le terrain (Aujourd'hui)</div><div class="kpi-val" id="k-act" style="color:var(--g)">—</div></div>
-            <div class="kpi"><div class="kpi-top" style="background:var(--r)"></div><div class="kpi-lbl">Absences / Maladie (Aujourd'hui)</div><div class="kpi-val" id="k-abs" style="color:var(--r)">—</div></div>
-            <div class="kpi"><div class="kpi-top" style="background:var(--b)"></div><div class="kpi-lbl">Couverture 44H</div><div class="kpi-val" id="k-44" style="color:var(--b)">—</div></div>
-        </div>
+        <div class="krow" id="ov-kpi"></div>
 
         <div class="grid-2">
             <div class="card"><div class="chd">☀️ Présents de Jour (Avant 16h)</div><div id="ov-day" style="display:flex;flex-direction:column;gap:12px"></div></div>
@@ -222,7 +235,6 @@
             <div style="display:flex;gap:12px">
                 <button class="btn btn-y" onclick="regenererPlanning()">⚙ Recalculer (44H Strict)</button>
                 <button class="btn btn-g" onclick="openEmailModal()">📧 Générer Mails Glovo</button>
-                <button class="btn btn-gh" onclick="exportPlanningExcel()">📊 Export Excel</button>
             </div>
         </div>
         
@@ -248,7 +260,6 @@
             <div class="ph-t">Rapport Financier RH</div>
             <div style="display:flex;gap:12px">
                 <select class="fc" id="pay-mois-sel" style="width:220px;padding:10px 16px;font-weight:700" onchange="rPay()"></select>
-                <button class="btn btn-y" onclick="exportPaieExcel()">📊 Exporter Tableau RH</button>
             </div>
         </div>
         <div class="pay-ban">
@@ -264,7 +275,6 @@
         <div class="ph">
             <div class="ph-t">Base de Données Agents</div>
             <div style="display:flex;gap:12px">
-                <button class="btn btn-gh" onclick="exportAgentsExcel()">📊 Export Data</button>
                 <button class="btn btn-y" onclick="openAddAgent()">➕ Nouvel Agent</button>
             </div>
         </div>
@@ -324,7 +334,7 @@
     </div>
     <div class="m-footer">
         <button class="btn btn-gh" onclick="closeModal('editOverlay')">Annuler</button>
-        <button class="btn btn-y" onclick="saveCell()">💾 Valider la modification</button>
+        <button class="btn btn-y" onclick="saveCell()">💾 Mettre à jour</button>
     </div>
   </div>
 </div>
@@ -337,7 +347,7 @@
         <span style="font-size:32px">✨</span>
         <div>
           <div style="font-weight:900;font-size:15px;color:#92400E;margin-bottom:6px">Procédure d'envoi PRO</div>
-          <div style="font-size:13px;color:var(--tx2);line-height:1.5">Sélectionnez la ville, cliquez sur générer. Ensuite, cliquez sur <b style="color:var(--g)">Copier HTML & Ouvrir Gmail</b> pour un agent, puis faites <kbd>Ctrl + V</kbd> dans le corps du message Gmail.</div>
+          <div style="font-size:13px;color:var(--tx2);line-height:1.5">Sélectionnez la ville, cliquez sur générer. Ensuite, cliquez sur <b style="color:var(--g)">Copier HTML</b> pour un agent, puis faites <kbd>Ctrl + V</kbd> dans le corps du message Gmail.</div>
         </div>
       </div>
       <div class="fgrid">
@@ -364,7 +374,7 @@
         <div class="fgl"><label>Date d'Embauche (Pour Paie)</label><input type="date" id="ag-emb" class="fc"></div>
       </div>
       <div class="fgl"><label>Email Gmail</label><input type="email" id="ag-email" class="fc"></div>
-      <div class="fgl"><label>Statut (Inactif le masque des plannings)</label><select id="ag-stat" class="fc"><option value="Actif">Actif</option><option value="Inactif">Inactif</option></select></div>
+      <div class="fgl"><label>Statut (Si inactif, il disparaît des plannings)</label><select id="ag-stat" class="fc"><option value="Actif">Actif</option><option value="Inactif">Inactif</option></select></div>
     </div>
     <div class="m-footer">
         <button class="btn btn-gh" onclick="closeModal('agOverlay')">Annuler</button>
@@ -375,7 +385,7 @@
 
 <div class="overlay" id="hsOverlay" onclick="if(event.target===this)closeModal('hsOverlay')">
   <div class="modal">
-    <div class="modal-hd"><div class="modal-hd-t">Nouveau Hotspot</div><button class="m-close" onclick="closeModal('hsOverlay')">✕</button></div>
+    <div class="modal-hd"><div class="modal-hd-t">📍 Créer un Hotspot</div><button class="m-close" onclick="closeModal('hsOverlay')">✕</button></div>
     <div class="m-body">
       <div class="fgl"><label>Ville</label><select id="hs-f-ville" class="fc"><option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option><option value="AGD">Agadir</option></select></div>
       <div class="fgl"><label>Nom du Point (Ex: Macdo Maarif)</label><input type="text" id="hs-f-nom" class="fc"></div>
@@ -389,7 +399,7 @@
 
 <script>
 // ═══════════════════════════════════════════════════════════
-//  SENTINEL v17.0 — FULL CORPORATE + SMART HOTSPOTS & FAILSFE
+//  SENTINEL v18.0 — STABLE CORPORATE RELEASE
 // ═══════════════════════════════════════════════════════════
 
 const USERS = {
@@ -401,9 +411,9 @@ const USERS = {
 };
 
 const CLOUD = {KEY:'$2a$10$2UAmdVsMhCVntgYL5F/RS.KvbKxaxpDTXSPzAyD/9nhcq4HK3Jyzq', BIN:'69e0bb5e856a6821893dbe64'};
-const SK = {AGENTS:'s_ag_v17', ABSENCES:'s_ab_v17', PLAN:'s_pl_v17_', HOTSPOTS:'s_hs_v17'};
+const SK = {AGENTS:'s_ag_v18', ABSENCES:'s_ab_v18', PLAN:'s_pl_v18_', HOTSPOTS:'s_hs_v18'};
 
-// DONNÉES SÉCURISÉES : LES 53 AGENTS EXACTS
+// DONNÉES SÉCURISÉES : 53 AGENTS
 const RAW_AGENTS = [
   {nom:'YASSINE MAGHFOUR',ville:'AGD',email:'ymaghfour28@gmail.com',embauche:'2026-05-06',statut:'Actif'},
   {nom:'ADOZ AZIZ',ville:'AGD',email:'Azizadoz90@gmail.com',embauche:'2026-05-06',statut:'Actif'},
@@ -473,7 +483,6 @@ var JOURS=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
 function getAgents(){
     var a = localStorage.getItem(SK.AGENTS);
     if(a) { var arr = JSON.parse(a); if(arr && arr.length >= 50) return arr; }
-    // Failsafe: Écriture directe des 53 agents si data manquante
     localStorage.setItem(SK.AGENTS, JSON.stringify(RAW_AGENTS));
     return RAW_AGENTS;
 }
@@ -496,9 +505,21 @@ function getLundi(off){var t=new Date(),d=t.getDay();var df=d===1?0:d===0?-6:1-d
 function numSem(dt){var s=new Date(dt.getFullYear(),0,1);return Math.ceil(((dt-s)/86400000+s.getDay()+1)/7);}
 function calcH(s){if(!s||['OFF','ABSENT','CONGE','MALADIE','—'].includes(s.toUpperCase()))return 0;var r=s.split('-');if(r.length<2)return 0;var t=x=>{var p=x.split(':');return parseInt(p[0])*60+parseInt(p[1]);};var d=t(r[1])-t(r[0]);if(d<0)d+=1440;return Math.round(d/6)/10;}
 function sClass(s){if(!s||s==='OFF'||s==='—')return 'so';if(['ABSENT','CONGE','MALADIE'].includes(s))return 'sa';return 'sm';}
-function toast(m, err){var e=document.createElement('div');e.className=err?'toast er':'toast';e.innerHTML=(err?'❌ ':'✅ ')+m;document.getElementById('toastWrap').appendChild(e);setTimeout(()=>{e.style.animation='slideIn 0.3s ease reverse forwards';setTimeout(()=>e.remove(),300);},3000);}
 
-// CLOUD SYNC (5s RAPID)
+// CORRECTION 14: TOAST SIGNATURE
+function toast(m, err=false){
+    var e=document.createElement('div');
+    e.className='toast';
+    if(err){ e.style.borderLeft='5px solid var(--r)'; }
+    e.innerHTML=(err?'❌ ':'✅ ')+m;
+    document.getElementById('toastWrap').appendChild(e);
+    setTimeout(()=>{
+        e.style.animation='slideIn 0.3s ease reverse forwards';
+        setTimeout(()=>e.remove(),300);
+    },3000);
+}
+
+// CORRECTION 8: CLOUD SYNC VERSIONING FALSE
 function cloudPull(){
   fetch(`https://api.jsonbin.io/v3/b/${CLOUD.BIN}/latest`,{headers:{'X-Master-Key':CLOUD.KEY,'X-Bin-Meta':'false'}})
   .then(r=>r.json()).then(d=>{
@@ -506,7 +527,7 @@ function cloudPull(){
       if(d.agents && d.agents.length >= 50) {
           localStorage.setItem(SK.AGENTS, JSON.stringify(d.agents));
       } else {
-          updateNeeded = true; // Auto-Healing si Cloud corrompu
+          updateNeeded = true;
       }
       if(d.abs) localStorage.setItem(SK.ABSENCES, JSON.stringify(d.abs));
       if(d.hs) localStorage.setItem(SK.HOTSPOTS, JSON.stringify(d.hs));
@@ -519,12 +540,25 @@ function cloudPull(){
 function cloudPushData(){
   var pk = SK.PLAN+numSem(getLundi(weekOffset+1))+'_'+getLundi(weekOffset+1).getFullYear();
   var payload = { agents: getAgents(), abs: getAbsences(), hs: getHotspots(), pk: pk, pd: JSON.parse(localStorage.getItem(pk)||'null') };
-  fetch(`https://api.jsonbin.io/v3/b/${CLOUD.BIN}`,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':CLOUD.KEY},body:JSON.stringify(payload)}).catch(()=>{});
+  fetch(`https://api.jsonbin.io/v3/b/${CLOUD.BIN}`,{
+      method:'PUT',
+      headers:{
+          'Content-Type':'application/json',
+          'X-Master-Key':CLOUD.KEY,
+          'X-Bin-Versioning':'false'
+      },
+      body:JSON.stringify(payload)
+  }).catch(()=>{});
 }
 
-// SESSION
+// CORRECTION 13: AUTO SAVE
+window.addEventListener('beforeunload',()=>{
+    cloudPushData();
+});
+
+// SESSION & CORRECTION 4: CLOCK
 document.addEventListener('DOMContentLoaded', function(){
-  document.getElementById('loginUsers').innerHTML=Object.keys(USERS).map(k=>`<div class="login-user" onclick="selUser('${k}')" id="lu-${k}"><div class="login-user-av" style="background:${USERS[k].color}">${ini(USERS[k].nom)}</div><div class="login-user-nm">${USERS[k].nom.split(' ')[0]}</div><div style="font-size:10px;color:var(--tx3)">${USERS[k].role==='admin'?'Admin':'Leader'}</div></div>`).join('');
+  document.getElementById('loginUsers').innerHTML=Object.keys(USERS).map(k=>`<div class="login-user" onclick="selUser('${k}')" id="lu-${k}"><div class="login-user-av" style="background:${USERS[k].color}">${ini(USERS[k].nom)}</div><div class="login-user-nm">${USERS[k].nom.split(' ')[0]}</div><div style="font-size:9px;color:var(--tx3)">${USERS[k].role==='admin'?'Admin':'Leader'}</div></div>`).join('');
   var s=sessionStorage.getItem('sentinel_session'); if(s && USERS[s]){ selUser(s); document.getElementById('loginPwd').value=USERS[s].pwd; doLogin(); }
 });
 function selUser(k){document.querySelectorAll('.login-user').forEach(e=>e.classList.remove('sel'));document.getElementById('lu-'+k).classList.add('sel');document.getElementById('selUser').value=k;document.getElementById('loginPwd').focus();}
@@ -536,9 +570,19 @@ function doLogin(){
   document.getElementById('loginScreen').style.display='none';document.getElementById('app').style.display='flex';
   document.getElementById('userName').textContent=currentUser.nom;document.getElementById('userAv').textContent=ini(currentUser.nom);document.getElementById('userAv').style.background=currentUser.color;
   
+  // CORRECTION 4
+  setInterval(()=>{
+      const now = new Date();
+      const clock = document.getElementById('clock');
+      if(clock){
+          clock.textContent = now.toLocaleTimeString('fr-FR');
+      }
+  },1000);
+
   buildNav(); 
   cloudPull(); 
-  setInterval(()=>cloudPull(), 5000); // SYNC TOUTES LES 5 SECONDES
+  // CORRECTION 11: SYNC LIMIT
+  setInterval(()=>cloudPull(), 15000); 
 }
 function doLogout(){sessionStorage.removeItem('sentinel_session');location.reload();}
 
@@ -549,7 +593,7 @@ function buildNav(){
 }
 function goPage(id,btn){document.querySelectorAll('.pg, .ni').forEach(e=>e.classList.remove('active'));document.getElementById('pg-'+id).classList.add('active');if(btn)btn.classList.add('active');}
 
-// CORE DATA & ALGORITHM 44H + SMART HOTSPOTS
+// CORE DATA
 function loadData(off){
   weekOffset=off; 
   var agents=getAgents(), abs=getAbsences(), hs=getHotspots();
@@ -568,7 +612,8 @@ function loadData(off){
           if(agD && agD.embauche && dtStr < agD.embauche) p.shifts[d]='—'; 
           var a=abs.find(x=>x.nom===p.nom&&x.date===D.meta.dates[d]); if(a)p.shifts[d]=a.type;
       }
-      p.totalH=p.shifts.reduce((acc,s)=>acc+calcH(s),0);
+      // CORRECTION 15: PROTECT REDUCE
+      p.totalH=(p.shifts || []).reduce((acc,s)=>acc+calcH(s),0);
   });
   renderUI();
 }
@@ -577,7 +622,6 @@ function genPlanning(agents, hotspots, off){
   var lundi=getLundi(off+1), dates=[], wn=numSem(lundi);
   for(var i=0;i<7;i++){var d=new Date(lundi);d.setDate(lundi.getDate()+i);dates.push(fmtD(d));}
   
-  // Organiser hotspots par ville
   var hsByCity={};
   hotspots.forEach(h=>{ if(!hsByCity[h.ville]) hsByCity[h.ville]=[]; hsByCity[h.ville].push(h.nom); });
 
@@ -586,38 +630,48 @@ function genPlanning(agents, hotspots, off){
       if(cityIdx[ag.ville]===undefined) cityIdx[ag.ville]=0; var c=cityIdx[ag.ville]++;
       var offDay=[0,1,2,3][(c+wn)%4], isMorning=((c+wn)%2)===0;
       
-      // SHIFTS ADAPTÉS JUSQU'À 02H30 MAX
       var p7=isMorning?['09:00-16:00','10:00-17:00','11:00-18:00']:['17:00-00:00','18:00-01:00','19:30-02:30'];
       var p8=isMorning?['09:00-17:00','10:00-18:00']:['17:00-01:00','18:30-02:30'];
       var template=[7,7,7,7,8,8].sort(()=>0.5-Math.random());
       
       var shifts=Array(7).fill(null), hsAssignments=Array(7).fill(''), tIdx=0;
-      var cHS = hsByCity[ag.ville] || []; // Hotspots de la ville
+      var cHS = hsByCity[ag.ville] || [];
 
       for(var d=0;d<7;d++){
           if(d===offDay){shifts[d]='OFF';continue;} 
           shifts[d]=(template[tIdx++]==7?p7:p8)[(d+c)%2];
-          if(cHS.length > 0){ hsAssignments[d] = cHS[(c + d) % cHS.length]; } // Distribution intelligente
+          if(cHS.length > 0){ hsAssignments[d] = cHS[(c + d) % cHS.length]; } 
       }
       return {nom:ag.nom, ville:ag.ville, shifts:shifts, hotspots:hsAssignments};
   });
   return {planning:planning,dates:dates,wn:wn};
 }
 
-// RENDER ALL
+// CORRECTION 1: RENDER UI
 function renderUI(){
   var ti=new Date().getDay(); ti=ti===0?6:ti-1;
   document.getElementById('ov-date').textContent=new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
   
+  // CORRECTION 1 : ov-kpi
   document.getElementById('ov-kpi').innerHTML=`
-    <div class="kpi"><div class="kpi-top" style="background:var(--tx)"></div><div class="kpi-lbl">Agents Actifs Gérés</div><div class="kpi-val" style="color:var(--tx)">${D.actifs.length}</div></div>
-    <div class="kpi"><div class="kpi-top" style="background:var(--g)"></div><div class="kpi-lbl">Présents Aujourd'hui</div><div class="kpi-val" style="color:var(--g)">${D.plan.filter(p=>!['OFF','ABSENT','—'].includes(p.shifts[ti])).length}</div></div>
+    <div class="kpi"><div class="kpi-top" style="background:var(--tx)"></div><div class="kpi-lbl">Agents Officiels</div><div class="kpi-val" style="color:var(--tx)">${D.actifs.length}</div></div>
+    <div class="kpi"><div class="kpi-top" style="background:var(--g)"></div><div class="kpi-lbl">Présents Aujourd'hui</div><div class="kpi-val" style="color:var(--g)">
+        ${ D.plan.filter(p=>{ var s=p.shifts[ti]; return s && !['OFF','ABSENT','CONGE','MALADIE','—'].includes(s); }).length }
+    </div></div>
     <div class="kpi"><div class="kpi-top" style="background:var(--r)"></div><div class="kpi-lbl">Absences Globales</div><div class="kpi-val" style="color:var(--r)">${D.abs.length}</div></div>
     <div class="kpi"><div class="kpi-top" style="background:var(--b)"></div><div class="kpi-lbl">Couverture 44H</div><div class="kpi-val" style="color:var(--b)">${D.plan.length?Math.round((D.plan.filter(p=>p.totalH==44).length/D.plan.length)*100):0}%</div></div>
   `;
   
-  document.getElementById('ov-day').innerHTML=D.plan.filter(p=>parseInt(p.shifts[ti].split(':')[0])<16).map(p=>`<div class="sr"><div class="av av-sm" style="background:var(--bg);color:var(--tx);border:1px solid var(--bd)">${ini(p.nom)}</div><div class="sr-info"><div class="sr-nm">${p.nom}</div></div><span class="pill sm">${p.shifts[ti]}</span></div>`).join('') || '<div style="color:var(--tx3);font-size:12px;padding:10px;text-align:center">Aucun shift de jour</div>';
-  document.getElementById('ov-ngt').innerHTML=D.plan.filter(p=>parseInt(p.shifts[ti].split(':')[0])>=16).map(p=>`<div class="sr"><div class="av av-sm" style="background:var(--tx);color:#fff">${ini(p.nom)}</div><div class="sr-info"><div class="sr-nm">${p.nom}</div></div><span class="pill" style="background:var(--tx);color:#fff">${p.shifts[ti]}</span></div>`).join('') || '<div style="color:var(--tx3);font-size:12px;padding:10px;text-align:center">Aucun shift de nuit</div>';
+  // CORRECTION 7: SAFE SHIFT OFF PARSING
+  document.getElementById('ov-day').innerHTML=D.plan.filter(p=>{
+        if(!p.shifts[ti] || ['OFF','ABSENT','CONGE','MALADIE','—'].includes(p.shifts[ti])) return false;
+        return parseInt(p.shifts[ti].split(':')[0]) < 16;
+  }).map(p=>`<div class="sr"><div class="av av-sm" style="background:var(--bg);color:var(--tx);border:1px solid var(--bd)">${ini(p.nom)}</div><div class="sr-info"><div class="sr-nm">${p.nom}</div></div><span class="pill sm">${p.shifts[ti]}</span></div>`).join('') || '<div style="color:var(--tx3);font-size:12px;padding:10px;text-align:center">Aucun shift de jour</div>';
+  
+  document.getElementById('ov-ngt').innerHTML=D.plan.filter(p=>{
+        if(!p.shifts[ti] || ['OFF','ABSENT','CONGE','MALADIE','—'].includes(p.shifts[ti])) return false;
+        return parseInt(p.shifts[ti].split(':')[0]) >= 16;
+  }).map(p=>`<div class="sr"><div class="av av-sm" style="background:var(--tx);color:#fff">${ini(p.nom)}</div><div class="sr-info"><div class="sr-nm">${p.nom}</div></div><span class="pill" style="background:var(--tx);color:#fff">${p.shifts[ti]}</span></div>`).join('') || '<div style="color:var(--tx3);font-size:12px;padding:10px;text-align:center">Aucun shift de nuit</div>';
   
   document.getElementById('pl-ttl').textContent='Semaine W'+D.meta.wn;
   var plHtml=`<thead><tr><th>Agent</th><th>Ville</th>${JOURS.map((j,i)=>`<th>${j}<br><span style="font-size:9px;color:var(--tx3);font-weight:normal">${D.meta.dates[i]}</span></th>`).join('')}<th>TOTAL</th></tr></thead><tbody>`;
@@ -630,7 +684,9 @@ function renderUI(){
   });
   document.getElementById('pl-tbl').innerHTML=plHtml+'</tbody>';
 
-  renderPaie();
+  // CORRECTION 5: rPay instead of renderPaie
+  rPay();
+
   rAgents();
   rHs();
   document.getElementById('f-ag').innerHTML=D.actifs.map(a=>`<option value="${a.nom}">${a.nom}</option>`).join('');
@@ -658,7 +714,6 @@ function saveCell(){
   localStorage.setItem(D.pk,JSON.stringify(pd)); cloudPushData(); closeModal('editOverlay'); loadData(weekOffset); toast('Shift Modifié');
 }
 
-// ── PAIE HR PRECISION (21 AU 22 + PRORATA) ──
 function initPaieMois(){
   var sel=document.getElementById('pay-mois-sel');if(sel.options.length>0)return;
   var now=new Date(), opts='';
@@ -667,10 +722,8 @@ function initPaieMois(){
 }
 function rPay(){
   var val = document.getElementById('pay-mois-sel').value.split('-');
-  var y=parseInt(val[0]), m=parseInt(val[1])-1; // Mois cible (m=4 pour Mai)
-  
-  var start=new Date(y, m-1, 21); // 21 Avril
-  var end=new Date(y, m, 22);     // 22 Mai
+  var y=parseInt(val[0]), m=parseInt(val[1])-1;
+  var start=new Date(y, m-1, 21), end=new Date(y, m, 22);
   var totalDays = Math.floor((end - start)/(1000*60*60*24)) + 1; 
   
   var html='', tN=0, tD=0;
@@ -702,10 +755,9 @@ function rPay(){
   document.getElementById('py-n').textContent=D.actifs.length; document.getElementById('py-d').textContent='-'+mad(tD); document.getElementById('py-t').textContent=mad(tN);
 }
 
-// ── AGENTS & ABS ──
 function submitAbs(){
     var n=document.getElementById('f-ag').value, t=document.getElementById('f-ty').value, s=document.getElementById('f-s').value, e=document.getElementById('f-e').value||s;
-    if(!s){toast('Sélectionnez une date','er');return;} var cur=new Date(s), end=new Date(e);
+    if(!s){toast('Sélectionnez une date',true);return;} var cur=new Date(s), end=new Date(e);
     while(cur<=end){ D.abs.push({nom:n, date:fmtD(cur), type:t}); cur.setDate(cur.getDate()+1); }
     localStorage.setItem(SK.ABSENCES,JSON.stringify(D.abs)); cloudPushData(); loadData(weekOffset); toast('Absence enregistrée dans le Cloud');
 }
@@ -724,56 +776,62 @@ function rAgents(){
     document.getElementById('ag-grid').innerHTML=list.map((a,i)=>`<div class="ag-card" onclick="editAgentIdx(${D.all.indexOf(a)})"><div class="av av-lg" style="background:var(--bg);color:var(--tx);border:1px solid var(--bd)">${ini(a.nom)}</div><div style="flex:1"><div style="font-weight:800;font-size:14px;margin-bottom:6px">${a.nom}</div><div><span class="pill so">${a.ville}</span> ${a.statut==='Inactif'?'<span class="pill sa" style="margin-left:4px">Inactif</span>':''}</div></div></div>`).join('') || '<div class="em" style="grid-column:1/-1">Aucun agent trouvé</div>';
 }
 
+// CORRECTION 3: fHs function
 function rHs(){
-    document.getElementById('hs-list').innerHTML=D.hs.filter(h=>currentUser.villes.includes(h.ville)).map((h,i)=>`<div class="hs-item"><div style="font-weight:800;font-size:15px;flex:1">${h.nom}</div><span class="pill so">${h.ville}</span><span class="pill sm" style="margin:0 15px">Rush: ${h.pk}</span><button class="btn btn-gh btn-sm" onclick="delHs(${i})">Supprimer</button></div>`).join('');
+    fHs(document.querySelector('#pg-hs .sel').value);
+}
+function fHs(v){
+    var list = v === 'ALL' ? D.hs : D.hs.filter(h => h.ville === v);
+    document.getElementById('hs-list').innerHTML = list.map((h,i)=>`
+        <div class="hs-item">
+            <div style="font-weight:800;font-size:15px;flex:1">${h.nom}</div>
+            <span class="pill so">${h.ville}</span>
+            <span class="pill sm" style="margin:0 15px">Rush: ${h.pk}</span>
+            <button class="btn btn-gh btn-sm" onclick="delHs(${i})">Supprimer</button>
+        </div>
+    `).join('') || '<div class="em">Aucun hotspot trouvé</div>';
 }
 function saveHotspot(){var n=document.getElementById('hs-f-nom').value;if(!n)return;D.hs.push({ville:document.getElementById('hs-f-ville').value,nom:n,pk:document.getElementById('hs-f-pk').value});localStorage.setItem(SK.HOTSPOTS,JSON.stringify(D.hs));cloudPushData();closeModal('hsOverlay');loadData(weekOffset);toast('Hotspot ajouté');}
 function delHs(i){if(confirm("Supprimer ce hotspot ?")){D.hs.splice(i,1);localStorage.setItem(SK.HOTSPOTS,JSON.stringify(D.hs));cloudPushData();loadData(weekOffset);toast('Supprimé');}}
 
-// ── MAILS GLOVO DESIGN ──
+// CORRECTION 2: preparerEmails (D.all)
 function openEmailModal(){document.getElementById('email-preview').innerHTML=''; document.getElementById('emailOverlay').classList.add('show');}
 function preparerEmails(){
     var ville = document.getElementById('email-ville-sel').value;
-    var agents = D.agents.filter(a=>a.email && (ville==='ALL'||a.ville===ville));
-    if(!agents.length){toast('Aucun email trouvé.','er');return;}
+    var agents = D.all.filter(a => a.email && (ville==='ALL'||a.ville===ville));
+    if(!agents.length){toast('Aucun email trouvé.', true);return;}
     
     var html='';
     agents.forEach((ag, idx) => {
         var p = D.plan.find(x=>x.nom===ag.nom); if(!p) return;
         var mailBody = `
         <div id="m-${idx}" style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;border:1.5px solid #E2E8F0;border-radius:12px;overflow:hidden;background:#fff">
-            <div style="background:#FFC244;padding:24px;text-align:center"><h2 style="margin:0;font-size:20px;color:#0F172A;letter-spacing:1px;font-weight:900">PLANNING GLOVO MAROC - W${D.meta.wn}</h2></div>
+            <div style="background:#FFC244;padding:24px;text-align:center"><h2 style="margin:0;font-size:20px;color:#0F172A;font-weight:900">PLANNING GLOVO MAROC - W${D.meta.wn}</h2></div>
             <div style="padding:30px">
                 <p style="font-size:15px;color:#0F172A">Bonjour <b>${p.nom.split(' ')[0]}</b>,</p>
-                <p style="font-size:14px;color:#475569;line-height:1.5">Voici votre planning de la semaine. Merci de respecter vos horaires et de vous présenter ponctuellement sur votre point de connexion.</p>
-                <table style="width:100%;border-collapse:collapse;margin:25px 0;background:#f8fafc;border-radius:10px;overflow:hidden;border:1px solid #e2e8f0">
-                    <tr style="background:#00A082;color:#fff"><th style="padding:14px;text-align:left;font-size:13px">Jour</th><th style="padding:14px;text-align:right;font-size:13px">Horaire & Hotspot</th></tr>
+                <table style="width:100%;border-collapse:collapse;margin-top:20px">
                     ${JOURS.map((j,i)=>{
-                        var s=p.shifts[i], isOff=['OFF','ABSENT','CONGE','MALADIE','—'].includes(s);
-                        var hs=(p.hotspots&&p.hotspots[i])?`<br><span style="font-size:11px;color:#00A082">📍 ${p.hotspots[i]}</span>`:'';
-                        return `<tr><td style="padding:14px;border-bottom:1px solid #e2e8f0;color:#0f172a;font-size:14px"><b>${j}</b> <span style="font-size:12px;color:#94a3b8">(${D.meta.dates[i]})</span></td><td style="padding:14px;text-align:right;border-bottom:1px solid #e2e8f0;font-size:14px;font-weight:${isOff?'normal':'900'};color:${isOff?'#94a3b8':'#00A082'}">${s==='OFF'?'Repos':s}${isOff?'':hs}</td></tr>`;
+                        var s=p.shifts[i];
+                        var hs=(p.hotspots && p.hotspots[i]) ? `<br><span style="font-size:11px;color:#00A082">📍 ${p.hotspots[i]}</span>` : '';
+                        return `<tr><td style="padding:12px;border:1px solid #ddd"><b>${j}</b></td><td style="padding:12px;border:1px solid #ddd;text-align:right">${s}${hs}</td></tr>`;
                     }).join('')}
                 </table>
-                <div style="background:#E8F8F5;padding:16px;border-left:5px solid #00A082;font-size:15px;font-weight:900;color:#00A082">Total des heures : ${p.totalH}h / 44h</div>
-                <div style="margin-top:30px;font-size:12px;color:#64748B;border-top:1px solid #e2e8f0;padding-top:20px;line-height:1.6">
-                    Note : Ce planning peut etre modifie en cas de force majeure ou ajustement operationnel. Vous en serez informe au prealable.<br><br><b style="color:#0f172a;font-size:13px">On field Operations - Glovo Maroc</b>
-                </div>
+                <div style="margin-top:20px;background:#E8F8F5;padding:15px;border-left:4px solid #00A082;font-weight:900">Total : ${p.totalH}h</div>
             </div>
         </div>`;
-        html+=`<div class="card" style="margin-bottom:20px;background:#f8fafc"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><b style="font-size:15px;color:var(--tx)">${ag.nom}</b><button class="btn btn-g" onclick="copyMail(${idx},'${ag.email}')">📋 Copier HTML & Ouvrir Gmail</button></div><div style="transform:scale(0.85);transform-origin:top left">${mailBody}</div></div>`;
+        html+=`<div class="card" style="margin-bottom:20px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px"><b>${ag.nom}</b><button class="btn btn-g" onclick="copyMail(${idx},'${ag.email}')">📋 Copier HTML</button></div><div style="transform:scale(0.85);transform-origin:top left">${mailBody}</div></div>`;
     });
-    document.getElementById('email-preview').innerHTML=html; toast('Modèles générés');
+    document.getElementById('email-preview').innerHTML=html; toast('Emails générés');
 }
 function copyMail(idx,email){
     var h=document.getElementById('m-'+idx).innerHTML;
     var blob=new Blob([h],{type:"text/html"});
     navigator.clipboard.write([new ClipboardItem({"text/html":blob,"text/plain":new Blob([h],{type:"text/plain"})})]).then(()=>{
-        toast("Design copié ! Collez (Ctrl+V) dans Gmail.");
+        toast("Design copié !");
         setTimeout(()=>window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${encodeURIComponent('Planning Semaine W'+D.meta.wn)}`,'_blank'),800);
     });
 }
 
-// ── EXPORTS CSV / EXCEL ──
 function dlXls(html, fn){var blob=new Blob(['\ufeff'+html],{type:'application/vnd.ms-excel;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fn;a.click();}
 function dlCSV(csv, fn){var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fn;a.click();}
 function exportPlanningCSV(){var csv='Agent,Ville,'+JOURS.map((j,i)=>j+' '+D.meta.dates[i]).join(',')+',Total\n'+D.plan.map(p=>p.nom+','+p.ville+','+p.shifts.join(',')+','+p.totalH).join('\n');dlCSV(csv, 'Planning_W'+D.meta.wn+'.csv');}
