@@ -36,18 +36,19 @@
     ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
 
     /* --- LOGIN --- */
-    #loginScreen { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #0F172A; }
+    #loginScreen { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #0F172A; z-index: 9999; }
     .login-box { background: #fff; border-radius: 16px; padding: 40px; width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); text-align: center; }
     .login-logo { width: 50px; height: 50px; background: var(--y); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 20px; }
-    .login-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+    .login-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; color: var(--tx); }
+    .login-sub { font-size: 12px; color: var(--tx3); margin-bottom: 24px; }
     .login-users { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
     .login-user { padding: 12px; border: 1.5px solid var(--bd); border-radius: 10px; cursor: pointer; transition: 0.2s; }
     .login-user.sel { border-color: var(--y); background: var(--y-lt); }
     .login-user-av { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #fff; font-size: 11px; margin: 0 auto 8px; }
-    .login-user-nm { font-size: 12px; font-weight: 700; }
+    .login-user-nm { font-size: 12px; font-weight: 700; color: var(--tx); }
     .login-input { width: 100%; padding: 12px; border: 1.5px solid var(--bd2); border-radius: 8px; font-size: 14px; outline: none; margin-bottom: 10px; }
     .login-input:focus { border-color: var(--y); box-shadow: 0 0 0 3px rgba(255,194,68,0.2); }
-    .login-btn { width: 100%; padding: 12px; background: var(--y); border: none; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.2s; }
+    .login-btn { width: 100%; padding: 12px; background: var(--y); border: none; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.2s; color: var(--tx); }
     .login-btn:hover { background: var(--y-dk); }
     .login-err { color: var(--r); font-size: 12px; font-weight: 600; min-height: 18px; margin-bottom: 10px; }
 
@@ -57,12 +58,12 @@
     .nav-logo { width: 32px; height: 32px; background: var(--y); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
     .nav-links { display: flex; gap: 5px; flex: 1; margin-left: 20px; overflow-x: auto; }
     .ni { padding: 8px 14px; border-radius: 6px; cursor: pointer; color: var(--tx2); font-weight: 600; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
-    .ni:hover { background: var(--bg); }
+    .ni:hover { background: var(--bg); color: var(--tx); }
     .ni.active { background: var(--tx); color: #fff; }
     .nav-right { display: flex; align-items: center; gap: 15px; margin-left: auto; }
-    .clock { font-size: 12px; font-family: monospace; background: var(--bg); padding: 6px 12px; border-radius: 6px; font-weight: 600; }
+    .clock { font-size: 12px; font-family: monospace; background: var(--bg); padding: 6px 12px; border-radius: 6px; font-weight: 600; border: 1px solid var(--bd); }
     
-    .sync-badge { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--g); font-weight: 800; background: var(--g-lt); padding: 4px 10px; border-radius: 12px; border: 1px solid var(--g); }
+    .sync-badge { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--g); font-weight: 800; background: var(--g-lt); padding: 4px 10px; border-radius: 12px; border: 1px solid var(--g-md); }
     .sync-dot { width: 6px; height: 6px; background: var(--g); border-radius: 50%; animation: pulse 1.5s infinite; }
     @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
 
@@ -81,7 +82,7 @@
     /* --- DASHBOARD KPI --- */
     .krow { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
     .kpi { background: #fff; border: 1px solid var(--bd); border-radius: 12px; padding: 20px; position: relative; box-shadow: var(--sh); }
-    .kpi-top { height: 4px; position: absolute; top: 0; left: 0; right: 0; }
+    .kpi-top { height: 4px; position: absolute; top: 0; left: 0; right: 0; border-radius: 12px 12px 0 0; }
     .kpi-lbl { font-size: 11px; font-weight: 800; color: var(--tx3); text-transform: uppercase; margin-bottom: 10px; }
     .kpi-val { font-size: 32px; font-weight: 900; }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -102,22 +103,22 @@
     .pill.so { background: var(--bg); color: var(--tx3); border: 1px solid var(--bd); }
     
     .ecell { cursor: pointer; transition: 0.2s; position: relative; }
-    .ecell:hover { background: var(--y-lt) !important; transform: scale(1.05); }
+    .ecell:hover { background: var(--y-lt) !important; box-shadow: inset 0 0 0 1px var(--y); }
 
     /* --- BUTTONS --- */
     .btn { padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; border: 1px solid transparent; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; font-family: inherit; }
     .btn-y { background: var(--y); color: #000; border-color: var(--y-dk); }
     .btn-y:hover { background: var(--y-dk); }
-    .btn-gh { background: #fff; border-color: var(--bd); color: var(--tx2); }
-    .btn-gh:hover { background: var(--bg); }
+    .btn-gh { background: #fff; border-color: var(--bd); color: var(--tx2); box-shadow: var(--sh); }
+    .btn-gh:hover { background: var(--bg); color: var(--tx); }
     .btn-g { background: var(--g); color: #fff; }
     .btn-r { background: var(--r); color: #fff; }
 
     /* --- FORMS --- */
     .fgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
     .fgl { display: flex; flex-direction: column; }
-    .fgl label { font-size: 11px; font-weight: 700; color: var(--tx2); margin-bottom: 6px; }
-    .fc { width: 100%; padding: 10px 12px; border: 1px solid var(--bd2); border-radius: 8px; font-size: 13px; font-family: inherit; outline: none; }
+    .fgl label { font-size: 11px; font-weight: 700; color: var(--tx2); margin-bottom: 6px; text-transform: uppercase; }
+    .fc { width: 100%; padding: 10px 12px; border: 1px solid var(--bd2); border-radius: 8px; font-size: 13px; font-family: inherit; outline: none; transition: 0.2s; }
     .fc:focus { border-color: var(--b); box-shadow: 0 0 0 2px var(--b-lt); }
 
     /* --- PAIE RH SECTION --- */
@@ -142,7 +143,10 @@
     .ag-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; }
     .ag-card { display: flex; align-items: center; gap: 15px; background: #fff; padding: 15px; border-radius: 12px; border: 1px solid var(--bd); cursor: pointer; transition: 0.2s; box-shadow: var(--sh); }
     .ag-card:hover { border-color: var(--y); transform: translateY(-2px); box-shadow: var(--sh2); }
-    .hs-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #fff; border-radius: 12px; border: 1px solid var(--bd); margin-bottom: 10px; border-left: 4px solid var(--y); }
+    
+    .sr { display: flex; align-items: center; gap: 15px; padding: 12px 15px; background: #fff; border: 1px solid var(--bd); border-radius: 8px; margin-bottom: 8px; }
+    .av { display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 800; color: #fff; flex-shrink: 0; }
+    .av-sm { width: 28px; height: 28px; font-size: 10px; }
 </style>
 </head>
 <body>
@@ -175,7 +179,7 @@
     </div>
     <div class="nav-links" id="navLinks"></div>
     <div class="nav-right">
-        <div class="sync-badge" id="syncStatus"><div class="sync-dot"></div><span>Sync Auto (5s)</span></div>
+        <div class="sync-badge"><div class="sync-dot"></div><span>Sync Auto (5s)</span></div>
         <div class="clock" id="clock">00:00:00</div>
         <div style="display:flex;align-items:center;gap:8px;padding:4px 12px 4px 4px;border-radius:20px;border:1px solid var(--bd);background:var(--bg)">
             <div id="userAv" style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:bold"></div>
@@ -191,24 +195,22 @@
         <div class="ph">
             <div class="ph-t">Vue d'ensemble <span style="font-size:14px;color:var(--tx2);font-weight:600;margin-left:10px" id="ov-date"></span></div>
         </div>
-        <div class="krow">
-            <div class="kpi"><div class="kpi-top" style="background:var(--y)"></div><div class="kpi-lbl">Total Agents</div><div class="kpi-val" id="k-tot" style="color:var(--tx)">—</div></div>
-            <div class="kpi"><div class="kpi-top" style="background:var(--g)"></div><div class="kpi-lbl">Présents Aujourd'hui</div><div class="kpi-val" id="k-act" style="color:var(--g)">—</div></div>
-            <div class="kpi"><div class="kpi-top" style="background:var(--r)"></div><div class="kpi-lbl">Absences / Maladies</div><div class="kpi-val" id="k-abs" style="color:var(--r)">—</div></div>
-            <div class="kpi"><div class="kpi-top" style="background:var(--b)"></div><div class="kpi-lbl">Respect 44H</div><div class="kpi-val" id="k-44" style="color:var(--b)">—</div></div>
-        </div>
+        
+        <div class="krow" id="ov-kpi">
+            </div>
+
         <div class="grid-2">
-            <div class="card"><div class="chd">☀️ Présents de Jour</div><div id="ov-day" style="display:flex;flex-direction:column;gap:10px"></div></div>
-            <div class="card"><div class="chd">🌙 Présents de Nuit</div><div id="ov-ngt" style="display:flex;flex-direction:column;gap:10px"></div></div>
+            <div class="card"><div class="chd">☀️ Présents de Jour</div><div id="ov-day" style="display:flex;flex-direction:column;gap:8px"></div></div>
+            <div class="card"><div class="chd">🌙 Présents de Nuit</div><div id="ov-ngt" style="display:flex;flex-direction:column;gap:8px"></div></div>
         </div>
     </div>
 
     <div class="pg" id="pg-pl">
         <div class="ph">
             <div style="display:flex;align-items:center;gap:10px">
-                <button class="btn btn-gh" onclick="chgW(-1)">◀ Sem. Précédente</button>
+                <button class="btn btn-gh" onclick="chgW(-1)">◀ Précédent</button>
                 <div id="pl-ttl" style="font-size:15px;font-weight:800;background:#fff;padding:8px 16px;border-radius:8px;border:1px solid var(--bd)">Planning</div>
-                <button class="btn btn-gh" onclick="chgW(1)">Sem. Suivante ▶</button>
+                <button class="btn btn-gh" onclick="chgW(1)">Suivant ▶</button>
             </div>
             <div style="display:flex;gap:10px">
                 <button class="btn btn-y" onclick="regenererPlanning()">⚙ Recalculer (Strict 44H)</button>
@@ -216,6 +218,7 @@
                 <button class="btn btn-gh" onclick="exportPlanningExcel()">📊 Export Excel</button>
             </div>
         </div>
+        
         <div style="display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap" id="plft">
             <button class="btn btn-gh active" onclick="fC('ALL',this)">Toutes Villes</button>
             <button class="btn btn-gh" onclick="fC('CAS',this)">Casablanca</button>
@@ -229,6 +232,7 @@
             <button class="btn btn-gh" onclick="fC('MOH',this)">Mohammadia</button>
             <button class="btn btn-gh" onclick="fC('LYN',this)">Laayoune</button>
         </div>
+        
         <div class="tbl-wr"><table id="pl-tbl"></table></div>
     </div>
 
@@ -282,9 +286,9 @@
                 <div class="fgl"><label>Date de fin (Optionnel)</label><input type="date" id="f-e" class="fc"></div>
             </div>
             <div class="fgl"><label>Motif (Optionnel)</label><input type="text" id="f-m" class="fc" placeholder="Ex: Certificat médical déposé..."></div>
-            <button class="btn btn-r" onclick="submitAbs()" style="width:100%;justify-content:center;margin-top:10px">💾 Enregistrer l'absence en temps réel</button>
+            <button class="btn btn-r" onclick="submitAbs()" style="width:100%;justify-content:center;margin-top:10px">💾 Enregistrer l'absence dans le Cloud</button>
         </div>
-        <div class="card"><div class="chd">Historique des déclarations</div><div id="abs-list" style="display:flex;flex-direction:column;gap:10px"></div></div>
+        <div class="card"><div class="chd">Historique des déclarations</div><div id="abs-list" style="display:flex;flex-direction:column;gap:8px"></div></div>
     </div>
   </div>
 </div>
@@ -293,7 +297,7 @@
   <div class="modal">
     <div class="modal-hd"><div class="modal-hd-t">✏️ Modifier le Shift</div><button class="m-close" onclick="closeModal('editOverlay')">✕</button></div>
     <div class="m-body">
-      <div style="font-size:16px;font-weight:800;margin-bottom:20px;color:var(--g)" id="em-agent"></div>
+      <div style="font-size:16px;font-weight:800;margin-bottom:20px;color:var(--tx)" id="em-agent"></div>
       <div class="fgl"><label>Nouvel Horaire</label><select class="fc" id="em-shift"></select></div>
     </div>
     <div class="m-footer">
@@ -310,7 +314,7 @@
       <div style="background:var(--y-lt);border:1px solid var(--y-md);padding:15px;border-radius:10px;margin-bottom:20px;display:flex;align-items:center;gap:15px">
         <span style="font-size:24px">✨</span>
         <div>
-          <div style="font-weight:800;color:#92400E;margin-bottom:4px">Procédure d'envoi</div>
+          <div style="font-weight:800;color:#92400E;margin-bottom:4px">Procédure d'envoi PRO</div>
           <div style="font-size:12px;color:var(--tx2)">Sélectionnez la ville, cliquez sur générer. Ensuite, cliquez sur "Copier HTML & Ouvrir Gmail" pour un agent, puis faites <kbd>Ctrl + V</kbd> dans le corps du message Gmail.</div>
         </div>
       </div>
@@ -351,7 +355,7 @@
 
 <script>
 // ═══════════════════════════════════════════════════════════
-//  SENTINEL v15.0 — AUTO-HEALING & EXACT HR DATA
+//  SENTINEL v16.0 — AUTO-HEALING & EXACT HR DATA (53 AGENTS)
 // ═══════════════════════════════════════════════════════════
 
 var USERS = {
@@ -363,9 +367,9 @@ var USERS = {
 };
 
 var CLOUD = {KEY:'$2a$10$2UAmdVsMhCVntgYL5F/RS.KvbKxaxpDTXSPzAyD/9nhcq4HK3Jyzq', BIN:'69e0bb5e856a6821893dbe64'};
-var SK = {AGENTS:'s_ag_v15', ABSENCES:'s_ab_v15', PLAN:'s_pl_v15_'};
+var SK = {AGENTS:'s_ag_v16', ABSENCES:'s_ab_v16', PLAN:'s_pl_v16_'};
 
-// LES 53 AGENTS EXACTS DU FICHIER CSV (Ne jamais modifier cette constante)
+// LES 53 AGENTS EXACTS (Data sécurisée)
 var DEFAULT_AGENTS = [
   {nom:'ADOZ AZIZ',ville:'AGD',email:'Azizadoz90@gmail.com',embauche:'2026-05-06',statut:'Actif'},
   {nom:'YASSINE MAGHFOUR',ville:'AGD',email:'ymaghfour28@gmail.com',embauche:'2026-05-06',statut:'Actif'},
@@ -424,6 +428,7 @@ var DEFAULT_AGENTS = [
 
 var currentUser=null; var D={}; var weekOffset=0; var gFC='ALL'; var agEditIdx=-1; var emState={};
 var JOURS=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+var clockInterval;
 
 // --- INTELLIGENCE DATA & AUTO-HEALING ---
 function getAgents(){
@@ -451,7 +456,7 @@ function sClass(s){if(!s||s==='OFF'||s==='—')return 'so';if(['ABSENT','CONGE',
 function toast(m){var e=document.createElement('div');e.className='toast';e.textContent='✅ '+m;document.getElementById('toastWrap').appendChild(e);setTimeout(()=>{e.style.animation='slideIn 0.3s ease reverse forwards';setTimeout(()=>e.remove(),300);},3000);}
 
 // CLOUD SYNC (Rapide: 5 Secondes)
-function cloudPull(){
+function cloudPull(isInitial){
   fetch(`https://api.jsonbin.io/v3/b/${CLOUD.BIN}/latest`,{headers:{'X-Master-Key':CLOUD.KEY,'X-Bin-Meta':'false'}})
   .then(r=>r.json()).then(d=>{
       if(d.agents && d.agents.length >= 53) {
@@ -462,8 +467,8 @@ function cloudPull(){
       }
       if(d.abs) localStorage.setItem(SK.ABSENCES, JSON.stringify(d.abs));
       if(d.pk && d.pd) localStorage.setItem(d.pk, JSON.stringify(d.pd));
-      loadData(weekOffset);
-  }).catch(()=>{});
+      if(isInitial) loadData(0); else loadData(weekOffset);
+  }).catch(()=>{ if(isInitial) loadData(0); });
 }
 function cloudPushData(){
   var pk = SK.PLAN+numSem(getLundi(weekOffset+1))+'_'+getLundi(weekOffset+1).getFullYear();
@@ -477,13 +482,19 @@ document.addEventListener('DOMContentLoaded', function(){
   var s=sessionStorage.getItem('sentinel_session'); if(s && USERS[s]){ selUser(s); document.getElementById('loginPwd').value=USERS[s].pwd; doLogin(); }
 });
 function selUser(k){document.querySelectorAll('.login-user').forEach(e=>e.classList.remove('sel'));document.getElementById('lu-'+k).classList.add('sel');document.getElementById('selUser').value=k;document.getElementById('loginPwd').focus();}
+
 function doLogin(){
   var k=document.getElementById('selUser').value, p=document.getElementById('loginPwd').value;
   if(!k||USERS[k].pwd!==p){document.getElementById('loginErr').textContent="Mot de passe incorrect.";return;}
   currentUser={key:k,...USERS[k]}; sessionStorage.setItem('sentinel_session',k);
   document.getElementById('loginScreen').style.display='none';document.getElementById('app').style.display='flex';
   document.getElementById('userName').textContent=currentUser.nom;document.getElementById('userAv').textContent=ini(currentUser.nom);document.getElementById('userAv').style.background=currentUser.color;
-  buildNav(); cloudPull(); setInterval(()=>cloudPull(), 5000); // SYNC TOUTES LES 5 SECONDES
+  
+  if(clockInterval) clearInterval(clockInterval);
+  clockInterval = setInterval(()=>{document.getElementById('clock').textContent=new Date().toLocaleTimeString('fr-FR');},1000);
+  document.getElementById('clock').textContent=new Date().toLocaleTimeString('fr-FR');
+
+  buildNav(); cloudPull(true); setInterval(()=>cloudPull(false), 5000); // SYNC TOUTES LES 5 SECONDES
 }
 function doLogout(){sessionStorage.removeItem('sentinel_session');location.reload();}
 
@@ -588,6 +599,7 @@ function initPaieMois(){
   var now=new Date(), opts='';
   for(var m=0;m<12;m++){var d=new Date(now.getFullYear(),now.getMonth()-m,1); opts+=`<option value="${d.getFullYear()}-${d.getMonth()+1}">${m===0?'Mois Actuel':d.toLocaleDateString('fr-FR',{month:'long',year:'numeric'})}</option>`;}
   sel.innerHTML=opts;
+  rPay();
 }
 function rPay(){
   var val = document.getElementById('pay-mois-sel').value.split('-');
@@ -600,7 +612,7 @@ function rPay(){
 
   Object.keys(byCity).forEach(v=>{
       html+=`<div class="pay-city-header"><span>📍 VILLE : ${v}</span><span style="font-size:12px;opacity:0.8">${byCity[v].length} Agents</span></div>
-      <table class="tbl-wr hr-table" style="margin-bottom:20px;width:100%">
+      <table class="tbl-wr" style="margin-bottom:20px;width:100%">
       <thead><tr><th>Agent</th><th>Embauche</th><th>Jours Période</th><th>Absences</th><th>Retenue</th><th>Salaire Net</th></tr></thead><tbody>`;
       byCity[v].forEach(a=>{
           var nAbs=D.abs.filter(ab=>{if(ab.nom!==a.nom||ab.type!=='ABSENT')return false; var d=new Date(ab.date.split('/').reverse().join('-')); return d>=start&&d<=end;}).length;
@@ -713,7 +725,6 @@ function exportAgentsExcel(){
 }
 
 function closeModal(id){document.getElementById(id).classList.remove('show');}
-setInterval(()=>{document.getElementById('clock').textContent=new Date().toLocaleTimeString('fr-FR');},1000);
 </script>
 </body>
 </html>
