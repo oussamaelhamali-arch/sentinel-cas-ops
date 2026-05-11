@@ -25,12 +25,11 @@
         height: 100vh;
         display: flex;
         flex-direction: column;
-        overflow-x: hidden; /* Empêche strictement le scroll horizontal global */
-        overflow-y: hidden;
+        overflow: hidden;
         font-size: 13px;
     }
 
-    /* SCROLLBARS PRO */
+    /* SCROLLBARS */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
@@ -292,9 +291,9 @@
 
 <div class="overlay" id="editOverlay" onclick="if(event.target===this)closeModal('editOverlay')">
   <div class="modal">
-    <div class="modal-hd"><div class="modal-hd-t">✏️ Modification d'Horaire</div><button class="m-close" onclick="closeModal('editOverlay')">✕</button></div>
+    <div class="modal-hd"><div class="modal-hd-t">✏️ Modifier le Shift</div><button class="m-close" onclick="closeModal('editOverlay')">✕</button></div>
     <div class="m-body">
-      <div style="font-size:16px;font-weight:800;margin-bottom:20px;color:var(--tx)" id="em-agent"></div>
+      <div style="font-size:16px;font-weight:800;margin-bottom:20px;color:var(--g)" id="em-agent"></div>
       <div class="fgl"><label>Nouvel Horaire</label><select class="fc" id="em-shift"></select></div>
     </div>
     <div class="m-footer">
@@ -324,7 +323,7 @@
         </div>
         <div class="fgl" style="justify-content:flex-end"><button class="btn btn-y" onclick="preparerEmails()" style="padding:12px">⚡ Générer les Modèles</button></div>
       </div>
-      <div id="email-preview" style="margin-top:20px;max-height:400px;overflow-y:auto"></div>
+      <div id="email-preview" style="margin-top:20px;max-height:400px;overflow-y:auto;padding-right:10px"></div>
     </div>
   </div>
 </div>
@@ -333,13 +332,13 @@
   <div class="modal">
     <div class="modal-hd"><div class="modal-hd-t">Fiche Agent</div><button class="m-close" onclick="closeModal('agOverlay')">✕</button></div>
     <div class="m-body">
-      <div class="fgl"><label>Nom Complet *</label><input type="text" class="fc" id="ag-nom"></div>
+      <div class="fgl"><label>Nom Complet *</label><input type="text" id="ag-nom" class="fc"></div>
       <div class="fgrid">
-        <div class="fgl"><label>Ville *</label><select class="fc" id="ag-ville"><option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option><option value="AGD">Agadir</option><option value="TEM">Temara</option><option value="SAL">Salé</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option><option value="MOH">Mohammadia</option><option value="LYN">Laayoune</option></select></div>
-        <div class="fgl"><label>Date d'Embauche (Pour Paie)</label><input type="date" class="fc" id="ag-emb"></div>
+        <div class="fgl"><label>Ville *</label><select id="ag-ville" class="fc"><option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option><option value="AGD">Agadir</option><option value="TEM">Temara</option><option value="SAL">Salé</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option><option value="MOH">Mohammadia</option><option value="LYN">Laayoune</option></select></div>
+        <div class="fgl"><label>Date d'Embauche (Pour Paie)</label><input type="date" id="ag-emb" class="fc"></div>
       </div>
-      <div class="fgl"><label>Email Gmail</label><input type="email" class="fc" id="ag-email"></div>
-      <div class="fgl"><label>Statut (Si inactif, il disparaît des plannings)</label><select class="fc" id="ag-stat"><option value="Actif">Actif</option><option value="Inactif">Inactif</option></select></div>
+      <div class="fgl"><label>Email Gmail</label><input type="email" id="ag-email" class="fc"></div>
+      <div class="fgl"><label>Statut</label><select id="ag-stat" class="fc"><option value="Actif">Actif</option><option value="Inactif">Inactif</option></select></div>
     </div>
     <div class="m-footer">
         <button class="btn btn-gh" onclick="closeModal('agOverlay')">Annuler</button>
@@ -352,7 +351,7 @@
 
 <script>
 // ═══════════════════════════════════════════════════════════
-//  SENTINEL v15.0 — HR CORPORATE LOGIC & AUTO-HEALING
+//  SENTINEL v15.0 — AUTO-HEALING & EXACT HR DATA
 // ═══════════════════════════════════════════════════════════
 
 var USERS = {
@@ -366,7 +365,7 @@ var USERS = {
 var CLOUD = {KEY:'$2a$10$2UAmdVsMhCVntgYL5F/RS.KvbKxaxpDTXSPzAyD/9nhcq4HK3Jyzq', BIN:'69e0bb5e856a6821893dbe64'};
 var SK = {AGENTS:'s_ag_v15', ABSENCES:'s_ab_v15', PLAN:'s_pl_v15_'};
 
-// L'ENSEMBLE DES 53 AGENTS (Base de données locale de sécurité)
+// LES 53 AGENTS EXACTS DU FICHIER CSV (Ne jamais modifier cette constante)
 var DEFAULT_AGENTS = [
   {nom:'ADOZ AZIZ',ville:'AGD',email:'Azizadoz90@gmail.com',embauche:'2026-05-06',statut:'Actif'},
   {nom:'YASSINE MAGHFOUR',ville:'AGD',email:'ymaghfour28@gmail.com',embauche:'2026-05-06',statut:'Actif'},
@@ -433,9 +432,8 @@ function getAgents(){
         var arr = JSON.parse(a);
         if(arr && arr.length >= 53) return arr;
     }
-    // Auto-réparation si la base est inférieure à 53 agents
+    // Auto-réparation si la base locale est corrompue (moins de 53 agents)
     localStorage.setItem(SK.AGENTS, JSON.stringify(DEFAULT_AGENTS));
-    cloudPushData(); 
     return DEFAULT_AGENTS;
 }
 function saveAgents(ag){localStorage.setItem(SK.AGENTS,JSON.stringify(ag)); cloudPushData(); }
@@ -452,13 +450,14 @@ function calcH(s){if(!s||['OFF','ABSENT','CONGE','MALADIE','—'].includes(s.toU
 function sClass(s){if(!s||s==='OFF'||s==='—')return 'so';if(['ABSENT','CONGE','MALADIE'].includes(s))return 'sa';return 'sm';}
 function toast(m){var e=document.createElement('div');e.className='toast';e.textContent='✅ '+m;document.getElementById('toastWrap').appendChild(e);setTimeout(()=>{e.style.animation='slideIn 0.3s ease reverse forwards';setTimeout(()=>e.remove(),300);},3000);}
 
-// CLOUD SYNC (5 Seconds)
+// CLOUD SYNC (Rapide: 5 Secondes)
 function cloudPull(){
   fetch(`https://api.jsonbin.io/v3/b/${CLOUD.BIN}/latest`,{headers:{'X-Master-Key':CLOUD.KEY,'X-Bin-Meta':'false'}})
   .then(r=>r.json()).then(d=>{
-      if(d.agents && d.agents.length >= 53) localStorage.setItem(SK.AGENTS, JSON.stringify(d.agents));
-      else if(d.agents && d.agents.length < 53) {
-          // Le cloud a été corrompu/vidé. On écrase le cloud avec la base locale saine.
+      if(d.agents && d.agents.length >= 53) {
+          localStorage.setItem(SK.AGENTS, JSON.stringify(d.agents));
+      } else if (d.agents && d.agents.length < 53) {
+          // Auto-Healing Cloud: Le cloud est corrompu (ex: effacé). On renvoie la base locale saine.
           cloudPushData(); 
       }
       if(d.abs) localStorage.setItem(SK.ABSENCES, JSON.stringify(d.abs));
@@ -641,7 +640,7 @@ function saveAgent(){
 function rAgents(){
     var q=(document.getElementById('ag-q').value||'').toLowerCase(), vf=document.getElementById('ag-vf').value, sf=document.getElementById('ag-sf').value;
     var list=D.all.filter(a=>(vf==='ALL'||a.ville===vf) && (sf==='ALL'||a.statut===sf) && a.nom.toLowerCase().includes(q));
-    document.getElementById('ag-grid').innerHTML=list.map((a,i)=>`<div class="ag-card" onclick="editAgentIdx(${D.all.indexOf(a)})"><div class="av av-lg" style="background:var(--bg);color:var(--tx);border:1px solid var(--bd)">${ini(a.nom)}</div><div style="flex:1"><div style="font-weight:700;font-size:13px;margin-bottom:4px">${a.nom}</div><div><span class="pill so">${a.ville}</span> ${a.statut==='Inactif'?'<span class="pill sa" style="margin-left:4px">Inactif</span>':''}</div></div></div>`).join('');
+    document.getElementById('ag-grid').innerHTML=list.map((a,i)=>`<div class="ag-card" onclick="editAgentIdx(${D.all.indexOf(a)})"><div class="av av-lg" style="background:var(--bg);color:var(--tx);border:1px solid var(--bd)">${ini(a.nom)}</div><div style="flex:1"><div style="font-weight:700;font-size:13px;margin-bottom:4px">${a.nom}</div><div><span class="pill so">${a.ville}</span> ${a.statut==='Inactif'?'<span class="pill sa" style="margin-left:4px">Inactif</span>':''}</div></div></div>`).join('') || '<div class="em" style="grid-column:1/-1">Aucun agent trouvé</div>';
 }
 
 // ── MAILS GLOVO DESIGN ──
@@ -659,7 +658,7 @@ function preparerEmails(){
             <div style="background:#FFC244;padding:20px;text-align:center"><h2 style="margin:0;font-size:18px;color:#000;letter-spacing:1px">PLANNING SEMAINE W${D.meta.wn}</h2></div>
             <div style="padding:25px">
                 <p style="font-size:14px;color:#0F172A">Bonjour <b>${p.nom.split(' ')[0]}</b>,</p>
-                <p style="font-size:13px;color:#475569">Voici votre planning de la semaine. Merci de respecter vos horaires et de vous présenter ponctuellement sur votre point.</p>
+                <p style="font-size:13px;color:#475569">Voici votre planning de la semaine. Merci de respecter vos horaires et de vous présenter ponctuellement.</p>
                 <table style="width:100%;border-collapse:collapse;margin:20px 0;background:#f8fafc;border-radius:8px;overflow:hidden;border:1px solid #e2e8f0">
                     <tr style="background:#00A082;color:#fff"><th style="padding:12px;text-align:left">Jour</th><th style="padding:12px;text-align:right">Horaire Assigné</th></tr>
                     ${JOURS.map((j,i)=>{
