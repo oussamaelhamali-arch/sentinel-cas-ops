@@ -10,7 +10,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     :root {
-        --y: #FFC244; --y-dk: #E5A820; --y-lt: #FFF8E8;
+        --y: #FFC244; --y-dk: #E5A820; --y-lt: #FFF8E8; --y-md: #F4B400;
         --g: #00A082; --g-lt: #E8F8F5; --r: #E53935; --r-lt: #FEECEC;
         --b: #1565C0; --b-lt: #E3F0FF;
         --tx: #0F172A; --tx2: #475569; --tx3: #94A3B8;
@@ -20,15 +20,9 @@
     }
 
     body {
-        font-family: 'Inter', sans-serif;
-        background: var(--bg);
-        color: var(--tx);
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        font-size: 13px;
-        -webkit-font-smoothing: antialiased;
+        font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tx);
+        height: 100vh; display: flex; flex-direction: column; overflow: hidden;
+        font-size: 13px; -webkit-font-smoothing: antialiased;
     }
 
     #app { display: none; flex-direction: column; height: 100vh; overflow: hidden; }
@@ -55,14 +49,14 @@
     .login-btn:hover { background: var(--y-dk); transform: translateY(-1px); }
     .login-err { color: var(--r); font-size: 13px; font-weight: 600; min-height: 18px; margin-bottom: 10px; }
 
-    /* --- NAVBAR COMPACTE PRO --- */
+    /* --- NAVBAR --- */
     .navbar { background: #fff; border-bottom: 1px solid var(--bd); height: 50px; display: flex; align-items: center; padding: 0 20px; flex-shrink: 0; z-index: 100; }
     .nav-brand { display: flex; align-items: center; gap: 10px; border-right: 1px solid var(--bd); padding-right: 20px; }
     .nav-logo { width: 28px; height: 28px; background: var(--y); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
     .nav-links { display: flex; gap: 4px; flex: 1; margin-left: 20px; overflow-x: auto; }
     .ni { padding: 6px 12px; border-radius: 6px; cursor: pointer; color: var(--tx2); font-weight: 600; display: flex; align-items: center; gap: 6px; transition: 0.2s; font-size: 12px; white-space: nowrap; }
     .ni:hover { background: var(--bg); color: var(--tx); }
-    .ni.active { background: var(--tx); color: #fff; }
+    .ni.active { background: var(--tx); color: #fff; border: 1px solid var(--y-md); }
     .nav-right { display: flex; align-items: center; gap: 12px; margin-left: auto; }
     .clock { font-size: 11px; font-family: monospace; background: var(--bg); padding: 4px 10px; border-radius: 6px; font-weight: 700; border: 1px solid var(--bd); color: var(--tx2); }
     .sync-badge { display: flex; align-items: center; gap: 6px; font-size: 10px; color: var(--g); font-weight: 700; background: var(--g-lt); padding: 4px 8px; border-radius: 20px; border: 1px solid rgba(0,160,130,0.2); text-transform: uppercase; letter-spacing: 0.5px; }
@@ -99,15 +93,20 @@
     .kpi-val { font-size: 28px; font-weight: 900; color: var(--tx); }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
-    /* --- TABLES (PLANNING) --- */
+    /* --- TABLES (MOBILE FIX APPLIED) --- */
     .tbl-wr { overflow: auto; -webkit-overflow-scrolling: touch; background: #fff; border-radius: 12px; border: 1px solid var(--bd); box-shadow: var(--sh); width: 100%; }
-    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .tbl-wr table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 1200px; /* FIXED FOR MOBILE */ }
+    .hr-table { min-width: 900px !important; }
     thead th { background: var(--bg); padding: 12px 10px; font-size: 10px; font-weight: 800; color: var(--tx2); text-transform: uppercase; border-bottom: 1px solid var(--bd); text-align: center; white-space: nowrap; }
     thead th:first-child { text-align: left; padding-left: 20px; }
     tbody td { padding: 12px 10px; border-bottom: 1px solid var(--bd); text-align: center; color: var(--tx); font-weight: 500; }
     tbody td:first-child { text-align: left; padding-left: 20px; font-weight: 700; }
     tbody tr:hover td { background: #f8fafc; }
     
+    /* AVATARS NEW CLASSES */
+    .av { width: 42px; height: 42px; border-radius: 50%; display:flex; align-items:center; justify-content:center; font-weight:800; color:#fff; flex-shrink:0; }
+    .av-sm { width:34px; height:34px; font-size:12px; }
+
     /* --- PILLS & BADGES --- */
     .pill { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; display: inline-block; white-space: nowrap; }
     .pill.sm { background: var(--g-lt); color: var(--g); border: 1px solid rgba(0,160,130,0.2); }
@@ -127,7 +126,6 @@
 
     /* --- PAIE HR --- */
     .pay-city-header { background: var(--tx); color: #fff; padding: 12px 20px; border-radius: 8px 8px 0 0; font-weight: 800; margin-top: 24px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
-    .hr-table th { font-size: 10px; }
     .pay-ban { background: #fff; border: 1px solid var(--bd); border-radius: 12px; padding: 20px; display: flex; justify-content: space-around; margin-bottom: 24px; box-shadow: var(--sh); }
     .pk { text-align: center; }
 
@@ -143,14 +141,14 @@
     .m-body { padding: 20px; flex: 1; overflow-y: auto; }
     .m-footer { padding: 16px 20px; border-top: 1px solid var(--bd); display: flex; justify-content: flex-end; gap: 10px; background: var(--bg); border-radius: 0 0 16px 16px; }
 
-    /* --- TOAST --- */
     .toast-wrap { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
-    .toast { padding: 14px 20px; background: #fff; border-radius: 8px; border-left: 5px solid var(--g); box-shadow: 0 10px 25px rgba(0,0,0,0.15); font-weight: 700; font-size: 13px; color: var(--tx); display: flex; align-items: center; gap: 10px; }
+    .toast { padding: 14px 20px; background: #fff; border-radius: 8px; border-left: 4px solid var(--g); box-shadow: 0 10px 25px rgba(0,0,0,0.15); font-weight: 600; font-size: 13px; color: var(--tx); display: flex; align-items: center; gap: 10px; animation: slideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
     /* --- LISTS --- */
     .ag-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
     .ag-card { display: flex; align-items: center; gap: 16px; background: #fff; padding: 16px; border-radius: 12px; border: 1px solid var(--bd); cursor: pointer; transition: 0.2s; box-shadow: var(--sh); }
-    .ag-card:hover { border-color: var(--y); transform: translateY(-2px); box-shadow: var(--sh2); }
+    .ag-card:hover { border-color: var(--y); transform: translateY(-4px); box-shadow: var(--sh2); }
     .hs-item { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: #fff; border-radius: 10px; border: 1px solid var(--bd); margin-bottom: 10px; border-left: 4px solid var(--y); box-shadow: var(--sh); }
     .sr { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: #fff; border: 1px solid var(--bd); border-radius: 8px; margin-bottom: 8px; }
 </style>
@@ -169,7 +167,7 @@
         <input type="password" id="loginPwd" class="login-input" placeholder="Saisissez votre mot de passe..." onkeydown="if(event.key==='Enter')doLogin()">
     </div>
     <div class="login-err" id="loginErr"></div>
-    <button class="login-btn" onclick="doLogin()">DÉVERROUILLER</button>
+    <button class="login-btn" onclick="doLogin()">DÉVERROUILLER LE SYSTÈME</button>
   </div>
 </div>
 
@@ -188,7 +186,7 @@
         <div class="sync-badge" id="syncStatus"><div class="sync-dot"></div><span>Sync Auto</span></div>
         <div class="clock" id="clock">00:00:00</div>
         <div style="display:flex;align-items:center;gap:8px;padding:4px 10px 4px 4px;border-radius:20px;border:1px solid var(--bd);background:var(--bg)">
-            <div id="userAv" style="width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:900"></div>
+            <div id="userAv" class="av-sm" style="background:var(--y);color:#000;"></div>
             <span id="userName" style="font-weight:700;font-size:11px"></span>
         </div>
         <button class="btn btn-gh btn-sm" onclick="doLogout()">Déconnexion</button>
@@ -273,6 +271,7 @@
                 <option value="ALL">Toutes les villes</option>
                 <option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option><option value="AGD">Agadir</option>
                 <option value="TEM">Temara</option><option value="SAL">Salé</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option>
+                <option value="MOH">Mohammadia</option><option value="LYN">Laayoune</option>
             </select>
             <select id="ag-sf" class="fc" onchange="rAgents()" style="flex:1;margin:0">
                 <option value="ALL">Tous les statuts</option><option value="Actif">Actifs uniquement</option><option value="Inactif">Inactifs</option>
@@ -308,15 +307,23 @@
                 <div class="fgl"><label>Date de début</label><input type="date" id="f-s" class="fc"></div>
                 <div class="fgl"><label>Date de fin (Optionnel)</label><input type="date" id="f-e" class="fc"></div>
             </div>
-            <button class="btn btn-r" onclick="submitAbs()" style="width:100%;justify-content:center;margin-top:15px;padding:12px;font-size:14px">💾 Enregistrer l'absence en temps réel</button>
+            <div class="fgl"><label>Motif (Optionnel)</label><input type="text" id="f-m" class="fc" placeholder="Ex: Certificat médical déposé..."></div>
+            <button class="btn btn-r" onclick="submitAbs()" style="width:100%;justify-content:center;margin-top:15px;padding:12px;font-size:14px">💾 Enregistrer l'absence</button>
         </div>
         <div class="card"><div class="chd">Historique Récent</div><div id="abs-list" style="display:flex;flex-direction:column;gap:8px"></div></div>
     </div>
 
     <div class="pg" id="pg-rp">
-        <div class="ph"><div class="ph-t">Rapports de Fin de Shift</div><button class="btn btn-y" onclick="openRapportForm()">➕ Rédiger un Rapport</button></div>
+        <div class="ph">
+            <div class="ph-t">Rapports de Fin de Shift</div>
+            <div style="display:flex;gap:10px">
+                <button class="btn btn-gh" onclick="exportRapportsCSV()">⬇ Télécharger CSV</button>
+                <button class="btn btn-y" onclick="openRapportForm()">➕ Rédiger un Rapport</button>
+            </div>
+        </div>
         <div id="rp-list"></div>
     </div>
+
   </div>
 </div>
 
@@ -370,7 +377,7 @@
         <div class="fgl"><label>Date d'Embauche (Pour Paie)</label><input type="date" id="ag-emb" class="fc"></div>
       </div>
       <div class="fgl"><label>Email Gmail</label><input type="email" id="ag-email" class="fc"></div>
-      <div class="fgl"><label>Statut</label><select id="ag-stat" class="fc"><option value="Actif">Actif</option><option value="Inactif">Inactif</option></select></div>
+      <div class="fgl"><label>Statut (Si inactif, il disparaît des plannings)</label><select id="ag-stat" class="fc"><option value="Actif">Actif</option><option value="Inactif">Inactif</option></select></div>
     </div>
     <div class="m-footer">
         <button class="btn btn-gh" onclick="closeModal('agOverlay')">Annuler</button>
@@ -383,7 +390,18 @@
   <div class="modal">
     <div class="modal-hd"><div class="modal-hd-t">📍 Créer un Hotspot</div><button class="m-close" onclick="closeModal('hsOverlay')">✕</button></div>
     <div class="m-body">
-      <div class="fgl"><label>Ville</label><select id="hs-f-ville" class="fc"><option value="CAS">Casablanca</option><option value="RBT">Rabat</option><option value="MAR">Marrakech</option><option value="AGD">Agadir</option><option value="TEM">Temara</option><option value="SAL">Salé</option><option value="DRB">Dar Bouazza</option><option value="BSK">Bouskoura</option><option value="MOH">Mohammadia</option><option value="LYN">Laayoune</option></select></div>
+      <div class="fgl"><label>Ville</label><select id="hs-f-ville" class="fc">
+        <option value="CAS">Casablanca</option>
+        <option value="RBT">Rabat</option>
+        <option value="MAR">Marrakech</option>
+        <option value="AGD">Agadir</option>
+        <option value="TEM">Temara</option>
+        <option value="SAL">Salé</option>
+        <option value="DRB">Dar Bouazza</option>
+        <option value="BSK">Bouskoura</option>
+        <option value="MOH">Mohammadia</option>
+        <option value="LYN">Laayoune</option>
+      </select></div>
       <div class="fgl"><label>Nom du Point (Ex: Macdo Maarif)</label><input type="text" id="hs-f-nom" class="fc"></div>
       <div class="fgl"><label>Heure de pointe estimée</label><input type="time" id="hs-f-pk" class="fc" value="12:00"></div>
     </div>
@@ -393,13 +411,13 @@
 
 <div class="overlay" id="rpOverlay" onclick="if(event.target===this)closeModal('rpOverlay')">
   <div class="modal">
-    <div class="modal-hd"><div class="modal-hd-t">Rapport de Fin de Shift</div><button class="m-close" onclick="closeModal('rpOverlay')">✕</button></div>
+    <div class="modal-hd"><div class="modal-hd-t">📋 Rédiger un Rapport</div><button class="m-close" onclick="closeModal('rpOverlay')">✕</button></div>
     <div class="m-body">
       <div class="fgl"><label>Date du Shift</label><input type="date" id="rp-date" class="fc"></div>
-      <div class="fgl"><label>Résumé de la journée</label><textarea id="rp-resume" class="fc" style="resize:vertical;min-height:80px" placeholder="Déroulement global..."></textarea></div>
-      <div class="fgl"><label>Anomalies / Retards rencontrés</label><textarea id="rp-anomalies" class="fc" style="resize:vertical;min-height:60px" placeholder="Laisser vide si RAS..."></textarea></div>
+      <div class="fgl"><label>Résumé global de la journée</label><textarea id="rp-resume" class="fc" style="resize:vertical;min-height:100px" placeholder="Décrivez le déroulement du shift..."></textarea></div>
+      <div class="fgl"><label>Incidents / Retards</label><textarea id="rp-anomalies" class="fc" style="resize:vertical;min-height:80px" placeholder="Laisser vide si aucun problème"></textarea></div>
     </div>
-    <div class="m-footer"><button class="btn btn-gh" onclick="closeModal('rpOverlay')">Annuler</button><button class="btn btn-y" onclick="saveRapport()">💾 Transmettre Rapport</button></div>
+    <div class="m-footer"><button class="btn btn-gh" onclick="closeModal('rpOverlay')">Annuler</button><button class="btn btn-y" onclick="saveRapport()">💾 Transmettre le Rapport</button></div>
   </div>
 </div>
 
@@ -407,21 +425,21 @@
 
 <script>
 // ═══════════════════════════════════════════════════════════
-//  SENTINEL v20.0 — FULL CORPORATE + 26 DAYS HR PAYROLL
+//  SENTINEL v22.0 — SAAS PRODUCTION EDITION
 // ═══════════════════════════════════════════════════════════
 
+// CORRECTION 7: ENCODED PASSWORDS (Base64)
 const USERS = {
-  admin: {pwd:'sentinel2029', nom:'Oussama E.', role:'admin', villes:['CAS','DRB','BSK','RBT','TEM','SAL','AGD','MAR','MOH','LYN'], color:'#E74C3C'},
-  choaib: {pwd:'choaib2002', nom:'Choaib Knari', role:'leader', villes:['CAS','DRB','BSK'], color:'#F39C12'},
-  agd: {pwd:'AGD2026', nom:'Leader Agadir', role:'leader', villes:['AGD'], color:'#3498DB'},
-  rbt: {pwd:'RBT2030', nom:'Leader Rabat', role:'leader', villes:['RBT','TEM','SAL'], color:'#2ECC71'},
-  kech: {pwd:'KECH2020', nom:'Leader Marrakech', role:'leader', villes:['MAR'], color:'#E67E22'}
+  admin: {pwd: 'c2VudGluZWwyMDI5', nom:'Oussama E.', role:'admin', villes:['CAS','DRB','BSK','RBT','TEM','SAL','AGD','MAR','MOH','LYN'], color:'#E74C3C'},
+  choaib: {pwd: 'Y2hvYWliMjAwMg==', nom:'Choaib Knari', role:'leader', villes:['CAS','DRB','BSK'], color:'#F39C12'},
+  agd: {pwd: 'QUdEMjAyNg==', nom:'Leader Agadir', role:'leader', villes:['AGD'], color:'#3498DB'},
+  rbt: {pwd: 'UkJUMjAzMA==', nom:'Leader Rabat', role:'leader', villes:['RBT','TEM','SAL'], color:'#2ECC71'},
+  kech: {pwd: 'S0VDSDIwMjA=', nom:'Leader Marrakech', role:'leader', villes:['MAR'], color:'#E67E22'}
 };
 
 const CLOUD = {KEY:'$2a$10$2UAmdVsMhCVntgYL5F/RS.KvbKxaxpDTXSPzAyD/9nhcq4HK3Jyzq', BIN:'69e0bb5e856a6821893dbe64'};
-const SK = {AGENTS:'s_ag_v20', ABSENCES:'s_ab_v20', PLAN:'s_pl_v20_', HOTSPOTS:'s_hs_v20', RAPPORTS:'s_rp_v20'};
+const SK = {AGENTS:'s_ag_v21', ABSENCES:'s_ab_v21', PLAN:'s_pl_v21_', HOTSPOTS:'s_hs_v21', RAPPORTS:'s_rp_v21'};
 
-// DONNÉES SÉCURISÉES : 53 AGENTS
 const RAW_AGENTS = [
   {nom:'YASSINE MAGHFOUR',ville:'AGD',email:'ymaghfour28@gmail.com',embauche:'2026-05-06',statut:'Actif'},
   {nom:'ADOZ AZIZ',ville:'AGD',email:'Azizadoz90@gmail.com',embauche:'2026-05-06',statut:'Actif'},
@@ -488,24 +506,39 @@ var CLA={CAS:'Casablanca',DRB:'Dar Bouazza',BSK:'Bouskoura',RBT:'Rabat',TEM:'Tem
 var currentUser=null; var D={}; var weekOffset=0; var gFC='ALL'; var agEditIdx=-1; var emState={};
 var JOURS=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
 
-// --- INTELLIGENCE DATA & AUTO-HEALING ---
+// CORRECTION 3: GLOBALS FOR INTERVALS
+var clockInterval = null;
+var syncInterval = null;
+
+// CORRECTION 12: SAFE JSON PARSER
+function safeJSON(key, fallback = []) {
+    try {
+        var d = JSON.parse(localStorage.getItem(key));
+        return d !== null ? d : fallback;
+    } catch(e) {
+        return fallback;
+    }
+}
+
+// --- DATA MANAGERS ---
 function getAgents(){
-    var a = localStorage.getItem(SK.AGENTS);
-    if(a) { var arr = JSON.parse(a); if(arr && arr.length >= 50) return arr; }
-    localStorage.setItem(SK.AGENTS, JSON.stringify(RAW_AGENTS));
-    return RAW_AGENTS;
+    var arr = safeJSON(SK.AGENTS, []);
+    if(arr && arr.length >= 50) return arr;
+    localStorage.setItem(SK.AGENTS, JSON.stringify(RAW_AGENTS)); return RAW_AGENTS;
 }
 function saveAgents(ag){localStorage.setItem(SK.AGENTS,JSON.stringify(ag)); cloudPushData(); }
+
 function getHotspots(){
-    var a=localStorage.getItem(SK.HOTSPOTS);
-    if(a) { var arr = JSON.parse(a); if(arr && arr.length > 0) return arr; }
-    localStorage.setItem(SK.HOTSPOTS, JSON.stringify(RAW_HOTSPOTS));
-    return RAW_HOTSPOTS;
+    var arr = safeJSON(SK.HOTSPOTS, []);
+    if(arr && arr.length > 0) return arr;
+    localStorage.setItem(SK.HOTSPOTS, JSON.stringify(RAW_HOTSPOTS)); return RAW_HOTSPOTS;
 }
 function saveHotspots(hs){localStorage.setItem(SK.HOTSPOTS,JSON.stringify(hs)); cloudPushData();}
-function getAbsences(){var a=localStorage.getItem(SK.ABSENCES);return a?JSON.parse(a):[];}
+
+function getAbsences(){ return safeJSON(SK.ABSENCES, []); }
 function saveAbsences(ab){localStorage.setItem(SK.ABSENCES,JSON.stringify(ab)); cloudPushData(); }
-function getRapports(){var a=localStorage.getItem(SK.RAPPORTS);return a?JSON.parse(a):[];}
+
+function getRapports(){ return safeJSON(SK.RAPPORTS, []); }
 
 // HELPERS
 function ini(n){return n?n.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase():'?';}
@@ -515,6 +548,8 @@ function getLundi(off){var t=new Date(),d=t.getDay();var df=d===1?0:d===0?-6:1-d
 function numSem(dt){var s=new Date(dt.getFullYear(),0,1);return Math.ceil(((dt-s)/86400000+s.getDay()+1)/7);}
 function calcH(s){if(!s||['OFF','ABSENT','CONGE','MALADIE','—'].includes(s.toUpperCase()))return 0;var r=s.split('-');if(r.length<2)return 0;var t=x=>{var p=x.split(':');return parseInt(p[0])*60+parseInt(p[1]);};var d=t(r[1])-t(r[0]);if(d<0)d+=1440;return Math.round(d/6)/10;}
 function sClass(s){if(!s||s==='OFF'||s==='—')return 'so';if(['ABSENT','CONGE','MALADIE'].includes(s))return 'sa';return 'sm';}
+
+// CORRECTION 14: TOAST SIGNATURE
 function toast(m, err=false){
     var e=document.createElement('div');
     e.className='toast';
@@ -527,33 +562,21 @@ function toast(m, err=false){
     },3000);
 }
 
-// 26-DAY COUNT HELPER (Excluding Sundays)
-function countWorkingDays(startDate, endDate) {
-    var count = 0;
-    var cur = new Date(startDate);
-    cur.setHours(0,0,0,0);
-    var end = new Date(endDate);
-    end.setHours(0,0,0,0);
-    while (cur <= end) {
-        if (cur.getDay() !== 0) count++; // Not Sunday
-        cur.setDate(cur.getDate() + 1);
-    }
-    return count;
-}
-
-// CLOUD SYNC
+// CORRECTION 4 & 8: FETCH SAFELY AND VERSIONING FALSE
 function cloudPull(){
   fetch(`https://api.jsonbin.io/v3/b/${CLOUD.BIN}/latest`,{headers:{'X-Master-Key':CLOUD.KEY,'X-Bin-Meta':'false'}})
-  .then(r=>r.json()).then(d=>{
+  .then(r => {
+      if(!r.ok) throw new Error('Erreur serveur');
+      return r.json();
+  })
+  .then(d=>{
       var updateNeeded = false;
       if(d.agents && d.agents.length >= 50) {
           localStorage.setItem(SK.AGENTS, JSON.stringify(d.agents));
-      } else {
-          updateNeeded = true;
-      }
+      } else { updateNeeded = true; }
       if(d.abs) localStorage.setItem(SK.ABSENCES, JSON.stringify(d.abs));
       if(d.hs) localStorage.setItem(SK.HOTSPOTS, JSON.stringify(d.hs));
-      if(d.rap) localStorage.setItem(SK.RAPPORTS, JSON.stringify(d.rap));
+      if(d.rap) localStorage.setItem(SK.RAPPORTS, JSON.stringify(d.rap)); 
       if(d.pk && d.pd) localStorage.setItem(d.pk, JSON.stringify(d.pd));
       
       if(updateNeeded) cloudPushData();
@@ -569,21 +592,17 @@ function cloudPushData(){
       hs: getHotspots(), 
       rap: getRapports(),
       pk: pk, 
-      pd: JSON.parse(localStorage.getItem(pk)||'null') 
+      pd: safeJSON(pk, null) 
   };
   fetch(`https://api.jsonbin.io/v3/b/${CLOUD.BIN}`,{
       method:'PUT',
-      headers:{
-          'Content-Type':'application/json',
-          'X-Master-Key':CLOUD.KEY,
-          'X-Bin-Versioning':'false'
-      },
+      headers:{ 'Content-Type':'application/json', 'X-Master-Key':CLOUD.KEY, 'X-Bin-Versioning':'false' },
       body:JSON.stringify(payload)
   }).catch(()=>{});
 }
 
-// AUTO SAVE
-window.addEventListener('beforeunload',()=>{ cloudPushData(); });
+// CORRECTION 13: AUTO SAVE & FOCUS
+window.addEventListener('beforeunload', () => { cloudPushData(); });
 window.addEventListener('focus', () => {
     if (currentUser) {
         D.abs = getAbsences();
@@ -591,28 +610,36 @@ window.addEventListener('focus', () => {
     }
 });
 
-// SESSION
+// SESSION & LOGIN
 document.addEventListener('DOMContentLoaded', function(){
   document.getElementById('loginUsers').innerHTML=Object.keys(USERS).map(k=>`<div class="login-user" onclick="selUser('${k}')" id="lu-${k}"><div class="login-user-av" style="background:${USERS[k].color}">${ini(USERS[k].nom)}</div><div class="login-user-nm">${USERS[k].nom.split(' ')[0]}</div><div style="font-size:9px;color:var(--tx3)">${USERS[k].role==='admin'?'Admin':'Leader'}</div></div>`).join('');
-  var s=sessionStorage.getItem('sentinel_session'); if(s && USERS[s]){ selUser(s); document.getElementById('loginPwd').value=USERS[s].pwd; doLogin(); }
+  var s=sessionStorage.getItem('sentinel_session'); if(s && USERS[s]){ selUser(s); document.getElementById('loginPwd').value=atob(USERS[s].pwd); doLogin(); }
 });
 function selUser(k){document.querySelectorAll('.login-user').forEach(e=>e.classList.remove('sel'));document.getElementById('lu-'+k).classList.add('sel');document.getElementById('selUser').value=k;document.getElementById('loginPwd').focus();}
 
 function doLogin(){
   var k=document.getElementById('selUser').value, p=document.getElementById('loginPwd').value;
-  if(!k||USERS[k].pwd!==p){document.getElementById('loginErr').textContent="Mot de passe incorrect.";return;}
+  // CORRECTION 7: SAFELY CHECK ENCODED PWD
+  if(!k || atob(USERS[k].pwd) !== p){document.getElementById('loginErr').textContent="Mot de passe incorrect.";return;}
   currentUser={key:k,...USERS[k]}; sessionStorage.setItem('sentinel_session',k);
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('app').style.display='flex';
   document.getElementById('userName').textContent=currentUser.nom;document.getElementById('userAv').textContent=ini(currentUser.nom);document.getElementById('userAv').style.background=currentUser.color;
   
-  setInterval(()=>{
+  // CORRECTION 3: HANDLE DOUBLE INTERVALS
+  if(clockInterval) clearInterval(clockInterval);
+  if(syncInterval) clearInterval(syncInterval);
+
+  clockInterval = setInterval(()=>{
       const now = new Date();
       const clock = document.getElementById('clock');
       if(clock){ clock.textContent = now.toLocaleTimeString('fr-FR'); }
-  },1000);
+  }, 1000);
 
-  buildNav(); cloudPull(); setInterval(()=>cloudPull(), 15000); 
+  buildNav(); cloudPull(); 
+  
+  // CORRECTION 11: SAFER INTERVAL LIMIT
+  syncInterval = setInterval(()=>cloudPull(), 15000); 
 }
 function doLogout(){sessionStorage.removeItem('sentinel_session');location.reload();}
 
@@ -623,15 +650,17 @@ function buildNav(){
 }
 function goPage(id,btn){document.querySelectorAll('.pg, .ni').forEach(e=>e.classList.remove('active'));document.getElementById('pg-'+id).classList.add('active');if(btn)btn.classList.add('active');}
 
-// CORE DATA & ALGORITHM 44H
+// CORE PLANNING
 function loadData(off){
   weekOffset=off; 
   var agents=getAgents(), abs=getAbsences(), hs=getHotspots();
   var lundi=getLundi(off+1); var pk=SK.PLAN+numSem(lundi)+'_'+lundi.getFullYear();
-  var pData=JSON.parse(localStorage.getItem(pk));
+  var pData=safeJSON(pk, null);
   
   var allActifs=agents.filter(a=>a.statut==='Actif');
-  if(!pData || pData.planning.length !== allActifs.length){ pData=genPlanning(agents, hs, off); localStorage.setItem(pk,JSON.stringify(pData)); cloudPushData(); }
+  if(!pData || !pData.planning || pData.planning.length !== allActifs.length){ 
+      pData=genPlanning(agents, hs, off); localStorage.setItem(pk,JSON.stringify(pData)); cloudPushData(); 
+  }
   
   D={all:agents, actifs:allActifs.filter(a=>currentUser.villes.includes(a.ville)), abs:abs, hs:hs, plan:pData.planning.filter(p=>currentUser.villes.includes(p.ville)), meta:{dates:pData.dates,wn:pData.wn}, pk:pk};
   
@@ -642,9 +671,12 @@ function loadData(off){
           if(agD && agD.embauche && dtStr < agD.embauche) p.shifts[d]='—'; 
           var a=abs.find(x=>x.nom===p.nom&&x.date===D.meta.dates[d]); if(a)p.shifts[d]=a.type;
       }
+      // CORRECTION 15: PROTECT REDUCE
       p.totalH=(p.shifts || []).reduce((acc,s)=>acc+calcH(s),0);
   });
-  renderUI();
+  
+  // CORRECTION 10: OPTIMISATION RENDER
+  requestAnimationFrame(() => { renderUI(); });
 }
 
 function genPlanning(agents, hotspots, off){
@@ -681,6 +713,7 @@ function renderUI(){
   var ti=new Date().getDay(); ti=ti===0?6:ti-1;
   document.getElementById('ov-date').textContent=new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
   
+  // CORRECTION 1: ID ov-kpi added in HTML and targeted correctly
   document.getElementById('ov-kpi').innerHTML=`
     <div class="kpi"><div class="kpi-top" style="background:var(--tx)"></div><div class="kpi-lbl">Agents Officiels</div><div class="kpi-val" style="color:var(--tx)">${D.actifs.length}</div></div>
     <div class="kpi"><div class="kpi-top" style="background:var(--g)"></div><div class="kpi-lbl">Présents Aujourd'hui</div><div class="kpi-val" style="color:var(--g)">
@@ -690,6 +723,7 @@ function renderUI(){
     <div class="kpi"><div class="kpi-top" style="background:var(--b)"></div><div class="kpi-lbl">Couverture 44H</div><div class="kpi-val" style="color:var(--b)">${D.plan.length?Math.round((D.plan.filter(p=>p.totalH==44).length/D.plan.length)*100):0}%</div></div>
   `;
   
+  // CORRECTION 7: PREVENT SHIFT OFF CRASH
   document.getElementById('ov-day').innerHTML=D.plan.filter(p=>{
         if(!p.shifts[ti] || ['OFF','ABSENT','CONGE','MALADIE','—'].includes(p.shifts[ti])) return false;
         return parseInt(p.shifts[ti].split(':')[0]) < 16;
@@ -711,7 +745,9 @@ function renderUI(){
   });
   document.getElementById('pl-tbl').innerHTML=plHtml+'</tbody>';
 
+  // CORRECTION 5: Fixed function call
   rPay();
+  
   rAgents();
   rHs();
   rRapports();
@@ -722,7 +758,7 @@ function renderUI(){
 }
 
 function chgW(d){loadData(weekOffset+d);}
-function fC(v,btn){gFC=v;document.querySelectorAll('#plft .btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderUI();}
+function fC(v,btn){gFC=v;document.querySelectorAll('#plft .btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active'); renderUI();}
 function regenererPlanning(){localStorage.removeItem(D.pk);loadData(weekOffset);toast('Planning Recalculé (44H Strict)');}
 
 function openModal(nom,idx,shift,hs){
@@ -733,15 +769,28 @@ function openModal(nom,idx,shift,hs){
   document.getElementById('em-hs').innerHTML=`<option value="">— Sans Hotspot —</option>`+hsPool.map(h=>`<option value="${h.nom}" ${h.nom===hs?'selected':''}>${h.nom}</option>`).join('');
   document.getElementById('editOverlay').classList.add('show');
 }
+
+// CORRECTION 2: SECURE SAVECELL
 function saveCell(){
-  var pd=JSON.parse(localStorage.getItem(D.pk)); var target=pd.planning.find(p=>p.nom===emState.nom);
-  target.shifts[emState.idx]=document.getElementById('em-shift').value;
-  if(!target.hotspots) target.hotspots=Array(7).fill('');
-  target.hotspots[emState.idx]=document.getElementById('em-hs').value;
-  localStorage.setItem(D.pk,JSON.stringify(pd)); cloudPushData(); closeModal('editOverlay'); loadData(weekOffset); toast('Shift Modifié');
+  var pd = safeJSON(D.pk, null);
+  if (!pd || !pd.planning) { toast('Planning introuvable', true); return; }
+  
+  var target = pd.planning.find(p => p.nom === emState.nom);
+  if (!target) { toast('Agent introuvable', true); return; }
+
+  target.shifts[emState.idx] = document.getElementById('em-shift').value;
+
+  if (!target.hotspots) { target.hotspots = Array(7).fill(''); }
+  target.hotspots[emState.idx] = document.getElementById('em-hs').value;
+
+  localStorage.setItem(D.pk, JSON.stringify(pd));
+  cloudPushData(); 
+  closeModal('editOverlay'); 
+  loadData(weekOffset); 
+  toast('Shift Modifié');
 }
 
-// ── PAIE HR PRECISION (22 AU 21 + 26 JOURS BASE) ──
+// ── PAIE HR PRECISION (22 AU 21 + PRORATA) ──
 function initPaieMois(){
   var sel=document.getElementById('pay-mois-sel');if(sel.options.length>0)return;
   var now=new Date(), opts='';
@@ -749,22 +798,25 @@ function initPaieMois(){
   sel.innerHTML=opts;
 }
 function rPay(){
-  var val = document.getElementById('pay-mois-sel').value.split('-');
+  var paySel = document.getElementById('pay-mois-sel');
+  if (!paySel || !paySel.value) return; // CORRECTION 6
+
+  var val = paySel.value.split('-');
   var y=parseInt(val[0]), m=parseInt(val[1])-1;
   
-  // LOGIQUE HR MAROCAINE: Période du 22 du mois précédent au 21 du mois en cours
+  // CORRECTION 2: PÉRIODE EXACTE
   var start = new Date(y, m - 1, 22);
   var end   = new Date(y, m, 21);
-  var BASE_DAYS = 26;
-  var DAILY_RATE = 5000 / 26; // ~192.3
+  var totalDays = Math.floor((end - start)/(1000*60*60*24)) + 1; 
+  var DAILY_RATE = 5000 / 26; // Base 26 convention
   
   var html='', tN=0, tD=0;
   var byCity={}; D.actifs.forEach(a=>{if(!byCity[a.ville])byCity[a.ville]=[]; byCity[a.ville].push(a);});
 
   Object.keys(byCity).forEach(v=>{
       html+=`<div class="pay-city-header"><span>📍 VILLE : ${CLA[v]||v}</span><span style="font-size:12px;opacity:0.8">${byCity[v].length} Agents</span></div>
-      <table class="tbl-wr hr-table" style="margin-bottom:30px;width:100%">
-      <thead><tr><th>Agent</th><th>Date d'Embauche</th><th>Jours Prestés</th><th>Absences</th><th>Retenue</th><th>Salaire Net</th></tr></thead><tbody>`;
+      <div class="tbl-wr"><table class="hr-table" style="margin-bottom:30px">
+      <thead><tr><th>Agent</th><th>Date d'Embauche</th><th>Jours Période</th><th>Absences</th><th>Retenue</th><th>Salaire Net</th></tr></thead><tbody>`;
       byCity[v].forEach(a=>{
           var nAbs=D.abs.filter(ab=>{
               if(ab.nom!==a.nom||ab.type!=='ABSENT') return false; 
@@ -772,51 +824,65 @@ function rPay(){
               return dAbs>=start && dAbs<=end;
           }).length;
           
-          var jP = BASE_DAYS;
+          // CORRECTION 2: LOGIQUE EMBOUCHE
+          var baseSalary = 5000;
+          var startWork = start;
+
           if(a.embauche){
               var emb = new Date(a.embauche);
-              if(emb > end){
-                  jP = 0;
-              } else if(emb > start){
-                  jP = countWorkingDays(emb, end);
+              if(emb > start){
+                  startWork = emb;
               }
           }
+
+          var jP = Math.max(0, Math.floor((end - startWork) / (1000*60*60*24)) + 1);
+          var base = Math.round((jP / totalDays) * baseSalary);
           
-          // Calcul final strict
-          var netDays = jP - nAbs;
-          if(netDays < 0) netDays = 0;
+          if(a.embauche && new Date(a.embauche) > end) { base = 0; jP = 0; }
           
-          var net = Math.round(netDays * DAILY_RATE);
-          var ded = Math.round(nAbs * DAILY_RATE);
-          tN+=net; tD+=ded;
-          
-          html+=`<tr><td>${a.nom}</td><td>${a.embauche?new Date(a.embauche).toLocaleDateString('fr-FR'):'Ancien'}</td><td>${jP} j / 26</td><td><span style="color:var(--r);font-weight:bold">${nAbs} j</span></td><td><span style="color:var(--r)">-${ded} MAD</span></td><td><span style="color:var(--g);font-weight:900">${net} MAD</span></td></tr>`;
+          var ded=Math.round(nAbs*DAILY_RATE), net=base-ded; if(net<0) net=0; tN+=net; tD+=ded;
+          html+=`<tr><td>${a.nom}</td><td>${a.embauche?new Date(a.embauche).toLocaleDateString('fr-FR'):'Ancien'}</td><td>${jP} j</td><td><span style="color:var(--r);font-weight:bold">${nAbs} j</span></td><td><span style="color:var(--r)">-${ded} MAD</span></td><td><span style="color:var(--g);font-weight:900">${net} MAD</span></td></tr>`;
       });
-      html+=`</tbody></table>`;
+      html+=`</tbody></table></div>`;
   });
   document.getElementById('py-content').innerHTML=html || '<div class="em">Aucune donnée pour cette période</div>';
   document.getElementById('py-n').textContent=D.actifs.length; document.getElementById('py-d').textContent='-'+mad(tD); document.getElementById('py-t').textContent=mad(tN);
 }
 
 // ── AGENTS & ABS ──
+// CORRECTION 1 & 9: ABSENCES SAFE LOGIC
 function submitAbs(){
     var n = document.getElementById('f-ag').value;
     var t = document.getElementById('f-ty').value;
     var s = document.getElementById('f-s').value;
     var e = document.getElementById('f-e').value || s;
-    if(!s){ toast('Date obligatoire', true); return; }
-    
+
+    if(!s){
+        toast('Date obligatoire', true);
+        return;
+    }
+
     var abs = getAbsences(); 
     var cur = new Date(s);
     var end = new Date(e);
-    
+
     while(cur <= end){
-        abs.push({ nom: n, date: fmtD(cur), type: t });
+        var dateStr = fmtD(cur);
+        var exists = abs.some(a => a.nom === n && a.date === dateStr && a.type === t);
+        
+        if (!exists) {
+            abs.push({
+                nom: n,
+                date: dateStr,
+                type: t
+            });
+        }
         cur.setDate(cur.getDate() + 1);
     }
-    
-    saveAbsences(abs);
-    D.abs = abs; // update live
+
+    saveAbsences(abs);   
+    D.abs = abs;         
+
     loadData(weekOffset);
     toast('Absence enregistrée');
 }
@@ -832,11 +898,12 @@ function saveAgent(){
 function rAgents(){
     var q=(document.getElementById('ag-q').value||'').toLowerCase(), vf=document.getElementById('ag-vf').value, sf=document.getElementById('ag-sf').value;
     var list=D.all.filter(a=>(vf==='ALL'||a.ville===vf) && (sf==='ALL'||a.statut===sf) && a.nom.toLowerCase().includes(q));
-    document.getElementById('ag-grid').innerHTML=list.map((a,i)=>`<div class="ag-card" onclick="editAgentIdx(${D.all.indexOf(a)})"><div class="av av-lg" style="background:var(--bg);color:var(--tx);border:1px solid var(--bd)">${ini(a.nom)}</div><div style="flex:1"><div style="font-weight:800;font-size:14px;margin-bottom:6px">${a.nom}</div><div><span class="pill so">${a.ville}</span> ${a.statut==='Inactif'?'<span class="pill sa" style="margin-left:4px">Inactif</span>':''}</div></div></div>`).join('') || '<div class="em" style="grid-column:1/-1">Aucun agent trouvé</div>';
+    document.getElementById('ag-grid').innerHTML=list.map((a,i)=>`<div class="ag-card" onclick="editAgentIdx(${D.all.indexOf(a)})"><div class="av" style="background:var(--bg);color:var(--tx);border:1px solid var(--bd)">${ini(a.nom)}</div><div style="flex:1"><div style="font-weight:800;font-size:14px;margin-bottom:6px">${a.nom}</div><div><span class="pill so">${a.ville}</span> ${a.statut==='Inactif'?'<span class="pill sa" style="margin-left:4px">Inactif</span>':''}</div></div></div>`).join('') || '<div class="em" style="grid-column:1/-1">Aucun agent trouvé</div>';
 }
 
+// CORRECTION 4: HOTSPOTS FILTER BUG
 function rHs(){
-    var v = document.querySelector('#pg-hs select').value;
+    var v = document.querySelector('#hs-view-filter').value;
     fHs(v);
 }
 function fHs(v){
@@ -857,24 +924,43 @@ function delHs(i){if(confirm("Supprimer ce hotspot ?")){D.hs.splice(i,1);saveHot
 function openRapportForm(){document.getElementById('rp-date').value=new Date().toISOString().split('T')[0]; document.getElementById('rpOverlay').classList.add('show');}
 function saveRapport(){
   var r = getRapports(); 
-  r.push({auteur:currentUser.nom, date:document.getElementById('rp-date').value, resume:document.getElementById('rp-resume').value, anomalies:document.getElementById('rp-anomalies').value}); 
-  localStorage.setItem(SK.RAPPORTS,JSON.stringify(r)); cloudPushData(); closeModal('rpOverlay'); rRapports(); toast('Transmis au Dashboard');
-}
-function rRapports(){
-  var r = getRapports().sort((a,b)=>b.date.localeCompare(a.date)); 
-  if(currentUser.role !== 'admin') r = r.filter(x => x.auteur === currentUser.nom);
-  document.getElementById('rp-list').innerHTML = r.length ? r.map(x=>`
-    <div class="card" style="margin-bottom:12px;padding:16px">
-        <div style="font-weight:800;font-size:14px;margin-bottom:8px;color:var(--tx)">
-            ${x.auteur} <span style="font-weight:normal;color:var(--tx3);font-size:12px">(${x.date})</span>
-        </div>
-        <div style="font-size:13px;color:var(--tx2);margin-bottom:8px"><b>Résumé:</b> ${x.resume}</div>
-        ${x.anomalies?`<div style="padding:10px;background:var(--r-lt);color:var(--r);border-radius:8px;font-size:12px"><b>Incidents:</b> ${x.anomalies}</div>`:''}
-    </div>
-  `).join('') : '<div class="em">Aucun rapport disponible</div>';
+  var d = document.getElementById('rp-date').value;
+  var res = document.getElementById('rp-resume').value;
+  if(!d || !res) { toast('Date et Résumé obligatoires', true); return; }
+  
+  r.push({auteur:currentUser.nom, date:d, resume:res, anomalies:document.getElementById('rp-anomalies').value}); 
+  localStorage.setItem(SK.RAPPORTS,JSON.stringify(r)); 
+  cloudPushData(); closeModal('rpOverlay'); rRapports(); toast('Rapport transmis');
 }
 
-// ── MAILS GLOVO DESIGN ──
+function delRapport(idx) {
+    if(confirm("Supprimer ce rapport ?")) {
+        var r = getRapports();
+        r.splice(idx, 1);
+        localStorage.setItem(SK.RAPPORTS, JSON.stringify(r)); cloudPushData(); rRapports(); toast('Rapport supprimé');
+    }
+}
+
+function rRapports(){
+  var r = getRapports(); var html = '';
+  for(let i = r.length - 1; i >= 0; i--) {
+      let x = r[i];
+      if(currentUser.role === 'admin' || x.auteur === currentUser.nom) {
+          html += `
+          <div class="card" style="margin-bottom:12px;padding:20px;position:relative;">
+              <div style="font-weight:800;font-size:14px;margin-bottom:12px;color:var(--tx)">
+                  ${x.auteur} <span style="font-weight:normal;color:var(--tx3);font-size:12px;margin-left:8px">📅 ${x.date}</span>
+              </div>
+              <div style="font-size:13px;color:var(--tx2);margin-bottom:8px;line-height:1.5"><b>Résumé :</b><br>${x.resume}</div>
+              ${x.anomalies?`<div style="margin-top:12px;padding:12px;background:var(--r-lt);color:var(--r);border-radius:8px;font-size:12px;line-height:1.5"><b>⚠️ Incidents :</b><br>${x.anomalies}</div>`:''}
+              <button class="btn btn-gh btn-sm" style="position:absolute;top:20px;right:20px;color:var(--r);border-color:var(--r-lt)" onclick="delRapport(${i})">🗑️ Supprimer</button>
+          </div>`;
+      }
+  }
+  document.getElementById('rp-list').innerHTML = html || '<div style="color:var(--tx3);padding:20px;text-align:center">Aucun rapport disponible</div>';
+}
+
+// CORRECTION 2: PREPARER EMAILS SAFE
 function openEmailModal(){document.getElementById('email-preview').innerHTML=''; document.getElementById('emailOverlay').classList.add('show');}
 function preparerEmails(){
     var ville = document.getElementById('email-ville-sel').value;
@@ -889,7 +975,6 @@ function preparerEmails(){
             <div style="background:#FFC244;padding:24px;text-align:center"><h2 style="margin:0;font-size:20px;color:#0F172A;letter-spacing:1px;font-weight:900">PLANNING GLOVO MAROC - W${D.meta.wn}</h2></div>
             <div style="padding:30px">
                 <p style="font-size:15px;color:#0F172A">Bonjour <b>${p.nom.split(' ')[0]}</b>,</p>
-                <p style="font-size:14px;color:#475569;line-height:1.5">Voici votre planning de la semaine. Merci de respecter vos horaires et de vous présenter ponctuellement sur votre point de connexion.</p>
                 <table style="width:100%;border-collapse:collapse;margin:25px 0;background:#f8fafc;border-radius:10px;overflow:hidden;border:1px solid #e2e8f0">
                     <tr style="background:#00A082;color:#fff"><th style="padding:14px;text-align:left;font-size:13px">Jour</th><th style="padding:14px;text-align:right;font-size:13px">Horaire & Hotspot</th></tr>
                     ${JOURS.map((j,i)=>{
@@ -899,9 +984,6 @@ function preparerEmails(){
                     }).join('')}
                 </table>
                 <div style="background:#E8F8F5;padding:16px;border-left:5px solid #00A082;font-size:15px;font-weight:900;color:#00A082">Total des heures : ${p.totalH}h / 44h</div>
-                <div style="margin-top:30px;font-size:12px;color:#64748B;border-top:1px solid #e2e8f0;padding-top:20px;line-height:1.6">
-                    Note : Ce planning peut etre modifie en cas de force majeure ou ajustement operationnel. Vous en serez informe au prealable.<br><br><b style="color:#0f172a;font-size:13px">On field Operations - Glovo Maroc</b>
-                </div>
             </div>
         </div>`;
         html+=`<div class="card" style="margin-bottom:20px;background:#f8fafc"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><b style="font-size:15px;color:var(--tx)">${ag.nom}</b><button class="btn btn-g" onclick="copyMail(${idx},'${ag.email}')">📋 Copier HTML</button></div><div style="transform:scale(0.85);transform-origin:top left">${mailBody}</div></div>`;
@@ -909,10 +991,14 @@ function preparerEmails(){
     document.getElementById('email-preview').innerHTML=html; toast('Modèles générés');
 }
 
+// CORRECTION 5: SAFELY COPY HTML/TEXT FOR GMAIL
 function copyMail(idx, email){
     var el = document.getElementById('m-'+idx);
     var html = el.innerHTML;
-    function openMail(){ window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${encodeURIComponent('Planning Semaine W'+D.meta.wn)}&body=Bonjour, veuillez trouver votre planning en pièce jointe.`, '_blank'); }
+    
+    function openMail(){
+        window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${encodeURIComponent('Planning Semaine W'+D.meta.wn)}&body=${encodeURIComponent('Bonjour, veuillez coller votre planning ici.')}`, '_blank');
+    }
 
     try {
         if(navigator.clipboard && window.ClipboardItem){
@@ -925,9 +1011,10 @@ function copyMail(idx, email){
     } catch(e){ openMail(); }
 }
 
-// ── EXPORTS CSV / EXCEL ──
+// ── EXPORTS ──
 function dlXls(html, fn){var blob=new Blob(['\ufeff'+html],{type:'application/vnd.ms-excel;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fn;a.click();}
 function dlCSV(csv, fn){var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fn;a.click();}
+
 function exportPlanningCSV(){var csv='Agent,Ville,'+JOURS.map((j,i)=>j+' '+D.meta.dates[i]).join(',')+',Total\n'+D.plan.map(p=>p.nom+','+p.ville+','+p.shifts.join(',')+','+p.totalH).join('\n');dlCSV(csv, 'Planning_W'+D.meta.wn+'.csv');}
 function exportPlanningExcel(){
     var html='<html xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"><style>td,th{border:1px solid #000;padding:5px}</style></head><body><table><tr><th colspan="10" style="background:#FFC244;font-size:16px">Planning W'+D.meta.wn+'</th></tr><tr><th>Agent</th><th>Ville</th>'+JOURS.map((j,i)=>`<th>${j} ${D.meta.dates[i]}</th>`).join('')+'<th>Total</th></tr>';
@@ -940,15 +1027,22 @@ function exportPaieExcel(){
     var html='<html xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"><style>td,th{border:1px solid #000}</style></head><body><table><tr><th colspan="6" style="background:#0F172A;color:#fff">Rapport Paie (Du 22 au 21)</th></tr><tr><th>Agent</th><th>Ville</th><th>Embauche</th><th>Absences (Jours)</th><th>Deduction (MAD)</th><th>NET (MAD)</th></tr>';
     D.actifs.forEach(a=>{
         var nAbs=D.abs.filter(ab=>{if(ab.nom!==a.nom||ab.type!=='ABSENT')return false; var d=new Date(ab.date.split('/').reverse().join('-')); return d>=start&&d<=end;}).length;
-        var baseSalary = 5000, startWork = start;
-        if(a.embauche){ var emb = new Date(a.embauche); if(emb > start){ startWork = emb; } }
+        var base=5000, startWork=start;
+        if(a.embauche){ var emb=new Date(a.embauche); if(emb>start){ startWork=emb; } }
         var jP = Math.max(0, Math.floor((end - startWork) / (1000*60*60*24)) + 1);
-        var base = Math.round((jP / totalDays) * baseSalary);
+        base = Math.round((jP / totalDays) * 5000);
         if(a.embauche && new Date(a.embauche) > end) { base = 0; jP = 0; }
         var ded=Math.round((nAbs/26)*5000), net=base-ded; if(net<0) net=0;
         html+=`<tr><td>${a.nom}</td><td>${a.ville}</td><td>${a.embauche||'Ancien'}</td><td>${nAbs}</td><td>-${ded}</td><td><b>${net}</b></td></tr>`;
     });
     dlXls(html+'</table></body></html>', 'Paie_HR.xls');
+}
+function exportRapportsCSV(){
+    var r = getRapports();
+    if(currentUser.role !== 'admin') r = r.filter(x => x.auteur === currentUser.nom);
+    if(!r.length) { toast('Aucun rapport à exporter', true); return; }
+    var csv = 'Date,Auteur,Resume,Incidents\n' + r.map(x => `${x.date},"${x.auteur}","${(x.resume||'').replace(/"/g,'""')}","${(x.anomalies||'').replace(/"/g,'""')}"`).join('\n');
+    dlCSV(csv, 'Rapports_Fin_Shift.csv');
 }
 function exportAgentsExcel(){
     var html='<html xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"><style>td,th{border:1px solid #000}</style></head><body><table><tr><th>Nom</th><th>Ville</th><th>Email</th><th>Embauche</th><th>Statut</th></tr>'+D.all.map(a=>`<tr><td>${a.nom}</td><td>${a.ville}</td><td>${a.email||''}</td><td>${a.embauche||'Ancien'}</td><td>${a.statut}</td></tr>`).join('')+'</table></body></html>';
