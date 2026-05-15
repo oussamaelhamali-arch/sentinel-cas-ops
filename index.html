@@ -69,7 +69,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--tx);display
 .btn-g{background:var(--g);color:#fff}
 .btn-r{background:var(--r);color:#fff}
 
-/* --- DASHBOARD NEW DESIGN --- */
+/* --- DASHBOARD PRO --- */
 .ov-header{background:linear-gradient(135deg,#0F172A 0%,#1a2744 60%,#0e2a1a 100%);border-radius:20px;padding:32px 36px;display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;box-shadow:0 8px 32px rgba(0,0,0,0.18);position:relative;overflow:hidden}
 .ov-header::before{content:'';position:absolute;top:-40px;right:-40px;width:220px;height:220px;background:radial-gradient(circle,rgba(255,194,68,0.12) 0%,transparent 70%);pointer-events:none}
 .ov-header-left{display:flex;align-items:center;gap:20px}
@@ -78,8 +78,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--tx);display
 .ov-header-sub{font-size:14px;color:rgba(255,255,255,0.5);margin-top:4px;font-weight:500}
 .ov-header-week{border:1.5px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.8);font-size:20px;font-weight:800;padding:10px 22px;border-radius:12px;letter-spacing:1px}
 
-/* NEW CLEAN KPI CARDS */
-.krow { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 28px; }
+.ov-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:28px}
 .kpi { background: #fff; border: 1px solid var(--bd); border-radius: 14px; padding: 20px; box-shadow: var(--sh); display: flex; flex-direction: column; transition: transform 0.2s; }
 .kpi:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.06); }
 .kpi-lbl { font-size: 12px; font-weight: 700; color: var(--tx2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
@@ -388,7 +387,7 @@ tbody tr:hover td{background:#F8FAFC}
 <script>
 'use strict';
 // ═══════════════════════════════════════════════════════════
-// SENTINEL v33.0 — CORPORATE FINAL (DASHBOARD REDESIGN)
+// SENTINEL v34.0 — CORPORATE FINAL (DASHBOARD PRO + PDF + EXCP)
 // ═══════════════════════════════════════════════════════════
 
 window.onerror = function(msg, src, line, col, error){ 
@@ -406,7 +405,7 @@ const USERS = {
 };
 
 const CLOUD = {KEY:'$2a$10$2UAmdVsMhCVntgYL5F/RS.KvbKxaxpDTXSPzAyD/9nhcq4HK3Jyzq', BIN:'69e0bb5e856a6821893dbe64'};
-const SK = {AGENTS:'s_ag_v33', ABSENCES:'s_ab_v33', PLAN:'s_pl_v33_', HOTSPOTS:'s_hs_v33', RAPPORTS:'s_rp_v33', CONFIG:'s_cfg_v33'};
+const SK = {AGENTS:'s_ag_v34', ABSENCES:'s_ab_v34', PLAN:'s_pl_v34_', HOTSPOTS:'s_hs_v34', RAPPORTS:'s_rp_v34', CONFIG:'s_cfg_v34'};
 
 const RAW_AGENTS=[{nom:'YASSINE MAGHFOUR',ville:'AGD',email:'ymaghfour28@gmail.com',embauche:'2026-05-06',statut:'Actif'},{nom:'ADOZ AZIZ',ville:'AGD',email:'Azizadoz90@gmail.com',embauche:'2026-05-06',statut:'Actif'},{nom:'Baidi Abdelbasset',ville:'BSK',email:'Abdelbasstbaidi@gmail.com',embauche:'',statut:'Actif'},{nom:'Tarik Hamid',ville:'BSK',email:'hamidtarik995@gmail.com',embauche:'',statut:'Actif'},{nom:'Morad Mourid',ville:'BSK',email:'m.morid1993@gmail.com',embauche:'',statut:'Actif'},{nom:'Abdelkhalek Nainia',ville:'CAS',email:'Abdou.nainia87@gmail.com',embauche:'',statut:'Actif'},{nom:'AHMED HAJJAJ',ville:'CAS',email:'ahmedhajjaj1996@gmail.com',embauche:'2026-04-27',statut:'Actif'},{nom:'Rajid Annas',ville:'CAS',email:'anoussrajid37@gmail.com',embauche:'',statut:'Actif'},{nom:'Ayeman Belgara',ville:'CAS',email:'Aymanbelgara43@gmail.com',embauche:'',statut:'Actif'},{nom:'Ayoub Mensour',ville:'CAS',email:'ayoubmans378@gmail.com',embauche:'',statut:'Actif'},{nom:'Abdelaziz Salimi',ville:'CAS',email:'aziz36928@gmail.com',embauche:'',statut:'Actif'},{nom:'Yassine Baddi',ville:'CAS',email:'baddiy700@gmail.com',embauche:'',statut:'Actif'},{nom:'Brahim Lachguer',ville:'CAS',email:'Brahimlachguer28@gmail.com',embauche:'',statut:'Actif'},{nom:'Zakaria Elaissi',ville:'CAS',email:'elaissizakaria72@gmail.com',embauche:'',statut:'Actif'},{nom:'El Mehdi El Barnoussi',ville:'CAS',email:'elbarnossi.elmehdi93@gmail.com',embauche:'',statut:'Actif'},{nom:'Hamza Karim',ville:'CAS',email:'fzislamkarim@gmail.com',embauche:'',statut:'Actif'},{nom:'Ahmed Habib Eddine',ville:'CAS',email:'Habibeddine.ahmed.1993@gmail.com',embauche:'',statut:'Actif'},{nom:'Hamza Achoubi',ville:'CAS',email:'hamza.10achoubi@gmail.com',embauche:'',statut:'Actif'},{nom:'Ibrahim ndiaye',ville:'CAS',email:'ibrahimnday0@gmail.com',embauche:'2026-04-27',statut:'Actif'},{nom:'tiouali ismail',ville:'CAS',email:'ismail.tiouali@gmail.com',embauche:'2026-04-27',statut:'Actif'},{nom:'Ismail Baha',ville:'CAS',email:'ismailbahi68@gmail.com',embauche:'',statut:'Actif'},{nom:'Kamal Jaghar',ville:'CAS',email:'kamaljaghar0707@gmail.com',embauche:'',statut:'Actif'},{nom:'Lahcen Elkhodry',ville:'CAS',email:'lhssankhoudri@gmail.com',embauche:'',statut:'Actif'},{nom:'Oussama Mkiriz',ville:'CAS',email:'oussamamkiriz04@gmail.com',embauche:'',statut:'Actif'},{nom:'Reda Lkouhel',ville:'CAS',email:'Redakouhel123@gmail.com',embauche:'',statut:'Actif'},{nom:'Salah Eddine Jalil',ville:'CAS',email:'salahvenom19@gmail.com',embauche:'',statut:'Actif'},{nom:'Mohamed Albouhaji',ville:'CAS',email:'simobouhaji.123@gmail.com',embauche:'',statut:'Actif'},{nom:'Abdelali Toubi',ville:'CAS',email:'Toubiabdelali@gmail.com',embauche:'',statut:'Actif'},{nom:'Zakaria Raji',ville:'CAS',email:'zakariaraji2002@gmail.com',embauche:'',statut:'Actif'},{nom:'Abdelkrim Sabbane',ville:'DRB',email:'Abdelkrimsabbane@gmail.com',embauche:'',statut:'Actif'},{nom:'Oussama Ouakil',ville:'DRB',email:'oussamaouakil21@gmail.com',embauche:'',statut:'Actif'},{nom:'El Mahfoud Sabir',ville:'LYN',email:'elmahfoudsabir97@gmail.com',embauche:'',statut:'Actif'},{nom:'Aymane Bouraoua',ville:'MAR',email:'Aymane1996bouraoia1@gmail.com',embauche:'2026-05-11',statut:'Actif'},{nom:'Houssam En-neddam',ville:'MAR',email:'houssamenne@gmail.com',embauche:'2026-05-11',statut:'Actif'},{nom:'Abdelmoughit El Bitar',ville:'MAR',email:'elbitarabdelmoughit@gmail.com',embauche:'2026-05-11',statut:'Actif'},{nom:'Jaouad Elkhabzi',ville:'MAR',email:'jelkhabzi@gmail.com',embauche:'2026-05-11',statut:'Actif'},{nom:'Noureddine Belioute',ville:'MAR',email:'noureddinebelioute6@gmail.com',embauche:'2026-05-11',statut:'Actif'},{nom:'Achraf ElBouzidi',ville:'MAR',email:'achraflbzd@gmail.com',embauche:'2026-05-11',statut:'Actif'},{nom:'Amine HASSANE',ville:'MOH',email:'hassaneamineamine@gmail.com',embauche:'2026-04-20',statut:'Actif'},{nom:'Abdeladim rokki',ville:'MOH',email:'rokkiabdeladim7@gmail.com',embauche:'2026-04-20',statut:'Actif'},{nom:'Mohammed Naenai',ville:'MOH',email:'simonaenai435@gmail.com',embauche:'2026-04-20',statut:'Actif'},{nom:'Achraf Akhlij',ville:'RBT',email:'Achraf.akhlij2005@gmail.com',embauche:'',statut:'Actif'},{nom:'Youssef Derkaoui',ville:'RBT',email:'Altuslabcom@gmail.com',embauche:'',statut:'Actif'},{nom:'Aymane Chlifane',ville:'RBT',email:'aymanechlihfane639@gmail.com',embauche:'',statut:'Actif'},{nom:'Ayoub Abssi',ville:'RBT',email:'Ayoubabssi05@gmail.com',embauche:'',statut:'Actif'},{nom:'Mourad Cherradi',ville:'RBT',email:'raxmou96@gmail.com',embauche:'',statut:'Actif'},{nom:'Yahya Rhallab',ville:'RBT',email:'Yahyarhallab00@gmail.com',embauche:'',statut:'Actif'},{nom:'Hassan Azgoune',ville:'SAL',email:'hassan.azgoune95@gmail.com',embauche:'',statut:'Actif'},{nom:'Ayoub Ben Malek',ville:'SAL',email:'jadalaeayoub@gmail.com',embauche:'',statut:'Actif'},{nom:'Charaf Loummihi',ville:'SAL',email:'loummihic@gmail.com',embauche:'',statut:'Actif'},{nom:'Zakariae Benali',ville:'SAL',email:'Zakariaebenaliwork@gmail.com',embauche:'',statut:'Actif'},{nom:'Islam Elmardi',ville:'TEM',email:'islamelmardi.1993@gmail.com',embauche:'',statut:'Actif'},{nom:'Oussama El Atrach',ville:'TEM',email:'oussamaelat@gmail.com',embauche:'',statut:'Actif'}];
 const RAW_HOTSPOTS=[{ville:'CAS',nom:'Maarif',pk:'12:00'},{ville:'MAR',nom:'Gueliz',pk:'13:00'},{ville:'RBT',nom:'Agdal',pk:'13:00'},{ville:'RBT',nom:'Hassan',pk:'19:00'}];
@@ -430,6 +429,7 @@ function fmtD(d){return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMont
 function getLundi(off){var t=new Date(),d=t.getDay(),df=d===1?0:d===0?-6:1-d,l=new Date(t);l.setDate(t.getDate()+df+(off||0)*7);l.setHours(0,0,0,0);return l;}
 function numSem(dt){var s=new Date(dt.getFullYear(),0,1);return Math.ceil(((dt-s)/86400000+s.getDay()+1)/7);}
 
+// ROBUST CALC H
 function calcH(shift){
     if(!shift || ['OFF','ABSENT','CONGE','MALADIE','—'].includes(shift.toUpperCase())) return 0;
     try{
@@ -451,7 +451,7 @@ function cleanOldPlanning(){
     Object.keys(localStorage).forEach(k=>{ if(k.startsWith(SK.PLAN)){ var p=k.replace(SK.PLAN,'').split('_'), w=parseInt(p[0]), y=parseInt(p[1]); if(y<cY || (y===cY && w<cW-4)) localStorage.removeItem(k); }});
 }
 
-// DATA MANAGERS
+// SAFE DATA MANAGERS
 function getCityCfg(v) {
     var cfg = safeJSON(localStorage.getItem(SK.CONFIG), {}); var c = cfg[v] || {};
     return {
@@ -468,11 +468,11 @@ function getAbsences(){var arr=safeJSON(localStorage.getItem(SK.ABSENCES),[]); r
 function saveAbsences(ab){localStorage.setItem(SK.ABSENCES,JSON.stringify(ab));cloudPushData();}
 function getRapports(){var arr=safeJSON(localStorage.getItem(SK.RAPPORTS),[]); return Array.isArray(arr) ? arr : [];}
 
-// SYNC CLOUD
+// SYNC CLOUD SAFE (1 MINUTE INTERVAL)
 function cloudPull(){
   if(isSyncing) return; isSyncing = true;
   fetch(`https://api.jsonbin.io/v3/b/${CLOUD.BIN}/latest`,{headers:{'X-Master-Key':CLOUD.KEY,'X-Bin-Meta':'false'}})
-  .then(r=>{if(!r.ok)throw new Error('Error'); return r.json();}).then(d=>{
+  .then(r=>{if(!r.ok)throw new Error('Cloud Sync Error'); return r.json();}).then(d=>{
       var upd=false;
       if(d.agents && Array.isArray(d.agents) && d.agents.length>=50) localStorage.setItem(SK.AGENTS,JSON.stringify(d.agents)); else upd=true;
       if(d.abs && Array.isArray(d.abs)) localStorage.setItem(SK.ABSENCES,JSON.stringify(d.abs));
@@ -489,7 +489,17 @@ function cloudPushData(){
   fetch(`https://api.jsonbin.io/v3/b/${CLOUD.BIN}`,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':CLOUD.KEY,'X-Bin-Versioning':'false'},body:JSON.stringify(payload)}).catch(()=>{});
 }
 window.addEventListener('beforeunload',()=>{cloudPushData();});
-window.addEventListener('focus',()=>{if(currentUser){D.abs=getAbsences();D.all=getAgents(); safeRender();}});
+window.addEventListener('focus',()=>{
+    try {
+        if(currentUser && !isSyncing){
+            D.abs = getAbsences();
+            D.all = getAgents();
+            safeRender();
+        }
+    } catch(err){
+        console.error(err);
+    }
+});
 
 // AUTH & NAV
 document.addEventListener('DOMContentLoaded',()=>{
@@ -519,7 +529,7 @@ function buildNav(){
 }
 function goPage(id,btn){document.querySelectorAll('.pg, .ni').forEach(e=>e.classList.remove('active'));document.getElementById('pg-'+id).classList.add('active');if(btn)btn.classList.add('active'); if(id==='pm')rParamsMenu();}
 
-// --- UI PARAMETRAGE ---
+// --- UI PARAMETRAGE (AVEC EXCEPTIONS AGENTS) ---
 function rParamsMenu() {
     var vList = currentUser.role==='admin' ? USERS['admin'].villes : currentUser.villes;
     const sidebar = document.getElementById('cfg-sidebar');
@@ -584,9 +594,21 @@ function rParamsForm(ville, btn) {
           <button class="btn btn-y" onclick="saveCityCfg('${ville}')">💾 Sauvegarder les horaires</button>
       </div>
 
-      <div style="font-size:14px;font-weight:800;color:var(--b);margin-top:30px;margin-bottom:15px;border-bottom:1px solid var(--bd);padding-bottom:10px">👤 Exceptions par Agent (Matin/Soir)</div>
-      <div style="background:#fff; border:1px solid var(--bd); border-radius:8px; padding:10px; max-height:250px; overflow-y:auto;">
+      <div style="font-size:14px;font-weight:800;color:var(--b);margin-top:30px;margin-bottom:15px;border-bottom:1px solid var(--bd);padding-bottom:10px">
+          👤 Exceptions par Agent (Matin/Soir)
+      </div>
+
+      <div style="background:#fff; border:1px solid var(--bd); border-radius:8px; padding:10px; max-height:320px; overflow-y:auto;">
           ${agsHtml}
+      </div>
+
+      <div style="margin-top:16px; text-align:right; display:flex; justify-content:flex-end; gap:10px; flex-wrap:wrap;">
+          <button class="btn btn-gh" onclick="resetAgentPrefs('${ville}')">
+              🔄 Réinitialiser
+          </button>
+          <button class="btn btn-y" onclick="saveAgentPrefs('${ville}')">
+              💾 Sauvegarder les préférences agents
+          </button>
       </div>
     `;
     const cfgBody = document.getElementById('cfg-body');
@@ -594,17 +616,73 @@ function rParamsForm(ville, btn) {
 }
 
 function updateAgentPref(nom, val) {
-    if(!D || !D.all) return;
-    let ag = D.all.find(a=>a.nom === nom);
-    if(ag) {
+    try {
+        if(!D || !D.all || !Array.isArray(D.all)) return;
+        let ag = D.all.find(a => a.nom === nom);
+        if(!ag) return;
         ag.pref = val;
-        saveAgents(D.all);
-        toast(`Préférence mise à jour.`);
+    } catch(err) {
+        console.error('updateAgentPref error', err);
+        toast('Erreur mise à jour préférence', true);
     }
+}
+
+function saveAgentPrefs(ville) {
+    try {
+        if(!D || !D.all) {
+            toast('Données agents indisponibles', true);
+            return;
+        }
+        saveAgents(D.all);
+        cloudPushData();
+        toast(`Préférences des agents de ${CLA[ville] || ville} sauvegardées.`);
+        loadData(weekOffset);
+    } catch(err) {
+        console.error(err);
+        toast('Erreur sauvegarde préférences', true);
+    }
+}
+
+function resetAgentPrefs(ville) {
+    try {
+        if(!D || !D.all) return;
+        D.all.forEach(a => {
+            if(a.ville === ville) {
+                delete a.pref;
+            }
+        });
+        saveAgents(D.all);
+        cloudPushData();
+        rParamsForm(ville, null);
+        toast('Préférences réinitialisées');
+    } catch(err) {
+        console.error(err);
+        toast('Erreur reset préférences', true);
+    }
+}
+
+function isValidShiftFormat(v) {
+    if(!v) return true;
+    return /^([01]?\d|2[0-3]):[0-5]\d-([01]?\d|2[0-3]):[0-5]\d$/.test(v);
 }
 
 function saveCityCfg(v) {
     var cfg = safeJSON(localStorage.getItem(SK.CONFIG), {});
+
+    let shiftsToCheck = [
+        val('cfg-m7-0'), val('cfg-m7-1'), val('cfg-m7-2'),
+        val('cfg-m8-0'), val('cfg-m8-1'),
+        val('cfg-s7-0'), val('cfg-s7-1'), val('cfg-s7-2'),
+        val('cfg-s8-0'), val('cfg-s8-1')
+    ];
+
+    for(let s of shiftsToCheck){
+        if(!isValidShiftFormat(s)){
+            toast(`Format invalide : ${s}`, true);
+            return;
+        }
+    }
+
     cfg[v] = {
         rush: val('cfg-rush'),
         m7: [val('cfg-m7-0'), val('cfg-m7-1'), val('cfg-m7-2')].filter(Boolean),
@@ -612,7 +690,13 @@ function saveCityCfg(v) {
         s7: [val('cfg-s7-0'), val('cfg-s7-1'), val('cfg-s7-2')].filter(Boolean),
         s8: [val('cfg-s8-0'), val('cfg-s8-1')].filter(Boolean)
     };
-    localStorage.setItem(SK.CONFIG, JSON.stringify(cfg)); cloudPushData(); toast('Configuration enregistrée'); loadData(weekOffset);
+    
+    localStorage.setItem(SK.CONFIG, JSON.stringify(cfg));
+    cloudPushData();
+    toast('Configuration enregistrée');
+    setTimeout(() => {
+        loadData(weekOffset);
+    }, 150);
 }
 
 // --- PLANNING & 44H STRICT SECURE ---
@@ -622,7 +706,7 @@ function enforce44h(plan){
     let total = p.shifts.reduce((acc,s)=>acc+calcH(s),0);
     while(total > 44){
       let modified = false;
-      for(let i=6; i>=0; i--){
+      for(let i=5; i>=0; i--){
         let h = calcH(p.shifts[i]);
         if(h > 0 && p.shifts[i] !== 'OFF'){
           p.shifts[i] = 'OFF';
@@ -678,6 +762,11 @@ function genPlanningV2(agents, hotspots, off){
 function loadData(off){
   if(!currentUser || !currentUser.villes){ console.error('currentUser invalide'); return; }
   weekOffset=off; var agents=getAgents(), abs=getAbsences(), hs=getHotspots();
+  
+  if(!Array.isArray(agents)) agents = [];
+  if(!Array.isArray(abs)) abs = [];
+  if(!Array.isArray(hs)) hs = [];
+
   var lundi=getLundi(off+1); var pk=`${SK.PLAN}${numSem(lundi)}_${lundi.getFullYear()}`;
   var pData=safeJSON(localStorage.getItem(pk),null); var allActifs=agents.filter(a=>a.statut==='Actif');
   
@@ -706,6 +795,8 @@ function safeRender(){ clearTimeout(renderTimeout); renderTimeout = setTimeout(r
 function safeCall(fn) { try { fn(); } catch(e) { console.error("Error in " + fn.name, e); } }
 
 function renderUI(){
+  if(!D || !D.plan || !D.meta) return;
+
   safeCall(() => {
       document.getElementById('ov-date').textContent=new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long', year:'numeric'});
       document.getElementById('ov-week-badge').textContent = 'Semaine W' + (D.meta ? D.meta.wn : '—');
